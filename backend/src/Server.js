@@ -10,7 +10,7 @@ const {
   changeAdminPassword,
   deleteAdmin,
   createAdmin,
-} = require("./Controllers/adminController");
+} = require("./Controllers/adminstratorController");
 const {
   createPatient,
   deletePatient,
@@ -92,7 +92,3 @@ app.delete("deleteAdmin", deleteAdmin);
 app.delete("/deletePatient", deletePatient);
 app.delete("/deleteMedicine", deleteMedicine);
 app.delete("/deletePharmacist", deletePharmacist);
-
-app.listen(port, () => {
-  console.log("server listening on port " + port);
-});

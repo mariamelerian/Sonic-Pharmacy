@@ -92,10 +92,10 @@ const getPatients = async (req, res) => {
   res.status(200).send(users);
 };
 
-module.exports(
+module.exports = {
   createPatient,
   deletePatient,
   updatePatientInfo,
   changePatientPassword,
-  getPatients
-);
+  getPatients,
+};

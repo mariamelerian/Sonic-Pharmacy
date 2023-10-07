@@ -62,4 +62,4 @@ const changeAdminPassword = async (req, res) => {
   }
 };
 
-module.exports(getAdmins, changeAdminPassword, deleteAdmin, createAdmin);
+module.exports = { getAdmins, changeAdminPassword, deleteAdmin, createAdmin };
