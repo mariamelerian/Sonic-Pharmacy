@@ -7,7 +7,8 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 require("dotenv").config();
 //Declare ll methods el haktbha 
-
+const {getAdmins,changeAdminPassword,deleteAdmin,createAdmin} = require("./Routes/AdminController");
+const {createPatient,deletePatient,updatePatientInfo,changePatientPassword,getPatients} = require("./Routes/PatientController");
 //el link bta3 el DB
 const MongoURI = process.env.MONGO_URI;
 
@@ -45,7 +46,15 @@ app.get("/home", (req, res) => {
 // #Routing to userController here
 //lama bagy a test bakteb dool fi postman b3d el /
 //ba map kol method l http req
-
+app.get("/admins",getAdmins);
+app.get("/patients",getPatients);
+app.post("/newPatient",createPatient);
+app.post("/newAdmin",createAdmin);
+app.put("/changeAdminPassword",changeAdminPassword);
+app.put("changePatientPassword",changePatientPassword);
+app.put("/updatePatient",updatePatientInfo);
+app.delete("deleteAdmin",deleteAdmin);
+app.delete("/deletePatient",deletePatient);
 
 
 /*
