@@ -27,6 +27,7 @@ const patientSchema = new Schema(
     gender: {
       type: String,
       required: true,
+      enum: ["Male", "Female"],
     },
     mobileNumber: {
       type: String,

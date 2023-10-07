@@ -23,7 +23,7 @@ const createPatient = async (req, res) => {
     //check if email already exists
     const existingPatient = await Patient.findOne({ email });
     if (existingPatient) {
-      return res.status(40).json({ message: "Email is already registered" });
+      return res.status(409).json({ message: "Email is already registered" });
     }
     // create a new patient with the provided information
     const newPatient = new Patient({
