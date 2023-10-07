@@ -7,18 +7,19 @@ const registerPharmacist = async (req, res) => {
     const validation = await validateUsername(username);
     // check if username already exists in database
     if (!validation) {
-      res.status(409).send("Username already exists");
+      return res.status(409).send("Username already exists");
     }
     //check if email exists
+    const { email } = req.body;
     const existing = await Pharmacist.findOne({ email });
     if (existing) {
-      return res.status(40).json({ message: "Email is already registered" });
+      return res.status(409).json({ message: "Email is already registered" });
     }
     const newPharmacist = new Pharmacist(req.body);
     const savedPharmacist = await newPharmacist.save();
-    res.status(201).json(savedPharmacist);
+    return res.status(201).json(savedPharmacist);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    return res.status(400).json({ error: error.message });
   }
 };
 
@@ -59,6 +60,8 @@ const updatePharmacist = async (req, res) => {
       req.body,
       { new: true }
     );
+    if (updatedPharmacist == null)
+      return res.status(404).json({ message: "pharmacist not found." });
     res.status(200).json(updatedPharmacist);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -67,7 +70,7 @@ const updatePharmacist = async (req, res) => {
 
 const deletePharmacist = async (req, res) => {
   try {
-    const deletedPharmacist = await Pharmacist.findByIdAndDelete(req.params.id);
+    const deletedPharmacist = await Pharmacist.findByIdAndDelete(req.body.id);
     if (!deletedPharmacist) {
       return res.status(404).json({ error: "Pharmacist not found" });
     }
