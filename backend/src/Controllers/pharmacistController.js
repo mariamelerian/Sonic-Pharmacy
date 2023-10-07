@@ -4,8 +4,11 @@ const { validateUsername } = require("../utils");
 const registerPharmacist = async (req, res) => {
   try {
     const { username } = req.body;
-    if (!validateUsername(username))
+    const validation = await validateUsername(username);
+    // check if username already exists in database
+    if (!validation) {
       res.status(409).send("Username already exists");
+    }
     //check if email exists
     const existing = await Pharmacist.findOne({ email });
     if (existing) {

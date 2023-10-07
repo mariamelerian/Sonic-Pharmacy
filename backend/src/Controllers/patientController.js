@@ -15,8 +15,9 @@ const createPatient = async (req, res) => {
     emergencyMobileNumber,
   } = req.body;
   try {
-    // check if patient with the same username already exists
-    if (!validateUsername(username)) {
+    const validation = await validateUsername(username);
+    // check if username already exists in database
+    if (!validation) {
       return res.status(409).json({ message: "Username already taken" });
     }
     //check if email already exists

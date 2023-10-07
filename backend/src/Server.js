@@ -3,6 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 require("dotenv").config();
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
 //imports
 const {
@@ -42,6 +44,9 @@ const {
 
 //App variables
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 const port = process.env.PORT || "8000";
 
 // Mongo DB
@@ -88,7 +93,7 @@ app.put("/updatePatient", updatePatientInfo);
 app.put("/updateMedicine", updateMedicine);
 app.put("/updatePharmacist", updatePharmacist);
 
-app.delete("deleteAdmin", deleteAdmin);
+app.delete("/deleteAdmin", deleteAdmin);
 app.delete("/deletePatient", deletePatient);
 app.delete("/deleteMedicine", deleteMedicine);
 app.delete("/deletePharmacist", deletePharmacist);

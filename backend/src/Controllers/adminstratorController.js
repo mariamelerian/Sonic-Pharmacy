@@ -5,13 +5,18 @@ const { validateUsername } = require("../utils.js");
 const createAdmin = async (req, res) => {
   const { username, password } = req.body;
 
+  const validation = await validateUsername(username);
   // check if username already exists in database
-  if (!validateUsername(username)) {
+  if (!validation) {
     return res.status(409).json({ message: "Username already exists" });
   }
   // create new admin
-  const newAdmin = await admin.create({ username, password });
-  res.status(201).json(newAdmin);
+  try {
+    const newAdmin = await admin.create({ username, password });
+    res.status(201).json(newAdmin);
+  } catch (err) {
+    res.status(500).json({ message: "server error" });
+  }
 };
 
 const getAdmins = async (req, res) => {
@@ -21,19 +26,21 @@ const getAdmins = async (req, res) => {
 
 const deleteAdmin = async (req, res) => {
   const { id } = req.body;
-  try {
-    // check if admin exists in database
-    const existingAdmin = await admin.findById(id);
-    if (!existingAdmin) {
-      return res.status(404).json({ message: "Admin not found" });
-    }
-    // delete admin
-    await existingAdmin.remove();
-    res.status(200).json({ message: "Admin deleted successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
+  // check if admin exists in database
+  admin
+    .findByIdAndDelete(id)
+    .then((deletedUser) => {
+      if (deletedUser) {
+        console.log("User deleted:", deletedUser);
+        res.status(200).json({ message: "Admin deleted successfully" });
+      } else {
+        return res.status(404).json({ message: "Admin not found" });
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+    });
 };
 
 const changeAdminPassword = async (req, res) => {
