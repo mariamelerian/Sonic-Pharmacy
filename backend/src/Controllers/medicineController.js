@@ -20,11 +20,13 @@ const getMedicine = async (req, res) => {
   }
 };
 
-const getMedicineByName = async (req, res) => {
+const searchMedicine = async (req, res) => {
   const name = req.body.name;
 
   try {
-    const medicine = await Medicine.findOne({ name: name });
+    const medicine = await Medicine.findOne({
+      name: { $regex: new RegExp(name, "i") },
+    });
     if (medicine) {
       res.status(200).json(medicine);
     } else {
@@ -44,20 +46,9 @@ const getMedicineSale = async (req, res) => {
   }
 };
 
-const searchMedicine = async (req, res) => {
-  const searchTerm = req.body.name;
-
-  try {
-    const medicines = await Medicine.find({
-      name: { $regex: new RegExp(searchTerm, "i") },
-    });
-    res.status(200).json(medicines);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 const filterMedicine = async (req, res) => {
+  if (!req.body.medicinalUse)
+    return res.status(400).json({ message: "Medicinal use not specified" });
   const medicinalUse = req.body.medicinalUse;
 
   try {
@@ -91,7 +82,15 @@ const createMedicine = async (req, res) => {
     const newMedicine = await medicine.save();
     res.status(201).json(newMedicine);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    if (error.code === 11000) {
+      // Duplicate key error (E11000)
+      res.status(409).json({
+        message: "Duplicate key error. Medicine with this name already exists.",
+      });
+    } else {
+      // Other errors
+      res.status(500).json({ message: "Internal server error." });
+    }
   }
 };
 
@@ -102,6 +101,8 @@ const updateMedicine = async (req, res) => {
     const updatedMedicine = await Medicine.findByIdAndUpdate(id, req.body, {
       new: true,
     });
+    if (!updatedMedicine)
+      return res.status(404).json({ message: "Medicine not found" });
     res.status(200).json(updatedMedicine);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -109,7 +110,7 @@ const updateMedicine = async (req, res) => {
 };
 
 const deleteMedicine = async (req, res) => {
-  const id = req.params.id;
+  const id = req.body.id;
 
   try {
     const deletedMedicine = await Medicine.findByIdAndDelete(id);
@@ -127,7 +128,6 @@ const deleteMedicine = async (req, res) => {
 module.exports = {
   getMedicines,
   getMedicine,
-  getMedicineByName,
   getMedicineSale,
   searchMedicine,
   filterMedicine,

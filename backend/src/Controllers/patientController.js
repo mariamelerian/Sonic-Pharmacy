@@ -46,31 +46,6 @@ const createPatient = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-const changePatientPassword = async (req, res) => {
-  const patientId = req.body.id;
-  const password = req.body.password;
-  const newPassword = req.body.newPassword;
-
-  try {
-    const patient = await Patient.findById(patientId);
-
-    if (!patient) {
-      return res.status(404).json({ message: "Patient not found" });
-    }
-
-    if (patient.password !== password) {
-      return res.status(409).json({ message: "Old password incorrect" });
-    }
-
-    patient.password = newPassword;
-    await patient.save();
-
-    return res.status(200).json({ message: "Password changed successfully" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Failed to change password" });
-  }
-};
 
 const updatePatientInfo = async (req, res) => {
   try {
@@ -87,7 +62,7 @@ const updatePatientInfo = async (req, res) => {
   }
 };
 
-const deletePatient = async (req,res) => {
+const deletePatient = async (req, res) => {
   try {
     const deletedPharmacist = await Patient.findByIdAndDelete(req.body.id);
     if (!deletedPharmacist) {
@@ -108,6 +83,5 @@ module.exports = {
   createPatient,
   deletePatient,
   updatePatientInfo,
-  changePatientPassword,
   getPatients,
 };

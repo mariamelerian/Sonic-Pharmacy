@@ -9,7 +9,6 @@ const cors = require("cors");
 //imports
 const {
   getAdmins,
-  changeAdminPassword,
   deleteAdmin,
   createAdmin,
 } = require("./Controllers/adminstratorController");
@@ -17,14 +16,12 @@ const {
   createPatient,
   deletePatient,
   updatePatientInfo,
-  changePatientPassword,
   getPatients,
 } = require("./Controllers/patientController");
 
 const {
   getMedicines,
   getMedicine,
-  getMedicineByName,
   getMedicineSale,
   searchMedicine,
   filterMedicine,
@@ -41,6 +38,11 @@ const {
   updatePharmacist,
   deletePharmacist,
 } = require("./Controllers/pharmacistController");
+
+const {
+  MedicinalUseArray,
+  getMedicinalUses,
+} = require("./Models/MedicinalUse");
 
 //App variables
 const app = express();
@@ -74,10 +76,10 @@ app.get("/admins", getAdmins);
 app.get("/patients", getPatients);
 app.get("/medicines", getMedicines);
 app.get("/medicine", getMedicine);
-app.get("/medicineByName", getMedicineByName);
+app.get("/medicineByName", searchMedicine);
 app.get("/medicineSales", getMedicineSale);
-app.get("/searchMedicine", searchMedicine);
 app.get("/filterMedicine", filterMedicine);
+app.get("/medicinalUses", getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
 app.get("/pharmacistApplications", getInactivePharmacists);
@@ -87,8 +89,6 @@ app.post("/newAdmin", createAdmin);
 app.post("/newPharmacist", registerPharmacist);
 app.post("/newMedicine", createMedicine);
 
-app.put("/changeAdminPassword", changeAdminPassword);
-app.put("/changePatientPassword", changePatientPassword);
 app.put("/updatePatient", updatePatientInfo);
 app.put("/updateMedicine", updateMedicine);
 app.put("/updatePharmacist", updatePharmacist);
@@ -97,3 +97,9 @@ app.delete("/deleteAdmin", deleteAdmin);
 app.delete("/deletePatient", deletePatient);
 app.delete("/deleteMedicine", deleteMedicine);
 app.delete("/deletePharmacist", deletePharmacist);
+
+//inserting dummy data
+const dummyData = require("./dummyData/medicine");
+const Medicine = require("./Models/Medicine");
+const { insertDummyData } = require("./utils.js");
+//insertDummyData(dummyData, Medicine);

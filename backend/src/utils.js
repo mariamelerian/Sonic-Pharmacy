@@ -19,4 +19,11 @@ const validateUsername = async (username) => {
   }
 };
 
-module.exports = { validateUsername };
+const insertDummyData = (array, model) => {
+  array.forEach((element) => {
+    const newModel = new model(element);
+    newModel.save();
+  });
+};
+
+module.exports = { validateUsername, insertDummyData };
