@@ -47,55 +47,55 @@ const createPatient = async (req, res) => {
   }
 };
 const changePatientPassword = async (req, res) => {
-  const { _id, password, newPassword } = req.body;
+  const patientId = req.body.id;
+  const password = req.body.password;
+  const newPassword = req.body.newPassword;
+
   try {
-    const patient = await Patient.findById(_id);
+    const patient = await Patient.findById(patientId);
+
     if (!patient) {
-      res.status(404).json({ message: "Patient not found" });
-      return;
+      return res.status(404).json({ message: "Patient not found" });
     }
 
-    // Check if the old password matches the current password
-    if (patient.password) {
-      if (patient.password != password) {
-        res.status(409).json({ message: "old password incorrect" });
-        return;
-      }
+    if (patient.password !== password) {
+      return res.status(409).json({ message: "Old password incorrect" });
     }
 
     patient.password = newPassword;
     await patient.save();
 
-    return patient;
+    return res.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
     console.error(error);
-    res.status(409).json({ message: "Failed to change Password" });
+    return res.status(500).json({ message: "Failed to change password" });
   }
 };
 
 const updatePatientInfo = async (req, res) => {
-  const newpatient = req.body;
   try {
-    const patient = await Patient.findByIdAndUpdate(req.body.id, newpatient, {
-      new: true,
-    });
-    return patient;
+    const updatedPharmacist = await Patient.findByIdAndUpdate(
+      req.body.id,
+      req.body,
+      { new: true }
+    );
+    if (updatedPharmacist == null)
+      return res.status(404).json({ message: "patient not found." });
+    res.status(200).json(updatedPharmacist);
   } catch (error) {
-    console.error(error);
-    return res
-      .status(409)
-      .json({ message: "Failed to update patient's information" });
+    res.status(500).json({ error: error.message });
   }
 };
 
-const deletePatient = async (req, res) => {
-  const patientId = req.body;
+const deletePatient = async (req,res) => {
   try {
-    const deletedPatient = await Patient.findByIdAndDelete(patientId);
-    return deletedPatient;
+    const deletedPharmacist = await Patient.findByIdAndDelete(req.body.id);
+    if (!deletedPharmacist) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+    res.status(200).json(deletedPharmacist);
   } catch (error) {
-    console.error(error);
-    return res.status(409).json({ message: "Failed to delete patient" });
+    res.status(500).json({ error: error.message });
   }
 };
 
