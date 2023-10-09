@@ -5,6 +5,7 @@ import {
     faBriefcaseMedical,
     faRightFromBracket,
     faUser,
+    faCalendarCheck
   } from "@fortawesome/free-solid-svg-icons";
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { useState } from "react";
@@ -213,9 +214,9 @@ import {
   
             <hr className="menu-line" />
             <a
-              id="admins"
+              id="medicine"
               className="menu-item"
-              href="/admin/admins-list"
+              href="/admin-medicine"
               onClick={closeMenu}
               style={{
                 color: "var(--gray-600, #6C757D)",
@@ -237,31 +238,30 @@ import {
               Admins
             </a>
             <hr className="menu-line" />
-            <a
-              id="packages"
-              className="menu-item"
-              href="/admin/packages"
-              onClick={closeMenu}
-              style={{
-                color: "var(--gray-600, #6C757D)",
-                fontFamily: "Roboto",
-                fontSize: "0.9375rem",
-                fontStyle: "normal",
-                fontWeight: 400,
-                lineHeight: "1rem" /* 106.667% */,
-                display: "flex",
-                alignItems: "center",
-                textDecoration: "none", // To remove underlines
-                padding: "0.5rem 0",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faBriefcaseMedical}
-                style={{ marginRight: "0.5rem" }}
-              />
-              Medicines
-            </a>
-
+          <a
+            id="appointment"
+            className="menu-item"
+            href="/admin/admin-medicine"
+            onClick={closeMenu}
+            style={{
+              color: "var(--gray-600, #6C757D)",
+              fontFamily: "Roboto",
+              fontSize: "0.9375rem",
+              fontStyle: "normal",
+              fontWeight: 400,
+              lineHeight: "1rem" /* 106.667% */,
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none", // To remove underlines
+              padding: "0.5rem 0",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faBriefcaseMedical}
+              style={{ marginRight: "0.5rem" }}
+            />
+             Medicine
+          </a>
             <hr className="menu-line" />
             <a
               id="logout"

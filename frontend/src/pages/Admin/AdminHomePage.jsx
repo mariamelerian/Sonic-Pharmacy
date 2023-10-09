@@ -38,7 +38,8 @@ export default function AdminHomePage() {
         >
           <AdminHomeCard location="/admin/patients-list" cardText="Patients" cardDetails="View/Edit Patients" icon={faHospitalUser}  />
           <AdminHomeCard location="/admin/pharmacists-list" cardText="Pharmacists" cardDetails="View/Edit Pharmacists" icon={faUserDoctor}/>
-          <AdminHomeCard location="/admin/admins-list" cardText="Admins" cardDetails="View/Edit Admins" icon={faUsers}/>
+          <AdminHomeCard location="/admin/admin-medicine" cardText="Medicine" cardDetails="View/Edit Medicine" icon={faBriefcaseMedical}/>
+          <AdminHomeCard location="/admin/admins-list" cardText="Admin" cardDetails="View/Edit Admins" icon={faUsers}  />
           {/* <AdminHomeCard location="/admin/packages" cardText="Health Packages" cardDetails="View/Edit Health Packages" icon={faBriefcaseMedical}/> */}
         </div>
       </Container>
