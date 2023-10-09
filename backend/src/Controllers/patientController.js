@@ -46,22 +46,22 @@ const createPatient = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-const changePatientPassword = async (req,res) => {
-  const {_id,password,newPassword}=req.body;
-    try {
+const changePatientPassword = async (req, res) => {
+  const { _id, password, newPassword } = req.body;
+  try {
     const patient = await Patient.findById(_id);
     if (!patient) {
-        res.status(404).json({message:"Patient not found"});
-        return;
+      res.status(404).json({ message: "Patient not found" });
+      return;
     }
 
     // Check if the old password matches the current password
-    if(patient.password){
-    if (patient.password != password) {
-      
-        res.status(409).json({message:"old password incorrect"});
+    if (patient.password) {
+      if (patient.password != password) {
+        res.status(409).json({ message: "old password incorrect" });
         return;
-    }}
+      }
+    }
 
     patient.password = newPassword;
     await patient.save();
@@ -69,31 +69,33 @@ const changePatientPassword = async (req,res) => {
     return patient;
   } catch (error) {
     console.error(error);
-    res.status(409).json({message:"Failed to change Password"});
+    res.status(409).json({ message: "Failed to change Password" });
   }
 };
 
 const updatePatientInfo = async (req, res) => {
-  const{_id,updatedInfo}=req.body;
-    try {
-    const patient = await Patient.findByIdAndUpdate(_id, updatedInfo, {
+  const newpatient = req.body;
+  try {
+    const patient = await Patient.findByIdAndUpdate(req.body.id, newpatient, {
       new: true,
     });
     return patient;
   } catch (error) {
     console.error(error);
-    return res.status(409).json({message:"Failed to update patient's information"});
+    return res
+      .status(409)
+      .json({ message: "Failed to update patient's information" });
   }
 };
 
-const deletePatient = async (req,res) => {
-    const patientId=res.body;
+const deletePatient = async (req, res) => {
+  const patientId = req.body;
   try {
     const deletedPatient = await Patient.findByIdAndDelete(patientId);
     return deletedPatient;
   } catch (error) {
     console.error(error);
-   return res.status(409).json({message:"Failed to delete patient"});
+    return res.status(409).json({ message: "Failed to delete patient" });
   }
 };
 
