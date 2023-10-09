@@ -13,6 +13,7 @@ const createPatient = async (req, res) => {
     mobileNumber,
     emergencyFullName,
     emergencyMobileNumber,
+    emergencyRelation,
   } = req.body;
   try {
     const validation = await validateUsername(username);
@@ -36,6 +37,7 @@ const createPatient = async (req, res) => {
       mobileNumber,
       emergencyFullName,
       emergencyMobileNumber,
+      emergencyRelation,
     });
     await newPatient.save();
     res.status(201).json({ message: "Patient created successfully" });
@@ -44,17 +46,22 @@ const createPatient = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-const changePatientPassword = async (patientId, oldPassword, newPassword) => {
-  try {
-    const patient = await Patient.findById(patientId);
+const changePatientPassword = async (req,res) => {
+  const {_id,password,newPassword}=req.body;
+    try {
+    const patient = await Patient.findById(_id);
     if (!patient) {
-      throw new Error("Patient not found");
+        res.status(404).json({message:"Patient not found"});
+        return;
     }
 
     // Check if the old password matches the current password
-    if (patient.password !== oldPassword) {
-      throw new Error("Old password is incorrect");
-    }
+    if(patient.password){
+    if (patient.password != password) {
+      
+        res.status(409).json({message:"old password incorrect"});
+        return;
+    }}
 
     patient.password = newPassword;
     await patient.save();
@@ -62,29 +69,31 @@ const changePatientPassword = async (patientId, oldPassword, newPassword) => {
     return patient;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to change password");
+    res.status(409).json({message:"Failed to change Password"});
   }
 };
 
-const updatePatientInfo = async (patientId, updatedInfo) => {
-  try {
-    const patient = await Patient.findByIdAndUpdate(patientId, updatedInfo, {
+const updatePatientInfo = async (req, res) => {
+  const{_id,updatedInfo}=req.body;
+    try {
+    const patient = await Patient.findByIdAndUpdate(_id, updatedInfo, {
       new: true,
     });
     return patient;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to update patient information");
+    return res.status(409).json({message:"Failed to update patient's information"});
   }
 };
 
-const deletePatient = async (patientId) => {
+const deletePatient = async (req,res) => {
+    const patientId=res.body;
   try {
     const deletedPatient = await Patient.findByIdAndDelete(patientId);
     return deletedPatient;
   } catch (error) {
     console.error(error);
-    throw new Error("Failed to delete patient");
+   return res.status(409).json({message:"Failed to delete patient"});
   }
 };
 
