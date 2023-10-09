@@ -38,6 +38,15 @@ const medicineSchema = new mongoose.Schema({
   },
 });
 
+// Define a virtual property to convert picture data to base64 data URI
+medicineSchema.virtual("imageSrc").get(function () {
+  if (this.picture && this.picture.data && this.picture.contentType) {
+    const imageData = Buffer.from(this.picture.data).toString("base64");
+    return `data:${this.picture.contentType};base64,${imageData}`;
+  }
+  return null;
+});
+
 const Medicine = mongoose.model("Medicine", medicineSchema);
 
 module.exports = Medicine;

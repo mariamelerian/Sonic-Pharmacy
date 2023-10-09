@@ -66,7 +66,7 @@ mongoose
 
 //TODO: main request
 app.get("/", (req, res) => {
-  res.status(200).send("You have everything installed!");
+  res.status(200).send("Server is working!");
 });
 
 // #Routing to userController here

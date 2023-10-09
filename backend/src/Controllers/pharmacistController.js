@@ -1,5 +1,6 @@
 const Pharmacist = require("../Models/Pharmacist");
 const { validateUsername } = require("../utils");
+const fs = require("fs");
 
 const registerPharmacist = async (req, res) => {
   try {
@@ -14,6 +15,15 @@ const registerPharmacist = async (req, res) => {
     const existing = await Pharmacist.findOne({ email });
     if (existing) {
       return res.status(409).json({ message: "Email is already registered" });
+    }
+    //add default picture
+    if (!req.body.picture) {
+      let picture = {};
+      const path = require("path");
+      const filePath = path.join(__dirname, "../res/default-profile-pic.jpg");
+      picture.data = fs.readFileSync(filePath, "utf-8");
+      picture.contentType = "image/jpeg";
+      req.body.picture = picture;
     }
     const newPharmacist = new Pharmacist(req.body);
     const savedPharmacist = await newPharmacist.save();

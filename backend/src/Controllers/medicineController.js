@@ -1,4 +1,5 @@
-const Medicine = require("../Models/Medicine"); // Assuming your Medicine model file is named 'Medicine.js'
+const Medicine = require("../Models/Medicine");
+const fs = require("fs");
 
 const getMedicines = async (req, res) => {
   try {
@@ -60,23 +61,16 @@ const filterMedicine = async (req, res) => {
 };
 
 const createMedicine = async (req, res) => {
-  const {
-    name,
-    price,
-    description,
-    quantity,
-    activeIngredients,
-    medicinalUse,
-  } = req.body;
+  if (!req.body.picture) {
+    let picture = {};
+    const path = require("path");
+    const filePath = path.join(__dirname, "../res/default-profile-pic.jpg");
+    picture.data = fs.readFileSync(filePath, "utf-8");
+    picture.contentType = "image/jpeg";
+    req.body.picture = picture;
+  }
 
-  const medicine = new Medicine({
-    name,
-    price,
-    description,
-    quantity,
-    activeIngredients,
-    medicinalUse,
-  });
+  const medicine = new Medicine(req.body);
 
   try {
     const newMedicine = await medicine.save();
