@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { slide as Menu } from "react-burger-menu";
-function HamburgerMenu() {
+function PatientHamburgerMenu() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleMenuClick = () => {
@@ -162,7 +162,7 @@ function HamburgerMenu() {
             Home
           </a>
           {/* Add a line between menu items */}
-          <hr className="menu-line" />
+       {/*    <hr className="menu-line" />
           <a
             id="profile"
             className="menu-item"
@@ -174,7 +174,7 @@ function HamburgerMenu() {
               fontSize: "0.9375rem",
               fontStyle: "normal",
               fontWeight: 400,
-              lineHeight: "1rem" /* 106.667% */,
+              lineHeight: "1rem" ,
               display: "flex",
               alignItems: "center",
               textDecoration: "none", // To remove underlines
@@ -197,7 +197,7 @@ function HamburgerMenu() {
               fontSize: "0.9375rem",
               fontStyle: "normal",
               fontWeight: 400,
-              lineHeight: "1rem" /* 106.667% */,
+              lineHeight: "1rem",
               display: "flex",
               alignItems: "center",
               textDecoration: "none", // To remove underlines
@@ -210,12 +210,12 @@ function HamburgerMenu() {
             />
             My Prescriptions
           </a>
-
+ */}
           <hr className="menu-line" />
           <a
             id="appointment"
             className="menu-item"
-            href="/patient/view-appointments"
+            href="/patient/patient-medicine"
             onClick={closeMenu}
             style={{
               color: "var(--gray-600, #6C757D)",
@@ -267,4 +267,4 @@ function HamburgerMenu() {
     </div>
   );
 }
-export default HamburgerMenu;
+export default PatientHamburgerMenu;
