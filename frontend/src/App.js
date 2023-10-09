@@ -9,6 +9,7 @@ import AdminPharmacistPage from "./pages/Admin/AdminPharmacistPage";
 //import AdminPackagesPage from "./pages/Admin/AdminPackagesPage";
 import AdminAdminsPage from "./pages/Admin/AdminAdminsPage";
 import AdminMedicine from "./pages/Admin/AdminViewMedicine";
+import PatientMedicine from "./pages/Patient/PatientViewMedicine";
 
 function App() {
   return (
@@ -29,6 +30,13 @@ function App() {
             <Route path="patients-list" element={<AdminPatientsPage />} />
             <Route path="admins-list" element={<AdminAdminsPage />} />
             <Route path="admin-medicine" element={<AdminMedicine />} />
+            {/* <Route path="packages" element={<AdminPackagesPage />} /> */}
+          </Route>
+
+          <Route path="Patient">
+            <Route index element={<AdminHomePage />} />
+
+            <Route path="patient-medicine" element={<PatientMedicine />} />
             {/* <Route path="packages" element={<AdminPackagesPage />} /> */}
           </Route>
 
