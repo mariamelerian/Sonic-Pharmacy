@@ -10,6 +10,7 @@ import AdminPharmacistPage from "./pages/Admin/AdminPharmacistPage";
 import AdminAdminsPage from "./pages/Admin/AdminAdminsPage";
 import AdminMedicine from "./pages/Admin/AdminViewMedicine";
 import PatientMedicine from "./pages/Patient/PatientViewMedicine";
+import PhMedicine from "./pages/Pharmacist/PhViewMedicine";
 
 function App() {
   return (
@@ -37,6 +38,13 @@ function App() {
             <Route index element={<AdminHomePage />} />
 
             <Route path="patient-medicine" element={<PatientMedicine />} />
+            {/* <Route path="packages" element={<AdminPackagesPage />} /> */}
+          </Route>
+
+          <Route path="Pharmacist">
+            <Route index element={<AdminHomePage />} />
+
+            <Route path="ph-medicine" element={<PhMedicine />} />
             {/* <Route path="packages" element={<AdminPackagesPage />} /> */}
           </Route>
 
