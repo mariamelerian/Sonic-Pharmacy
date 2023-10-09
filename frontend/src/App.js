@@ -11,6 +11,8 @@ import AdminAdminsPage from "./pages/Admin/AdminAdminsPage";
 import AdminMedicine from "./pages/Admin/AdminViewMedicine";
 import PatientMedicine from "./pages/Patient/PatientViewMedicine";
 import PhMedicine from "./pages/Pharmacist/PhViewMedicine";
+import PatientHomePage from "./pages/Patient/PatientHomePage";
+import PharmacistHomePage from "./pages/Pharmacist/PharmacistHomePage";
 
 function App() {
   return (
@@ -35,14 +37,14 @@ function App() {
           </Route>
 
           <Route path="Patient">
-            <Route index element={<AdminHomePage />} />
+            <Route index element={<PatientHomePage />} />
 
             <Route path="patient-medicine" element={<PatientMedicine />} />
             {/* <Route path="packages" element={<AdminPackagesPage />} /> */}
           </Route>
 
           <Route path="Pharmacist">
-            <Route index element={<AdminHomePage />} />
+            <Route index element={<PharmacistHomePage />} />
 
             <Route path="ph-medicine" element={<PhMedicine />} />
             {/* <Route path="packages" element={<AdminPackagesPage />} /> */}

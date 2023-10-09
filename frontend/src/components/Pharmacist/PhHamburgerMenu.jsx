@@ -123,7 +123,7 @@ import {
             <a
               id="home"
               className="menu-item"
-              href="/doctor"
+              href="/pharmacist"
               onClick={closeMenu}
               style={{
                 color: "var(--gray-600, #6C757D)",
@@ -162,7 +162,7 @@ import {
               Home
             </a>
             {/* Add a line between menu items */}
-            <hr className="menu-line" />
+{/*             <hr className="menu-line" />
             <a
               id="profile"
               className="menu-item"
@@ -174,7 +174,7 @@ import {
                 fontSize: "0.9375rem",
                 fontStyle: "normal",
                 fontWeight: 400,
-                lineHeight: "1rem" /* 106.667% */,
+                lineHeight: "1rem" ,
                 display: "flex",
                 alignItems: "center",
                 textDecoration: "none", // To remove underlines
@@ -184,12 +184,12 @@ import {
               <FontAwesomeIcon icon={faUser} style={{ marginRight: "0.5rem" }} />
               My Profile
             </a>
-  
+   */}
             <hr className="menu-line" />
             <a
               id="prescription"
               className="menu-item"
-              href="/doctor/doctor-patients"
+              href="/pharmacist/ph-medicine"
               onClick={closeMenu}
               style={{
                 color: "var(--gray-600, #6C757D)",
