@@ -13,19 +13,31 @@ import PatientMedicine from "./pages/Patient/PatientViewMedicine";
 import PhMedicine from "./pages/Pharmacist/PhViewMedicine";
 import PatientHomePage from "./pages/Patient/PatientHomePage";
 import PharmacistHomePage from "./pages/Pharmacist/PharmacistHomePage";
-
+import PatientSignup from "./pages/Guest/PatientSignup";
+import Login from "./pages/Guest/Login";
+import PharmSignup from "./pages/Guest/PharmSignup";
 function App() {
   return (
     <BrowserRouter>
       <div className="bg-light">
         <Routes>
           <Route path="/" element={<GuestHomePage />} />
+
+          <Route path="login">
+            <Route index element={<Login />} />
+          </Route>
+
           <Route path="GuestHomePage">
             <Route index element={<GuestHomePage />} />
           </Route>
-          {/*   <Route path="login">
-            <Route index element={<Login />} />
-          </Route> */}
+
+          <Route path="patient-signup">
+            <Route index element={<PatientSignup />} />
+          </Route>
+
+          <Route path="doctor-signup">
+            <Route index element={<PharmSignup />} />
+          </Route>
 
           <Route path="admin">
             <Route index element={<AdminHomePage />} />
