@@ -25,7 +25,7 @@ const getAdmins = async (req, res) => {
 };
 
 const deleteAdmin = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
   // check if admin exists in database
   admin
     .findByIdAndDelete(id)

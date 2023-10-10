@@ -50,8 +50,8 @@ const createPatient = async (req, res) => {
 const updatePatientInfo = async (req, res) => {
   try {
     const updatedPharmacist = await Patient.findByIdAndUpdate(
-      req.body.id,
-      req.body,
+      req.params.id,
+      req.params,
       { new: true }
     );
     if (updatedPharmacist == null)
@@ -64,7 +64,7 @@ const updatePatientInfo = async (req, res) => {
 
 const deletePatient = async (req, res) => {
   try {
-    const deletedPharmacist = await Patient.findByIdAndDelete(req.body.id);
+    const deletedPharmacist = await Patient.findByIdAndDelete(req.params.id);
     if (!deletedPharmacist) {
       return res.status(404).json({ error: "Patient not found" });
     }

@@ -44,7 +44,7 @@ const getPharmacists = async (req, res) => {
 
 const getPharmacist = async (req, res) => {
   try {
-    const pharmacist = await Pharmacist.findById(req.body.id);
+    const pharmacist = await Pharmacist.findById(req.params.id);
     if (!pharmacist) {
       return res.status(404).json({ error: "Pharmacist not found" });
     }
@@ -66,8 +66,8 @@ const getInactivePharmacists = async (req, res) => {
 const updatePharmacist = async (req, res) => {
   try {
     const updatedPharmacist = await Pharmacist.findByIdAndUpdate(
-      req.body.id,
-      req.body,
+      req.params.id,
+      req.params,
       { new: true }
     );
     if (updatedPharmacist == null)
@@ -80,7 +80,7 @@ const updatePharmacist = async (req, res) => {
 
 const deletePharmacist = async (req, res) => {
   try {
-    const deletedPharmacist = await Pharmacist.findByIdAndDelete(req.body.id);
+    const deletedPharmacist = await Pharmacist.findByIdAndDelete(req.params.id);
     if (!deletedPharmacist) {
       return res.status(404).json({ error: "Pharmacist not found" });
     }

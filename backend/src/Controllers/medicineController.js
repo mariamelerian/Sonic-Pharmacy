@@ -11,7 +11,7 @@ const getMedicines = async (req, res) => {
 };
 
 const getMedicine = async (req, res) => {
-  const id = req.body.id;
+  const id = req.params.id;
 
   try {
     const medicine = await Medicine.findById(id);
@@ -22,7 +22,7 @@ const getMedicine = async (req, res) => {
 };
 
 const searchMedicine = async (req, res) => {
-  const name = req.body.name;
+  const name = req.params.name;
 
   try {
     const medicine = await Medicine.findOne({
@@ -48,12 +48,22 @@ const getMedicineSale = async (req, res) => {
 };
 
 const filterMedicine = async (req, res) => {
-  if (!req.body.medicinalUse)
-    return res.status(400).json({ message: "Medicinal use not specified" });
-  const medicinalUse = req.body.medicinalUse;
+  const medicinalUses = req.body.medicinalUses;
+
+  if (
+    !medicinalUses ||
+    !Array.isArray(medicinalUses) ||
+    medicinalUses.length === 0
+  ) {
+    return res
+      .status(400)
+      .json({ message: "Medicinal uses not specified or not in array format" });
+  }
 
   try {
-    const medicines = await Medicine.find({ medicinalUse: medicinalUse });
+    const medicines = await Medicine.find({
+      medicinalUse: { $in: medicinalUses },
+    });
     res.status(200).json(medicines);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -90,10 +100,10 @@ const createMedicine = async (req, res) => {
 };
 
 const updateMedicine = async (req, res) => {
-  const id = req.body.id;
+  const id = req.params.id;
 
   try {
-    const updatedMedicine = await Medicine.findByIdAndUpdate(id, req.body, {
+    const updatedMedicine = await Medicine.findByIdAndUpdate(id, req.params, {
       new: true,
     });
     if (!updatedMedicine)
@@ -105,7 +115,7 @@ const updateMedicine = async (req, res) => {
 };
 
 const deleteMedicine = async (req, res) => {
-  const id = req.body.id;
+  const id = req.params.id;
 
   try {
     const deletedMedicine = await Medicine.findByIdAndDelete(id);

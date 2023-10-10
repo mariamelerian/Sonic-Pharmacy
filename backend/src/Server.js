@@ -78,7 +78,6 @@ app.get("/medicines", getMedicines);
 app.get("/medicine", getMedicine);
 app.get("/medicineByName", searchMedicine);
 app.get("/medicineSales", getMedicineSale);
-app.get("/filterMedicine", filterMedicine);
 app.get("/medicinalUses", getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
@@ -88,6 +87,7 @@ app.post("/newPatient", createPatient);
 app.post("/newAdmin", createAdmin);
 app.post("/newPharmacist", registerPharmacist);
 app.post("/newMedicine", createMedicine);
+app.post("/filterMedicine", filterMedicine);
 
 app.put("/updatePatient", updatePatientInfo);
 app.put("/updateMedicine", updateMedicine);
