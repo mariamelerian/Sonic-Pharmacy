@@ -58,6 +58,11 @@ function PhShowMedicines() {
     setShowMedicineForm(!showMedicineForm);
   };
 
+  const onCancel = () => {
+    setShowMedicineForm(false);
+  };
+
+
   const [editedMedicine, setEditedMedicine] = useState(null);
 
   const handleEditMedicine = (index) => {
@@ -77,7 +82,7 @@ function PhShowMedicines() {
 
   return (
     <div>
-      {showMedicineForm && <MedicineForm />}
+      {showMedicineForm && <MedicineForm onCancel={onCancel}/>}
       <Form className="my-4 mx-3">
         <Form.Control
           type="text"
