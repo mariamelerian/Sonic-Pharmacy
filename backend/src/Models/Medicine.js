@@ -3,9 +3,8 @@ const { MedicinalUseArray } = require("./MedicinalUse");
 
 const medicineSchema = new mongoose.Schema({
   picture: {
-    data: Buffer, // Store image data as Buffer
-    contentType: String, // Specify the content type of the image
-  },
+    type: String,
+  }, // Store the image source as a string
   name: {
     type: String,
     required: true,
@@ -36,15 +35,6 @@ const medicineSchema = new mongoose.Schema({
     enum: MedicinalUseArray,
     required: true,
   },
-});
-
-// Define a virtual property to convert picture data to base64 data URI
-medicineSchema.virtual("imageSrc").get(function () {
-  if (this.picture && this.picture.data && this.picture.contentType) {
-    const imageData = Buffer.from(this.picture.data).toString("base64");
-    return `data:${this.picture.contentType};base64,${imageData}`;
-  }
-  return null;
 });
 
 const Medicine = mongoose.model("Medicine", medicineSchema);

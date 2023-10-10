@@ -18,12 +18,12 @@ const registerPharmacist = async (req, res) => {
     }
     //add default picture
     if (!req.body.picture) {
-      let picture = {};
       const path = require("path");
       const filePath = path.join(__dirname, "../res/default-profile-pic.jpg");
-      picture.data = fs.readFileSync(filePath, "utf-8");
-      picture.contentType = "image/jpeg";
-      req.body.picture = picture;
+      const imageBuffer = fs.readFileSync(filePath);
+      const base64ImageData = imageBuffer.toString("base64");
+      const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
+      req.body.picture = imageSrc;
     }
     const newPharmacist = new Pharmacist(req.body);
     const savedPharmacist = await newPharmacist.save();
