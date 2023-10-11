@@ -2,11 +2,9 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import GuestHomePage from "./pages/Guest/GuestHomePage";
-//import Login from "./pages/Guest/Login";
 import AdminHomePage from "./pages/Admin/AdminHomePage";
 import AdminPatientsPage from "./pages/Admin/AdminPatientsPage";
 import AdminPharmacistPage from "./pages/Admin/AdminPharmacistPage";
-//import AdminPackagesPage from "./pages/Admin/AdminPackagesPage";
 import AdminAdminsPage from "./pages/Admin/AdminAdminsPage";
 import AdminMedicine from "./pages/Admin/AdminViewMedicine";
 import PatientMedicine from "./pages/Patient/PatientViewMedicine";
@@ -16,6 +14,8 @@ import PharmacistHomePage from "./pages/Pharmacist/PharmacistHomePage";
 import PatientSignup from "./pages/Guest/PatientSignup";
 import Login from "./pages/Guest/Login";
 import PharmSignup from "./pages/Guest/PharmSignup";
+import PhSales from "./pages/Pharmacist/PhViewSales";
+
 function App() {
   return (
     <BrowserRouter>
@@ -35,7 +35,7 @@ function App() {
             <Route index element={<PatientSignup />} />
           </Route>
 
-          <Route path="doctor-signup">
+          <Route path="pharmacist-signup">
             <Route index element={<PharmSignup />} />
           </Route>
 
@@ -45,21 +45,18 @@ function App() {
             <Route path="patients-list" element={<AdminPatientsPage />} />
             <Route path="admins-list" element={<AdminAdminsPage />} />
             <Route path="admin-medicine" element={<AdminMedicine />} />
-            {/* <Route path="packages" element={<AdminPackagesPage />} /> */}
           </Route>
 
           <Route path="Patient">
             <Route index element={<PatientHomePage />} />
-
             <Route path="patient-medicine" element={<PatientMedicine />} />
-            {/* <Route path="packages" element={<AdminPackagesPage />} /> */}
           </Route>
 
           <Route path="Pharmacist">
             <Route index element={<PharmacistHomePage />} />
 
             <Route path="ph-medicine" element={<PhMedicine />} />
-            {/* <Route path="packages" element={<AdminPackagesPage />} /> */}
+            <Route path="ph-sales" element={<PhSales />} />
           </Route>
 
           <Route path="*" element={<>Page not found</>} />

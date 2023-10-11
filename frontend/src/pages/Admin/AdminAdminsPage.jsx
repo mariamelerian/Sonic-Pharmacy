@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import AdminViewTable from "../../components/Admin/AdminViewTable";
 import AdminSearchBar from "../../components/Admin/AdminSearchBar";
 import AppNavbar from "../../components/AppNavigation/AppNavbar";
@@ -45,4 +45,5 @@ export default function AdminAdminsPage() {
     </Container>
   </>
   )
+
 }
