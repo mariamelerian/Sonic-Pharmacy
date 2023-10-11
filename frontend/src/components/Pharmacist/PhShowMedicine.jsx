@@ -62,7 +62,6 @@ function PhShowMedicines() {
     setShowMedicineForm(false);
   };
 
-
   const [editedMedicine, setEditedMedicine] = useState(null);
 
   const handleEditMedicine = (index) => {
@@ -82,7 +81,7 @@ function PhShowMedicines() {
 
   return (
     <div>
-      {showMedicineForm && <MedicineForm onCancel={onCancel}/>}
+      {showMedicineForm && <MedicineForm onCancel={onCancel} />}
       <Form className="my-4 mx-3">
         <Form.Control
           type="text"
@@ -106,9 +105,7 @@ function PhShowMedicines() {
                     className="medicine-image"
                   />
                 </div>
-                <div className="medicine-price">
-                  Price: ${medicine.price}
-                </div>
+                <div className="medicine-price">Price: ${medicine.price}</div>
                 {editedMedicine === index ? (
                   <div>
                     <Form.Group>
@@ -241,13 +238,13 @@ function PhShowMedicines() {
                     </span>
                   )} 
                   </div>*/}
-              
+
                 <div className="edit-button">
                   <Button
                     variant="link"
                     onClick={() => handleEditMedicine(index)}
                   >
-                    Edit 
+                    Edit
                     <FontAwesomeIcon icon={faEdit} className="ml-1" />
                   </Button>
                 </div>
