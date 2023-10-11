@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 const pharmacistSchema = new Schema(
   {
     picture: {
-      data: Buffer, // Store image data as Buffer
-      contentType: String, // Specify the content type of the image
+      type: String,
     },
     username: {
       type: String,

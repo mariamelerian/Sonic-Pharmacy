@@ -1,40 +1,58 @@
-//Di zi el main method lama bagy a run ba run el app js 3alatol
-//use nodemon badal node 3lashan ma3odsh 22fl w aftah el server kol mara
-
 // External variables
 const express = require("express");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 require("dotenv").config();
-//Declare ll methods el haktbha
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+//imports
 const {
   getAdmins,
-  changeAdminPassword,
   deleteAdmin,
   createAdmin,
-} = require("./Routes/AdminController");
+} = require("./Controllers/adminstratorController");
 const {
   createPatient,
   deletePatient,
   updatePatientInfo,
-  changePatientPassword,
   getPatients,
-} = require("./Routes/PatientController");
-//el link bta3 el DB
-const MongoURI = process.env.MONGO_URI;
+} = require("./Controllers/patientController");
+
+const {
+  getMedicines,
+  getMedicine,
+  getMedicineSale,
+  searchMedicine,
+  filterMedicine,
+  createMedicine,
+  updateMedicine,
+  deleteMedicine,
+} = require("./Controllers/medicineController");
+
+const {
+  registerPharmacist,
+  getPharmacists,
+  getPharmacist,
+  getInactivePharmacists,
+  updatePharmacist,
+  deletePharmacist,
+} = require("./Controllers/pharmacistController");
+
+const {
+  MedicinalUseArray,
+  getMedicinalUses,
+} = require("./Models/MedicinalUse");
 
 //App variables
-//3lashan a3rf akteb b express
 const app = express();
-//3lashan lw i am running haga fi el port el awlani yb2a fi option tany
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 const port = process.env.PORT || "8000";
-//require el models (schema) basamih kol ma aktb user refer to el schema user model
-// const user = require('./Models/User');
 
-// #Importing the userController
-
-// configurations
 // Mongo DB
+const MongoURI = process.env.MONGO_URI;
 mongoose
   .connect(MongoURI)
   .then(() => {
@@ -45,11 +63,10 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
-/*
-                                                    Start of your code
-*/
-app.get("/home", (req, res) => {
-  res.status(200).send("You have everything installed!");
+
+//TODO: main request
+app.get("/", (req, res) => {
+  res.status(200).send("Server is working!");
 });
 
 // #Routing to userController here
@@ -57,14 +74,32 @@ app.get("/home", (req, res) => {
 //ba map kol method l http req
 app.get("/admins", getAdmins);
 app.get("/patients", getPatients);
+app.get("/medicines", getMedicines);
+app.get("/medicine", getMedicine);
+app.get("/medicineByName", searchMedicine);
+app.get("/medicineSales", getMedicineSale);
+app.get("/medicinalUses", getMedicinalUses);
+app.get("/pharmacists", getPharmacists);
+app.get("/pharmacist", getPharmacist);
+app.get("/pharmacistApplications", getInactivePharmacists);
+
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", createAdmin);
-app.put("/changeAdminPassword", changeAdminPassword);
-app.put("changePatientPassword", changePatientPassword);
-app.put("/updatePatient", updatePatientInfo);
-app.delete("deleteAdmin", deleteAdmin);
-app.delete("/deletePatient", deletePatient);
+app.post("/newPharmacist", registerPharmacist);
+app.post("/newMedicine", createMedicine);
+app.post("/filterMedicine", filterMedicine);
 
-/*
-                                                    End of your code
-*/
+app.put("/updatePatient", updatePatientInfo);
+app.put("/updateMedicine", updateMedicine);
+app.put("/updatePharmacist", updatePharmacist);
+
+app.delete("/deleteAdmin", deleteAdmin);
+app.delete("/deletePatient", deletePatient);
+app.delete("/deleteMedicine", deleteMedicine);
+app.delete("/deletePharmacist", deletePharmacist);
+
+//inserting dummy data
+const dummyData = require("./dummyData/medicine");
+const Medicine = require("./Models/Medicine");
+const { insertDummyData } = require("./utils.js");
+//insertDummyData(dummyData, Medicine);

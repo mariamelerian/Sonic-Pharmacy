@@ -3,9 +3,8 @@ const { MedicinalUseArray } = require("./MedicinalUse");
 
 const medicineSchema = new mongoose.Schema({
   picture: {
-    data: Buffer, // Store image data as Buffer
-    contentType: String, // Specify the content type of the image
-  },
+    type: String,
+  }, // Store the image source as a string
   name: {
     type: String,
     required: true,

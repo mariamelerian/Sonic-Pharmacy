@@ -27,6 +27,7 @@ const patientSchema = new Schema(
     gender: {
       type: String,
       required: true,
+      enum: ["Male", "Female"],
     },
     mobileNumber: {
       type: String,
@@ -40,9 +41,13 @@ const patientSchema = new Schema(
       type: String,
       required: true,
     },
+    emergencyRelation: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-const Patient = mongoose.model("Patient", patientSchema);
+const Patient = mongoose.model("PatientPharmacy", patientSchema);
 module.exports = Patient;
