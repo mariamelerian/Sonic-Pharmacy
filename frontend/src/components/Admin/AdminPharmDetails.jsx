@@ -72,7 +72,7 @@ function AdminPharmDetails() {
 
   return (
     <div>
-      {/* the first one is the correct one */}
+      {/* aya zabatetha nevermind */}
       {/* {pharmacists.map((pharmacist, index) => {
         if (pharmacist.status === "Active") {
           return (
