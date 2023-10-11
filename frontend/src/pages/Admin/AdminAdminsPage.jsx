@@ -10,29 +10,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function AdminAdminsPage() {
-    const [showAddNewAdmin, setShowAddNewAdmin] = useState(false);
 
-    const admins = [
-      { id: 1, username: "@bwald" },
-      { id: 2, username: "@svan" },
-    ];
-
-    const toggleAddNewAdmin = () => {
-        setShowAddNewAdmin(!showAddNewAdmin);
-      };
-
-    const addBtnText=showAddNewAdmin?"Close Form":"Add new Adminstrator";
-    const btnStyle={
-        backgroundcolor: `${showAddNewAdmin ? "#ff6b35" : "#05afb9"} !important`, //leh msh shaghala?
-        marginBottom: '20px'
-    }
-    const iconStyle={
-        opacity: 1,
-        color: "#f0f0f0",
-        fontSize: "20px",
-        cursor: "pointer",
-        marginLeft:"10px"
-  }
 
   return (
     <>
@@ -60,20 +38,10 @@ export default function AdminAdminsPage() {
         marginLeft: "100px",
       }}
     >
-      <Button style={btnStyle} id="newAdminForm" onClick={toggleAddNewAdmin}>{addBtnText}
-      {showAddNewAdmin? <FontAwesomeIcon
-                icon={faXmark}
-                style={iconStyle}
-              />:<FontAwesomeIcon
-              icon={faPlus}
-              style={iconStyle}
-            />
-      }
-      </Button>
-      {showAddNewAdmin && <AddNewAdmin />}
+      
 
       <AdminSearchBar/>
-      <AdminViewTable onAdmins={true} users={admins}/>
+      <AdminViewTable/>
     </Container>
   </>
   )
