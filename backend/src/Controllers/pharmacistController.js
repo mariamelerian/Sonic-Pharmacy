@@ -35,7 +35,7 @@ const registerPharmacist = async (req, res) => {
 
 const getPharmacists = async (req, res) => {
   try {
-    const pharmacists = await Pharmacist.find();
+    const pharmacists = await Pharmacist.find({ state: "Active" });
     res.status(200).json(pharmacists);
   } catch (error) {
     res.status(500).json({ error: error.message });
