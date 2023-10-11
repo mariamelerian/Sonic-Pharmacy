@@ -11,7 +11,7 @@ const getMedicines = async (req, res) => {
 };
 
 const getMedicine = async (req, res) => {
-  const id = req.params.id;
+  const id = req.query._id;
 
   try {
     const medicine = await Medicine.findById(id);
@@ -22,7 +22,7 @@ const getMedicine = async (req, res) => {
 };
 
 const searchMedicine = async (req, res) => {
-  const name = req.params.name;
+  const name = req.query.name;
 
   try {
     const medicine = await Medicine.findOne({
@@ -71,21 +71,20 @@ const filterMedicine = async (req, res) => {
 };
 
 const createMedicine = async (req, res) => {
-  if (!req.body.picture) {
-    let picture = {};
-    const path = require("path");
-    const filePath = path.join(__dirname, "../res/default-medicine-pic.jpg");
-    const imageBuffer = fs.readFileSync(filePath);
-    const base64ImageData = imageBuffer.toString("base64");
-    const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
-    req.body.picture = imageSrc;
-  }
-
-  const medicine = new Medicine(req.body);
+  // if (!req.body.picture) {
+  //   let picture = {};
+  //   const path = require("path");
+  //   const filePath = path.join(__dirname, "../res/default-medicine-pic.jpg");
+  //   const imageBuffer = fs.readFileSync(filePath);
+  //   const base64ImageData = imageBuffer.toString("base64");
+  //   const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
+  //   req.body.picture = imageSrc;
+  // }
 
   try {
-    const newMedicine = await medicine.save();
-    res.status(201).json(newMedicine);
+    const medicine = await Medicine.create(req.body);
+    // const newMedicine = await medicine.save();
+    res.status(200).json(medicine);
   } catch (error) {
     if (error.code === 11000) {
       // Duplicate key error (E11000)
@@ -100,10 +99,10 @@ const createMedicine = async (req, res) => {
 };
 
 const updateMedicine = async (req, res) => {
-  const id = req.params.id;
+  const id = req.query._id;
 
   try {
-    const updatedMedicine = await Medicine.findByIdAndUpdate(id, req.params, {
+    const updatedMedicine = await Medicine.findByIdAndUpdate(id, req.query, {
       new: true,
     });
     if (!updatedMedicine)
@@ -115,7 +114,7 @@ const updateMedicine = async (req, res) => {
 };
 
 const deleteMedicine = async (req, res) => {
-  const id = req.params.id;
+  const id = req.query._id;
 
   try {
     const deletedMedicine = await Medicine.findByIdAndDelete(id);

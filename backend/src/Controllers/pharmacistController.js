@@ -80,7 +80,7 @@ const updatePharmacist = async (req, res) => {
 
 const deletePharmacist = async (req, res) => {
   try {
-    const deletedPharmacist = await Pharmacist.findByIdAndDelete(req.params.id);
+    const deletedPharmacist = await Pharmacist.findByIdAndDelete(req.query._id);
     if (!deletedPharmacist) {
       return res.status(404).json({ error: "Pharmacist not found" });
     }
