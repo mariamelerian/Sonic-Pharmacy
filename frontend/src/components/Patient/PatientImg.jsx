@@ -1,5 +1,5 @@
 import { Card, Image } from "react-bootstrap";
-import mainImg from "../../Assets/Admin/AdminHome.jpg";
+import mainImg from "../../Assets/Patient/HomeImg.png";
 /* import { useSelector } from "react-redux";
 import loginAdminReducer from "../../state/loginAdminReducer"; */
 

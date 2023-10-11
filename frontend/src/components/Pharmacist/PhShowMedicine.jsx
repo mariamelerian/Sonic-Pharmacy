@@ -1,4 +1,16 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
+//  import { Card, Col, Row, Form, Button } from "react-bootstrap";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import {
+//   faChevronDown,
+//   faChevronUp,
+//   faEdit,
+// } from "@fortawesome/free-solid-svg-icons";
+// import doctorImg from "../../Assets/Patient/Doctor.jpg";
+import MedicineForm from "./PhNewMedicine";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
+import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Form, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -6,50 +18,42 @@ import {
   faChevronUp,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
-import doctorImg from "../../Assets/Patient/Doctor.jpg";
-import MedicineForm from "./PhNewMedicine";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 function PhShowMedicines() {
-  const Medicines = [
-    {
-      medicineName: "Medicine 1",
-      price: 9.99,
-      description: "This is the description for Medicine 1.",
-      medicinalUse: "Medicinal use for Medicine 1.",
-      image: doctorImg,
-      quantity: 100,
-      sales: 50,
-    },
-    {
-      medicineName: "Medicine 2",
-      price: 19.99,
-      description: "This is the description for Medicine 2.",
-      medicinalUse: "Medicinal use for Medicine 2.",
-      image: doctorImg,
-      quantity: 200,
-      sales: 150,
-    },
-    // Add more medicine objects as needed
-  ];
-
   const [searchTerm, setSearchTerm] = useState("");
-  //const [expandedMedicine, setExpandedMedicine] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [responseData, setResponseData] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/medicines");
+      if (response.status === 200) {
+        setResponseData(response.data);
+        setLoading(false);
+      } else {
+        setError("Server error");
+        setLoading(false);
+      }
+    } catch (error) {
+      setError("An error occurred while fetching data.");
+      setLoading(false);
+    }
+  };
+  const Medicines = responseData;
+  console.log(responseData);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // const handleExpand = (index) => {
-  //   if (expandedMedicine === index) {
-  //     setExpandedMedicine(null);
-  //   } else {
-  //     setExpandedMedicine(index);
-  //   }
-  // };
-
-  const filteredMedicines = Medicines.filter((medicine) =>
-    medicine.medicineName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMedicines = responseData.filter((medicine) =>
+    medicine.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const [showMedicineForm, setShowMedicineForm] = useState(false);
@@ -58,7 +62,7 @@ function PhShowMedicines() {
     setShowMedicineForm(!showMedicineForm);
   };
 
-  const onCancel = () => {
+  const onClose = () => {
     setShowMedicineForm(false);
   };
 
@@ -74,14 +78,17 @@ function PhShowMedicines() {
     setEditedMedicine(updatedMedicines);
   };
 
-  const handleSaveMedicine = (index) => {
+  const handleSaveMedicine = async (index) => {
     // Perform save logic here
     setEditedMedicine(null);
   };
 
   return (
     <div>
-      {showMedicineForm && <MedicineForm onCancel={onCancel} />}
+      {showMedicineForm && (
+        <MedicineForm fetchData={fetchData} onClose={onClose} />
+      )}
+
       <Form className="my-4 mx-3">
         <Form.Control
           type="text"
@@ -92,16 +99,16 @@ function PhShowMedicines() {
       </Form>
       <Row>
         {filteredMedicines.map((medicine, index) => (
-          <Col key={medicine.medicineName} lg={6} md={6} sm={12}>
+          <Col key={medicine.name} lg={6} md={6} sm={12}>
             <Card className="mb-4 mx-3 bg-light">
               <Card.Header className="text-center">
-                Medicine Name: {medicine.medicineName}
+                Medicine Name: {medicine.name}
               </Card.Header>
               <Card.Body className="text-center">
                 <div className="medicine-image-container">
                   <img
                     src={medicine.image}
-                    alt={medicine.medicineName}
+                    alt={medicine.name}
                     className="medicine-image"
                   />
                 </div>
@@ -184,19 +191,16 @@ function PhShowMedicines() {
                         }
                       />
                     </Form.Group>
-                    <Button
-                      variant="primary"
-                      className="mr-2"
-                      onClick={() => handleSaveMedicine(index)}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={() => setEditedMedicine(null)}
-                    >
-                      Cancel
-                    </Button>
+                    <Form.Group>
+                      <Form.Label>Active In</Form.Label>
+                      <Form.Control
+                        type="number"
+                        value={medicine.sales}
+                        onChange={(e) =>
+                          handleMedicineChange(index, "sales", e.target.value)
+                        }
+                      />
+                    </Form.Group>
                   </div>
                 ) : (
                   <div>
