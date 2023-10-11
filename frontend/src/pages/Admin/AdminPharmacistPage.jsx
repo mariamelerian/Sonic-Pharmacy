@@ -12,11 +12,6 @@ import AdminPharmDetails from "../../components/Admin/AdminPharmDetails";
 export default function AdminPharmacistPage() {
   const [tab, setTab] = useState("registered");
 
-  const doctors = [
-    { id: 1, firstName: "Robin", lastName: "Otto", username: "@rno" },
-    { id: 2, firstName: "Joe", lastName: "Doe", username: "@joedoe" },
-  ];
-
   return (
     <>
       <AppNavbar hamburgerMenu={<AdminBurgerMenu />} />
@@ -59,7 +54,7 @@ export default function AdminPharmacistPage() {
             }}
           >
             {/* <AdminSearchBar /> */}
-            <AdminPharmDetails onAdmins={false} users={doctors} />
+            <AdminPharmDetails />
           </Container>
         </Tab>
         <Tab eventKey="requests" title="Requests">

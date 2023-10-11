@@ -88,6 +88,7 @@ function PhShowMedicines() {
       {showMedicineForm && (
         <MedicineForm fetchData={fetchData} onClose={onClose} />
       )}
+
       <Form className="my-4 mx-3">
         <Form.Control
           type="text"

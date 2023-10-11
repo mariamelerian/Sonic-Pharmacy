@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+
 import { Card, Col, Row, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faClock, faCheckCircle, faTimesCircle, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan,faCalendar, faClock, faCheckCircle, faTimesCircle, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useState } from "react";
+import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
+import { Modal } from "react-bootstrap";
+import axios from "axios";
 
 function AdminPatientsDetails() {
   const Patients = [
@@ -78,112 +83,161 @@ function AdminPatientsDetails() {
     }
   };
 
-  return (
-    <div>
-      <Form className="my-4 mx-3">
-        <Form.Control
-          type="text"
-          placeholder="Search Patients"
-          value={searchTerm}
-          onChange={handleSearch}
-        />
-      </Form>
-      {filteredPatients.map((patient, index) => (
-        <Card className="mb-4 mx-3 bg-light" key={patient.PatientName}>
-          <Card.Header
-            className="d-flex align-items-center justify-content-between"
-            onClick={() => toggleExpand(index)}
-            style={{ cursor: "pointer" }}
-          >
-            <span>Patient Name: {patient.PatientName}</span>
-            <FontAwesomeIcon
-              icon={expandedPatient === index ? faChevronUp : faChevronDown}
-            />
-          </Card.Header>
-          {expandedPatient === index && (
-            <Card.Body>
-              <Row>
-                <Col lg={4}>
-               {/*    <div
-                    className={`appointment-icon-container ${
-                      patient.status === "Confirmed" ? "confirmed" : "cancelled"
-                    }`}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        patient.status === "Confirmed"
-                          ? faCheckCircle
-                          : faTimesCircle
-                      }
-                      className="appointment-icon"
-                    />
-                  </div> */}
-                </Col>
-                <Col lg={8}>
-                  <Card.Text>
-                    {/* <div className="show-more-date">
-                      <FontAwesomeIcon
-                        icon={faCalendar}
-                        style={{ marginRight: "0.5rem" }}
-                      />
-                      {patient.date}
-                    </div>
-                    <div className="show-more-time">
-                      <FontAwesomeIcon
-                        icon={faClock}
-                        style={{ marginRight: "0.5rem" }}
-                      />
-                      {patient.time}
-                    </div>
-                    <div
-                      className={`show-more-status ${
-                        patient.status === "Confirmed" ? "confirmed" : "cancelled"
-                      }`}
-                    >
-                      {patient.status}
-                    </div> */}
-                    <hr />
-                 {/*    <div className="upcoming-appointments">
-                      <h5>Upcoming Appointments</h5>
-                      {patient.upcomingAppointments.length === 0 ? (
-                        <p>No upcoming appointments</p>
-                      ) : (
-                        <ul>
-                          {patient.upcomingAppointments.map((appointment) => (
-                            <li key={appointment.date}>
-                              <div>{appointment.date}</div>
-                              <div>{appointment.time}</div>
-                              <div>{appointment.status}</div>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div> */}
-                    <hr />
-                    <div className="patient-info">
-                      <h5>Patients Information</h5>
-                      {/* <p>Age: {patient.age}</p> */}
-                      <p>Username: {patient.username}</p>
-                      <p>Email: {patient.email}</p>
-                      <p>Date of Birth: {patient.date}</p>
-                      <p>Gender: {patient.gender}</p>
-                      <p>Mobile Number: {patient.mobileNumber}</p>
-                      <p>Emergency Contact (Name): {patient.emergencyContactFN}</p>
-                      <p>Emergency Contact (Mobile Number): {patient.emergencyContactMN}</p>
-                      <p>Emergency Contact (Relation): {patient.emergencyContactR}</p>
+  const [loading, setLoading] = useState(true);
+  const [responseData, setResponseData] = useState([]);
+  const [id, setId] = useState("");
+  const [error, setError] = useState(null);
+  const [loadingg, isLoading] = useState(null);
+  const [viewModal, setViewModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [showAddNewAdmin, setShowAddNewAdmin] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+ 
 
-                      <button>Delete Patient</button>
-                      
-                      {/* <p>Medical History: {patient.medicalHistory}</p> */}
-                    </div>
-                  </Card.Text>
-                </Col>
-              </Row>
-            </Card.Body>
-          )}
-        </Card>
-      ))}
-    </div>
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const response = await axios.get("http://localhost:8000/patients");
+    try {
+      if (response.status === 200) {
+         setResponseData(response.data);
+      } else {
+        console.log("Server error");
+      }
+      setLoading(false);
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setError("No data found.");
+      } else if (error.response && error.response.status === 500) {
+        setError("Server Error");
+      }
+      setLoading(false);
+    }
+  };
+
+  const users = responseData;
+
+
+  const toggleViewModal = (user) => {
+    setSelectedPatient(user);
+    setViewModal(!viewModal);
+  };
+
+  const addBtnText = showAddNewAdmin ? "Close Form" : "Add new Adminstrator";
+  const btnStyle = {
+    backgroundcolor: `${showAddNewAdmin ? "#ff6b35" : "#05afb9"} !important`, //leh msh shaghala?
+    marginBottom: "20px",
+  };
+  const iconStyle = {
+    opacity: 1,
+    color: "#f0f0f0",
+    fontSize: "20px",
+    cursor: "pointer",
+    marginLeft: "10px",
+  };
+
+  const handleClose = () => setShowModal(false);
+
+
+  const deleteUser = async (id) => {
+    setError(null);
+    setId(id);
+    setShowModal(true);
+  };
+
+  const actuallyDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/deletePatient?_id=${id}`
+      );
+
+      if (response.status === 200) {
+        fetchData();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Error");
+    }
+
+    setTimeout(() => {
+      setError(null); // Clear the error after 5 seconds
+    }, 5000);
+    setShowModal(false);
+  };
+  
+
+  return (
+    <>
+    <Modal show={showModal} onHide={handleClose}>
+        <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
+        <Modal.Footer className="d-flex align-items-center justify-content-center">
+          <Button variant="danger" onClick={actuallyDelete}>
+            Yes
+          </Button>
+          <Button variant="success" onClick={handleClose}>
+            No
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <div>
+        <Table striped bordered hover variant="light" style={{ width: '1000px' }}>
+          <thead>
+            <tr>
+              <th style={{ color: '#099BA0' }}>Username</th>
+              <th style={{ color: '#099BA0' }}>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user._id} >
+                <td onClick={() => toggleViewModal(user)}>{user.username} </td>
+                <td onClick={() => toggleViewModal(user)}>{user.name}</td>
+                <td>
+                  <FontAwesomeIcon
+                    icon={faTrashCan}
+                    onClick={() => deleteUser(user._id)}
+                    style={{
+                      opacity: 1,
+                      color: "#ff6b35",
+                      fontSize: "20px",
+                      cursor: "pointer",
+                    }}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+      <div>
+        <Modal show={viewModal} onHide={() => toggleViewModal(null)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Patient Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {selectedPatient && (
+              <div>
+                <p>Username: {selectedPatient.username}</p>
+                <p>Name: {selectedPatient.name}</p>
+                <p>Email: {selectedPatient.email}</p>
+      <p>Date of Birth: {selectedPatient.dateOfBirth}</p>
+      <p>Gender: {selectedPatient.gender}</p>
+      <p>Mobile Number: {selectedPatient.mobileNumber}</p>
+      <p>Emergency Contact Name: {selectedPatient.emergencyFullName}</p>
+      <p>Emergency Contact Number: {selectedPatient.emergencyMobileNumber}</p>
+              </div>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => toggleViewModal(null)}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    </>
   );
 }
 

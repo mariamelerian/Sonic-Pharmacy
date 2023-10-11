@@ -36,7 +36,7 @@ export default function AdminPatientsPage() {
         }}
       >
         {/* <AdminSearchBar /> */}
-        <AdminPatientsDetails onAdmins={false} users={patients}/>
+        <AdminPatientsDetails users={patients}/>
       </Container>
     </>
   );

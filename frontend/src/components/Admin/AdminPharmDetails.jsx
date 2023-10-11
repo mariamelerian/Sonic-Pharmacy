@@ -1,78 +1,36 @@
-import React, { useState } from "react";
-import { Card, Col, Row, Form } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Card, Col, Row, Button, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendar, faClock, faCheckCircle, faTimesCircle, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 function AdminPharmDetails() {
-  const Pharmacists = [
-    {
-      PharmacistName: 'Ahmed',
-      email:'ahmed@hotmail.com',
-      username:'ahmed123',
-      date: "25-3-2003",
-      HourlyRate: '100/hr',
-      affliliation: 'St Jose',
-      educationalBackground: 'GUC',
-    /*   time: "10:00 AM",
-      status: "Confirmed", */
-   /*    upcomingAppointments: [
-        {
-          date: "2023-10-20",
-          time: "9:30 AM",
-          status: "Confirmed",
-        },
-        {
-          date: "2023-10-25",
-          time: "11:00 AM",
-          status: "Confirmed",
-        },
-      ], */
-      /* age: 20, */
-      gender: "Male",
-      /* medicalHistory: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor euismod lacus, non cursus nunc fringilla ut.", */
-    },
-    {
-      PharmacistName: 'Lola',
-      email:'lola@hotmail.com',
-      username:'lola123',
-      date: "7-10-2002",
-      HourlyRate: '1/hr',
-      affliliation: 'St Jose',
-      educationalBackground: 'GUC',
-      /* time: "2:30 PM",
-      status: "Cancelled", */
-      /* upcomingAppointments: [], */
-      /* age: 28, */
-      /* gender: "Female", */
-      /* medicalHistory: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor euismod lacus, non cursus nunc fringilla ut.", */
-    },
-    {
-        PharmacistName: 'Maddison',
-        email:'JamesMadders@hotmail.com',
-        username:'Madders',
-        date: "1-6-1996",
-        HourlyRate: '200/hr',
-        affliliation: 'St Jose',
-        educationalBackground: 'GUC',
-        /* time: "2:30 PM",
-        status: "Cancelled", */
-        /* upcomingAppointments: [], */
-        /* age: 26, */
-        gender: "Male",
-        /* medicalHistory: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor euismod lacus, non cursus nunc fringilla ut.", */
-      },
-    // Add more patient objects as needed
-  ];
+  const [pharmacists, setPharmacists] = useState([]);
+  const [error1, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [id, setId] = useState("");
 
-  const [searchTerm, setSearchTerm] = useState("");
+  useEffect(() => {
+    fetchData();
+  }, []);
+  useEffect(() => {}, [id]);
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/pharmacists");
+      if (response.status === 200) {
+        setPharmacists(response.data);
+      } else {
+        console.log("Server error");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setError("No pharmacists found.");
+      } else if (error.response && error.response.status === 500) {
+        setError("Server Error");
+      }
+    }
   };
-
-  const filteredPharmacists = Pharmacists.filter((pharmacist) =>
-    pharmacist.PharmacistName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   const [expandedPharmacist, setExpandedPharmacist] = useState(null);
 
@@ -84,24 +42,106 @@ function AdminPharmDetails() {
     }
   };
 
+  const handleClose = () => setShowModal(false);
+
+  const deleteUser = async (id) => {
+    setError(null);
+    setId(id);
+    setShowModal(true);
+  };
+
+  const actuallyDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/deletePharmacist?_id=${id}`
+      );
+
+      if (response.status === 200) {
+        fetchData();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Error");
+    }
+
+    setTimeout(() => {
+      setError(null); // Clear the error after 5 seconds
+    }, 5000);
+    setShowModal(false);
+  };
+
   return (
     <div>
-      <Form className="my-4 mx-3">
-        <Form.Control
-          type="text"
-          placeholder="Search Pharmacists"
-          value={searchTerm}
-          onChange={handleSearch}
-        />
-      </Form>
-      {filteredPharmacists.map((pharmacist, index) => (
-        <Card className="mb-4 mx-3 bg-light" key={pharmacist.PharmacistName}>
+      {/* aya zabatetha nevermind */}
+      {/* {pharmacists.map((pharmacist, index) => {
+        if (pharmacist.status === "Active") {
+          return (
+            <Card
+              className="mb-4 mx-3 bg-light"
+              key={pharmacist._id}
+              style={{ width: "25rem" }}
+            >
+              <Card.Header
+                className="d-flex align-items-center justify-content-between"
+                onClick={() => toggleExpand(index)}
+                style={{ cursor: "pointer" }}
+              >
+                <span>{pharmacist.name}</span>
+                <FontAwesomeIcon
+                  icon={
+                    expandedPharmacist === index ? faChevronUp : faChevronDown
+                  }
+                />
+              </Card.Header>
+              {expandedPharmacist === index && (
+                <Card.Body>
+                  <Row>
+                    <Col lg={8}>
+                      <Card.Text>
+                        <div className="patient-info">
+                          <p>Username: {pharmacist.username}</p>
+                          <p>Email: {pharmacist.email}</p>
+                          <p>Date of Birth: {pharmacist.date}</p>
+                          <p>Hourly Rate: {pharmacist.HourlyRate}</p>
+                          <p>Affiliation: {pharmacist.affliliation}</p>
+                          <p>
+                            Educational Background:{" "}
+                            {pharmacist.educationalBackground}
+                          </p>
+                          <Button>Delete Pharmacist</Button>
+                        </div>
+                      </Card.Text>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              )}
+            </Card>
+          );
+        }
+      })} */}
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
+        <Modal.Footer className="d-flex align-items-center justify-content-center">
+          <Button variant="danger" onClick={actuallyDelete}>
+            Yes
+          </Button>
+          <Button variant="success" onClick={handleClose}>
+            No
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      {pharmacists.map((pharmacist, index) => (
+        <Card
+          className="mb-4 mx-3 bg-light"
+          key={pharmacist._id}
+          style={{ width: "25rem" }}
+        >
           <Card.Header
             className="d-flex align-items-center justify-content-between"
             onClick={() => toggleExpand(index)}
             style={{ cursor: "pointer" }}
           >
-            <span>Pharmacist Name: {pharmacist.PharmacistName}</span>
+            <span>{pharmacist.name}</span>
             <FontAwesomeIcon
               icon={expandedPharmacist === index ? faChevronUp : faChevronDown}
             />
@@ -109,75 +149,21 @@ function AdminPharmDetails() {
           {expandedPharmacist === index && (
             <Card.Body>
               <Row>
-                <Col lg={4}>
-               {/*    <div
-                    className={`appointment-icon-container ${
-                      patient.status === "Confirmed" ? "confirmed" : "cancelled"
-                    }`}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        patient.status === "Confirmed"
-                          ? faCheckCircle
-                          : faTimesCircle
-                      }
-                      className="appointment-icon"
-                    />
-                  </div> */}
-                </Col>
                 <Col lg={8}>
                   <Card.Text>
-                    {/* <div className="show-more-date">
-                      <FontAwesomeIcon
-                        icon={faCalendar}
-                        style={{ marginRight: "0.5rem" }}
-                      />
-                      {patient.date}
-                    </div>
-                    <div className="show-more-time">
-                      <FontAwesomeIcon
-                        icon={faClock}
-                        style={{ marginRight: "0.5rem" }}
-                      />
-                      {patient.time}
-                    </div>
-                    <div
-                      className={`show-more-status ${
-                        patient.status === "Confirmed" ? "confirmed" : "cancelled"
-                      }`}
-                    >
-                      {patient.status}
-                    </div> */}
-                    <hr />
-                 {/*    <div className="upcoming-appointments">
-                      <h5>Upcoming Appointments</h5>
-                      {patient.upcomingAppointments.length === 0 ? (
-                        <p>No upcoming appointments</p>
-                      ) : (
-                        <ul>
-                          {patient.upcomingAppointments.map((appointment) => (
-                            <li key={appointment.date}>
-                              <div>{appointment.date}</div>
-                              <div>{appointment.time}</div>
-                              <div>{appointment.status}</div>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div> */}
-                    <hr />
                     <div className="patient-info">
-                      <h5>Pharmacists Information:</h5>
                       <p>Username: {pharmacist.username}</p>
                       <p>Email: {pharmacist.email}</p>
                       <p>Date of Birth: {pharmacist.date}</p>
-                      {/* <p>Age: {pharmacist.age}</p> */}
-                      {/* <p>Gender: {pharmacist.gender}</p> */}
                       <p>Hourly Rate: {pharmacist.HourlyRate}</p>
                       <p>Affiliation: {pharmacist.affliliation}</p>
-                      <p>Educational Background: {pharmacist.educationalBackground}</p>
-                      {/* <p>Medical History: {pharmacist.medicalHistory}</p> */}
-                      <button >Delete Pharmacist</button>
+                      <p>
+                        Educational Background:{" "}
+                        {pharmacist.educationalBackground}
+                      </p>
+                      <Button onClick={() => deleteUser(pharmacist._id)}>
+                        Delete Pharmacist
+                      </Button>
                     </div>
                   </Card.Text>
                 </Col>
