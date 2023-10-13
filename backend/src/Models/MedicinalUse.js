@@ -1,6 +1,5 @@
 const MedicinalUseArray = [
   "Pain Relief",
-  "Pain Relief",
   "Fever Relief",
   "Allergy Relief",
   "Digestive Health",
