@@ -50,10 +50,9 @@ export default function AdminDocReqs() {
         <AdminDocReqCard
           key={index}
           docName={user.name}
-          /* docSpecialty={user.specialty} */
           docEmail={user.email}
           docBirthDate={user.dateOfBirth}
-          docRate={user.rate}
+          docRate={user.hourlyRate}
           docAffiliation={user.affiliation}
           docEducation={user.education}
         />

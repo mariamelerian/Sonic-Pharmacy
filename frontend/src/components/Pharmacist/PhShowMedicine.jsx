@@ -1,23 +1,10 @@
-// import React, { useState } from "react";
-//  import { Card, Col, Row, Form, Button } from "react-bootstrap";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import {
-//   faChevronDown,
-//   faChevronUp,
-//   faEdit,
-// } from "@fortawesome/free-solid-svg-icons";
-// import doctorImg from "../../Assets/Patient/Doctor.jpg";
-import MedicineForm from "./PhNewMedicine";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-
 import React, { useEffect, useState } from "react";
-import { Card, Col, Row, Form, Button } from "react-bootstrap";
+import { Card, Col, Row, Form, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronDown,
-  faChevronUp,
-  faEdit,
-} from "@fortawesome/free-solid-svg-icons";
+import MedicineForm from "./PhNewMedicine";
+import { faPlus, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { deleteFilterArray } from "../../state/filterMedicine";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 function PhShowMedicines() {
@@ -25,9 +12,31 @@ function PhShowMedicines() {
   const [loading, setLoading] = useState(true);
   const [responseData, setResponseData] = useState([]);
   const [error, setError] = useState(null);
+  const [editedMedicine, setEditedMedicine] = useState(null);
+  const [showMedicineForm, setShowMedicineForm] = useState(false);
+  const filterMedicinalUse = useSelector(
+    (state) => state.filterMedicine.medicinalUse
+  );
+  const [price, setPrice] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [quantity, setQuantity] = useState(null);
+  const [medicinalUse, setMedicinalUse] = useState(null);
+  const [activeIngredients, setActiveIngredients] = useState(null);
+  const dispatch = useDispatch();
+
+  const medicineImage = {
+    width: "15rem",
+    height: "15rem",
+  };
 
   useEffect(() => {
     fetchData();
+    dispatch(
+      deleteFilterArray({
+        medicinalUse: "",
+      })
+    );
+    setEditedMedicine(null);
   }, []);
 
   const fetchData = async () => {
@@ -45,18 +54,17 @@ function PhShowMedicines() {
       setLoading(false);
     }
   };
-  const Medicines = responseData;
-  console.log(responseData);
+  const medicines = responseData;
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredMedicines = responseData.filter((medicine) =>
-    medicine.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMedicines = medicines.filter(
+    (medicine) =>
+      medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      medicine.medicinalUse.includes(filterMedicinalUse)
   );
-
-  const [showMedicineForm, setShowMedicineForm] = useState(false);
 
   const toggleMedicineForm = () => {
     setShowMedicineForm(!showMedicineForm);
@@ -66,21 +74,46 @@ function PhShowMedicines() {
     setShowMedicineForm(false);
   };
 
-  const [editedMedicine, setEditedMedicine] = useState(null);
-
   const handleEditMedicine = (index) => {
     setEditedMedicine(index);
   };
 
-  const handleMedicineChange = (index, field, value) => {
-    const updatedMedicines = [...Medicines];
-    updatedMedicines[index][field] = value;
-    setEditedMedicine(updatedMedicines);
-  };
-
-  const handleSaveMedicine = async (index) => {
-    // Perform save logic here
+  const saveMedicine = async (id) => {
+    const medicineToUpdate = medicines[editedMedicine];
+    const queryParameters = new URLSearchParams({
+      _id: id,
+      name: medicineToUpdate.name,
+      price: price || medicineToUpdate.price,
+      description: description || medicineToUpdate.description,
+      medicinalUse: medicinalUse || medicineToUpdate.medicinalUse,
+      quantity: quantity || medicineToUpdate.quantity,
+      activeIngredients:
+        activeIngredients || medicineToUpdate.activeIngredients,
+    }).toString();
+    const url = `/updateMedicine?${queryParameters}`;
+    try {
+      const response = await axios.put(url, null);
+      if (response.status === 200) {
+        fetchData();
+      } else if (response.status === 404) {
+        setError("Medicine not found");
+      } else {
+        setError("Error");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setError("Medicine not found");
+      } else {
+        setError(
+          "An error occurred while updating medicine. Please try again later"
+        );
+      }
+    }
     setEditedMedicine(null);
+    setPrice(null);
+    setMedicinalUse(null);
+    setDescription(null);
+    setQuantity(null);
   };
 
   return (
@@ -97,176 +130,150 @@ function PhShowMedicines() {
           onChange={handleSearch}
         />
       </Form>
-      <Row>
-        {filteredMedicines.map((medicine, index) => (
-          <Col key={medicine.name} lg={6} md={6} sm={12}>
-            <Card className="mb-4 mx-3 bg-light">
-              <Card.Header className="text-center">
-                Medicine Name: {medicine.name}
-              </Card.Header>
-              <Card.Body className="text-center">
-                <div className="medicine-image-container">
-                  <img
-                    src={medicine.image}
-                    alt={medicine.name}
-                    className="medicine-image"
-                  />
-                </div>
-                <div className="medicine-price">Price: ${medicine.price}</div>
-                {editedMedicine === index ? (
-                  <div>
-                    <Form.Group>
-                      <Form.Label>Medicine Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        value={medicine.medicineName}
-                        onChange={(e) =>
-                          handleMedicineChange(
-                            index,
-                            "medicineName",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Label>Price</Form.Label>
-                      <Form.Control
-                        type="number"
-                        value={medicine.price}
-                        onChange={(e) =>
-                          handleMedicineChange(index, "price", e.target.value)
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Label>Description</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        value={medicine.description}
-                        onChange={(e) =>
-                          handleMedicineChange(
-                            index,
-                            "description",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Label>Medicinal Use</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        value={medicine.medicinalUse}
-                        onChange={(e) =>
-                          handleMedicineChange(
-                            index,
-                            "medicinalUse",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Label>Quantity</Form.Label>
-                      <Form.Control
-                        type="number"
-                        value={medicine.quantity}
-                        onChange={(e) =>
-                          handleMedicineChange(
-                            index,
-                            "quantity",
-                            e.target.value
-                          )
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Label>Sales</Form.Label>
-                      <Form.Control
-                        type="number"
-                        value={medicine.sales}
-                        onChange={(e) =>
-                          handleMedicineChange(index, "sales", e.target.value)
-                        }
-                      />
-                    </Form.Group>
-                    <Form.Group>
-                      <Form.Label>Active In</Form.Label>
-                      <Form.Control
-                        type="number"
-                        value={medicine.sales}
-                        onChange={(e) =>
-                          handleMedicineChange(index, "sales", e.target.value)
-                        }
-                      />
-                    </Form.Group>
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      ) : (
+        <Row>
+          {filteredMedicines.map((medicine, index) => (
+            <Col key={medicine.name} lg={6} md={6} sm={12}>
+              <Card className="mb-4 mx-3 bg-light">
+                <Card.Header className="text-center">
+                  <div className="d-flex justify-content-end">
+                    <FontAwesomeIcon
+                      icon={faPenToSquare}
+                      style={{
+                        opacity: 1,
+                        color: "#099BA0 ",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                        marginBottom: "5px",
+                      }}
+                      onClick={() => handleEditMedicine(index)}
+                    />
                   </div>
-                ) : (
-                  <div>
-                    <div className="medicine-description">
-                      {medicine.description}
-                    </div>
-                    <div className="medicine-use">
-                      Medicinal Use: {medicine.medicinalUse}
-                    </div>
-                    <div className="medicine-quantity">
-                      Quantity: {medicine.quantity}
-                    </div>
-                    <div className="medicine-sales">
-                      Sales: {medicine.sales}
-                    </div>
+                  <div className="text-center"> {medicine.name} </div>
+                </Card.Header>
+                <Card.Body className="text-center">
+                  <div className="medicine-image-container">
+                    <img
+                      src={medicine.picture}
+                      alt={medicine.name}
+                      style={medicineImage}
+                    />
                   </div>
-                )}
-              </Card.Body>
-              <Card.Footer>
-                {/* <div
-                  className="text-muted expand-button"
-                  onClick={() => handleExpand(index)}
-                >
-                  {expandedMedicine === index ? (
-                    <span>
-                      Collapse
-                      <FontAwesomeIcon
-                        icon={faChevronUp}
-                        className="ml-2"
-                      />
-                    </span>
+                  {editedMedicine === index ? (
+                    <div>
+                      <Form.Group>
+                        <Form.Label>Price</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder={medicine.price}
+                          name={medicine.price}
+                          onChange={(e) => {
+                            const inputValue = e.target.value;
+                            if (/^\d*\.?\d*$/.test(inputValue)) {
+                              setPrice(inputValue);
+                            }
+                          }}
+                        />
+                      </Form.Group>
+                      <Form.Group>
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control
+                          as="textarea"
+                          placeholder={medicine.description}
+                          name={medicine.description}
+                          onChange={(e) => setDescription(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Form.Group>
+                        <Form.Label>Medicinal Use</Form.Label>
+                        <Form.Control
+                          as="textarea"
+                          placeholder={medicine.medicinalUse}
+                          name={medicine.medicinalUse}
+                          onChange={(e) => setMedicinalUse(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Form.Group>
+                        <Form.Label>Active Ingredients</Form.Label>
+                        <Form.Control
+                          as="textarea"
+                          placeholder={medicine.activeIngredients}
+                          name={medicine.activeIngredients}
+                          onChange={(e) => setActiveIngredients(e.target.value)}
+                        />
+                      </Form.Group>
+                      <Form.Group>
+                        <Form.Label>Quantity</Form.Label>
+                        <Form.Control
+                          type="number"
+                          placeholder={medicine.quantity}
+                          name={medicine.quantity}
+                          onChange={(e) => setQuantity(e.target.value)}
+                        />
+                      </Form.Group>
+                    </div>
                   ) : (
-                    <span>
-                      Expand
-                      <FontAwesomeIcon
-                        icon={faChevronDown}
-                        className="ml-2"
-                      />
-                    </span>
-                  )} 
-                  </div>*/}
-
-                <div className="edit-button">
-                  <Button
-                    variant="link"
-                    onClick={() => handleEditMedicine(index)}
-                  >
-                    Edit
-                    <FontAwesomeIcon icon={faEdit} className="ml-1" />
-                  </Button>
-                </div>
-              </Card.Footer>
+                    <div>
+                      <div className="medicine-price">
+                        Price: {medicine.price} LE
+                      </div>
+                      <div className="medicine-description">
+                        {medicine.description}
+                      </div>
+                      <div className="medicine-use">
+                        Medicinal Use: {medicine.medicinalUse}
+                      </div>
+                      <div className="medicine-activeIngredients">
+                        Active Ingredients:{" "}
+                        {medicine.activeIngredients.map((ingredient, index) => (
+                          <span key={index}>
+                            {ingredient}
+                            {index < medicine.activeIngredients.length - 1
+                              ? " - "
+                              : ""}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="medicine-quantity">
+                        Quantity: {medicine.quantity}
+                      </div>
+                      <div className="medicine-sales">
+                        Sales: {medicine.sales} LE
+                      </div>
+                    </div>
+                  )}
+                </Card.Body>
+                <Card.Footer>
+                  {editedMedicine === index && (
+                    <div
+                      className="d-flex align-items-center justify-content-center"
+                      onClick={() => saveMedicine(medicine._id)}
+                    >
+                      <Button>Save Changes</Button>
+                    </div>
+                  )}
+                </Card.Footer>
+              </Card>
+            </Col>
+          ))}
+          <Col lg={6} md={6} sm={12}>
+            <Card className="mb-4 mx-3 bg-light">
+              <Card.Body className="text-center">
+                <Button variant="primary" onClick={toggleMedicineForm}>
+                  <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                  Add New Medicine
+                </Button>
+              </Card.Body>
             </Card>
           </Col>
-        ))}
-        <Col lg={6} md={6} sm={12}>
-          <Card className="mb-4 mx-3 bg-light">
-            <Card.Body className="text-center">
-              <Button variant="primary" onClick={toggleMedicineForm}>
-                <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                Add New Medicine
-              </Button>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+        </Row>
+      )}
     </div>
   );
 }

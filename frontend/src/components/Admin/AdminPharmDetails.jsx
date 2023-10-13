@@ -72,53 +72,6 @@ function AdminPharmDetails() {
 
   return (
     <div>
-      {/* aya zabatetha nevermind */}
-      {/* {pharmacists.map((pharmacist, index) => {
-        if (pharmacist.status === "Active") {
-          return (
-            <Card
-              className="mb-4 mx-3 bg-light"
-              key={pharmacist._id}
-              style={{ width: "25rem" }}
-            >
-              <Card.Header
-                className="d-flex align-items-center justify-content-between"
-                onClick={() => toggleExpand(index)}
-                style={{ cursor: "pointer" }}
-              >
-                <span>{pharmacist.name}</span>
-                <FontAwesomeIcon
-                  icon={
-                    expandedPharmacist === index ? faChevronUp : faChevronDown
-                  }
-                />
-              </Card.Header>
-              {expandedPharmacist === index && (
-                <Card.Body>
-                  <Row>
-                    <Col lg={8}>
-                      <Card.Text>
-                        <div className="patient-info">
-                          <p>Username: {pharmacist.username}</p>
-                          <p>Email: {pharmacist.email}</p>
-                          <p>Date of Birth: {pharmacist.date}</p>
-                          <p>Hourly Rate: {pharmacist.HourlyRate}</p>
-                          <p>Affiliation: {pharmacist.affliliation}</p>
-                          <p>
-                            Educational Background:{" "}
-                            {pharmacist.educationalBackground}
-                          </p>
-                          <Button>Delete Pharmacist</Button>
-                        </div>
-                      </Card.Text>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              )}
-            </Card>
-          );
-        }
-      })} */}
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
         <Modal.Footer className="d-flex align-items-center justify-content-center">
@@ -154,13 +107,10 @@ function AdminPharmDetails() {
                     <div className="patient-info">
                       <p>Username: {pharmacist.username}</p>
                       <p>Email: {pharmacist.email}</p>
-                      <p>Date of Birth: {pharmacist.date}</p>
-                      <p>Hourly Rate: {pharmacist.HourlyRate}</p>
-                      <p>Affiliation: {pharmacist.affliliation}</p>
-                      <p>
-                        Educational Background:{" "}
-                        {pharmacist.educationalBackground}
-                      </p>
+                      <p>Date of Birth: {pharmacist.dateOfBirth}</p>
+                      <p>Hourly Rate: {pharmacist.hourlyRate} LE/hr</p>
+                      <p>Affiliation: {pharmacist.affiliation}</p>
+                      <p>Educational Background: {pharmacist.education}</p>
                       <Button onClick={() => deleteUser(pharmacist._id)}>
                         Delete Pharmacist
                       </Button>

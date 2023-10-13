@@ -4,16 +4,11 @@ import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import { Container, Row } from "react-bootstrap";
 import PatientImg from "../../components/Patient/PatientImg";
 import PatientHamburgerMenu from "../../components/Patient/PatientHamburgerMenu";
-import {
-  faHospitalUser,
-  faUserDoctor,
-  faUsers,
-  faBriefcaseMedical,
-} from "@fortawesome/free-solid-svg-icons";
- export default function PatientHomePage() {
+import { faBriefcaseMedical } from "@fortawesome/free-solid-svg-icons";
+export default function PatientHomePage() {
   return (
     <>
-      <AppNavbar hamburgerMenu={<PatientHamburgerMenu/>} />
+      <AppNavbar hamburgerMenu={<PatientHamburgerMenu />} />
       <Container
         className="bg-white px-5 py-4 d-flex align-items-center justify-content-center"
         style={{
@@ -34,7 +29,12 @@ import {
             margin: "20px",
           }}
         >
-          <PatientHomeCard location="/patient/patient-medicine" cardText="Medicines" cardDetails="Show All Medicines" icon={faBriefcaseMedical}/>
+          <PatientHomeCard
+            location="/patient/patient-medicine"
+            cardText="Medicines"
+            cardDetails="Show All Medicines"
+            icon={faBriefcaseMedical}
+          />
         </div>
       </Container>
     </>

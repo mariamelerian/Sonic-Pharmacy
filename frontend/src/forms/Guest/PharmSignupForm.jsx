@@ -1,17 +1,12 @@
 import axios from "axios";
 import * as React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-/* import { useDispatch } from "react-redux"; */
-
 import FormPassword from "../FormPassword";
 import FormInput from "../FormInput";
-/* import { setCredentials } from "../../state/loginDoctorReducer"; */
+import { useNavigate } from "react-router-dom";
 
 const PharmSignupForm = () => {
-  const [firstName, setFirstname] = useState("");
-  const [lastName, setLastname] = useState("");
+  const [name, setName] = useState("");
   const [birthdate, setBirthdate] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,32 +16,19 @@ const PharmSignupForm = () => {
   const [affiliation, setAffiliation] = useState("");
   const [education, setEducation] = useState("");
   const [error1, setError] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [loading, isLoading] = useState(null);
   const [agree, setAgree] = useState(false);
-  const [okay, setOkay] = useState(false);
-  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
- /*  const dispatch = useDispatch(); */
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleLink = () => {
-    setOpen(true);
-  };
-
-  const handleClick = async (e) => {
-    e.preventDefault();
     setError(null);
+    setSuccess(null);
     isLoading(true);
 
     if (
-      !firstName ||
-      !lastName ||
+      !name ||
       !email ||
       !password ||
       !confirmPassword ||
@@ -90,10 +72,6 @@ const PharmSignupForm = () => {
       isLoading(false);
       return;
     }
-    // } if (/\d/.test(email)) {
-    //   setError("Email cannot contain numeric characters.");
-    //   isLoading(false);
-    //   return;
     if (/[^\x00-\x7F]/.test(email)) {
       setError("Email cannot contain emojis or special characters.");
       isLoading(false);
@@ -111,32 +89,32 @@ const PharmSignupForm = () => {
     const languageRegex = /[^\x00-\x7F]/;
     const nameRegex = /^[^\s]+(\s[^\s]+)?$/;
 
-    if ((lastName.length || firstName.length) < 2) {
+    if (name.length < 2) {
       setError("name must be at least 2 characters.");
       isLoading(false);
       return;
     }
-    if (emojiRegex.test(lastName) || emojiRegex.test(firstName)) {
+    if (emojiRegex.test(name)) {
       setError(" name cannot contain emojis.");
       isLoading(false);
       return;
     }
-    if (numberRegex.test(lastName) || numberRegex.test(firstName)) {
+    if (numberRegex.test(name)) {
       setError("name cannot contain numbers.");
       isLoading(false);
       return;
     }
-    if (symbolRegex.test(lastName) || symbolRegex.test(firstName)) {
+    if (symbolRegex.test(name)) {
       setError(" name cannot contain symbols.");
       isLoading(false);
       return;
     }
-    if (languageRegex.test(lastName) || languageRegex.test(firstName)) {
+    if (languageRegex.test(name)) {
       setError("Last name cannot contain characters from multiple languages.");
       isLoading(false);
       return;
     }
-    if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+    if (!nameRegex.test(name)) {
       setError(
         "Name must contain either one name or two names with only one space between them."
       );
@@ -184,88 +162,40 @@ const PharmSignupForm = () => {
       isLoading(false);
       return;
     } else {
-      const user = {
-        firstName,
-        lastName,
-        username,
-        email,
-        password,
-        birthdate,
-        rate,
-        affiliation,
-        education,
-      };
- /*      dispatch(
-        setCredentials({
-          userName: username,
-          firstName: firstName,
-          lastName: lastName,
-          userEmail: email,
+      try {
+        const response = await axios.post("/newPharmacist", {
+          username: username,
+          name: name,
+          email: email,
           password: password,
-          birthdate: birthdate,
-          userId: "123",
+          dateOfBirth: birthdate,
           hourlyRate: rate,
           affiliation: affiliation,
           education: education,
-        })
-      ); */
-      isLoading(false);
-      navigate("/signup/email-verification");
+        });
 
-      //   const config = {
-      //     headers: {
-      //       "Access-Control-Allow-Origin": "*",
-      //       "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-      //       "Content-Type": "application/json",
-      //     },
-      //   };
-      //   try {
-      //     isLoading(true);
-      //     await axios
-      //       .post(
-      //         baseUrl + "/otp/signUp/generateOTP",
-      //         {
-      //           email: email,
-      //         },
-      //         config
-      //       )
-      //       .then((response) => {
-      //         if (response.status !== 200) {
-      //           console.log("Server error");
-      //           console.log(response);
-      //         } else {
-      //           console.log(response);
-      //           dispatch(
-      //             setCredentials({
-      //               birthdate: birthdate,
-      //               password: password,
-      //               userEmail: email,
-      //               firstName: firstName,
-      //               lastName: lastName,
-      //               nationality: nationality,
-      //               phoneNumber: phoneNumber,
-      //             })
-      //           );
-      //           isLoading(false);
-      //           navigate("/signup/email-verification");
-      //         }
-      //       })
-      //       .catch((error) => {
-      //         console.error("Error:", error);
-      //         if (error.response) {
-      //           setMessage(null);
-      //           setOkay(false);
-      //           if (error.response.status === 400) {
-      //             console.log(email);
-      //             console.log("Authentication error");
-      //           }
-      //         }
-      //       });
-      //   } catch (error) {
-      //     setMessage(null);
-      //     setOkay(false);
-      //     console.log(error);
-      //   }
+        if (response.status === 201) {
+          isLoading(false);
+          setSuccess("Your application will be reviewed");
+        } else {
+          setError("Signup failed");
+          isLoading(false);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+
+        if (error.response && error.response.status === 409) {
+          setError("Username taken!");
+        } else if (error.response && error.response.status !== 201) {
+          setError("Signup failed");
+        } else {
+          setError(
+            "An error occurred while signing up. Please try again later."
+          );
+        }
+
+        isLoading(false);
+      }
     }
   };
   const checkboxHandler = () => {
@@ -281,27 +211,19 @@ const PharmSignupForm = () => {
           <div className="col">
             <div className="form-group">
               <FormInput
-                name="First Name"
+                name="Name"
                 type="text"
-                placeholder="Elina"
-                onChange={(e) => setFirstname(e.target.value)}
-                value={firstName}
+                placeholder="Elina Doe"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
               />
             </div>
-          </div>
-          <div className="col">
-            <FormInput
-              name="Last Name"
-              type="text"
-              placeholder="John"
-              onChange={(e) => setLastname(e.target.value)}
-            />
           </div>
         </div>
         <div className="row">
           <div className="col">
             <FormInput
-              name="Birthdate"
+              name="Birth date"
               type="date"
               onChange={(e) => setBirthdate(e.target.value)}
             />
@@ -338,29 +260,23 @@ const PharmSignupForm = () => {
           name="Educational Background"
           type="text"
           placeholder="MBA"
-          onChange={
-            (e) => setEducation(e.target.value)
-            // validateEmail();
-          }
+          onChange={(e) => setEducation(e.target.value)}
         />
         <FormInput
-          name="email"
+          name="Email"
           type="email"
           placeholder="john.doe@ibm.com"
-          onChange={
-            (e) => setEmail(e.target.value)
-            // validateEmail();
-          }
+          onChange={(e) => setEmail(e.target.value)}
         />
         <FormPassword
           id="password"
-          name="password"
+          name="Password"
           type="password"
           placeholder="**************"
           onChange={(e) => setPassword(e.target.value)}
         />
         <FormPassword
-          name="confirmPassword"
+          name="Confirm Password"
           type="password"
           placeholder="**************"
           onChange={(e) => setConfirmPassword(e.target.value)}
@@ -369,7 +285,7 @@ const PharmSignupForm = () => {
         <button
           id="nextbtn"
           className="w-100 btn-sm custom-button"
-          onClick={handleClick}
+          type="submit"
         >
           Next
         </button>
@@ -384,6 +300,23 @@ const PharmSignupForm = () => {
           </div>
         </div>
         {error1 && <div className="error">{error1}</div>}
+        {success && (
+          <div
+            className="d-flex justify-content-center"
+            style={{
+              marginTop: "0.5rem",
+              marginBottom: "0.5rem",
+              fontSize: "0.85rem",
+              backgroundColor: "#099BA0 ",
+              color: "white", // White text color
+              padding: "10px", // Padding around the message
+              borderRadius: "5px", // Rounded corners
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)", // Box shadow for a subtle effect
+            }}
+          >
+            {success}
+          </div>
+        )}
       </form>
     </div>
   );

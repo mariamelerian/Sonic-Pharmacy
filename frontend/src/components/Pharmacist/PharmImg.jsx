@@ -1,9 +1,9 @@
 import { Card, Image } from "react-bootstrap";
-import mainImg from "../../Assets/Patient/patientHomeImg.png";
+import mainImg from "../../Assets/Pharmacist/phHomeImg.png";
 /* import { useSelector } from "react-redux";
 import loginAdminReducer from "../../state/loginAdminReducer"; */
 
-function PatientImg() {
+function PharmImg() {
   // const name = useSelector((state) => state.adminLogin.userName);
   return (
     <div>
@@ -22,25 +22,25 @@ function PatientImg() {
           className="position-absolute text-center bg-transparent"
           style={{
             top: "18%",
-            left: "50%",
+            left: "60rem",
+            width: "40rem",
             transform: "translate(-50%, -50%)",
-            border: "none",
+            border: "transparent",
           }}
         >
           <Card.Text
             style={{
-              marginTop: "20rem",
-              marginRight: "5rem",
+              marginTop: "43rem",
               color: "white",
               textAlign: "center",
               fontFamily: "Vibur",
-              fontSize: "5rem",
+              fontSize: "6rem",
               fontStyle: "normal",
               fontWeight: 400,
               lineHeight: "120%",
             }}
           >
-            Hello, Patient
+            Hello, Pharmacist
           </Card.Text>
         </Card>
       </Card>
@@ -48,4 +48,4 @@ function PatientImg() {
   );
 }
 
-export default PatientImg;
+export default PharmImg;

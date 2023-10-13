@@ -11,11 +11,10 @@ import {
   faBriefcaseMedical,
 } from "@fortawesome/free-solid-svg-icons";
 
-
 export default function AdminHomePage() {
   return (
     <>
-      <AppNavbar hamburgerMenu={<AdminBurgerMenu/>} />
+      <AppNavbar hamburgerMenu={<AdminBurgerMenu />} />
       <Container
         className="bg-white px-5 py-4 d-flex align-items-center justify-content-center"
         style={{
@@ -36,11 +35,30 @@ export default function AdminHomePage() {
             margin: "20px",
           }}
         >
-          <AdminHomeCard location="/admin/patients-list" cardText="Patients" cardDetails="View/Edit Patients" icon={faHospitalUser}  />
-          <AdminHomeCard location="/admin/pharmacists-list" cardText="Pharmacists" cardDetails="View/Edit Pharmacists" icon={faUserDoctor}/>
-          <AdminHomeCard location="/admin/admin-medicine" cardText="Medicine" cardDetails="View/Edit Medicine" icon={faBriefcaseMedical}/>
-          <AdminHomeCard location="/admin/admins-list" cardText="Admin" cardDetails="View/Edit Admins" icon={faUsers}  />
-          {/* <AdminHomeCard location="/admin/packages" cardText="Health Packages" cardDetails="View/Edit Health Packages" icon={faBriefcaseMedical}/> */}
+          <AdminHomeCard
+            location="/admin/patients-list"
+            cardText="Patients"
+            cardDetails="View/Edit Patients"
+            icon={faHospitalUser}
+          />
+          <AdminHomeCard
+            location="/admin/pharmacists-list"
+            cardText="Pharmacists"
+            cardDetails="View/Edit Pharmacists"
+            icon={faUserDoctor}
+          />
+          <AdminHomeCard
+            location="/admin/admin-medicine"
+            cardText="Medicine"
+            cardDetails="View available Medicine"
+            icon={faBriefcaseMedical}
+          />
+          <AdminHomeCard
+            location="/admin/admins-list"
+            cardText="Admins"
+            cardDetails="View/Edit Admins"
+            icon={faUsers}
+          />
         </div>
       </Container>
     </>
