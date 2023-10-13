@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 
-function PhMedicineFilter({ onFilter }) {
+function FilterMedicine({ onFilter }) {
   const [selectedMedicinalUse, setSelectedMedicinalUse] = useState("");
-
 
   const handleMedicinalUseChange = (e) => {
     setSelectedMedicinalUse(e.target.value);
@@ -11,7 +10,6 @@ function PhMedicineFilter({ onFilter }) {
 
   const handleFilter = () => {
     const filterData = {
-   
       medicinalUse: selectedMedicinalUse,
     };
 
@@ -55,7 +53,6 @@ function PhMedicineFilter({ onFilter }) {
             marginBottom: "1.4rem",
           }}
         >
-   
           Medicinal Use
         </div>
         <Form.Control as="select" onChange={handleMedicinalUseChange}>
@@ -77,4 +74,4 @@ function PhMedicineFilter({ onFilter }) {
   );
 }
 
-export default PhMedicineFilter;
+export default FilterMedicine;

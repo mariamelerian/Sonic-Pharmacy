@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import PhHamburgerMenu from "../../components/Pharmacist/PhHamburgerMenu";
 import PhShowMedicines from "../../components/Pharmacist/PhShowMedicine";
-import PhMedicineFilter from "../../components/Pharmacist/PhMedicineFilter";
+import FilterMedicine from "../../components/FilterMedicine";
 
 function PhMedicine() {
   return (
@@ -13,7 +13,7 @@ function PhMedicine() {
         <Container className="bg-white px-5 py-4">
           <Row>
             <Col xs={12} md={5}>
-              <PhMedicineFilter />
+              <FilterMedicine />
             </Col>
             <Col xs={12} md={7}>
               <PhShowMedicines />
