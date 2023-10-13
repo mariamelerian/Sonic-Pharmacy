@@ -4,7 +4,7 @@ const initialState = {
 };
 
 const filterMedicineSlice = createSlice({
-  name: "doctorData",
+  name: "medicineData",
   initialState,
   reducers: {
     setFilterArray: (state, action) => {
