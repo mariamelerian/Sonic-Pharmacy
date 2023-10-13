@@ -1,22 +1,22 @@
 import Carousel from "react-bootstrap/Carousel";
 import React, { useState, useEffect } from "react";
-import doctor from "../../Assets/Patient/Doctor.jpg";
+import medicine from "../../Assets/medicineImg.png";
 
 const RegPhoto = () => {
   const carouselData = [
     {
       id: 1,
-      src: doctor,
+      src: medicine,
       alt: "First Slide",
     },
     {
       id: 2,
-      src: doctor,
+      src: medicine,
       alt: "Second Slide",
     },
     {
       id: 3,
-      src: doctor,
+      src: medicine,
       alt: "Third Slide",
     },
   ];

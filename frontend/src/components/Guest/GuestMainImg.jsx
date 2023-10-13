@@ -1,6 +1,6 @@
 import { Card, Image } from "react-bootstrap";
-import mainImg from "../../Assets/Patient/HomeImg.png";
-import GuestBox from "./GuestBox";
+import mainImg from "../../Assets/medicineImg.png";
+
 function GuestMainImg() {
   return (
     <div>
@@ -33,7 +33,6 @@ function GuestMainImg() {
               fontStyle: "normal",
               fontWeight: 400,
               lineHeight: "120%",
-           
             }}
           >
             Welcome to El7a2ny!
@@ -44,6 +43,4 @@ function GuestMainImg() {
   );
 }
 
-
 export default GuestMainImg;
-

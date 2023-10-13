@@ -2,12 +2,10 @@ import React from "react";
 import PatientHomeCard from "../Patient/PatientHomeCard";
 import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import { Container, Row } from "react-bootstrap";
-import PatientImg from "../../components/Patient/PatientImg";
+import PharmImg from "../../components/Pharmacist/PharmImg";
 import PhHamburgerMenu from "../../components/Pharmacist/PhHamburgerMenu";
-import {
-  faBriefcaseMedical,
-  faFileInvoiceDollar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBriefcaseMedical } from "@fortawesome/free-solid-svg-icons";
+
 export default function PharmacistHomePage() {
   return (
     <>
@@ -22,7 +20,7 @@ export default function PharmacistHomePage() {
         }}
       >
         <Row className="row-sub-container">
-          <PatientImg />
+          <PharmImg />
         </Row>
         <div
           style={{
@@ -37,12 +35,6 @@ export default function PharmacistHomePage() {
             cardText="Medicines"
             cardDetails="Show All Medicines"
             icon={faBriefcaseMedical}
-          />
-          <PatientHomeCard
-            location="/pharmacist/ph-sales"
-            cardText="Sales"
-            cardDetails="Show All Sales"
-            icon={faFileInvoiceDollar}
           />
         </div>
       </Container>

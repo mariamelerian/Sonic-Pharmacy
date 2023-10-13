@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import { faArrowDown, faPerson } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion, Button, Col, Container, Row } from "react-bootstrap";
+import React from "react";
+import { Accordion, Container } from "react-bootstrap";
 import AccordionBody from "react-bootstrap/esm/AccordionBody";
 import AdminDocReqDetails from "./AdminDocReqDetails";
 

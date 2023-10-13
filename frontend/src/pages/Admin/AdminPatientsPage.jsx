@@ -1,16 +1,10 @@
 import React from "react";
-import AdminViewTable from "../../components/Admin/AdminViewTable";
-import AdminSearchBar from "../../components/Admin/AdminSearchBar";
 import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import { Container } from "react-bootstrap";
 import AdminBurgerMenu from "../../components/Admin/AdminBurgerMenu";
 import AdminPatientsDetails from "../../components/Admin/AdminPatientsDetails";
 
 export default function AdminPatientsPage() {
-  const patients = [
-    { id: 1, firstName: "Mark", lastName: "Otto", username: "@mko" },
-    { id: 2, firstName: "John", lastName: "Doe", username: "@johndoe" },
-  ];
   return (
     <>
       <AppNavbar hamburgerMenu={<AdminBurgerMenu />} />
@@ -36,7 +30,7 @@ export default function AdminPatientsPage() {
         }}
       >
         {/* <AdminSearchBar /> */}
-        <AdminPatientsDetails users={patients}/>
+        <AdminPatientsDetails />
       </Container>
     </>
   );

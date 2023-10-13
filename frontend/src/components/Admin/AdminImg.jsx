@@ -1,5 +1,5 @@
 import { Card, Image } from "react-bootstrap";
-import mainImg from "../../Assets/Admin/AdminHome.jpg";
+import mainImg from "../../Assets/Admin/adminHome.png";
 /* import { useSelector } from "react-redux";
 import loginAdminReducer from "../../state/loginAdminReducer"; */
 
@@ -10,10 +10,10 @@ function AdminImg() {
       <Card
         className="d-flex align-items-center justify-content-center rounded"
         style={{
-          width: "100%",
+          width: "80rem",
           border: "none",
           position: "relative",
-          height: "60vh",
+          height: "30rem",
           overflow: "hidden",
         }}
       >
@@ -29,17 +29,17 @@ function AdminImg() {
         >
           <Card.Text
             style={{
-              marginTop: "570px",
-              color: "#05AFB9",
+              marginTop: "27rem",
+              color: "white",
               textAlign: "center",
               fontFamily: "Vibur",
-              fontSize: "7rem",
+              fontSize: "6rem",
               fontStyle: "normal",
               fontWeight: 400,
               lineHeight: "120%",
             }}
           >
-            Hello 
+            Hello, Admin
           </Card.Text>
         </Card>
       </Card>
