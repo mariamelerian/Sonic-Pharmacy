@@ -4,6 +4,7 @@ const { MedicinalUseArray } = require("./MedicinalUse");
 const medicineSchema = new mongoose.Schema({
   picture: {
     type: String,
+    required: false,
   }, // Store the image source as a string
   name: {
     type: String,
@@ -32,7 +33,7 @@ const medicineSchema = new mongoose.Schema({
   },
   medicinalUse: {
     type: String,
-    enum: MedicinalUseArray,
+    // enum: MedicinalUseArray,
     required: true,
   },
 });

@@ -99,7 +99,11 @@ app.delete("/deleteMedicine", deleteMedicine);
 app.delete("/deletePharmacist", deletePharmacist);
 
 //inserting dummy data
-const dummyData = require("./dummyData/patient");
-const Medicine = require("./Models/Patient");
+// const dummyData = require("./dummyData/patient");
+const Patient = require("./Models/Patient");
+
+// ./dummyData/medicineconst dummyData = require("./dummyData/medicine");
+const Medicine = require("./Models/Medicine");
+
 const { insertDummyData } = require("./utils.js");
 //insertDummyData(dummyData, Medicine);
