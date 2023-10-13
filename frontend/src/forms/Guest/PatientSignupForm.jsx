@@ -1,17 +1,12 @@
 import axios from "axios";
 import * as React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-// import { useDispatch } from "react-redux";
-// import { setCredentialsPatient } from "../../state/loginPatientReducer";
-
+import { useNavigate } from "react-router";
 import FormPassword from "../FormPassword";
 import FormInput from "../FormInput";
 
 const PatientSignupForm = () => {
   const [name, setName] = useState("");
-
   const [birthdate, setBirthdate] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,30 +16,16 @@ const PatientSignupForm = () => {
   const [gender, setGender] = useState("");
   const [emergencyName, setEmergencyName] = useState("");
   const [emergencyPhone, setEmergencyPhone] = useState("");
+  const [emergencyRelation, setEmergencyRelation] = useState("");
   const [error1, setError] = useState(null);
-  const [message, setMessage] = useState(null);
   const [loading, isLoading] = useState(null);
   const [agree, setAgree] = useState(false);
-  const [okay, setOkay] = useState(false);
-  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  //const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleLink = () => {
-    setOpen(true);
-  };
-
-  const handleClick = async (e) => {
-    e.preventDefault();
     setError(null);
     isLoading(true);
-
     if (
       !name ||
       !email ||
@@ -55,7 +36,7 @@ const PatientSignupForm = () => {
       !username ||
       !emergencyName ||
       !emergencyPhone ||
-      !phoneNumber
+      !emergencyRelation
     ) {
       setError("Please fill in all fields");
       console.log(error1);
@@ -91,10 +72,7 @@ const PatientSignupForm = () => {
       isLoading(false);
       return;
     }
-    // } if (/\d/.test(email)) {
-    //   setError("Email cannot contain numeric characters.");
-    //   isLoading(false);
-    //   return;
+
     if (/[^\x00-\x7F]/.test(email)) {
       setError("Email cannot contain emojis or special characters.");
       isLoading(false);
@@ -105,7 +83,6 @@ const PatientSignupForm = () => {
       isLoading(false);
       return;
     }
-    // Validation for Last Name
     const emojiRegex = /[\u{1F300}-\u{1F6FF}]/u;
     const numberRegex = /\d/;
     const symbolRegex = /[!@#$%^&*(),.?":{}|<>]/;
@@ -194,17 +171,6 @@ const PatientSignupForm = () => {
       isLoading(false);
       return;
     } else {
-      const user = {
-        name,
-        username,
-        email,
-        gender,
-        password,
-        phoneNumber,
-        birthdate,
-        emergencyName,
-        emergencyPhone,
-      };
       try {
         const response = await axios.post("/newPatient", {
           username: username,
@@ -216,11 +182,12 @@ const PatientSignupForm = () => {
           mobileNumber: phoneNumber,
           emergencyFullName: emergencyName,
           emergencyMobileNumber: emergencyPhone,
+          emergencyRelation: emergencyRelation,
         });
 
         if (response.status === 201) {
           isLoading(false);
-          navigate("/login");
+          navigate("/Patient");
         } else {
           setError("Signup failed");
           isLoading(false);
@@ -242,6 +209,7 @@ const PatientSignupForm = () => {
       }
     }
   };
+
   const checkboxHandler = () => {
     setAgree(!agree);
   };
@@ -266,7 +234,7 @@ const PatientSignupForm = () => {
         <div className="row">
           <div className="col">
             <FormInput
-              name="Birthdate"
+              name="Birth date"
               type="date"
               onChange={(e) => setBirthdate(e.target.value)}
             />
@@ -289,34 +257,34 @@ const PatientSignupForm = () => {
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </div>
-          <div className="col">
-            <FormInput
+          <div className="col" style={{ marginTop: "32px" }}>
+            <select
               name="Gender"
-              placeholder="Male"
-              type="select"
               onChange={(e) => setGender(e.target.value)}
-            />
+              value={gender}
+              className="form-control"
+            >
+              <option value="">Select Gender</option>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+            </select>
           </div>
         </div>
-
         <FormInput
-          name="email"
+          name="Email"
           type="email"
           placeholder="john.doe@ibm.com"
-          onChange={
-            (e) => setEmail(e.target.value)
-            // validateEmail();
-          }
+          onChange={(e) => setEmail(e.target.value)}
         />
         <FormPassword
           id="password"
-          name="password"
+          name="Password"
           type="password"
           placeholder="**************"
           onChange={(e) => setPassword(e.target.value)}
         />
         <FormPassword
-          name="confirmPassword"
+          name="Confirm Password"
           type="password"
           placeholder="**************"
           onChange={(e) => setConfirmPassword(e.target.value)}
@@ -332,18 +300,24 @@ const PatientSignupForm = () => {
           </div>
           <div className="col">
             <FormInput
-              name=" Emergency Phone Number"
+              name="Emergency Phone"
               type="text"
-              placeholder="0506404491"
+              placeholder="Emergency Phone"
               onChange={(e) => setEmergencyPhone(e.target.value)}
             />
           </div>
         </div>
+        <FormInput
+          name="Emergency Relation"
+          type="text"
+          placeholder="Emergency Relation"
+          onChange={(e) => setEmergencyRelation(e.target.value)}
+        />
 
         <button
           id="nextbtn"
           className="w-100 btn-sm custom-button"
-          onClick={handleClick}
+          type="submit"
         >
           Next
         </button>

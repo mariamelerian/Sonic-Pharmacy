@@ -14,55 +14,50 @@ import PharmacistHomePage from "./pages/Pharmacist/PharmacistHomePage";
 import PatientSignup from "./pages/Guest/PatientSignup";
 import Login from "./pages/Guest/Login";
 import PharmSignup from "./pages/Guest/PharmSignup";
-import PhSales from "./pages/Pharmacist/PhViewSales";
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="bg-light">
-        <Routes>
-          <Route path="/" element={<GuestHomePage />} />
+    <div className="bg-light">
+      <Routes>
+        <Route path="/" element={<GuestHomePage />} />
 
-          <Route path="login">
-            <Route index element={<Login />} />
-          </Route>
+        <Route path="login">
+          <Route index element={<Login />} />
+        </Route>
 
-          <Route path="GuestHomePage">
-            <Route index element={<GuestHomePage />} />
-          </Route>
+        <Route path="GuestHomePage">
+          <Route index element={<GuestHomePage />} />
+        </Route>
 
-          <Route path="patient-signup">
-            <Route index element={<PatientSignup />} />
-          </Route>
+        <Route path="patient-signup">
+          <Route index element={<PatientSignup />} />
+        </Route>
 
-          <Route path="pharmacist-signup">
-            <Route index element={<PharmSignup />} />
-          </Route>
+        <Route path="pharmacist-signup">
+          <Route index element={<PharmSignup />} />
+        </Route>
 
-          <Route path="admin">
-            <Route index element={<AdminHomePage />} />
-            <Route path="pharmacists-list" element={<AdminPharmacistPage />} />
-            <Route path="patients-list" element={<AdminPatientsPage />} />
-            <Route path="admins-list" element={<AdminAdminsPage />} />
-            <Route path="admin-medicine" element={<AdminMedicine />} />
-          </Route>
+        <Route path="admin">
+          <Route index element={<AdminHomePage />} />
+          <Route path="pharmacists-list" element={<AdminPharmacistPage />} />
+          <Route path="patients-list" element={<AdminPatientsPage />} />
+          <Route path="admins-list" element={<AdminAdminsPage />} />
+          <Route path="admin-medicine" element={<AdminMedicine />} />
+        </Route>
 
-          <Route path="Patient">
-            <Route index element={<PatientHomePage />} />
-            <Route path="patient-medicine" element={<PatientMedicine />} />
-          </Route>
+        <Route path="Patient">
+          <Route index element={<PatientHomePage />} />
+          <Route path="patient-medicine" element={<PatientMedicine />} />
+        </Route>
 
-          <Route path="Pharmacist">
-            <Route index element={<PharmacistHomePage />} />
+        <Route path="Pharmacist">
+          <Route index element={<PharmacistHomePage />} />
+          <Route path="ph-medicine" element={<PhMedicine />} />
+        </Route>
 
-            <Route path="ph-medicine" element={<PhMedicine />} />
-            <Route path="ph-sales" element={<PhSales />} />
-          </Route>
-
-          <Route path="*" element={<>Page not found</>} />
-        </Routes>
-      </div>
-    </BrowserRouter>
+        <Route path="*" element={<>Page not found</>} />
+      </Routes>
+    </div>
   );
 }
 

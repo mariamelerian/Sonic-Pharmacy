@@ -1,10 +1,6 @@
 import {
   faCalendarCheck,
-  faPrescription,
-  faPrescriptionBottle,
-  faPrescriptionBottleAlt,
   faRightFromBracket,
-  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -162,7 +158,7 @@ function PatientHamburgerMenu() {
             Home
           </a>
           {/* Add a line between menu items */}
-       {/*    <hr className="menu-line" />
+          {/*    <hr className="menu-line" />
           <a
             id="profile"
             className="menu-item"

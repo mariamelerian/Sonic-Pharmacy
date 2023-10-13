@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Form, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { deleteFilterArray } from "../../state/filterMedicine";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 function PatientShowMedicine() {
@@ -10,21 +12,23 @@ function PatientShowMedicine() {
   const [loading, setLoading] = useState(true);
   const [responseData, setResponseData] = useState([]);
   const [error, setError] = useState(null);
+  const filterMedicinalUse = useSelector(
+    (state) => state.filterMedicine.medicinalUse
+  );
+  const dispatch = useDispatch();
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleExpand = (index) => {
-    if (expandedMedicine === index) {
-      setExpandedMedicine(null);
-    } else {
-      setExpandedMedicine(index);
-    }
+  const medicineImage = {
+    width: "15rem",
+    height: "15rem",
   };
 
   useEffect(() => {
     fetchData();
+    dispatch(
+      deleteFilterArray({
+        medicinalUse: "",
+      })
+    );
   }, []);
 
   const fetchData = async () => {
@@ -42,14 +46,25 @@ function PatientShowMedicine() {
       setLoading(false);
     }
   };
-  const medicine = responseData;
+  const medicines = responseData;
 
-  const filteredMedicines = medicine.filter(
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleExpand = (index) => {
+    if (expandedMedicine === index) {
+      setExpandedMedicine(null);
+    } else {
+      setExpandedMedicine(index);
+    }
+  };
+
+  const filteredMedicines = medicines.filter(
     (medicine) =>
-      medicine.name &&
-      medicine.name.toLowerCase().includes(searchTerm.toLowerCase())
+      medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      medicine.medicinalUse.includes(filterMedicinalUse)
   );
-  console.log("MED", filteredMedicines);
   return (
     <div>
       <Form className="my-4 mx-3">
@@ -74,29 +89,37 @@ function PatientShowMedicine() {
             <Col key={medicine.medicineName} lg={6} md={6} sm={12}>
               <Card className="mb-4 mx-3 bg-light">
                 <Card.Header className="text-center">
-                  Medicine Name: {medicine.name}
+                  {medicine.name}
                 </Card.Header>
                 <Card.Body className="text-center">
                   <div className="medicine-image-container">
                     <img
-                      src={medicine.image}
+                      src={medicine.picture}
                       alt={medicine.name}
-                      className="medicine-image"
+                      style={medicineImage}
                     />
                   </div>
-                  <div className="medicine-price">Price: ${medicine.price}</div>
+                  <div className="medicine-price">
+                    Price: {medicine.price} LE
+                  </div>
                   {expandedMedicine === index ? (
                     <>
                       <div className="medicine-description">
-                        <h5>Description</h5>
+                        <h6>Description</h6>
                         <p>{medicine.description}</p>
                       </div>
                       <hr />
                       <div className="medicine-use">
-                        <h5>Medicinal Use</h5>
+                        <h6>Medicinal Use</h6>
                         <p>{medicine.medicinalUse}</p>
                       </div>
                       <hr />
+                      <div className="medicine-use">
+                        <h6>Active Ingredients</h6>
+                        <p>{medicine.activeIngredients}</p>
+                      </div>
+                      <hr />
+
                       <div
                         className="expand-button"
                         onClick={() => handleExpand(index)}

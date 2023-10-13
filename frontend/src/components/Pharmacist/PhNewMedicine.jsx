@@ -103,7 +103,7 @@ function MedicineForm({ onClose, fetchData }) {
               onChange={(e) => setDescription(e.target.value)}
             />
           </Form.Group>
-          <Form.Group>
+          {/* <Form.Group>
             <Form.Label>Medicinal Use</Form.Label>
             <Form.Control
               type="text"
@@ -111,6 +111,28 @@ function MedicineForm({ onClose, fetchData }) {
               value={medicinalUse}
               onChange={(e) => setMedicinalUse(e.target.value)}
             />
+          </Form.Group> */}
+          <Form.Group>
+            <Form.Label>Medicinal Use</Form.Label>
+            <Form.Control
+              as="select"
+              name="medicinalUse"
+              value={medicinalUse}
+              onChange={(e) => setMedicinalUse(e.target.value)}
+            >
+              <option value="">Select Medicinal Use</option>
+              <option value="Pain Relief">Pain Relief</option>
+              <option value="Fever Relief">Fever Relief</option>
+              <option value="Allergy Relief">Allergy Relief</option>
+              <option value="Digestive Health">Digestive Health</option>
+              <option value="Respiratory Relief">Respiratory Relief</option>
+              <option value="Anxiety Relief">Anxiety Relief</option>
+              <option value="Cholesterol Management">
+                Cholesterol Management
+              </option>
+              <option value="Diabetes Management">Diabetes Management</option>
+              <option value="Infection Treatment">Infection Treatment</option>
+            </Form.Control>
           </Form.Group>
           <Form.Group>
             <Form.Label>Active Ingredients</Form.Label>

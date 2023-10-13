@@ -1,30 +1,52 @@
-import React, { useState } from "react";
-import { Card, Col, Row, Form } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Card, Col, Row, Form, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import doctorImg from "../../Assets/Patient/Doctor.jpg";
+import { deleteFilterArray } from "../../state/filterMedicine";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 function AdminShowMedicine() {
-  const Medicines = [
-    {
-      medicineName: "Medicine 1",
-      price: 9.99,
-      description: "This is the description for Medicine 1.",
-      medicinalUse: "Medicinal use for Medicine 1.",
-      image: doctorImg
-    },
-    {
-      medicineName: "Medicine 2",
-      price: 19.99,
-      description: "This is the description for Medicine 2.",
-      medicinalUse: "Medicinal use for Medicine 2.",
-      image: doctorImg
-    },
-    // Add more medicine objects as needed
-  ];
-
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedMedicine, setExpandedMedicine] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [responseData, setResponseData] = useState([]);
+  const [error, setError] = useState(null);
+  const filterMedicinalUse = useSelector(
+    (state) => state.filterMedicine.medicinalUse
+  );
+  const dispatch = useDispatch();
+
+  const medicineImage = {
+    width: "15rem",
+    height: "15rem",
+  };
+
+  useEffect(() => {
+    fetchData();
+    dispatch(
+      deleteFilterArray({
+        medicinalUse: "",
+      })
+    );
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/medicines");
+      if (response.status === 200) {
+        setResponseData(response.data);
+        setLoading(false);
+      } else {
+        setError("Server error");
+        setLoading(false);
+      }
+    } catch (error) {
+      setError("An error occurred while fetching data.");
+      setLoading(false);
+    }
+  };
+  const medicines = responseData;
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -38,10 +60,11 @@ function AdminShowMedicine() {
     }
   };
 
-  const filteredMedicines = Medicines.filter((medicine) =>
-    medicine.medicineName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMedicines = medicines.filter(
+    (medicine) =>
+      medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      medicine.medicinalUse.includes(filterMedicinalUse)
   );
-
   return (
     <div>
       <Form className="my-4 mx-3">
@@ -52,55 +75,72 @@ function AdminShowMedicine() {
           onChange={handleSearch}
         />
       </Form>
-      <Row>
-        {filteredMedicines.map((medicine, index) => (
-          <Col key={medicine.medicineName} lg={6} md={6} sm={12}>
-            <Card className="mb-4 mx-3 bg-light">
-              <Card.Header className="text-center">
-                Medicine Name: {medicine.medicineName}
-              </Card.Header>
-              <Card.Body className="text-center">
-                <div className="medicine-image-container">
-                  <img
-                    src={medicine.image}
-                    alt={medicine.medicineName}
-                    className="medicine-image"
-                  />
-                </div>
-                <div className="medicine-price">Price: ${medicine.price}</div>
-                {expandedMedicine === index ? (
-                  <>
-                    <div className="medicine-description">
-                      <h5>Description</h5>
-                      <p>{medicine.description}</p>
-                    </div>
-                    <hr />
-                    <div className="medicine-use">
-                      <h5>Medicinal Use</h5>
-                      <p>{medicine.medicinalUse}</p>
-                    </div>
-                    <hr />
-                
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      ) : error ? (
+        <div className="text-center text-danger">{error}</div>
+      ) : (
+        <Row>
+          {filteredMedicines.map((medicine, index) => (
+            <Col key={medicine.medicineName} lg={6} md={6} sm={12}>
+              <Card className="mb-4 mx-3 bg-light">
+                <Card.Header className="text-center">
+                  {medicine.name}
+                </Card.Header>
+                <Card.Body className="text-center">
+                  <div className="medicine-image-container">
+                    <img
+                      src={medicine.picture}
+                      alt={medicine.name}
+                      style={medicineImage}
+                    />
+                  </div>
+                  <div className="medicine-price">
+                    Price: {medicine.price} LE
+                  </div>
+                  {expandedMedicine === index ? (
+                    <>
+                      <div className="medicine-description">
+                        <h6>Description</h6>
+                        <p>{medicine.description}</p>
+                      </div>
+                      <hr />
+                      <div className="medicine-use">
+                        <h6>Medicinal Use</h6>
+                        <p>{medicine.medicinalUse}</p>
+                      </div>
+                      <hr />
+                      <div className="medicine-use">
+                        <h6>Active Ingredients</h6>
+                        <p>{medicine.activeIngredients}</p>
+                      </div>
+                      <hr />
+
+                      <div
+                        className="expand-button"
+                        onClick={() => handleExpand(index)}
+                      >
+                        <FontAwesomeIcon icon={faChevronUp} />
+                      </div>
+                    </>
+                  ) : (
                     <div
                       className="expand-button"
                       onClick={() => handleExpand(index)}
                     >
-                      <FontAwesomeIcon icon={faChevronUp} />
+                      <FontAwesomeIcon icon={faChevronDown} />
                     </div>
-                  </>
-                ) : (
-                  <div
-                    className="expand-button"
-                    onClick={() => handleExpand(index)}
-                  >
-                    <FontAwesomeIcon icon={faChevronDown} />
-                  </div>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+                  )}
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
     </div>
   );
 }
