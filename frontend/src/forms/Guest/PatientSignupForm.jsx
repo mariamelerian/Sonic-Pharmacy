@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import FormPassword from "../FormPassword";
 import FormInput from "../FormInput";
 
@@ -230,6 +230,7 @@ const PatientSignupForm = () => {
             />
           </div>
         </div>
+
         <div className="row">
           <div className="col">
             <FormInput
