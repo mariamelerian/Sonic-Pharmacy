@@ -10,7 +10,7 @@ function GuestBox() {
     navigate("/login");
   };
   const handleDrSignUp = () => {
-    navigate("/doctor-signup");
+    navigate("/pharmacist-signup");
   };
   const handlePatientSignup = () => {
     navigate("patient-signup");

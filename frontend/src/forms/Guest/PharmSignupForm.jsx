@@ -183,9 +183,10 @@ const PharmSignupForm = () => {
         }
       } catch (error) {
         console.error("Error:", error);
-
-        if (error.response && error.response.status === 409) {
-          setError("Username taken!");
+        if (error.response && error.response.status === 408) {
+          setError("Username already exists");
+        } else if (error.response && error.response.status === 409) {
+          setError("Email already registered");
         } else if (error.response && error.response.status !== 201) {
           setError("Signup failed");
         } else {
@@ -299,7 +300,22 @@ const PharmSignupForm = () => {
             Login
           </div>
         </div>
-        {error1 && <div className="error">{error1}</div>}
+        {error1 && (
+          <div
+            style={{
+              marginTop: "0.5rem",
+              marginBottom: "0.5rem",
+              fontSize: "0.85rem",
+              backgroundColor: "#f44336 ",
+              color: "white", // White text color
+              padding: "10px", // Padding around the message
+              borderRadius: "5px", // Rounded corners
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            {error1}
+          </div>
+        )}
         {success && (
           <div
             className="d-flex justify-content-center"

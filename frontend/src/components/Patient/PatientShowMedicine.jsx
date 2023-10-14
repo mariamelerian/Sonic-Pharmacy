@@ -114,9 +114,13 @@ function PatientShowMedicine() {
                         <p>{medicine.medicinalUse}</p>
                       </div>
                       <hr />
-                      <div className="medicine-use">
-                        <h6>Active Ingredients</h6>
-                        <p>{medicine.activeIngredients}</p>
+                      <div className="medicine-activeIngredients">
+                        Active Ingredients:{" "}
+                        {medicine.activeIngredients.map((ingredient, index) => (
+                          <div key={index} style={{ marginBottom: "5px" }}>
+                            • {ingredient}
+                          </div>
+                        ))}
                       </div>
                       <hr />
 
