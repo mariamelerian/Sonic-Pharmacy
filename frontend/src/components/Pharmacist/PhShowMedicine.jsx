@@ -80,6 +80,9 @@ function PhShowMedicines() {
 
   const saveMedicine = async (id) => {
     const medicineToUpdate = medicines[editedMedicine];
+    const activeIngredientsArray = activeIngredients
+      ? activeIngredients.split("-")
+      : null;
     const queryParameters = new URLSearchParams({
       _id: id,
       name: medicineToUpdate.name,
@@ -88,7 +91,7 @@ function PhShowMedicines() {
       medicinalUse: medicinalUse || medicineToUpdate.medicinalUse,
       quantity: quantity || medicineToUpdate.quantity,
       activeIngredients:
-        activeIngredients || medicineToUpdate.activeIngredients,
+        activeIngredientsArray || medicineToUpdate.activeIngredients,
     }).toString();
     const url = `/updateMedicine?${queryParameters}`;
     try {
@@ -193,11 +196,33 @@ function PhShowMedicines() {
                       <Form.Group>
                         <Form.Label>Medicinal Use</Form.Label>
                         <Form.Control
-                          as="textarea"
-                          placeholder={medicine.medicinalUse}
-                          name={medicine.medicinalUse}
+                          as="select"
+                          name="medicinalUse"
                           onChange={(e) => setMedicinalUse(e.target.value)}
-                        />
+                        >
+                          <option value={medicine.medicinalUse}>
+                            {medicine.medicinalUse}
+                          </option>
+                          <option value="Pain Relief">Pain Relief</option>
+                          <option value="Fever Relief">Fever Relief</option>
+                          <option value="Allergy Relief">Allergy Relief</option>
+                          <option value="Digestive Health">
+                            Digestive Health
+                          </option>
+                          <option value="Respiratory Relief">
+                            Respiratory Relief
+                          </option>
+                          <option value="Anxiety Relief">Anxiety Relief</option>
+                          <option value="Cholesterol Management">
+                            Cholesterol Management
+                          </option>
+                          <option value="Diabetes Management">
+                            Diabetes Management
+                          </option>
+                          <option value="Infection Treatment">
+                            Infection Treatment
+                          </option>
+                        </Form.Control>
                       </Form.Group>
                       <Form.Group>
                         <Form.Label>Active Ingredients</Form.Label>
@@ -232,12 +257,9 @@ function PhShowMedicines() {
                       <div className="medicine-activeIngredients">
                         Active Ingredients:{" "}
                         {medicine.activeIngredients.map((ingredient, index) => (
-                          <span key={index}>
-                            {ingredient}
-                            {index < medicine.activeIngredients.length - 1
-                              ? " - "
-                              : ""}
-                          </span>
+                          <div key={index} style={{ marginBottom: "5px" }}>
+                            • {ingredient}
+                          </div>
                         ))}
                       </div>
                       <div className="medicine-quantity">

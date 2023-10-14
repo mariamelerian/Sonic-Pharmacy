@@ -32,8 +32,8 @@ function MedicineForm({ onClose, fetchData }) {
     }
 
     try {
-      console.log("wselt hena before method");
       onClose();
+      const activeIngredientsArray = ingredients.split("-");
       const response = await axios.post("/newMedicine", {
         picture: picture,
         name: medicineName,
@@ -41,10 +41,9 @@ function MedicineForm({ onClose, fetchData }) {
         description: description,
         quantity: quantity,
         sales: sales,
-        activeIngredients: ingredients,
+        activeIngredients: activeIngredientsArray,
         medicinalUse: medicinalUse,
       });
-      console.log("wselt hena b3d el method");
 
       if (response.status === 200) {
         console.log("here");
@@ -103,15 +102,6 @@ function MedicineForm({ onClose, fetchData }) {
               onChange={(e) => setDescription(e.target.value)}
             />
           </Form.Group>
-          {/* <Form.Group>
-            <Form.Label>Medicinal Use</Form.Label>
-            <Form.Control
-              type="text"
-              name="medicinalUse"
-              value={medicinalUse}
-              onChange={(e) => setMedicinalUse(e.target.value)}
-            />
-          </Form.Group> */}
           <Form.Group>
             <Form.Label>Medicinal Use</Form.Label>
             <Form.Control

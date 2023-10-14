@@ -28,8 +28,8 @@ function GuestMainImg() {
             style={{
               color: "#05AFB9",
               textAlign: "center",
-              fontFamily: "Vibur",
-              fontSize: "7rem",
+              fontFamily: "fantasy",
+              fontSize: "5rem",
               fontStyle: "normal",
               fontWeight: 400,
               lineHeight: "120%",

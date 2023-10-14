@@ -33,7 +33,7 @@ function PatientImg() {
               marginRight: "5rem",
               color: "white",
               textAlign: "center",
-              fontFamily: "Vibur",
+              fontFamily: "fantasy",
               fontSize: "5rem",
               fontStyle: "normal",
               fontWeight: 400,
