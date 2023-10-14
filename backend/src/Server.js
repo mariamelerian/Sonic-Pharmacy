@@ -102,7 +102,7 @@ app.delete("/deletePharmacist", deletePharmacist);
 // const dummyData = require("./dummyData/patient");
 const Patient = require("./Models/Patient");
 
-// ./dummyData/medicineconst dummyData = require("./dummyData/medicine");
+const dummyData = require("./dummyData/medicine");
 const Medicine = require("./Models/Medicine");
 
 const { insertDummyData } = require("./utils.js");

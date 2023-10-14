@@ -71,15 +71,15 @@ const filterMedicine = async (req, res) => {
 };
 
 const createMedicine = async (req, res) => {
-  // if (!req.body.picture) {
-  //   let picture = {};
-  //   const path = require("path");
-  //   const filePath = path.join(__dirname, "../res/default-medicine-pic.jpg");
-  //   const imageBuffer = fs.readFileSync(filePath);
-  //   const base64ImageData = imageBuffer.toString("base64");
-  //   const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
-  //   req.body.picture = imageSrc;
-  // }
+  if (!req.body.picture) {
+    let picture = {};
+    const path = require("path");
+    const filePath = path.join(__dirname, "../res/default-medicine-pic.jpg");
+    const imageBuffer = fs.readFileSync(filePath);
+    const base64ImageData = imageBuffer.toString("base64");
+    const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
+    req.body.picture = imageSrc;
+  }
 
   try {
     const medicine = await Medicine.create(req.body);

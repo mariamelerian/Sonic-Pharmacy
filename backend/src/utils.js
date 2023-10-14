@@ -22,17 +22,15 @@ const validateUsername = async (username) => {
 
 const insertDummyData = (array, model) => {
   array.forEach((element) => {
-    /*
     if (!element.picture) {
       let picture = {};
       const path = require("path");
-      const filePath = path.join(__dirname, "./res/default-profile-pic.jpg");
+      const filePath = path.join(__dirname, "./res/default-medicine-pic.jpg");
       const imageBuffer = fs.readFileSync(filePath);
       const base64ImageData = imageBuffer.toString("base64");
       const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
       element.picture = imageSrc;
     }
-    */
     const newModel = new model(element);
     newModel.save();
   });
