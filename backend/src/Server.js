@@ -5,6 +5,7 @@ mongoose.set("strictQuery", false);
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const session = require("express-session");
 
 //imports
 const {
@@ -49,6 +50,14 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+app.use(
+  session({
+    secret: "sonic123",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Set to true in a production environment with HTTPS
+  })
+);
 const port = process.env.PORT || "8000";
 
 // Mongo DB
@@ -63,6 +72,9 @@ mongoose
     });
   })
   .catch((err) => console.log(err));
+
+//Initialize cart
+const cart = [];
 
 //TODO: main request
 app.get("/", (req, res) => {
@@ -97,6 +109,15 @@ app.delete("/deleteAdmin", deleteAdmin);
 app.delete("/deletePatient", deletePatient);
 app.delete("/deleteMedicine", deleteMedicine);
 app.delete("/deletePharmacist", deletePharmacist);
+
+//NEW ROUTES
+// CART ROUTES
+const cartController = require("./cartController");
+app.post("/add-to-cart/:medicineId", cartController.addToCart);
+app.get("/cart", cartController.viewCart);
+app.post("/clear-cart", cartController.clearCart);
+app.post("/change-quantity/:medicineId", cartController.changeQuantity);
+app.post(("/remove-from-cart/:medicineId", cartController.removeFromCart));
 
 //inserting dummy data
 // const dummyData = require("./dummyData/patient");
