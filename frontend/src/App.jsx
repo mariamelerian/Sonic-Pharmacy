@@ -14,6 +14,7 @@ import PharmacistHomePage from "./pages/Pharmacist/PharmacistHomePage";
 import PatientSignup from "./pages/Guest/PatientSignup";
 import Login from "./pages/Guest/Login";
 import PharmSignup from "./pages/Guest/PharmSignup";
+import PatientCart from "./pages/Patient/PatientCart";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         <Route path="Patient">
           <Route index element={<PatientHomePage />} />
           <Route path="patient-medicine" element={<PatientMedicine />} />
+          <Route path="patient-cart" element={<PatientCart />} />
         </Route>
 
         <Route path="Pharmacist">

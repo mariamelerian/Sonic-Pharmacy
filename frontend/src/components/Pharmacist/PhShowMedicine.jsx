@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Row, Form, Button, Spinner } from "react-bootstrap";
+import { Card, Col, Row, Form, Button, Spinner, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MedicineForm from "./PhNewMedicine";
 import { faPlus, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
@@ -13,7 +13,7 @@ function PhShowMedicines() {
   const [responseData, setResponseData] = useState([]);
   const [error, setError] = useState(null);
   const [editedMedicine, setEditedMedicine] = useState(null);
-  const [showMedicineForm, setShowMedicineForm] = useState(false);
+  //const [showMedicineForm, setShowMedicineForm] = useState(false);
   const filterMedicinalUse = useSelector(
     (state) => state.filterMedicine.medicinalUse
   );
@@ -22,6 +22,8 @@ function PhShowMedicines() {
   const [quantity, setQuantity] = useState(null);
   const [medicinalUse, setMedicinalUse] = useState(null);
   const [activeIngredients, setActiveIngredients] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [showMedicineForm, setShowMedicineForm] = useState(false);
   const dispatch = useDispatch();
 
   const medicineImage = {
@@ -68,6 +70,15 @@ function PhShowMedicines() {
 
   const toggleMedicineForm = () => {
     setShowMedicineForm(!showMedicineForm);
+  };
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setShowMedicineForm(false); // Close the form when the modal is closed
   };
 
   const onClose = () => {
@@ -291,6 +302,14 @@ function PhShowMedicines() {
                   <FontAwesomeIcon icon={faPlus} className="mr-2" />
                   Add New Medicine
                 </Button>
+                <Modal show={showModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Medicine</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {showMedicineForm && <MedicineForm fetchData={fetchData} onClose={closeModal} />}
+        </Modal.Body>
+      </Modal>
               </Card.Body>
             </Card>
           </Col>
