@@ -43,4 +43,64 @@ const deleteAdmin = async (req, res) => {
     });
 };
 
-module.exports = { getAdmins, deleteAdmin, createAdmin };
+const adminLogin = async (req, res) => {
+  try {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    // Find the admin using their email address
+    const user = await admin.findOne({ username });
+
+    // If the admin wasn't found, respond with an error message
+    if (!user) {
+      res.status(404).json({ message: "Invalid login credentials" });
+      return;
+    }
+
+    // Check if the password is correct
+    const passwordMatches = await user.checkPassword(password);
+
+    // If the password is incorrect, respond with an error message
+    if (!passwordMatches) {
+      res.status(409).json({ message: "Invalid login credentials" });
+      return;
+    }
+
+    // If the email and password are correct, create a session cookie to log the user in
+    req.session.user = user;
+    res.status(200).json({ message: "Login successful" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred while logging in" });
+  }
+};
+
+const adminChangePassword = async (req, res) => {
+  const user = await admin.findById(req.params.id);
+
+  if (!user) {
+    return res.status(404).json({ error: 'Admin not found' });
+  }
+
+  const { oldPassword, newPassword } = req.body;
+
+  // Check if the old password is correct
+  const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+
+  if (!isPasswordCorrect) {
+    return res.status(409).json({ error: 'Invalid old password' });
+  }
+
+  // Hash the new password and update the user's document
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  user.password = hashedPassword;
+
+  await user.save();
+
+  return res.status(200).json({ message: 'Password updated successfully' });
+};
+
+
+
+module.exports = { getAdmins, deleteAdmin, createAdmin,adminLogin,adminChangePassword };
