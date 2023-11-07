@@ -1,33 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import MedicineForm from './MedicineForm'; // Import your MedicineForm component
+import MedicineForm from './PhNewMedicine';
 
 function AddMedicineModal({ fetchData }) {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true); // Set 'show' to true initially
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   return (
-    <>
-      <Button variant="primary" onClick={handleShow}>
-        Add New Medicine
-      </Button>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Medicine</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <MedicineForm onClose={handleClose} fetchData={fetchData} />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>Add New Medicine</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <MedicineForm onClose={handleClose} fetchData={fetchData} />
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 

@@ -15,6 +15,7 @@ import PatientSignup from "./pages/Guest/PatientSignup";
 import Login from "./pages/Guest/Login";
 import PharmSignup from "./pages/Guest/PharmSignup";
 import PatientCart from "./pages/Patient/PatientCart";
+//import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
 
 function App() {
   return (

@@ -173,9 +173,9 @@ function MedicineForm({ onClose, fetchData }) {
           <Button className="mr-2" onClick={handleSave}>
             Save
           </Button>
-          <Button variant="secondary" onClick={onClose}>
+          {/* <Button variant="secondary" onClick={onClose}>
             Cancel
-          </Button>
+          </Button> */}
         </div>
         {error && (
           <div

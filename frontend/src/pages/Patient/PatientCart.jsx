@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import AppNavbar from '../../components/AppNavigation/AppNavbar';
 import PatientHamburgerMenu from '../../components/Patient/PatientHamburgerMenu';
-
 import EmptyCart from '../../components/Patient/PatientEmptyCart';
+import CartItems from '../../components/Patient/PatientCartItems';
+
 function PatientCart() {
   // Example cart data state
   const [cartItems, setCartItems] = useState([]); // Use your actual cart data state
@@ -15,7 +16,7 @@ function PatientCart() {
           <EmptyCart /> // Display the empty cart component
         ) : (
           <div>
-            {/* Display cart items here if the cart is not empty */}
+            <CartItems items={cartItems} /> {/* Pass the cartItems to the new component */}
           </div>
         )}
       </div>

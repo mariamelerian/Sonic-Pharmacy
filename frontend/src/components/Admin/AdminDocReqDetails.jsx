@@ -27,11 +27,12 @@ export default function AdminDocReqDetails({
   return (
     <Card style={{ width: "100%", border: "transparent" }}>
       <Card.Body>
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-end ">
           <Button
             style={{
-              backgroundColor: "#f0f0f0",
+              backgroundColor: "#00ff00",
               marginLeft: "20px",
+              color:"#ff0000",
               borderColor: "#f0f0f0",
               width: "40px",
               height: "40px",
@@ -44,7 +45,7 @@ export default function AdminDocReqDetails({
           </Button>
           <Button
             style={{
-              backgroundColor: "#f0f0f0",
+              backgroundColor: "#ff0000",
               marginLeft: "20px",
               borderColor: "#f0f0f0",
               width: "40px",
