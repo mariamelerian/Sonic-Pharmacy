@@ -69,7 +69,7 @@ function PhShowMedicines() {
   );
 
   const toggleMedicineForm = () => {
-    setShowMedicineForm(!showMedicineForm);
+    setShowMedicineForm(true);
   };
 
   const onClose = () => {
