@@ -3,6 +3,7 @@ const { validateUsername } = require("../utils");
 const fs = require("fs");
 const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
+const jwt = require('jsonwebtoken');
 
 const registerPharmacist = async (req, res) => {
   try {
@@ -115,9 +116,12 @@ const pharmacistLogin = async (req, res) => {
       return;
     }
 
-    // If the email and password are correct, create a session cookie to log the user in
+   // If the email and password are correct, create a session cookie to log the user in
+
     req.session.user = user;
-    res.status(200).json({ message: "Login successful" });
+   return res.status(200).json({ message: "Login successful" });
+
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "An error occurred while logging in" });
