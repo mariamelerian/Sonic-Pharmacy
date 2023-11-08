@@ -1,6 +1,7 @@
 const admin = require("../Models/Adminstrator.js");
 const { default: mongoose } = require("mongoose");
 const { validateUsername } = require("../utils.js");
+const jwt = require('jsonwebtoken');
 
 const createAdmin = async (req, res) => {
   const { username, password } = req.body;
@@ -43,37 +44,43 @@ const deleteAdmin = async (req, res) => {
     });
 };
 
+
+
 const adminLogin = async (req, res) => {
   try {
-    const username = req.body.username;
-    const password = req.body.password;
+    const { username, password } = req.body;
 
-    // Find the admin using their email address
+    // Find the admin using their username
     const user = await admin.findOne({ username });
 
     // If the admin wasn't found, respond with an error message
     if (!user) {
-      res.status(404).json({ message: "Invalid login credentials" });
-      return;
+      return res.status(404).json({ message: "Invalid login credentials" });
     }
 
     // Check if the password is correct
-    const passwordMatches = await user.checkPassword(password);
+    const isValidPassword = await user.checkPassword(password);
 
     // If the password is incorrect, respond with an error message
-    if (!passwordMatches) {
-      res.status(409).json({ message: "Invalid login credentials" });
-      return;
+    if (!isValidPassword) {
+      return res.status(409).json({ message: "Invalid login credentials" });
     }
 
-    // If the email and password are correct, create a session cookie to log the user in
+    // If the username and password are correct, create a JWT token
+    //const token = jwt.sign({ username: user.username }, 'your_secret_key', { expiresIn: '1h' });
     req.session.user = user;
-    res.status(200).json({ message: "Login successful" });
+    return res.status(200).json({ message: "Login Successful" });
+    // Send the token in the response
+    //res.status(200).json({ token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "An error occurred while logging in" });
   }
 };
+
+
+
+
 
 const adminChangePassword = async (req, res) => {
   const user = await admin.findById(req.params.id);
