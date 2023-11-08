@@ -4,6 +4,7 @@ import { useState } from "react";
 import FormPassword from "../FormPassword";
 import FormInput from "../FormInput";
 import { useNavigate } from "react-router-dom";
+import { Card, Form, Button } from "react-bootstrap";//for uploding pics
 
 const PharmSignupForm = () => {
   const [name, setName] = useState("");
@@ -20,6 +21,9 @@ const PharmSignupForm = () => {
   const [loading, isLoading] = useState(null);
   const [agree, setAgree] = useState(false);
   const navigate = useNavigate();
+  const [selectedIdImage, setSelectedIdImage] = useState(null); // Added
+  const [selectedPharmacyDegreeImage, setSelectedPharmacyDegreeImage] = useState(null);
+  const [selectedWorkingLicenseImage, setSelectedWorkingLicenseImage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -202,6 +206,26 @@ const PharmSignupForm = () => {
   const checkboxHandler = () => {
     setAgree(!agree);
   };
+  //for pic upload
+   // Modify handleImageUpload to handle each image type
+   const handleImageUpload = (e, imageType) => {
+    const file = e.target.files[0];
+
+    switch (imageType) {
+      case "id":
+        setSelectedIdImage(file);
+        break;
+      case "pharmacyDegree":
+        setSelectedPharmacyDegreeImage(file);
+        break;
+      case "workingLicense":
+        setSelectedWorkingLicenseImage(file);
+        break;
+      default:
+        break;
+    }
+  };
+  
 
   return (
     <div className="col-9 form-container">
@@ -282,7 +306,47 @@ const PharmSignupForm = () => {
           placeholder="**************"
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
+       {/* // Section for "Upload ID" */}
+<div className="mb-4">
+  <Form.Group>
+    <Form.Label>Upload ID</Form.Label>
+    <Form.Control
+      type="file"
+      accept="image/*"
+      name="IdImage"
+      onChange={(e) => handleImageUpload(e, "id")}
+    />
+  </Form.Group>
+</div>
 
+{/* // Section for "Upload Pharmacy Degree" */}
+<div className="mb-4">
+  <Form.Group>
+    <Form.Label>Upload Pharmacy Degree</Form.Label>
+    <Form.Control
+      type="file"
+      accept="image/*"
+      name="PharmacyDegreeImage"
+      onChange={(e) => handleImageUpload(e, "pharmacyDegree")}
+    />
+  </Form.Group>
+</div>
+
+{/* // Section for "Upload Working License" */}
+<div className="mb-4">
+  <Form.Group>
+    <Form.Label>Upload Working License</Form.Label>
+    <Form.Control
+      type="file"
+      accept="image/*"
+      name="WorkingLicenseImage"
+      onChange={(e) => handleImageUpload(e, "workingLicense")}
+    />
+  </Form.Group>
+</div>
+
+
+      
         <button
           id="nextbtn"
           className="w-100 btn-sm custom-button"
