@@ -29,6 +29,7 @@ const {
   createMedicine,
   updateMedicine,
   deleteMedicine,
+  medicineNamesIds,
 } = require("./Controllers/medicineController");
 
 const {
@@ -89,6 +90,7 @@ app.get("/patients", getPatients);
 app.get("/medicines", getMedicines);
 app.get("/medicine", getMedicine);
 app.get("/medicineByName", searchMedicine);
+app.get("/medicineNames", medicineNamesIds);
 app.get("/medicineSales/:pharmacistId", getMedicineSale);
 app.get("/medicinalUses", getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
@@ -112,29 +114,32 @@ app.delete("/deletePharmacist", deletePharmacist);
 
 //NEW ROUTES
 // CART ROUTES
-const cartController = require("./cartController");
+const cartController = require("./Controllers/cartController");
 app.post("/add-to-cart/:medicineId", cartController.addToCart);
 app.get("/cart", cartController.viewCart);
+app.get("/allCarts", cartController.getAllCarts);
 app.post("/clear-cart", cartController.clearCart);
 app.post("/change-quantity/:medicineId", cartController.changeQuantity);
 app.post(("/remove-from-cart/:medicineId", cartController.removeFromCart));
 
 // ORDER ROUTES
-const orderController = require("./orderController");
+const orderController = require("./Controllers/orderController");
 app.post("/checkout", orderController.checkout);
 app.get("/allOrders", orderController.getAllOrders);
 app.get("/orders/:orderId", orderController.getOrderById);
-app.get("/orders/:patientId", orderController.getOrdersByPatientId);
+app.get("/orders/:patientId", orderController.getPatientOrders);
 app.post("/orders/:orderId", orderController.updateOrderByID);
-app.post("/orders/:orderId", orderController.cancelOrderById);
-app.delete("/orders/:orderId", orderController.deleteOrderById);
+app.post("/orders/:orderId", orderController.cancelOrderByID);
+app.delete("/orders/:orderId", orderController.deleteOrderByID);
 
+/*
 //inserting dummy data
 // const dummyData = require("./dummyData/patient");
 const Patient = require("./Models/Patient");
 
-// const dummyData = require("./dummyData/medicine");
-// const Medicine = require("./Models/Medicine");
+const dummyData = require("./dummyData/cart");
+const Cart = require("./Models/Cart");
 
-// const { insertDummyData } = require("./utils.js");
-//insertDummyData(dummyData, Medicine);
+const { insertDummyData } = require("./utils.js");
+insertDummyData(dummyData, Cart);
+*/

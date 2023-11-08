@@ -134,6 +134,18 @@ const deleteMedicine = async (req, res) => {
   }
 };
 
+const medicineNamesIds = async (req, res) => {
+  try {
+    // Use Mongoose to find medicines and project only _id and name fields
+    const medicines = await Medicine.find({}, "_id name");
+
+    // Respond with the list of medicines
+    res.status(200).json(medicines);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to retrieve medicines" });
+  }
+};
+
 module.exports = {
   getMedicines,
   getMedicine,
@@ -143,4 +155,5 @@ module.exports = {
   createMedicine,
   updateMedicine,
   deleteMedicine,
+  medicineNamesIds,
 };

@@ -45,7 +45,8 @@ const addToCart = async (req, res) => {
 
 // View the cart contents
 const viewCart = async (req, res) => {
-  const userId = req.session.userId;
+  let userId = req.session.userId;
+  if (!userId) userId = req.params.userId;
 
   try {
     const cart = await Cart.findOne({ user: userId });
@@ -57,6 +58,15 @@ const viewCart = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ message: "Failed to retrieve the cart" });
+  }
+};
+
+const getAllCarts = async (req, res) => {
+  try {
+    const carts = await Cart.find();
+    res.status(200).json(carts);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to retrieve carts" });
   }
 };
 
@@ -142,4 +152,5 @@ module.exports = {
   clearCart,
   changeQuantity,
   removeFromCart,
+  getAllCarts,
 };
