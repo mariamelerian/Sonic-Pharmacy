@@ -15,6 +15,7 @@ import PatientSignup from "./pages/Guest/PatientSignup";
 import Login from "./pages/Guest/Login";
 import PharmSignup from "./pages/Guest/PharmSignup";
 import PatientCart from "./pages/Patient/PatientCart";
+import PatientMyOrdersPage from "./pages/Patient/PatientMyOrdersPage";
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
           <Route index element={<PatientHomePage />} />
           <Route path="patient-medicine" element={<PatientMedicine />} />
           <Route path="patient-cart" element={<PatientCart />} />
+          <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />
         </Route>
 
         <Route path="Pharmacist">
