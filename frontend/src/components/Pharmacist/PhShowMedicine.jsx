@@ -6,6 +6,8 @@ import { faPlus, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { deleteFilterArray } from "../../state/filterMedicine";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import AddMedicineModal from "./PhNewMedicineModal";
+
 
 function PhShowMedicines() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -67,7 +69,7 @@ function PhShowMedicines() {
   );
 
   const toggleMedicineForm = () => {
-    setShowMedicineForm(!showMedicineForm);
+    setShowMedicineForm(true);
   };
 
   const onClose = () => {
@@ -122,7 +124,7 @@ function PhShowMedicines() {
   return (
     <div>
       {showMedicineForm && (
-        <MedicineForm fetchData={fetchData} onClose={onClose} />
+        <AddMedicineModal fetchData={fetchData} onClose={onClose} />
       )}
 
       <Form className="my-4 mx-3">

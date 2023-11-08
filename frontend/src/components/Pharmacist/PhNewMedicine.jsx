@@ -9,10 +9,11 @@ function MedicineForm({ onClose, fetchData }) {
   const [medicinalUse, setMedicinalUse] = useState(null);
   const [quantity, setQuantity] = useState(null);
   const [sales, setSales] = useState(null);
-  const [picture, setPicture] = useState(null);
+  //const [picture, setPicture] = useState(null);
   const [ingredients, setIngredients] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null); // New state variable for the selected image file
 
   const handleSave = async (e) => {
     console.log("wselt henaaaa");
@@ -35,7 +36,7 @@ function MedicineForm({ onClose, fetchData }) {
       onClose();
       const activeIngredientsArray = ingredients.split("-");
       const response = await axios.post("/newMedicine", {
-        picture: picture,
+        picture: selectedImage,
         name: medicineName,
         price: price,
         description: description,
@@ -68,6 +69,11 @@ function MedicineForm({ onClose, fetchData }) {
     setTimeout(() => {
       setError(null); // Clear the error after 5 seconds
     }, 5000);
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    setSelectedImage(file);
   };
 
   return (
@@ -133,15 +139,7 @@ function MedicineForm({ onClose, fetchData }) {
               onChange={(e) => setIngredients(e.target.value)}
             />
           </Form.Group>
-          <Form.Group>
-            <Form.Label>Image URL</Form.Label>
-            <Form.Control
-              type="text"
-              name="image"
-              value={picture}
-              onChange={(e) => setPicture(e.target.value)}
-            />
-          </Form.Group>
+         
           <Form.Group>
             <Form.Label>Quantity</Form.Label>
             <Form.Control
@@ -151,6 +149,7 @@ function MedicineForm({ onClose, fetchData }) {
               onChange={(e) => setQuantity(e.target.value)}
             />
           </Form.Group>
+          
           <Form.Group>
             <Form.Label>Sales</Form.Label>
             <Form.Control
@@ -160,14 +159,23 @@ function MedicineForm({ onClose, fetchData }) {
               onChange={(e) => setSales(e.target.value)}
             />
           </Form.Group>
+          <Form.Group>
+            <Form.Label>Upload Image</Form.Label>
+            <Form.Control
+              type="file"
+              accept="image/*"
+              name="image"
+              onChange={handleImageUpload}
+            />
+          </Form.Group>
         </Form>
         <div className="d-flex justify-content-end">
           <Button className="mr-2" onClick={handleSave}>
             Save
           </Button>
-          <Button variant="secondary" onClick={onClose}>
+          {/* <Button variant="secondary" onClick={onClose}>
             Cancel
-          </Button>
+          </Button> */}
         </div>
         {error && (
           <div

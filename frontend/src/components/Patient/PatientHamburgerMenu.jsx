@@ -1,10 +1,12 @@
 import {
   faCalendarCheck,
   faRightFromBracket,
+  faShoppingCart
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { slide as Menu } from "react-burger-menu";
+
 function PatientHamburgerMenu() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -234,6 +236,31 @@ function PatientHamburgerMenu() {
           </a>
           <hr className="menu-line" />
           <a
+  id="my-cart"
+  className="menu-item"
+  href="/patient/patient-cart" // Update the href to match the route path
+  onClick={closeMenu}
+  style={{
+    color: "var(--gray-600, #6C757D)",
+    fontFamily: "Roboto",
+    fontSize: "0.9375rem",
+    fontStyle: "normal",
+    fontWeight: 400,
+    lineHeight: "1rem",
+    display: "flex",
+    alignItems: "center",
+    textDecoration: "none",
+    padding: "0.5rem 0",
+  }}
+>
+  <FontAwesomeIcon
+    icon={faShoppingCart}
+    style={{ marginRight: "0.5rem" }}
+  />
+  My Cart
+</a>
+<hr className="menu-line" />
+          <a
             id="logout"
             className="menu-item"
             href="/"
@@ -258,6 +285,8 @@ function PatientHamburgerMenu() {
             Logout
           </a>
           <hr className="menu-line" />
+   
+
         </div>
       </Menu>
     </div>
