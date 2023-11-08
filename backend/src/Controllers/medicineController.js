@@ -39,9 +39,14 @@ const searchMedicine = async (req, res) => {
 };
 
 const getMedicineSale = async (req, res) => {
+  const pharmacistId = req.session.userId;
+
   try {
-    const medicines = await Medicine.find({}, "name quantity sales");
-    res.status(200).json(medicines);
+    const sales = await Medicine.find(
+      { "sales.pharmacist": pharmacistId },
+      "name sales"
+    );
+    res.status(200).json(sales);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

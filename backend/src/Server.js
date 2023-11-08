@@ -89,7 +89,7 @@ app.get("/patients", getPatients);
 app.get("/medicines", getMedicines);
 app.get("/medicine", getMedicine);
 app.get("/medicineByName", searchMedicine);
-app.get("/medicineSales", getMedicineSale);
+app.get("/medicineSales/:pharmacistId", getMedicineSale);
 app.get("/medicinalUses", getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
@@ -118,6 +118,16 @@ app.get("/cart", cartController.viewCart);
 app.post("/clear-cart", cartController.clearCart);
 app.post("/change-quantity/:medicineId", cartController.changeQuantity);
 app.post(("/remove-from-cart/:medicineId", cartController.removeFromCart));
+
+// ORDER ROUTES
+const orderController = require("./orderController");
+app.post("/checkout", orderController.checkout);
+app.get("/allOrders", orderController.getAllOrders);
+app.get("/orders/:orderId", orderController.getOrderById);
+app.get("/orders/:patientId", orderController.getOrdersByPatientId);
+app.post("/orders/:orderId", orderController.updateOrderByID);
+app.post("/orders/:orderId", orderController.cancelOrderById);
+app.delete("/orders/:orderId", orderController.deleteOrderById);
 
 //inserting dummy data
 // const dummyData = require("./dummyData/patient");
