@@ -123,6 +123,10 @@ function PatientShowMedicine() {
                         ))}
                       </div>
                       <hr />
+                      <button className="btn btn-primary" onClick={() => alert('This item has been added to your cart')}>
+  Add to Cart
+</button>
+
 
                       <div
                         className="expand-button"
