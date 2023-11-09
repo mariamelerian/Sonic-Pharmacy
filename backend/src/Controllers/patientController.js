@@ -4,6 +4,8 @@ const { validateUsername } = require("../utils.js");
 const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
+const Address = require('../models/address');
 
 const stripe = require('stripe')('<your_stripe_secret_key>');
 
@@ -111,6 +113,7 @@ const patientLogin = async (req, res) => {
 
     req.session.user = user;
     res.status(200).json({ message: "Login successful" });
+
 
 
   } catch (error) {
@@ -287,6 +290,97 @@ const chargePayment = async (req,res) => {
 };
 
 
+const addAddress = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const { userId, Country, City, Street, Building } = req.body;
+
+    const address = new Address({ userId, Country, City, Street, Building });
+    await address.save();
+
+    res.status(201).json(address);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to add address' });
+  }
+};
+
+const deleteAddress = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const { userId } = req.params;
+    const { addressId } = req.body;
+
+    const address = await Address.findOneAndDelete({ addressId, userId });
+    if (!address) {
+      res.status(404).json({ error: 'Address not found' });
+    } else {
+      res.json(address);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete address' });
+  }
+};
+
+
+const updateAddress = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+   
+    const { addressId,Country, City, Street, Building } = req.body;
+
+    const address = await Address.findOneAndUpdate(
+      { addressId },
+      { Country, City, Street, Building },
+      { new: true }
+    );
+
+    if (!address) {
+      res.status(404).json({ error: 'Address not found' });
+    } else {
+      res.json(address);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update address' });
+  }
+};
+
+const viewAddresses = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const { userId } = req.params;
+
+    const addresses = await Address.find({ userId });
+    if (!addresses || addresses.length === 0) {
+      res.status(404).json({ error: 'Addresses not found' });
+    } else {
+      res.json(addresses);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to get addresses' });
+  }
+};
+
+
 module.exports = {
   createPatient,
   deletePatient,
@@ -297,5 +391,9 @@ module.exports = {
   patientCheckPasswordResetOTP,
   patientChangePassword,
   createCustomer,
-  chargePayment
+  chargePayment,
+  addAddress,
+  updateAddress,
+  viewAddresses,
+  deleteAddress
 };
