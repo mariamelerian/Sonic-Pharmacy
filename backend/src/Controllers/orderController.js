@@ -1,15 +1,34 @@
 const Order = require("../Models/Order");
+const Cart = require("../Models/Cart");
 
 const createOrder = async () => {
   try {
-    const orderData = req.body; // Assuming the request body contains the order data
     const userId = req.session.userId; // Assuming the user ID is in the session
+
+    const cart = await Cart.findOne({ user: userId });
+    const items = cart.items;
+
     const count = await Order.countDocuments({ patient: userId });
     const orderNumber = count + 1;
-    orderData.number = orderNumber;
+
+    const orderData = {
+      number: orderNumber,
+      date: new Date(),
+      items: items,
+      totalPrice: cart.total,
+      status: "Pending",
+      patient: userId,
+    };
     const order = new Order(orderData);
     await order.save();
-  } catch (error) {}
+
+    // Clear the cart
+    cart.items = [];
+    cart.total = 0;
+    await cart.save();
+  } catch (error) {
+    throw new Error("Failed to create the order : " + error.message);
+  }
 };
 
 const checkout = async (req, res) => {

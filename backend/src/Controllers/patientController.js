@@ -6,6 +6,7 @@ const otpGenerator = require("otp-generator");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const Address = require("../models/address");
+const { create } = require("../Models/Pharmacist.js");
 
 const stripe = require("stripe")("<your_stripe_secret_key>");
 
@@ -293,6 +294,7 @@ const chargePayment = async (req, res) => {
       };
     case "succeeded":
       // Payment confirmed and complete
+      await createOrder();
       return res
         .status(200)
         .json({ status: "paid", paymentId: paymentIntent.id });
