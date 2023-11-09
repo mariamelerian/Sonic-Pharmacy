@@ -1,29 +1,29 @@
 import React, { useState } from "react";
-import medicineImg from '../../Assets/medicineImg.png';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import { Container, Button } from "react-bootstrap";
+import medicineBlueImg from  '../../Assets/Patient/medicineBlueImg.jpg';
 function CartItems() {
   const [medicine, setMedicine] = useState([
     {
       id: 1,
       quantity: 2,
-      image: medicineImg,
+      image: medicineBlueImg,
       name: "Medicine 1",
       price: 10.99,
     },
     {
       id: 2,
       quantity: 1,
-      image: medicineImg,
+      image: medicineBlueImg,
       name: "Medicine 2",
       price: 7.99,
     },
     {
       id: 3,
       quantity: 5,
-      image: medicineImg,
+      image: medicineBlueImg,
       name: "Medicine 3",
       price: 4.99,
     },
@@ -125,6 +125,7 @@ function CartItems() {
     cursor: "pointer",
     fontSize: "18px",
     marginTop: "50px", // Push the button more to the bottom
+    marginBottom:"50px"
   };
   return (
     <div className="cart">
