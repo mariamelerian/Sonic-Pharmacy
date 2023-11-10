@@ -17,13 +17,14 @@ import PharmSignup from "./pages/Guest/PharmSignup";
 import PatientCart from "./pages/Patient/PatientCart";
 
 import PatientMyOrdersPage from "./pages/Patient/PatientMyOrdersPage";
+import AdminProfilePage from "./pages/Admin/AdminProfilePage";
+import PatientProfile from "./pages/Patient/PatientProfile";
+import PharmacistProfile from "./pages/Pharmacist/PharmacistProfile";
 
 import MedicineInCart from "./components/Patient/PatientMedicineInCart";
 import PatientExistingAddress from "./components/Patient/PatientExistingAddress";
 import CartItems from "./components/Patient/PatientMedicineInCart";
 import PatientCheckOutModal from "./components/Patient/PatientCheckOutModal";
-
-//import PatientMyOrdersPage from "./pages/Patient/PatientMyOrdersPage";
 import ForgotPassword from "./pages/Guest/ForgotPassword";
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
@@ -64,6 +65,7 @@ function App() {
           <Route path="patients-list" element={<AdminPatientsPage />} />
           <Route path="admins-list" element={<AdminAdminsPage />} />
           <Route path="admin-medicine" element={<AdminMedicine />} />
+          <Route path="profile" element={<AdminProfilePage />} />
         </Route>
 
         <Route path="Patient">
@@ -75,12 +77,13 @@ function App() {
           <Route path="patient-checkout" element={<PatientCheckOutModal />} />
 
           <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />
-
+          <Route path="profile" element={<PatientProfile />} />
         </Route>
 
         <Route path="Pharmacist">
           <Route index element={<PharmacistHomePage />} />
           <Route path="ph-medicine" element={<PhMedicine />} />
+          <Route path="pharmacist-profile" element={<PharmacistProfile />} />
         </Route>
 
         <Route path="*" element={<>Page not found</>} />

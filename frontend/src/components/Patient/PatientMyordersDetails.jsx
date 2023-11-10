@@ -30,9 +30,7 @@ export default function PatientMyordersDetails({
     <Card style={{ width: "100%", border: "transparent" }}>
       <Card.Body>
         <div className="d-flex justify-content-end">
-
-         { orderStatus==='Pending' && <Button 
-
+         { orderStatus==='Pending' && <Button onClick={ orderStatus = 'Cancelled'}
           variant = "secondary"
             style={{
               backgroundColor: "#f0f0f0",
