@@ -22,6 +22,7 @@ import CartItems from "./components/Patient/PatientMedicineInCart";
 import PatientCheckOutModal from "./components/Patient/PatientCheckOutModal";
 
 import PatientMyOrdersPage from "./pages/Patient/PatientMyOrdersPage";
+import ForgotPassword from "./pages/Guest/ForgotPassword";
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
 
 
@@ -45,6 +46,13 @@ function App() {
 
         <Route path="pharmacist-signup">
           <Route index element={<PharmSignup />} />
+        </Route>
+
+        <Route path="forgot-password">
+          {/* <Route path="otp-verification" element={<OTPVerification />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="password-changed" element={<PasswordChanged />} /> */}
+          <Route index element={<ForgotPassword />} />
         </Route>
 
         <Route path="admin">
