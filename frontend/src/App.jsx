@@ -23,6 +23,10 @@ import PatientCheckOutModal from "./components/Patient/PatientCheckOutModal";
 
 import PatientMyOrdersPage from "./pages/Patient/PatientMyOrdersPage";
 import ForgotPassword from "./pages/Guest/ForgotPassword";
+import OTPVerification from "./pages/Guest/OTPVerification";
+import ResetPassword from "./pages/Guest/ResetPassword";
+import PasswordChanged from "./pages/Guest/PasswordChanged";
+  
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
 
 
@@ -35,6 +39,14 @@ function App() {
         <Route path="login">
           <Route index element={<Login />} />
         </Route>
+
+        <Route path="forgot-password">
+          <Route path="otp-verification" element={<OTPVerification />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="password-changed" element={<PasswordChanged />} />
+          <Route index element={<ForgotPassword />} />
+        </Route>
+
 
         <Route path="GuestHomePage">
           <Route index element={<GuestHomePage />} />

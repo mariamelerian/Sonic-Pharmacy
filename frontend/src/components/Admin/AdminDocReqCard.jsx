@@ -1,4 +1,3 @@
-// AdminDocReqCard.jsx
 import React, { useState } from "react";
 import { Accordion, Container } from "react-bootstrap";
 import AccordionBody from "react-bootstrap/esm/AccordionBody";
