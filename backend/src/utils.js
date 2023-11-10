@@ -22,6 +22,7 @@ const validateUsername = async (username) => {
 
 const insertDummyData = (array, model) => {
   array.forEach((element) => {
+    /*
     if (!element.picture) {
       let picture = {};
       const path = require("path");
@@ -31,6 +32,7 @@ const insertDummyData = (array, model) => {
       const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
       element.picture = imageSrc;
     }
+    */
     const newModel = new model(element);
     newModel.save();
   });

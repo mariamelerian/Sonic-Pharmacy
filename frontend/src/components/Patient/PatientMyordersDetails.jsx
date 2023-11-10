@@ -9,7 +9,9 @@ export default function PatientMyordersDetails({
     orderStatus,   //if status is en route then we can cancel the order
     orderCost,
     orderDate,
-    test
+
+    items
+
 }) {
   const rowStyle = {
     display: "flex",
@@ -28,7 +30,7 @@ export default function PatientMyordersDetails({
     <Card style={{ width: "100%", border: "transparent" }}>
       <Card.Body>
         <div className="d-flex justify-content-end">
-         { orderStatus==='Pending' && <Button
+         { orderStatus==='Pending' && <Button onClick={ orderStatus = 'Cancelled'}
           variant = "secondary"
             style={{
               backgroundColor: "#f0f0f0",
@@ -52,38 +54,45 @@ export default function PatientMyordersDetails({
               fontSize: "15px",
             }}
           >
+
+
+              <div style={{color:"#05afb9", fontSize:"1.3rem", fontWeight:"bold", marginBottom:"0.5rem"}}>
+              {orderStatus}
+               </div>
+
             <div style={rowStyle}>
               <span style={titleStyle}>Order Number:</span>
               {orderNumber}
             </div>
             <div style={rowStyle}>
-              <span style={titleStyle}>Order Status:</span>
-              {orderStatus}
-            </div>
-            <div style={rowStyle}>
-              <span style={titleStyle}>Cost:</span>
-              {orderCost} LE
-            </div>
-            <div style={rowStyle}>
+
               <span style={titleStyle}>Date:</span>
               {orderDate}
             </div>
-            {test.map((item, index) => (
+            {items.map((items, index) => (
                 <>
-                 <div style={rowStyle}>
-                 <span style={titleStyle}>Quantity:</span>
-                {item.quantity}
-                </div>
-                        <div style={rowStyle}>
-                        <span style={titleStyle}>Price:</span>
-                       {item.price}
+
+                      <div style={rowStyle}>
+                        <span style={titleStyle}>*Name:</span>
+                       {items.name}
                        </div>
+
                        <div style={rowStyle}>
-                        <span style={titleStyle}>Name:</span>
-                       {item.name}
+                        <span style={titleStyle}>Price:</span>
+                       {items.price}
                        </div>
+                    <div style={rowStyle}>
+                     <span style={titleStyle}>Quantity:</span>
+                      {items.quantity}
+                    </div>
                        </>
                   ))}
+
+                  <div style={rowStyle}>
+                   <span style={titleStyle}> Total Cost:</span>
+                   {orderCost} LE
+                   </div>
+
      </div>
         </Card.Text>
       </Card.Body>
