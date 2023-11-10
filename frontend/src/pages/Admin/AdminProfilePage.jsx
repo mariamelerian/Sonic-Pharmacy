@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Tab, Col, Row, Nav, ListGroup } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import AppNavbar from "../../components/AppNavigation/AppNavbar";
+/* import { useSelector } from "react-redux";
+ */import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import AdminBurgerMenu from "../../components/Admin/AdminBurgerMenu";
 import ChangePass from "../../forms/ChangePass";
 
@@ -9,8 +9,8 @@ function AdminProfilePage() {
   const [activeKey, setActiveKey] = useState("first");
   const [refreshFlag, setRefreshFlag] = useState(false);
   const [showChangePass, setShowChangePass] = useState(false);
-  const user = useSelector((state) => state.adminLogin);
-
+/*   const user = useSelector((state) => state.adminLogin);
+ */
   const listItemStyle = {
     fontSize: "1rem", // Font size for all information
     marginBottom: "0.7rem", // Margin bottom for all information
@@ -91,8 +91,8 @@ function AdminProfilePage() {
                                 <span style={{ color: "#099BA0" }}>
                                   Username:
                                 </span>{" "}
-                                {user.userName}
-                              </div>
+{/*                                 {user.userName}
+ */}                              </div>
                               <div style={listItemStyle}>
                                 <span style={{ color: "#099BA0" }}>
                                   Password:
