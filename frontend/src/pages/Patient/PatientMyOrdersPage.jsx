@@ -8,7 +8,9 @@ import Tabs from "react-bootstrap/Tabs";
 import PatientMyOrders from "../../components/Patient/PatientMyOrders";
 import PatientHamburgerMenu from "../../components/Patient/PatientHamburgerMenu";
 
+
 export default function PatientMyOrdersPage() {
+
 
 
   return (
@@ -43,6 +45,7 @@ export default function PatientMyOrdersPage() {
               marginLeft: "100px",
             }}
           >
+
           
             <PatientMyOrders />
           

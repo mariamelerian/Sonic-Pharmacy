@@ -9,7 +9,9 @@ export default function PatientMyordersDetails({
     orderStatus,   //if status is en route then we can cancel the order
     orderCost,
     orderDate,
+
     items
+
 }) {
   const rowStyle = {
     display: "flex",
@@ -53,14 +55,17 @@ export default function PatientMyordersDetails({
             }}
           >
 
+
               <div style={{color:"#05afb9", fontSize:"1.3rem", fontWeight:"bold", marginBottom:"0.5rem"}}>
               {orderStatus}
                </div>
+
             <div style={rowStyle}>
               <span style={titleStyle}>Order Number:</span>
               {orderNumber}
             </div>
             <div style={rowStyle}>
+
               <span style={titleStyle}>Date:</span>
               {orderDate}
             </div>
@@ -87,6 +92,7 @@ export default function PatientMyordersDetails({
                    <span style={titleStyle}> Total Cost:</span>
                    {orderCost} LE
                    </div>
+
      </div>
         </Card.Text>
       </Card.Body>
