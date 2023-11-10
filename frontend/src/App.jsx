@@ -15,8 +15,19 @@ import PatientSignup from "./pages/Guest/PatientSignup";
 import Login from "./pages/Guest/Login";
 import PharmSignup from "./pages/Guest/PharmSignup";
 import PatientCart from "./pages/Patient/PatientCart";
+
 import PatientMyOrdersPage from "./pages/Patient/PatientMyOrdersPage";
+
+import MedicineInCart from "./components/Patient/PatientMedicineInCart";
+import PatientExistingAddress from "./components/Patient/PatientExistingAddress";
+import CartItems from "./components/Patient/PatientMedicineInCart";
+import PatientCheckOutModal from "./components/Patient/PatientCheckOutModal";
+
+import PatientMyOrdersPage from "./pages/Patient/PatientMyOrdersPage";
+import ForgotPassword from "./pages/Guest/ForgotPassword";
+
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
+
 
 function App() {
   return (
@@ -40,6 +51,13 @@ function App() {
           <Route index element={<PharmSignup />} />
         </Route>
 
+        <Route path="forgot-password">
+          {/* <Route path="otp-verification" element={<OTPVerification />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="password-changed" element={<PasswordChanged />} /> */}
+          <Route index element={<ForgotPassword />} />
+        </Route>
+
         <Route path="admin">
           <Route index element={<AdminHomePage />} />
           <Route path="pharmacists-list" element={<AdminPharmacistPage />} />
@@ -52,7 +70,12 @@ function App() {
           <Route index element={<PatientHomePage />} />
           <Route path="patient-medicine" element={<PatientMedicine />} />
           <Route path="patient-cart" element={<PatientCart />} />
+
+          <Route path="patient-cartItem" element={<CartItems />} />
+          <Route path="patient-checkout" element={<PatientCheckOutModal />} />
+
           <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />
+
         </Route>
 
         <Route path="Pharmacist">

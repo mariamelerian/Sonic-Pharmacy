@@ -11,6 +11,7 @@ export default function PatientMyOrdersCard({
     orderCost,
     orderDate,
     items
+
 }) {
   return (
     <Container style={{ width: "1000px", padding: "0px" }}>
@@ -40,6 +41,7 @@ export default function PatientMyOrdersCard({
                 orderCost={orderCost}
                 orderDate={orderDate}
                 items = {items}
+
                 />
           </AccordionBody>
         </Accordion.Item>

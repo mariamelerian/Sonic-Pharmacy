@@ -1,8 +1,8 @@
+// AdminDocReqDetails.jsx
 import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { faX } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 
 export default function AdminDocReqDetails({
   docEmail,
@@ -10,6 +10,8 @@ export default function AdminDocReqDetails({
   docEducation,
   docAffiliation,
   docBirthDate,
+  onApprove,
+  onReject,
 }) {
   const rowStyle = {
     display: "flex",
@@ -29,10 +31,11 @@ export default function AdminDocReqDetails({
       <Card.Body>
         <div className="d-flex justify-content-end ">
           <Button
+            onClick={onApprove}
             style={{
               backgroundColor: "#00ff00",
               marginLeft: "20px",
-              color:"#ff0000",
+              color: "#ff0000",
               borderColor: "#f0f0f0",
               width: "40px",
               height: "40px",
@@ -40,10 +43,15 @@ export default function AdminDocReqDetails({
           >
             <FontAwesomeIcon
               icon={faCheck}
-              style={{ color: "#f0f0f0", fontWeight: "bold", fontSize: "20px" }}
+              style={{
+                color: "#f0f0f0",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}
             />
           </Button>
           <Button
+            onClick={onReject}
             style={{
               backgroundColor: "#ff0000",
               marginLeft: "20px",
@@ -54,7 +62,11 @@ export default function AdminDocReqDetails({
           >
             <FontAwesomeIcon
               icon={faX}
-              style={{ color: "#f0f0f0", fontWeight: "bold", fontSize: "20px" }}
+              style={{
+                color: "#f0f0f0",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}
             />
           </Button>
         </div>

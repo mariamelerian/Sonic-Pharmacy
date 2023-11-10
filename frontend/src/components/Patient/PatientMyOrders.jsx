@@ -14,7 +14,9 @@ export default function PatientMyOrders() {
 
   const fetchData = async () => {
     try {
+
       const response = await axios.get("/allOrders");
+
       if (response.status === 200) {
         setResponseData(response.data);
       } else {
@@ -31,6 +33,7 @@ export default function PatientMyOrders() {
     }
   };
 
+
   const orders = responseData;
 
   return (
@@ -41,6 +44,7 @@ export default function PatientMyOrders() {
             fontWeight: "bold",
             color: "#212529",
           }}>No Orders Found</div>: ( <Container
+
       className="bg-white px-5 py-4 d-flex align-items-center justify-content-center"
       style={{
         margin: "20px",
@@ -50,6 +54,7 @@ export default function PatientMyOrders() {
       }}
     >
     
+
        
        {orders.map((order, index) => (
         <PatientMyOrdersCard
@@ -66,5 +71,6 @@ export default function PatientMyOrders() {
     </>
     
    
+
   );
 }
