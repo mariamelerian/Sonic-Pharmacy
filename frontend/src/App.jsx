@@ -16,6 +16,8 @@ import Login from "./pages/Guest/Login";
 import PharmSignup from "./pages/Guest/PharmSignup";
 import PatientCart from "./pages/Patient/PatientCart";
 
+import PatientMyOrdersPage from "./pages/Patient/PatientMyOrdersPage";
+
 import MedicineInCart from "./components/Patient/PatientMedicineInCart";
 import PatientExistingAddress from "./components/Patient/PatientExistingAddress";
 import CartItems from "./components/Patient/PatientMedicineInCart";
@@ -23,6 +25,7 @@ import PatientCheckOutModal from "./components/Patient/PatientCheckOutModal";
 
 import PatientMyOrdersPage from "./pages/Patient/PatientMyOrdersPage";
 import ForgotPassword from "./pages/Guest/ForgotPassword";
+
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
 
 

@@ -10,7 +10,8 @@ export default function PatientMyOrdersCard({
     orderStatus,   //if status is en route then we can cancel the order
     orderCost,
     orderDate,
-    test
+    items
+
 }) {
   return (
     <Container style={{ width: "1000px", padding: "0px" }}>
@@ -39,7 +40,8 @@ export default function PatientMyOrdersCard({
                 orderStatus={orderStatus}
                 orderCost={orderCost}
                 orderDate={orderDate}
-                test = {test}
+                items = {items}
+
                 />
           </AccordionBody>
         </Accordion.Item>

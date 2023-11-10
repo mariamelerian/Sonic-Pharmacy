@@ -50,6 +50,11 @@ const pharmacistSchema = new Schema(
       enum: ["Active", "Inactive", "Rejected"],
       default: "Inactive",
     },
+    documents: [
+      {
+        file: String,
+      },
+    ],
   },
   { timestamps: true }
 );
