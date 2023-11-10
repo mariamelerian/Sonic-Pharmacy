@@ -5,6 +5,7 @@ import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { deleteFilterArray } from "../../state/filterMedicine";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import AddToCartModal from "./AddToCartModal"; // Import the modal component
 
 function PatientShowMedicine() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -12,9 +13,8 @@ function PatientShowMedicine() {
   const [loading, setLoading] = useState(true);
   const [responseData, setResponseData] = useState([]);
   const [error, setError] = useState(null);
-  const filterMedicinalUse = useSelector(
-    (state) => state.filterMedicine.medicinalUse
-  );
+  const [filterMedicinalUse, setFilterMedicinalUse] = useState("");
+  const [selectedMedicine, setSelectedMedicine] = useState(null);
   const dispatch = useDispatch();
 
   const medicineImage = {
@@ -45,26 +45,34 @@ function PatientShowMedicine() {
       setError("An error occurred while fetching data.");
       setLoading(false);
     }
-  };
-  const medicines = responseData;
+  }
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
   const handleExpand = (index) => {
-    if (expandedMedicine === index) {
-      setExpandedMedicine(null);
-    } else {
-      setExpandedMedicine(index);
-    }
+    setFilterMedicinalUse(""); // Reset the filter when expanding a medicine
+    setExpandedMedicine(expandedMedicine === index ? null : index);
   };
 
-  const filteredMedicines = medicines.filter(
-    (medicine) =>
-      medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      medicine.medicinalUse.includes(filterMedicinalUse)
-  );
+  const handleAddToCart = (medicine) => {
+    setSelectedMedicine(medicine);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedMedicine(null);
+  };
+
+  const handleConfirmAddToCart = () => {
+    // Add your logic to handle adding the selected medicine to the cart
+    // You can show a confirmation message here if needed
+    setSelectedMedicine(null);
+  };
+
+  const medicines = responseData;
+  const showModal = !!selectedMedicine;
+
   return (
     <div>
       <Form className="my-4 mx-3">
@@ -85,7 +93,7 @@ function PatientShowMedicine() {
         <div className="text-center text-danger">{error}</div>
       ) : (
         <Row>
-          {filteredMedicines.map((medicine, index) => (
+          {medicines.map((medicine, index) => (
             <Col key={medicine.medicineName} lg={6} md={6} sm={12}>
               <Card className="mb-4 mx-3 bg-light">
                 <Card.Header className="text-center">
@@ -123,6 +131,9 @@ function PatientShowMedicine() {
                         ))}
                       </div>
                       <hr />
+                      <button className="btn btn-primary" onClick={() => handleAddToCart(medicine)}>
+                        Add to Cart
+                      </button>
 
                       <div
                         className="expand-button"
@@ -145,6 +156,12 @@ function PatientShowMedicine() {
           ))}
         </Row>
       )}
+      <AddToCartModal
+        show={showModal}
+        handleClose={handleCloseModal}
+        itemName={selectedMedicine?.name}
+        onConfirm={handleConfirmAddToCart}
+      />
     </div>
   );
 }
