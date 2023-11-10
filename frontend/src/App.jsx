@@ -23,7 +23,7 @@ import PatientExistingAddress from "./components/Patient/PatientExistingAddress"
 import CartItems from "./components/Patient/PatientMedicineInCart";
 import PatientCheckOutModal from "./components/Patient/PatientCheckOutModal";
 
-import PatientMyOrdersPage from "./pages/Patient/PatientMyOrdersPage";
+//import PatientMyOrdersPage from "./pages/Patient/PatientMyOrdersPage";
 import ForgotPassword from "./pages/Guest/ForgotPassword";
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
