@@ -14,7 +14,11 @@ import PharmacistHomePage from "./pages/Pharmacist/PharmacistHomePage";
 import PatientSignup from "./pages/Guest/PatientSignup";
 import Login from "./pages/Guest/Login";
 import PharmSignup from "./pages/Guest/PharmSignup";
-
+import PatientCart from "./pages/Patient/PatientCart";
+import MedicineInCart from "./components/Patient/PatientMedicineInCart";
+import PatientExistingAddress from "./components/Patient/PatientExistingAddress";
+import CartItems from "./components/Patient/PatientMedicineInCart";
+import PatientCheckOutModal from "./components/Patient/PatientCheckOutModal";
 function App() {
   return (
     <div className="bg-light">
@@ -48,6 +52,9 @@ function App() {
         <Route path="Patient">
           <Route index element={<PatientHomePage />} />
           <Route path="patient-medicine" element={<PatientMedicine />} />
+          <Route path="patient-cart" element={<PatientCart />} />
+          <Route path="patient-cartItem" element={<CartItems />} />
+          <Route path="patient-checkout" element={<PatientCheckOutModal />} />
         </Route>
 
         <Route path="Pharmacist">
