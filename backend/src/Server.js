@@ -18,6 +18,16 @@ const {
   deletePatient,
   updatePatientInfo,
   getPatients,
+  patientLogin,
+  patientSendPasswordResetOTP,
+  patientCheckPasswordResetOTP,
+  patientChangePassword,
+  createCustomer,
+  chargePayment,
+  addAddress,
+  updateAddress,
+  viewAddresses,
+  deleteAddress
 } = require("./Controllers/patientController");
 
 const {
@@ -102,6 +112,7 @@ app.post("/newAdmin", createAdmin);
 app.post("/newPharmacist", registerPharmacist);
 app.post("/newMedicine", createMedicine);
 app.post("/filterMedicine", filterMedicine);
+app.post("/addAdress",addAddress);
 
 app.put("/updatePatient", updatePatientInfo);
 app.put("/updateMedicine", updateMedicine);

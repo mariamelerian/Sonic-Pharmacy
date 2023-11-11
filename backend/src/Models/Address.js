@@ -6,7 +6,6 @@ const addressSchema = new Schema(
     userId: {
       type: String,
       required: true,
-      unique: true,
     },
     Country: {
       type: String,
