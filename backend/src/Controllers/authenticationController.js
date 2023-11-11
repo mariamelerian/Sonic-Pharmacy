@@ -39,7 +39,7 @@ const login = async (req, res) => {
       if (auth) {
         const token = createToken(doctor1._id, "pharmacist");
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge } * 1000);
-        req.session.userId = username;
+        req.session.userId = doctor1._id;
         return res.status(200).json({ message: "Pharmacist", user: doctor1 });
       }
       throw Error("incorrect password");
@@ -50,7 +50,7 @@ const login = async (req, res) => {
       if (auth) {
         const token = createToken(patient1._id, "patient");
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge } * 1000);
-        req.session.userId = username;
+        req.session.userId = patient1._id;
         return res.status(200).json({ message: "Patient", user: patient1 });
       }
       throw Error("incorrect password");
@@ -61,7 +61,7 @@ const login = async (req, res) => {
       if (auth) {
         const token = createToken(admin1._id, "administrator");
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge } * 1000);
-        req.session.userId = username;
+        req.session.userId = admin1._id;
         return res.status(200).json({ message: "Admin", user: admin1 });
       }
       throw Error("incorrect password");

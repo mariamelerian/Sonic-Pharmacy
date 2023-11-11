@@ -96,9 +96,12 @@ const clearCart = async (req, res) => {
 
 // Change the quantity of a medicine in the cart
 const changeQuantity = async (req, res) => {
+  console.log("hi");
   const medicineId = req.params.medicineId;
+  console.log("medicine" + medicineId);
   const quantity = parseInt(req.body.quantity);
   let userId = req.session.userId;
+  console.log("user" + userId);
   if (!userId) userId = req.params.userId;
 
   if (isNaN(quantity) || quantity <= 0) {
@@ -111,6 +114,7 @@ const changeQuantity = async (req, res) => {
   }
 
   const medicineInCart = cart.items.find((item) => item.medicine == medicineId);
+  console.log(cart);
 
   if (medicineInCart) {
     medicineInCart.quantity = quantity;

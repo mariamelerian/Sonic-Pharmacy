@@ -146,7 +146,7 @@ const cartController = require("./Controllers/cartController");
 app.get("/cart/:userId?", cartController.viewCart);
 app.get("/allCarts", cartController.getAllCarts);
 app.put("/addtocart/:medicineId/:userId?", cartController.addToCart);
-app.put("/changequantity/:medicineId/:userId?", cartController.changeQuantity);
+app.post("/changequantity/:medicineId/:userId?", cartController.changeQuantity);
 app.put("/removefromcart/:medicineId/:userId?", cartController.removeFromCart);
 app.put("/clearcart/:userId?", cartController.clearCart);
 
