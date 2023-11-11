@@ -7,7 +7,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import AdminDocReqs from "../../components/Admin/AdminDocReqs";
 import AdminBurgerMenu from "../../components/Admin/AdminBurgerMenu";
-import AdminPharmDetails from "../../components/Admin/AdminPharmDetails";
+import AdminPharmDetailsTable from "../../components/Admin/AdminPharmDetailsTable";
 
 export default function AdminPharmacistPage() {
   const [tab, setTab] = useState("registered");
@@ -54,7 +54,7 @@ export default function AdminPharmacistPage() {
             }}
           >
             {/* <AdminSearchBar /> */}
-            <AdminPharmDetails />
+            <AdminPharmDetailsTable />
           </Container>
         </Tab>
         <Tab eventKey="requests" title="Requests">
