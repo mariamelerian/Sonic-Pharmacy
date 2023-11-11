@@ -6,6 +6,11 @@ const orderSchema = new Schema({
     type: Date,
     required: true,
   },
+  number: {
+    type: Number,
+    required: true,
+  },
+
   items: [
     {
       medicine: {

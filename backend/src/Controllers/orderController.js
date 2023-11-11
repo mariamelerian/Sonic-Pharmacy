@@ -1,11 +1,34 @@
 const Order = require("../Models/Order");
+const Cart = require("../Models/Cart");
 
 const createOrder = async () => {
   try {
-    const orderData = req.body; // Assuming the request body contains the order data
+    const userId = req.session.userId; // Assuming the user ID is in the session
+
+    const cart = await Cart.findOne({ user: userId });
+    const items = cart.items;
+
+    const count = await Order.countDocuments({ patient: userId });
+    const orderNumber = count + 1;
+
+    const orderData = {
+      number: orderNumber,
+      date: new Date(),
+      items: items,
+      totalPrice: cart.total,
+      status: "Pending",
+      patient: userId,
+    };
     const order = new Order(orderData);
     await order.save();
-  } catch (error) {}
+
+    // Clear the cart
+    cart.items = [];
+    cart.total = 0;
+    await cart.save();
+  } catch (error) {
+    throw new Error("Failed to create the order : " + error.message);
+  }
 };
 
 const checkout = async (req, res) => {
@@ -39,11 +62,12 @@ const getOrderById = async (req, res) => {
 };
 
 const getPatientOrders = async (req, res) => {
-  const patientId = req.params.patientId; // Assuming the patient identifier is in the request parameters
+  let userId = req.session.userId;
+  if (!userId) userId = req.params.userId;
 
   try {
     const orders = await Order.find({
-      patient: patientId,
+      patient: userId,
       state: { $ne: "Cancelled" },
     });
     res.status(200).json(orders);
@@ -72,10 +96,49 @@ const updateOrderByID = async (req, res) => {
   }
 };
 
+const updateOrderByNumber = async (req, res) => {
+  const orderNumber = req.params.orderNumber;
+  let userId = req.session.userId;
+  if (!userId) userId = req.params.userId;
+  const newStatus = req.body.status; // Assuming the request body contains the new status
+
+  try {
+    const order = await Order.findOne({ number: orderNumber, patient: userId });
+    if (order) {
+      5;
+      order.status = newStatus;
+      await order.save();
+      res.status(200).json(order);
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update the order" });
+  }
+};
+
 const cancelOrderByID = async (req, res) => {
   const orderId = req.params.orderId;
   try {
     const order = await Order.findById(orderId);
+    if (order) {
+      order.status = "Cancelled";
+      await order.save();
+      res.status(200).json(order);
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update the order" });
+  }
+};
+
+const cancelOrderByNumber = async (req, res) => {
+  const orderNumber = req.params.orderNumber;
+  let userId = req.session.userId;
+  if (!userId) userId = req.params.userId;
+  try {
+    const order = await Order.findOne({ number: orderNumber, patient: userId });
     if (order) {
       order.status = "Cancelled";
       await order.save();
@@ -94,13 +157,33 @@ const deleteOrderByID = async (req, res) => {
   try {
     const order = await Order.findById(orderId);
     if (order) {
-      await order.remove();
+      await Order.findByIdAndRemove(order._id);
       res.status(200).json({ message: "Order deleted" });
     } else {
       res.status(404).json({ message: "Order not found" });
     }
   } catch (error) {
     res.status(500).json({ message: "Failed to delete the order" });
+  }
+};
+
+const deleteOrderByNumber = async (req, res) => {
+  const orderNumber = req.params.orderNumber;
+  let userId = req.session.userId;
+  if (!userId) userId = req.params.userId;
+
+  try {
+    const order = await Order.findOne({ number: orderNumber, patient: userId });
+    if (order) {
+      await Order.findByIdAndRemove(order._id);
+      res.status(200).json({ message: "Order deleted" });
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to delete the order : " + error.message });
   }
 };
 
@@ -112,4 +195,7 @@ module.exports = {
   updateOrderByID,
   cancelOrderByID,
   deleteOrderByID,
+  updateOrderByNumber,
+  cancelOrderByNumber,
+  deleteOrderByNumber,
 };
