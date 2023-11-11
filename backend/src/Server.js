@@ -115,6 +115,7 @@ app.get("/medicinalUses", getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
 app.get("/pharmacistApplications", getInactivePharmacists);
+app.get("/addresses",viewAddresses);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", createAdmin);
@@ -123,6 +124,8 @@ app.post("/newMedicine", createMedicine);
 app.post("/filterMedicine", filterMedicine);
 app.post("/addAdress",addAddress);
 
+
+//authentication
 app.post("/login",login) 
 app.post("/requireAuth",requireAuth);
 app.post("logout",logout); 
@@ -136,11 +139,13 @@ app.post("/verifyOtp",verifyOtp);
 app.put("/updatePatient", updatePatientInfo);
 app.put("/updateMedicine", updateMedicine);
 app.put("/updatePharmacist", updatePharmacist);
+app.put("/updateAddress",updateAddress);
 
 app.delete("/deleteAdmin", deleteAdmin);
 app.delete("/deletePatient", deletePatient);
 app.delete("/deleteMedicine", deleteMedicine);
 app.delete("/deletePharmacist", deletePharmacist);
+app.delete("/deleteAddress",deleteAddress);
 
 //NEW ROUTES
 // CART ROUTES
