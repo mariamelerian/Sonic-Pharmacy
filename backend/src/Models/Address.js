@@ -4,26 +4,26 @@ const Schema = mongoose.Schema;
 const addressSchema = new Schema(
   {
     userId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Patient",
       required: true,
-      unique: true,
     },
     Country: {
       type: String,
       required: true,
     },
     City: {
-        type: String,
-        required: true,
-      },
-      Street: {
-        type: String,
-        required: true,
-      },
-      Building: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required: true,
+    },
+    Street: {
+      type: String,
+      required: true,
+    },
+    Building: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
