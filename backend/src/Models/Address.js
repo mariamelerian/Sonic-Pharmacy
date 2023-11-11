@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const addressSchema = new Schema(
   {
     userId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Patient",
       required: true,
     },
     Country: {
@@ -29,3 +30,6 @@ const addressSchema = new Schema(
 
 const Address = mongoose.model("Address", addressSchema);
 module.exports = Address;
+
+
+

@@ -6,6 +6,10 @@ const orderSchema = new Schema({
     type: Date,
     required: true,
   },
+  number: {
+    type: Number,
+    required: true,
+  },
   items: [
     {
       medicine: {
@@ -35,6 +39,11 @@ const orderSchema = new Schema({
   patient: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Patient", // Reference to the Patient model
+    required: true,
+  },
+  address: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Address", // Reference to the Address model
     required: true,
   },
 });

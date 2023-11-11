@@ -6,13 +6,14 @@ const Medicine = require("../Models/Medicine");
 // Add a medicine to the cart
 const addToCart = async (req, res) => {
   const medicineId = req.params.medicineId;
-  const userId = req.session.userId;
+  let userId = req.session.userId;
+  if (!userId) userId = req.params.userId;
 
   // Initialize the cart if it doesn't exist
-  const cart = await Cart.findOne({ user: userId }).exec();
+  let cart = await Cart.findOne({ user: userId }).exec();
 
   if (!cart) {
-    const cart = new Cart({
+    cart = new Cart({
       user: userId,
       items: [],
       total: 0,
@@ -26,7 +27,7 @@ const addToCart = async (req, res) => {
     if (selectedMedicine) {
       // Add the medicine to the cart in the session
       const medicine = {
-        _id: selectedMedicine._id,
+        medicine: selectedMedicine._id,
         name: selectedMedicine.name,
         price: selectedMedicine.price,
         quantity: 1,
@@ -39,7 +40,9 @@ const addToCart = async (req, res) => {
       res.status(404).json({ message: "Medicine not found" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Error adding medicine to the cart" });
+    res.status(500).json({
+      message: "Error adding medicine to the cart, error " + error.message,
+    });
   }
 };
 
@@ -72,7 +75,8 @@ const getAllCarts = async (req, res) => {
 
 // Clear the cart
 const clearCart = async (req, res) => {
-  const userId = req.session.userId;
+  let userId = req.session.userId;
+  if (!userId) userId = req.params.userId;
 
   try {
     const cart = await Cart.findOne({ user: userId });
@@ -93,13 +97,14 @@ const clearCart = async (req, res) => {
 const changeQuantity = async (req, res) => {
   const medicineId = req.params.medicineId;
   const quantity = parseInt(req.body.quantity);
-  const userId = req.session.userId;
+  let userId = req.session.userId;
+  if (!userId) userId = req.params.userId;
 
   if (isNaN(quantity) || quantity <= 0) {
     return res.status(400).json({ message: "Invalid quantity" });
   }
 
-  const cart = Cart.findOne({ user: userId }).exec();
+  const cart = await Cart.findOne({ user: userId }).exec();
   if (!cart) {
     return res.status(400).json({ message: "Cart is empty" });
   }
@@ -126,7 +131,8 @@ const changeQuantity = async (req, res) => {
 // Remove a medicine from the cart
 const removeFromCart = async (req, res) => {
   const medicineId = req.params.medicineId;
-  const userId = req.session.userId;
+  let userId = req.session.userId;
+  if (!userId) userId = req.params.userId;
 
   const cart = await Cart.findOne({ user: userId }).exec();
 

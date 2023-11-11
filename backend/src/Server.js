@@ -14,11 +14,18 @@ const {
   createAdmin,
 } = require("./Controllers/adminstratorController");
 const {
+  login, 
+  requireAuth, 
+  logout, 
+  updateUserInfoInCookie,
+  otp,
+  verifyOtp
+} = require("./Controllers/authenticationController");
+const {
   createPatient,
   deletePatient,
   updatePatientInfo,
   getPatients,
-  patientLogin,
   patientSendPasswordResetOTP,
   patientCheckPasswordResetOTP,
   patientChangePassword,
@@ -27,7 +34,8 @@ const {
   addAddress,
   updateAddress,
   viewAddresses,
-  deleteAddress
+  deleteAddress,
+  getPatientById,
 } = require("./Controllers/patientController");
 
 const {
@@ -97,6 +105,7 @@ app.get("/", (req, res) => {
 //ba map kol method l http req
 app.get("/admins", getAdmins);
 app.get("/patients", getPatients);
+app.get("/patientById/:patientId", getPatientById);
 app.get("/medicines", getMedicines);
 app.get("/medicine", getMedicine);
 app.get("/medicineByName", searchMedicine);
@@ -114,6 +123,16 @@ app.post("/newMedicine", createMedicine);
 app.post("/filterMedicine", filterMedicine);
 app.post("/addAdress",addAddress);
 
+app.post("/login",login) 
+app.post("/requireAuth",requireAuth);
+app.post("logou",logout); 
+app.put("/updCookie",updateUserInfoInCookie);
+app.post("/otp",otp);
+app.post("/verifyOtp",verifyOtp);
+
+
+
+
 app.put("/updatePatient", updatePatientInfo);
 app.put("/updateMedicine", updateMedicine);
 app.put("/updatePharmacist", updatePharmacist);
@@ -126,30 +145,42 @@ app.delete("/deletePharmacist", deletePharmacist);
 //NEW ROUTES
 // CART ROUTES
 const cartController = require("./Controllers/cartController");
-app.post("/add-to-cart/:medicineId", cartController.addToCart);
-app.get("/cart", cartController.viewCart);
+app.get("/cart/:userId?", cartController.viewCart);
 app.get("/allCarts", cartController.getAllCarts);
-app.post("/clear-cart", cartController.clearCart);
-app.post("/change-quantity/:medicineId", cartController.changeQuantity);
-app.post(("/remove-from-cart/:medicineId", cartController.removeFromCart));
+app.put("/addtocart/:medicineId/:userId?", cartController.addToCart);
+app.put("/changequantity/:medicineId/:userId?", cartController.changeQuantity);
+app.put("/removefromcart/:medicineId/:userId?", cartController.removeFromCart);
+app.put("/clearcart/:userId?", cartController.clearCart);
 
 // ORDER ROUTES
 const orderController = require("./Controllers/orderController");
-app.post("/checkout", orderController.checkout);
 app.get("/allOrders", orderController.getAllOrders);
+app.get("/patientorders/:userId?", orderController.getPatientOrders);
 app.get("/orders/:orderId", orderController.getOrderById);
-app.get("/orders/:patientId", orderController.getPatientOrders);
-app.post("/orders/:orderId", orderController.updateOrderByID);
-app.post("/orders/:orderId", orderController.cancelOrderByID);
-app.delete("/orders/:orderId", orderController.deleteOrderByID);
+app.post("/checkout", orderController.checkout);
+app.put("/orders/update/:orderId", orderController.updateOrderByID);
+app.put(
+  "/orders/updatebynumber/:orderNumber/:userId?",
+  orderController.updateOrderByNumber
+);
+app.put("/cancelorder/:orderId", orderController.cancelOrderByID);
+app.put(
+  "/cancelorderbynumber/:orderNumber/:userId?",
+  orderController.cancelOrderByNumber
+);
+app.delete("/deleteorder/:orderId", orderController.deleteOrderByID);
+app.delete(
+  "/deleteorderbynumber/:orderNumber/:userId?",
+  orderController.deleteOrderByNumber
+);
 
 /*
 //inserting dummy data
 // const dummyData = require("./dummyData/patient");
 const Patient = require("./Models/Patient");
 
-const dummyData = require("./dummyData/cart");
-const Cart = require("./Models/Cart");
+const dummyData = require("./dummyData/order");
+const Cart = require("./Models/Order");
 
 const { insertDummyData } = require("./utils.js");
 insertDummyData(dummyData, Cart);

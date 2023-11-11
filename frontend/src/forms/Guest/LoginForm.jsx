@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 /* import { useDispatch } from "react-redux"; */
 import FormPassword from "../FormPassword";
 import FormInput from "../FormInput";
+import ForgotPassword from "../../pages/Guest/ForgotPassword";
 /* import { setCredentials } from "../../state/loginPatientReducer"; */
 
 const LoginForm = () => {
@@ -57,15 +58,14 @@ const LoginForm = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Container className="forgot-password-container">
-          {/* <div className="form-comment"> */}
-          <div
-            className="forgot-password text-decoration-none"
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate("forgot-password")}
-          >
-            Forgot Password?
-          </div>
-        </Container>
+      <a
+        href="/forgot-password"
+        className="forgot-password text-decoration-none"
+        style={{ cursor: "pointer" }}
+      >
+        Forgot Password?
+      </a>
+    </Container>
         <button
           className="w-100 btn-sm custom-button"
           disabled={loading}
