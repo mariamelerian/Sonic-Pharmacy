@@ -125,7 +125,7 @@ app.post("/addAdress",addAddress);
 
 app.post("/login",login) 
 app.post("/requireAuth",requireAuth);
-app.post("logou",logout); 
+app.post("logout",logout); 
 app.put("/updCookie",updateUserInfoInCookie);
 app.post("/otp",otp);
 app.post("/verifyOtp",verifyOtp);
