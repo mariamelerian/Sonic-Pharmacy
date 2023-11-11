@@ -49,6 +49,7 @@ const addToCart = async (req, res) => {
 // View the cart contents
 const viewCart = async (req, res) => {
   let userId = req.session.userId;
+  console.log(userId);
   if (!userId) userId = req.params.userId;
 
   try {

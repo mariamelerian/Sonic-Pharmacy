@@ -9,6 +9,7 @@ import FormInput from "../FormInput";
 import ForgotPassword from "../../pages/Guest/ForgotPassword";
 /* import { setCredentials } from "../../state/loginPatientReducer"; */
 
+
 const LoginForm = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -22,23 +23,56 @@ const LoginForm = () => {
   };
 
   const handleClick = async (e) => {
+
+
     e.preventDefault();
     setError(null);
     isLoading(true);
-    // if (!email || !password) {
-    //   setError("Please fill in all the required fields");
-    //   isLoading(false);
-    //   return;
-    // }
+    if (!username || !password) {
+      setError("Please fill in all the required fields");
+      isLoading(false);
+      return;
+    }
     // const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-    // if (!email.match(emailRegex)) {
+    // if (!username.match(emailRegex)) {
     //   setError("Invalid email format.");
     //   console.log(error1);
     //   isLoading(false);
     //   return;
     // }
     isLoading(false);
-    navigate("/patient");
+
+    //try to log in
+    //save user id and role from response 
+    const userData = {
+      username: username,
+      password: password,
+    };
+    
+    axios.post("/login", userData)
+      .then(response => {
+        // Handle the response data
+        
+        console.log('Login successful:', response.data);
+
+        if(response.status == 200){
+          const role = response.data.message;
+          const user = response.data.user;
+          localStorage.setItem("userId", user._id);
+          if(role == "Admin")
+            navigate("/admin");
+          else if (role == "Pharmacist")
+            navigate("/pharmacist")
+          else 
+            navigate("/patient")
+        }
+      })
+      .catch(error => {
+        // Handle errors
+        console.error('Error during login:', error);
+        setError("Invalid credentials");
+        isLoading(false);
+      });
   };
 
   return (
