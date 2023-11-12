@@ -13,6 +13,7 @@ const {
   getAdmins,
   deleteAdmin,
   createAdmin,
+  adminChangePassword
 } = require("./Controllers/adminstratorController");
 const {
   login,
@@ -37,6 +38,7 @@ const {
   viewAddresses,
   deleteAddress,
   getPatientById,
+  allAddresses
 } = require("./Controllers/patientController");
 
 const {
@@ -58,6 +60,7 @@ const {
   getInactivePharmacists,
   updatePharmacist,
   deletePharmacist,
+  pharmacistChangePassword
 } = require("./Controllers/pharmacistController");
 
 const {
@@ -83,16 +86,16 @@ app.use(cookieParser());
 const port = process.env.PORT || "8000";
 
 // Apply middleware to all routes except the login route
-app.use((req, res, next) => {
-  // Check if the route is not the login route
-  if (req.path !== "/login") {
-    // Apply your middleware to all routes except login
-    requireAuth(req, res, next);
-  } else {
-    // If it's the login route, skip the middleware
-    next();
-  }
-});
+// app.use((req, res, next) => {
+//   // Check if the route is not the login route
+//   if (req.path !== "/login") {
+//     // Apply your middleware to all routes except login
+//     requireAuth(req, res, next);
+//   } else {
+//     // If it's the login route, skip the middleware
+//     next();
+//   }
+// });
 
 // Mongo DB
 const MongoURI = process.env.MONGO_URI;
@@ -128,13 +131,14 @@ app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
 app.get("/pharmacistApplications", getInactivePharmacists);
 app.get("/addresses", viewAddresses);
+app.get("/allAddresses",allAddresses);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", createAdmin);
 app.post("/newPharmacist", registerPharmacist);
 app.post("/newMedicine", createMedicine);
 app.post("/filterMedicine", filterMedicine);
-app.post("/addAdress", addAddress);
+app.post("/addAddress", addAddress);
 
 //authentication
 app.post("/login", login);
@@ -148,6 +152,10 @@ app.put("/updatePatient", requireAuth, updatePatientInfo);
 app.put("/updateMedicine", requireAuth, updateMedicine);
 app.put("/updatePharmacist", requireAuth, updatePharmacist);
 app.put("/updateAddress", requireAuth, updateAddress);
+app.put("/patientChangePassword/:userId?",patientChangePassword);
+app.put("/adminChangePassword/:userId?",adminChangePassword);
+app.put("/pharmacistChangePassword/:userId?",pharmacistChangePassword);
+
 
 app.delete("/deleteAdmin", requireAuth, deleteAdmin);
 app.delete("/deletePatient", requireAuth, deletePatient);

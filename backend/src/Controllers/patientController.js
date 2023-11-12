@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const Address = require("../models/address");
 const { create } = require("../Models/Pharmacist.js");
+const bcrypt = require('bcrypt');
 
 const stripe = require("stripe")("<your_stripe_secret_key>");
 
@@ -34,6 +35,8 @@ const createPatient = async (req, res) => {
     if (existingPatient) {
       return res.status(409).json({ message: "Email is already registered" });
     }
+    
+     
     // create a new patient with the provided information
     const newPatient = new Patient({
       username,
@@ -47,6 +50,7 @@ const createPatient = async (req, res) => {
       emergencyMobileNumber,
       emergencyRelation,
     });
+    newPatient.password=await bcrypt.hash(newPatient.password, 10);
     await newPatient.save();
     res.status(201).json({ message: "Patient created successfully" });
   } catch (error) {
@@ -205,7 +209,8 @@ const patientCheckPasswordResetOTP = async function (req, res) {
 };
 
 const patientChangePassword = async (req, res) => {
-  const user = await Patient.findById(req.params.id);
+  const user = await Patient.findById(req.params.userId);
+  console.log(req.params.userId);
 
   if (!user) {
     return res.status(404).json({ error: "Patient not found" });
@@ -268,11 +273,11 @@ const createCustomer = async (req, res) => {
 };
 
 const chargePayment = async (req, res) => {
-  const user = await Patient.findById(req.params.id);
+  const user = await Patient.findById(req.params.userId);
   if (!user) {
     return res.status(404).json({ error: "Patient not found" });
   }
-  const customerId = req.params.id;
+  const customerId = req.params.userId;
   const amount = req.amount;
   const currency = req.currency;
   const paymentIntent = await stripe.paymentIntents.create({
@@ -331,9 +336,9 @@ const deleteAddress = async (req, res) => {
 
   try {
     const { userId } = req.params;
-    const { addressId } = req.body;
+    const { _id } = req.body;
 
-    const address = await Address.findOneAndDelete({ addressId, userId });
+    const address = await Address.findOneAndDelete({ _id});
     if (!address) {
       res.status(404).json({ error: "Address not found" });
     } else {
@@ -370,6 +375,12 @@ const updateAddress = async (req, res) => {
     res.status(500).json({ error: "Failed to update address" });
   }
 };
+
+const allAddresses = async (req, res) => {
+  const users = await Address.find();
+  res.status(200).send(users);
+}
+
 
 const viewAddresses = async (req, res) => {
   const errors = validationResult(req);
@@ -408,4 +419,5 @@ module.exports = {
   updateAddress,
   viewAddresses,
   deleteAddress,
+  allAddresses
 };

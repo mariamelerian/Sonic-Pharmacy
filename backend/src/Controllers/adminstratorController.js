@@ -2,6 +2,7 @@ const admin = require("../Models/Adminstrator.js");
 const { default: mongoose } = require("mongoose");
 const { validateUsername } = require("../utils.js");
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const createAdmin = async (req, res) => {
   const { username, password } = req.body;
@@ -13,10 +14,14 @@ const createAdmin = async (req, res) => {
   }
   // create new admin
   try {
+  
     const newAdmin = await admin.create({ username, password });
+    newAdmin.password=await bcrypt.hash(password, 10);
+    await newAdmin.save();
     res.status(201).json(newAdmin);
   } catch (err) {
     res.status(500).json({ message: "server error" });
+    console.log(err);
   }
 };
 
@@ -83,7 +88,7 @@ const adminLogin = async (req, res) => {
 
 
 const adminChangePassword = async (req, res) => {
-  const user = await admin.findById(req.params.id);
+  const user = await admin.findById(req.params.userId);
 
   if (!user) {
     return res.status(404).json({ error: 'Admin not found' });
@@ -110,4 +115,4 @@ const adminChangePassword = async (req, res) => {
 
 
 
-module.exports = { getAdmins, deleteAdmin, createAdmin,adminLogin,adminChangePassword };
+module.exports = { getAdmins, deleteAdmin, createAdmin,adminChangePassword };
