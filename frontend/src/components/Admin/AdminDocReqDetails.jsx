@@ -29,26 +29,26 @@
       <Card style={{ width: "100%", border: "transparent" }}>
         <Card.Body>
           <div className="d-flex justify-content-end ">
-            <Button
-              onClick={onApprove}
-              style={{
-                backgroundColor: "#00ff00",
-                marginLeft: "20px",
-                color: "#ff0000",
-                borderColor: "#f0f0f0",
-                width: "40px",
-                height: "40px",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faCheck}
-                style={{
-                  color: "#f0f0f0",
-                  fontWeight: "bold",
-                  fontSize: "20px",
-                }}
-              />
-            </Button>
+          <Button
+  onClick={onApprove}
+  variant="success"  // Use the "success" variant for a green button 
+  style={{
+    marginLeft: "20px",
+    color: "#ff0000",
+    borderColor: "#f0f0f0",
+    width: "40px",
+    height: "40px",
+  }}
+>
+  <FontAwesomeIcon
+    icon={faCheck}
+    style={{
+      color: "#f0f0f0",
+      fontWeight: "bold",
+      fontSize: "20px",
+    }}
+  />
+</Button>
             <Button
               onClick={onReject}
               variant = "tertiary"
