@@ -41,11 +41,13 @@ const orderSchema = new Schema({
     ref: "Patient", // Reference to the Patient model
     required: true,
   },
+  /*
   address: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Address", // Reference to the Address model
     required: true,
   },
+  */
 });
 
 const Order = mongoose.model("Order", orderSchema);

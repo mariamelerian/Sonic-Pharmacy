@@ -74,7 +74,7 @@ const getPatientById = async (req, res) => {
     res.status(200).json(patient);
   } catch (error) {
     // Handle any errors that may occur during the database query
-    throw new Error("Failed to retrieve patient");
+    throw new Error("Failed to retrieve patient " + error.message);
   }
 };
 

@@ -81,9 +81,10 @@ const getPatientOrders = async (req, res) => {
 const updateOrderByID = async (req, res) => {
   const orderId = req.params.orderId;
   const newStatus = req.body.status; // Assuming the request body contains the new status
-
+  console.log(orderId, newStatus);
   try {
     const order = await Order.findById(orderId);
+    console.log(order);
     if (order) {
       order.status = newStatus;
       await order.save();
@@ -92,7 +93,9 @@ const updateOrderByID = async (req, res) => {
       res.status(404).json({ message: "Order not found" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Failed to update the order" });
+    res
+      .status(500)
+      .json({ message: "Failed to update the order" + error.message });
   }
 };
 
@@ -119,8 +122,10 @@ const updateOrderByNumber = async (req, res) => {
 
 const cancelOrderByID = async (req, res) => {
   const orderId = req.params.orderId;
+  console.log(orderId);
   try {
     const order = await Order.findById(orderId);
+    console.log(order);
     if (order) {
       order.status = "Cancelled";
       await order.save();
@@ -129,7 +134,9 @@ const cancelOrderByID = async (req, res) => {
       res.status(404).json({ message: "Order not found" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Failed to update the order" });
+    res
+      .status(500)
+      .json({ message: "Failed to update the order " + error.message });
   }
 };
 
