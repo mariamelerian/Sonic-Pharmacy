@@ -38,7 +38,10 @@ const {
   viewAddresses,
   deleteAddress,
   getPatientById,
-  allAddresses
+  allAddresses,
+  getWallet,
+  subWalletAmount,
+  addWalletAmount
 } = require("./Controllers/patientController");
 
 const {
@@ -133,6 +136,7 @@ app.get("/pharmacist", getPharmacist);
 app.get("/pharmacistApplications", getInactivePharmacists);
 app.get("/addresses", viewAddresses);
 app.get("/allAddresses",allAddresses);
+app.get("/wallet/:userId?",getWallet);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", createAdmin);
@@ -156,6 +160,8 @@ app.put("/updateAddress", requireAuth, updateAddress);
 app.put("/patientChangePassword/:userId?",patientChangePassword);
 app.put("/adminChangePassword/:userId?",adminChangePassword);
 app.put("/pharmacistChangePassword/:userId?",pharmacistChangePassword);
+app.put("/addWalletAmount/:userId?",addWalletAmount);
+app.put("/subWalletAmount/:userId?",subWalletAmount);
 
 
 app.delete("/deleteAdmin", requireAuth, deleteAdmin);
