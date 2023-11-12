@@ -49,6 +49,7 @@ export default function AdminDocReqs() {
       {users.map((user, index) => (
         <AdminDocReqCard
           key={index}
+          id={user._id}
           docName={user.name}
           docEmail={user.email}
           docBirthDate={user.dateOfBirth}

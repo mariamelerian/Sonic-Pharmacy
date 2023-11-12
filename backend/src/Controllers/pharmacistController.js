@@ -114,8 +114,8 @@ const getInactivePharmacists = async (req, res) => {
 const updatePharmacist = async (req, res) => {
   try {
     const updatedPharmacist = await Pharmacist.findByIdAndUpdate(
-      req.params.id,
-      req.params,
+      req.body.id,
+      req.body,
       { new: true }
     );
     if (updatedPharmacist == null)

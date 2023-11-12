@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Accordion, Container } from "react-bootstrap";
 import AccordionBody from "react-bootstrap/esm/AccordionBody";
 import AdminDocReqDetails from "./AdminDocReqDetails";
+import axios from "axios";
+import { json } from "react-router";
 
 export default function AdminDocReqCard({
   docName,
@@ -10,19 +12,38 @@ export default function AdminDocReqCard({
   docEducation,
   docAffiliation,
   docBirthDate,
+  id,
 }) {
   const [isVisible, setIsVisible] = useState(true);
 
-  const handleApprove = () => {
+  const handleApprove = async () => {
     // Handle the logic for approving the document request
     // For now, let's just make the card disappear
-    setIsVisible(false);
+    const response = await axios.put("/updatePharmacist", {
+      id: id,
+      state: "Active",
+    });
+    if (response.status === 200) {
+      setIsVisible(false);
+      console.log("Pharmacist Approved " + JSON.stringify(response.data));
+    } else {
+      console.log("error approving pharmacist");
+    }
   };
 
-  const handleReject = () => {
+  const handleReject = async () => {
     // Handle the logic for rejecting the document request
     // For now, let's just make the card disappear
-    setIsVisible(false);
+    const response = await axios.put("/updatePharmacist", {
+      id: id,
+      state: "Rejected",
+    });
+    if (response.status === 200) {
+      setIsVisible(false);
+      console.log("Pharmacist Approved " + JSON.stringify(response.data));
+    } else {
+      console.log("error approving pharmacist");
+    }
   };
 
   return (
