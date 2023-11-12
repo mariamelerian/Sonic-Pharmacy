@@ -97,6 +97,7 @@ const logout = async (req, res) => {
   req.session.destroy(function (err) {
     // cannot access session here
   });
+  res.status(200).send("logout");
 };
 
 const updateUserInfoInCookie = (req, res, user) => {

@@ -13,7 +13,7 @@ const {
   getAdmins,
   deleteAdmin,
   createAdmin,
-  adminChangePassword
+  adminChangePassword,
 } = require("./Controllers/adminstratorController");
 const {
   login,
@@ -41,7 +41,7 @@ const {
   allAddresses,
   getWallet,
   subWalletAmount,
-  addWalletAmount
+  addWalletAmount,
 } = require("./Controllers/patientController");
 
 const {
@@ -63,7 +63,7 @@ const {
   getInactivePharmacists,
   updatePharmacist,
   deletePharmacist,
-  pharmacistChangePassword
+  pharmacistChangePassword,
 } = require("./Controllers/pharmacistController");
 
 const {
@@ -100,7 +100,6 @@ app.use((req, res, next) => {
   }
 });
 
-
 // Mongo DB
 const MongoURI = process.env.MONGO_URI;
 mongoose
@@ -135,8 +134,8 @@ app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
 app.get("/pharmacistApplications", getInactivePharmacists);
 app.get("/addresses", viewAddresses);
-app.get("/allAddresses",allAddresses);
-app.get("/wallet/:userId?",getWallet);
+app.get("/allAddresses", allAddresses);
+app.get("/wallet/:userId?", getWallet);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", createAdmin);
@@ -148,7 +147,7 @@ app.post("/addAddress", addAddress);
 //authentication
 app.post("/login", login);
 app.post("/requireAuth");
-app.post("logout", logout);
+app.post("/logout", logout);
 app.put("/updCookie", updateUserInfoInCookie);
 app.post("/otp", otp);
 app.post("/verifyOtp", verifyOtp);
@@ -157,12 +156,11 @@ app.put("/updatePatient", requireAuth, updatePatientInfo);
 app.put("/updateMedicine", requireAuth, updateMedicine);
 app.put("/updatePharmacist", requireAuth, updatePharmacist);
 app.put("/updateAddress", requireAuth, updateAddress);
-app.put("/patientChangePassword/:userId?",patientChangePassword);
-app.put("/adminChangePassword/:userId?",adminChangePassword);
-app.put("/pharmacistChangePassword/:userId?",pharmacistChangePassword);
-app.put("/addWalletAmount/:userId?",addWalletAmount);
-app.put("/subWalletAmount/:userId?",subWalletAmount);
-
+app.put("/patientChangePassword/:userId?", patientChangePassword);
+app.put("/adminChangePassword/:userId?", adminChangePassword);
+app.put("/pharmacistChangePassword/:userId?", pharmacistChangePassword);
+app.put("/addWalletAmount/:userId?", addWalletAmount);
+app.put("/subWalletAmount/:userId?", subWalletAmount);
 
 app.delete("/deleteAdmin", requireAuth, deleteAdmin);
 app.delete("/deletePatient", requireAuth, deletePatient);
