@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import ChangePass from "../../forms/ChangePass";
-import { Card, Button } from "react-bootstrap";
+import { Button } from "bootstrap";
 
 function ViewPersonalInfo() {
   const user = useSelector((state) => state.patientLogin);
