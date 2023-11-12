@@ -45,10 +45,9 @@ export default function ChangePass({ patient, api }) {
     }
 
     try {
-      console.log("11");
       const url = api;
-      const response = await axios.post(url, {
-        currentPassword: oldPass,
+      const response = await axios.put(url, {
+        oldPassword: oldPass,
         newPassword: newPass,
       });
       if (response.status === 200) {

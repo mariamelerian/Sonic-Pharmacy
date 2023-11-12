@@ -57,7 +57,7 @@ function ViewPersonalInfo() {
               </label>
             </span>
             {showChangePass && (
-              <ChangePass patient={true} api="/changePasswordForPatient" />
+              <ChangePass patient={true} api="/patientChangePassword" />
             )}
           </div>
           <div style={listItemStyle}>
@@ -75,10 +75,10 @@ function ViewPersonalInfo() {
             <span style={{ color: "#099BA0" }}>Emergency Phone Number:</span>{" "}
             {user.emergencyNumber}
           </div>
-          <div style={listItemStyle}>
+          {/* <div style={listItemStyle}>
             <span style={{ color: "#099BA0" }}>Emergency Relation:</span>{" "}
             {user.emergencyRelation}
-          </div>
+          </div> */}
         </ListGroup.Item>
       </ListGroup>
     </div>

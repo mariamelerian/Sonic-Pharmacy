@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -42,7 +42,7 @@ const registerPharmacist = async (req, res) => {
       req.body.picture = imageSrc;
     }
     const newPharmacist = new Pharmacist(req.body);
-    newPharmacist.password=await bcrypt.hash(req.body.password, 10);
+    newPharmacist.password = await bcrypt.hash(req.body.password, 10);
     const savedPharmacist = await newPharmacist.save();
 
     const id = savedPharmacist._id;
@@ -50,7 +50,7 @@ const registerPharmacist = async (req, res) => {
     req.params.pharmacistId = id;
 
     uploadDocuments(req, res);
-    
+
     return res.status(201).json(savedPharmacist);
   } catch (error) {
     return res.status(400).json({ error: error.message });
@@ -82,8 +82,8 @@ const uploadDocuments = (req, res) => {
 
 const getPharmacists = async (req, res) => {
   try {
-   const pharmacists = await Pharmacist.find({ state: "Active" });
-   
+    const pharmacists = await Pharmacist.find({ state: "Active" });
+
     res.status(200).json(pharmacists);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -237,7 +237,7 @@ const pharmacistCheckPasswordResetOTP = async (req, res) => {
 };
 
 const pharmacistChangePassword = async (req, res) => {
-  const user = await Pharmacist.findById(req.params.userId);
+  const user = await Pharmacist.findById(req.session.userId);
 
   if (!user) {
     return res.status(404).json({ error: "Pharmacist not found" });

@@ -28,11 +28,8 @@ export default function PatientMyOrdersCard({
                   color: "#212529",
                 }}
               >
-                {orderNumber}
+                Order {orderNumber}
               </div>
-              {/*     <div style={{ fontSize: "15px", color: "#05afb9" }}>
-                {docSpecialty}
-              </div> */}
             </div>
           </Accordion.Header>
           <AccordionBody>

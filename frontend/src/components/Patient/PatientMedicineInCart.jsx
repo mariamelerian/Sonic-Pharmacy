@@ -4,12 +4,15 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import { Container, Button } from "react-bootstrap";
 import medicineBlueImg from "../../Assets/Patient/medicineBlueImg.jpg";
+import PatientCheckOutModal from "./PatientCheckOutModal";
 import axios from "axios";
 
 function CartItems() {
   const [loading, setLoading] = useState(true);
+  const [checkout, setCheckout] = useState(false);
   const [medicine, setMedicine] = useState({ items: [] });
   const [error1, setError] = useState(null);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -278,12 +281,20 @@ function CartItems() {
           <div style={lineStyle2}></div>
 
           <div style={{ display: "flex", justifyContent: "right" }}>
-            <Link to="/patient/patient-checkout">
-              <Button variant="primary" style={checkoutButtonStyle}>
-                Proceed to Checkout
-              </Button>
-            </Link>
-
+            <Button
+              variant="primary"
+              style={checkoutButtonStyle}
+              onClick={() => setCheckout(true)}
+            >
+              Proceed to Checkout
+            </Button>
+            {checkout && (
+              <PatientCheckOutModal
+                subtotal={subtotal?.toFixed(2)}
+                total={total?.toFixed(2)}
+                delivery={delivery}
+              />
+            )}
             <div style={{ width: "50px" }}></div>
 
             <Link to="/patient/patient-medicine">

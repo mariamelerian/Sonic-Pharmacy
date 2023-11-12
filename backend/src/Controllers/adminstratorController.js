@@ -1,8 +1,8 @@
 const admin = require("../Models/Adminstrator.js");
 const { default: mongoose } = require("mongoose");
 const { validateUsername } = require("../utils.js");
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const createAdmin = async (req, res) => {
   const { username, password } = req.body;
@@ -14,9 +14,8 @@ const createAdmin = async (req, res) => {
   }
   // create new admin
   try {
-  
     const newAdmin = await admin.create({ username, password });
-    newAdmin.password=await bcrypt.hash(password, 10);
+    newAdmin.password = await bcrypt.hash(password, 10);
     await newAdmin.save();
     res.status(201).json(newAdmin);
   } catch (err) {
@@ -48,8 +47,6 @@ const deleteAdmin = async (req, res) => {
       res.status(500).json({ message: "Server error" });
     });
 };
-
-
 
 const adminLogin = async (req, res) => {
   try {
@@ -83,15 +80,11 @@ const adminLogin = async (req, res) => {
   }
 };
 
-
-
-
-
 const adminChangePassword = async (req, res) => {
-  const user = await admin.findById(req.params.userId);
+  const user = await admin.findById(req.session.userId);
 
   if (!user) {
-    return res.status(404).json({ error: 'Admin not found' });
+    return res.status(404).json({ error: "Admin not found" });
   }
 
   const { oldPassword, newPassword } = req.body;
@@ -100,7 +93,7 @@ const adminChangePassword = async (req, res) => {
   const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
 
   if (!isPasswordCorrect) {
-    return res.status(409).json({ error: 'Invalid old password' });
+    return res.status(409).json({ error: "Invalid old password" });
   }
 
   // Hash the new password and update the user's document
@@ -110,9 +103,7 @@ const adminChangePassword = async (req, res) => {
 
   await user.save();
 
-  return res.status(200).json({ message: 'Password updated successfully' });
+  return res.status(200).json({ message: "Password updated successfully" });
 };
 
-
-
-module.exports = { getAdmins, deleteAdmin, createAdmin,adminChangePassword };
+module.exports = { getAdmins, deleteAdmin, createAdmin, adminChangePassword };

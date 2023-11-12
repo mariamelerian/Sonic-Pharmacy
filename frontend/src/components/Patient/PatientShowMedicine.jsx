@@ -15,6 +15,7 @@ function PatientShowMedicine() {
   const [error, setError] = useState(null);
   const [filterMedicinalUse, setFilterMedicinalUse] = useState("");
   const [selectedMedicine, setSelectedMedicine] = useState(null);
+  const id = useSelector((state) => state.patientLogin.userId);
   const dispatch = useDispatch();
 
   const medicineImage = {
@@ -45,7 +46,7 @@ function PatientShowMedicine() {
       setError("An error occurred while fetching data.");
       setLoading(false);
     }
-  }
+  };
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -56,17 +57,24 @@ function PatientShowMedicine() {
     setExpandedMedicine(expandedMedicine === index ? null : index);
   };
 
-  const handleAddToCart = (medicine) => {
+  const handleAddToCart = async (medicine) => {
     setSelectedMedicine(medicine);
-  };
-
-  const handleCloseModal = () => {
+    try {
+      const response = await axios.put(`/addtocart/${medicine._id}`);
+      if (response.status === 200) {
+        setError(null);
+      } else {
+        setError("Error");
+      }
+    } catch (error) {
+      setError(
+        "An error occurred while adding to cart. Please try again later"
+      );
+    }
     setSelectedMedicine(null);
   };
 
-  const handleConfirmAddToCart = () => {
-    // Add your logic to handle adding the selected medicine to the cart
-    // You can show a confirmation message here if needed
+  const handleCloseModal = () => {
     setSelectedMedicine(null);
   };
 
@@ -131,7 +139,10 @@ function PatientShowMedicine() {
                         ))}
                       </div>
                       <hr />
-                      <button className="btn btn-primary" onClick={() => handleAddToCart(medicine)}>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => handleAddToCart(medicine)}
+                      >
                         Add to Cart
                       </button>
 
@@ -160,7 +171,6 @@ function PatientShowMedicine() {
         show={showModal}
         handleClose={handleCloseModal}
         itemName={selectedMedicine?.name}
-        onConfirm={handleConfirmAddToCart}
       />
     </div>
   );

@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const Address = require("../models/address");
 const { create } = require("../Models/Pharmacist.js");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const Wallet = require("../Models/Wallet.js");
 
 const stripe = require("stripe")("<your_stripe_secret_key>");
@@ -36,8 +36,7 @@ const createPatient = async (req, res) => {
     if (existingPatient) {
       return res.status(409).json({ message: "Email is already registered" });
     }
-    
-     
+
     // create a new patient with the provided information
     const newPatient = new Patient({
       username,
@@ -52,10 +51,10 @@ const createPatient = async (req, res) => {
       emergencyRelation,
     });
 
-    newPatient.password=await bcrypt.hash(newPatient.password, 10);
+    newPatient.password = await bcrypt.hash(newPatient.password, 10);
     await newPatient.save();
-    const idd=newPatient._id;
-    const newWallet=new Wallet({userId:idd,Amount:0,});
+    const idd = newPatient._id;
+    const newWallet = new Wallet({ userId: idd, Amount: 0 });
     await newWallet.save();
 
     res.status(201).json({ message: "Patient created successfully" });
@@ -116,58 +115,50 @@ const getPatients = async (req, res) => {
   res.status(200).send(users);
 };
 const getWallet = async (req, res) => {
-  try{
-  const userId=req.params.userId;
+  try {
+    const userId = req.params.userId;
 
-  const users = await Wallet.findOne({userId});
-  if(!users){
-    return res.status(404).json({ error: "Wallet not found" });
+    const users = await Wallet.findOne({ userId });
+    if (!users) {
+      return res.status(404).json({ error: "Wallet not found" });
+    }
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-  res.status(200).send(users);
-} catch (error) {
-  res.status(500).json({ error: error.message });
-}
-  
 };
 
 const addWalletAmount = async (req, res) => {
-  try{
-  const userId=req.params.userId;
-  const wallet1 = await Wallet.findOne({userId:userId});
-  if(!wallet1){
-    return res.status(404).json({ error: "Wallet not found" });
+  try {
+    const userId = req.params.userId;
+    const wallet1 = await Wallet.findOne({ userId: userId });
+    if (!wallet1) {
+      return res.status(404).json({ error: "Wallet not found" });
+    }
+    wallet1.Amount += req.body.amount;
+    await wallet1.save();
+    res.status(200).send(wallet1);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-  wallet1.Amount+=req.body.amount;
-  await wallet1.save();
-  res.status(200).send(wallet1);
-} catch (error) {
-  res.status(500).json({ error: error.message });
-}
-  
-
 };
 const subWalletAmount = async (req, res) => {
-  try{
-  const userId=req.params.userId;
-  const wallet1 = await Wallet.findOne({userId:userId});
-  if(!wallet1){
-    return res.status(404).json({ error: "Wallet not found" });
+  try {
+    const userId = req.params.userId;
+    const wallet1 = await Wallet.findOne({ userId: userId });
+    if (!wallet1) {
+      return res.status(404).json({ error: "Wallet not found" });
+    }
+    wallet1.Amount -= req.body.amount;
+
+    if (wallet1.Amount < 0) {
+      wallet1.Amount += req.body.amount;
+      return res.status(409).json({ error: "Not Enough Money" });
+    } else await wallet1.save();
+    res.status(200).send(wallet1);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-  wallet1.Amount-=req.body.amount;
-
-  if(wallet1.Amount<0){
-    wallet1.Amount+=req.body.amount;
-    return res.status(409).json({ error: "Not Enough Money" });
-  }
-  else
-  await wallet1.save();
-  res.status(200).send(wallet1);
-
-} catch (error) {
-  res.status(500).json({ error: error.message });
-}
-  
-
 };
 
 const patientLogin = async (req, res) => {
@@ -269,7 +260,7 @@ const patientCheckPasswordResetOTP = async function (req, res) {
 };
 
 const patientChangePassword = async (req, res) => {
-  const user = await Patient.findById(req.params.userId);
+  const user = await Patient.findById(req.session.userId);
   console.log(req.params.userId);
 
   if (!user) {
@@ -398,7 +389,7 @@ const deleteAddress = async (req, res) => {
     const { userId } = req.params;
     const { _id } = req.body;
 
-    const address = await Address.findOneAndDelete({ _id});
+    const address = await Address.findOneAndDelete({ _id });
     if (!address) {
       res.status(404).json({ error: "Address not found" });
     } else {
@@ -439,8 +430,7 @@ const updateAddress = async (req, res) => {
 const allAddresses = async (req, res) => {
   const users = await Address.find();
   res.status(200).send(users);
-}
-
+};
 
 const viewAddresses = async (req, res) => {
   const errors = validationResult(req);
@@ -482,5 +472,5 @@ module.exports = {
   allAddresses,
   getWallet,
   addWalletAmount,
-  subWalletAmount
+  subWalletAmount,
 };
