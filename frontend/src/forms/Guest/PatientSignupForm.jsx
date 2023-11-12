@@ -187,7 +187,7 @@ const PatientSignupForm = () => {
 
         if (response.status === 201) {
           isLoading(false);
-          navigate("/Patient");
+          navigate("/patient");
         } else {
           setError("Signup failed");
           isLoading(false);
@@ -208,10 +208,6 @@ const PatientSignupForm = () => {
         isLoading(false);
       }
     }
-  };
-
-  const checkboxHandler = () => {
-    setAgree(!agree);
   };
 
   return (

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { ListGroup } from "react-bootstrap";
-/* import { useSelector } from "react-redux"; */
+import { useSelector } from "react-redux";
 import ChangePass from "../../forms/ChangePass";
 
 function ViewPersonalInfo() {
-/*   const user = useSelector((state) => state.patientLogin); */
+  const user = useSelector((state) => state.patientLogin);
   const [showChangePass, setShowChangePass] = useState(false);
 
   const listItemStyle = {
@@ -41,10 +41,10 @@ function ViewPersonalInfo() {
       <ListGroup>
         <ListGroup.Item>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Name:</span> {/* {user.name} */}
+            <span style={{ color: "#099BA0" }}>Name:</span> {user.name}
           </div>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Username:</span> {/* {user.userName} */}
+            <span style={{ color: "#099BA0" }}>Username:</span> {user.username}
           </div>
           <div style={listItemStyle}>
             <span style={{ color: "#099BA0" }}>Password:</span>{" "}
@@ -61,11 +61,23 @@ function ViewPersonalInfo() {
             )}
           </div>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Email:</span> {/* {user.userEmail} */}
+            <span style={{ color: "#099BA0" }}>Email:</span> {user.email}
           </div>
           <div style={listItemStyle}>
             <span style={{ color: "#099BA0" }}>Phone Number:</span>{" "}
-            {/* {user.phoneNumber} */}
+            {user.phoneNumber}
+          </div>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0" }}>Emergency Contact:</span>{" "}
+            {user.emergencyName}
+          </div>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0" }}>Emergency Phone Number:</span>{" "}
+            {user.emergencyNumber}
+          </div>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0" }}>Emergency Relation:</span>{" "}
+            {user.emergencyRelation}
           </div>
         </ListGroup.Item>
       </ListGroup>

@@ -4,12 +4,12 @@ import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import ViewPersonalInfo from "./viewPersonalInfo";
-/* import { useSelector } from "react-redux"; */
+import { useSelector } from "react-redux";
 
 function ProfileTabs() {
   const [activeKey, setActiveKey] = useState("first");
   const [refreshFlag, setRefreshFlag] = useState(false);
- /*  const wallet = useSelector((state) => state.patientLogin.wallet); */
+  const wallet = useSelector((state) => state.patientLogin.wallet);
 
   const handleSelect = (selectedKey) => {
     setActiveKey(selectedKey);
@@ -96,7 +96,7 @@ function ProfileTabs() {
                       marginTop: "3rem",
                     }}
                   >
-                    {/* Balance: ${wallet} */}
+                    Balance: ${wallet}
                   </div>
 
                   {/* You can add more wallet-related content here */}
