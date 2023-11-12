@@ -6,6 +6,7 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 
 //imports
 const {
@@ -77,7 +78,21 @@ app.use(
     cookie: { secure: false }, // Set to true in a production environment with HTTPS
   })
 );
+// Use the cookie-parser middleware
+app.use(cookieParser());
 const port = process.env.PORT || "8000";
+
+// Apply middleware to all routes except the login route
+app.use((req, res, next) => {
+  // Check if the route is not the login route
+  if (req.path !== "/login") {
+    // Apply your middleware to all routes except login
+    requireAuth(req, res, next);
+  } else {
+    // If it's the login route, skip the middleware
+    next();
+  }
+});
 
 // Mongo DB
 const MongoURI = process.env.MONGO_URI;
@@ -123,7 +138,7 @@ app.post("/addAdress", addAddress);
 
 //authentication
 app.post("/login", login);
-app.post("/requireAuth", requireAuth);
+app.post("/requireAuth");
 app.post("logout", logout);
 app.put("/updCookie", updateUserInfoInCookie);
 app.post("/otp", otp);
@@ -147,7 +162,7 @@ app.get("/cart/:userId?", cartController.viewCart);
 app.get("/allCarts", cartController.getAllCarts);
 app.put("/addtocart/:medicineId/:userId?", cartController.addToCart);
 app.post("/changequantity/:medicineId/:userId?", cartController.changeQuantity);
-app.put("/removefromcart/:medicineId/:userId?", cartController.removeFromCart);
+app.post("/removefromcart/:medicineId/:userId?", cartController.removeFromCart);
 app.put("/clearcart/:userId?", cartController.clearCart);
 
 // ORDER ROUTES

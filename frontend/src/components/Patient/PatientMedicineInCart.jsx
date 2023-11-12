@@ -6,18 +6,9 @@ import { Container, Button } from "react-bootstrap";
 import medicineBlueImg from "../../Assets/Patient/medicineBlueImg.jpg";
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "http://localhost:8000", // Set your base URL
-  timeout: 5000, // Set a timeout for requests (optional)
-  headers: {
-    "Content-Type": "application/json",
-    // Add any other common headers here
-  },
-});
-
 function CartItems() {
   const [loading, setLoading] = useState(true);
-  const [medicine, setMedicine] = useState({});
+  const [medicine, setMedicine] = useState({ items: [] });
   const [error1, setError] = useState(null);
   useEffect(() => {
     fetchData();
@@ -28,32 +19,36 @@ function CartItems() {
       const response = await axios.get("/cart");
 
       if (response.status === 200) {
-        setMedicine(response.data);
-        console.log("response data" + medicine.items);
+        await setMedicine(response.data);
 
-        medicine.items.map((item) => {
-          //fetch request to get medicine images
-          axios
-            .get("/medicine", { params: { _id: item.medicine } })
-            .then((response) => {
-              setMedicine((prevMedicine) =>
-                prevMedicine.items.map((item2) =>
+        // Use Promise.all to wait for all image fetch requests to complete
+        await Promise.all(
+          response.data.items.map(async (item) => {
+            try {
+              // Fetch request to get medicine images
+              const imageResponse = await axios.get("/medicine", {
+                params: { _id: item.medicine },
+              });
+
+              // Update the image property using the updated response.data.picture
+              setMedicine((prevMedicine) => ({
+                ...prevMedicine,
+                items: prevMedicine.items.map((item2) =>
                   item2.medicine === item.medicine
-                    ? { ...item, image: response.data.picture }
-                    : item
-                )
-              );
-            })
-            .catch((error) => {
-              console.log("error : " + error.message);
-            });
-        });
+                    ? { ...item2, image: imageResponse.data.picture }
+                    : item2
+                ),
+              }));
+            } catch (error) {
+              console.log("error fetching image:", error.message);
+            }
+          })
+        );
 
         setLoading(false);
       } else {
         console.log("Server error");
       }
-      setLoading(false);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setError("No cart items found.");
@@ -65,30 +60,50 @@ function CartItems() {
   };
 
   const handleQuantityChange = async (itemId, newQuantity) => {
-    await axios
-      .post(`/changequantity/${itemId}`, { quantity: newQuantity })
-      .then((response) => {
-        console.log(response.data);
-        setMedicine((prevMedicine) => {
-          if (prevMedicine && prevMedicine.items) {
-            return {
-              ...prevMedicine,
-              items: prevMedicine.items.map((item) =>
-                item.id === itemId ? { ...item, quantity: newQuantity } : item
-              ),
-            };
-          }
-        });
-      })
-      .catch((error) => {
-        console.log("error : " + error.message);
+    try {
+      const response = await axios.post(`/changequantity/${itemId}`, {
+        quantity: newQuantity,
       });
+
+      const price = response.data.items.filter(
+        (item) => item.medicine === itemId
+      )[0].price;
+
+      setMedicine((prevMedicine) => {
+        if (prevMedicine && prevMedicine.items) {
+          const updatedItems = prevMedicine.items.map((item) =>
+            item.medicine === itemId
+              ? { ...item, quantity: newQuantity, price: price }
+              : item
+          );
+
+          return {
+            ...prevMedicine,
+            items: updatedItems,
+            total: response.data.total,
+          };
+        }
+
+        // Return the unchanged state if items or prevMedicine is not defined
+        return prevMedicine;
+      });
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
   };
 
-  const handleDeleteItem = (itemId) => {
-    setMedicine((prevMedicine) =>
-      prevMedicine.filter((item) => item.id !== itemId)
-    );
+  const handleDeleteItem = async (itemId) => {
+    const response = await axios.post(`/removefromcart/${itemId}`);
+    console.log(response.data);
+
+    setMedicine((prevMedicine) => {
+      const newItems = prevMedicine.items.filter((item) => item.id !== itemId);
+
+      return {
+        ...prevMedicine,
+        items: newItems,
+      };
+    });
   };
 
   const plusMinusButtonStyle = {
