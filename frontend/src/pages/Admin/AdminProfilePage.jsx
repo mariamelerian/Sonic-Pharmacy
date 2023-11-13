@@ -9,7 +9,7 @@ function AdminProfilePage() {
   const [activeKey, setActiveKey] = useState("first");
   const [refreshFlag, setRefreshFlag] = useState(false);
   const [showChangePass, setShowChangePass] = useState(false);
-  const user = useSelector((state) => state.adminLogin);
+  const user = useSelector((state) => state.adminPharmLogin);
 
   const listItemStyle = {
     fontSize: "1rem", // Font size for all information
@@ -91,7 +91,7 @@ function AdminProfilePage() {
                                 <span style={{ color: "#099BA0" }}>
                                   Username:
                                 </span>
-                                {user.userName}
+                                {user.username}
                               </div>
                               <div style={listItemStyle}>
                                 <span style={{ color: "#099BA0" }}>
@@ -99,10 +99,15 @@ function AdminProfilePage() {
                                 </span>{" "}
                                 <span>
                                   <label
-                                    style={labelStyle}
+                                     style={{
+                                      cursor: "pointer",
+                                      fontWeight: "lighter",
+                                      textDecoration:  "underline" ,
+                                      color:  "blue" ,
+                                    }}
                                     onClick={toggleChangePass} // Add your click handler here
                                   >
-                                    {showChangePass ? "close" : "********"}
+                                    {showChangePass ? "close" : "change password"}
                                   </label>
                                 </span>
                                 {showChangePass && (
