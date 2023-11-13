@@ -19,7 +19,6 @@ const PharmSignupForm = () => {
   const [error1, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, isLoading] = useState(null);
-  const [agree, setAgree] = useState(false);
   const navigate = useNavigate();
   const [selectedIdImage, setSelectedIdImage] = useState(null); // Added
   const [selectedPharmacyDegreeImage, setSelectedPharmacyDegreeImage] =
@@ -42,7 +41,10 @@ const PharmSignupForm = () => {
       !username ||
       !education ||
       !affiliation ||
-      !rate
+      !rate ||
+      !selectedIdImage ||
+      !selectedPharmacyDegreeImage ||
+      !selectedWorkingLicenseImage
     ) {
       setError("Please fill in all fields");
       console.log(error1);
@@ -178,9 +180,130 @@ const PharmSignupForm = () => {
       formData.append("hourlyRate", rate);
       formData.append("affiliation", affiliation);
       formData.append("education", education);
-      formData.append("idImage", selectedIdImage);
-      formData.append("pharmacyDegreeImage", selectedPharmacyDegreeImage);
-      formData.append("workingLicenseImage", selectedWorkingLicenseImage);
+
+      if (selectedIdImage) {
+        try {
+          // Read the file data as a Uint8Array
+          const fileArrayBuffer = await selectedIdImage.arrayBuffer();
+          const fileUint8Array = new Uint8Array(fileArrayBuffer);
+
+          // Format the file
+          const formattedFile = {
+            filename: selectedIdImage.name,
+            mimetype: selectedIdImage.type,
+            buffer: {
+              type: "Buffer",
+              data: Array.from(fileUint8Array),
+            },
+          };
+
+          console.log(`Processed file: ${selectedIdImage.name}`);
+
+          // Check if any errors occurred during processing
+          if (!formattedFile) {
+            console.error("Error processing file:", selectedIdImage.name);
+            return;
+          }
+
+          const blob = new Blob([formattedFile.buffer.data], {
+            type: formattedFile.mimetype,
+          });
+
+          formData.append("files", blob, formattedFile.filename);
+
+          console.log("formData after processing:", formattedFile.buffer.data);
+        } catch (error) {
+          console.error("Error processing file:", selectedIdImage.name, error);
+        }
+      }
+
+      if (selectedPharmacyDegreeImage) {
+        try {
+          // Read the file data as a Uint8Array
+          const fileArrayBuffer =
+            await selectedPharmacyDegreeImage.arrayBuffer();
+          const fileUint8Array = new Uint8Array(fileArrayBuffer);
+
+          // Format the file
+          const formattedFile = {
+            filename: selectedPharmacyDegreeImage.name,
+            mimetype: selectedPharmacyDegreeImage.type,
+            buffer: {
+              type: "Buffer",
+              data: Array.from(fileUint8Array),
+            },
+          };
+
+          console.log(`Processed file: ${selectedPharmacyDegreeImage.name}`);
+
+          // Check if any errors occurred during processing
+          if (!formattedFile) {
+            console.error(
+              "Error processing file:",
+              selectedPharmacyDegreeImage.name
+            );
+            return;
+          }
+
+          const blob = new Blob([formattedFile.buffer.data], {
+            type: formattedFile.mimetype,
+          });
+
+          formData.append("files", blob, formattedFile.filename);
+
+          console.log("formData after processing:", formattedFile.buffer.data);
+        } catch (error) {
+          console.error(
+            "Error processing file:",
+            selectedPharmacyDegreeImage.name,
+            error
+          );
+        }
+      }
+
+      if (selectedWorkingLicenseImage) {
+        try {
+          // Read the file data as a Uint8Array
+          const fileArrayBuffer =
+            await selectedWorkingLicenseImage.arrayBuffer();
+          const fileUint8Array = new Uint8Array(fileArrayBuffer);
+
+          // Format the file
+          const formattedFile = {
+            filename: selectedWorkingLicenseImage.name,
+            mimetype: selectedWorkingLicenseImage.type,
+            buffer: {
+              type: "Buffer",
+              data: Array.from(fileUint8Array),
+            },
+          };
+
+          console.log(`Processed file: ${selectedWorkingLicenseImage.name}`);
+
+          // Check if any errors occurred during processing
+          if (!formattedFile) {
+            console.error(
+              "Error processing file:",
+              selectedWorkingLicenseImage.name
+            );
+            return;
+          }
+
+          const blob = new Blob([formattedFile.buffer.data], {
+            type: formattedFile.mimetype,
+          });
+
+          formData.append("files", blob, formattedFile.filename);
+
+          console.log("formData after processing:", formattedFile.buffer.data);
+        } catch (error) {
+          console.error(
+            "Error processing file:",
+            selectedWorkingLicenseImage.name,
+            error
+          );
+        }
+      }
 
       try {
         const response = await axios.post("/newPharmacist", formData, {
@@ -212,27 +335,6 @@ const PharmSignupForm = () => {
 
         isLoading(false);
       }
-    }
-  };
-  const checkboxHandler = () => {
-    setAgree(!agree);
-  };
-
-  const handleImageUpload = (e, imageType) => {
-    const file = e.target.files[0];
-
-    switch (imageType) {
-      case "id":
-        setSelectedIdImage(file);
-        break;
-      case "pharmacyDegree":
-        setSelectedPharmacyDegreeImage(file);
-        break;
-      case "workingLicense":
-        setSelectedWorkingLicenseImage(file);
-        break;
-      default:
-        break;
     }
   };
 
@@ -321,9 +423,9 @@ const PharmSignupForm = () => {
             <Form.Label>Upload ID</Form.Label>
             <Form.Control
               type="file"
-              accept="image/*"
+              accept=".pdf"
               name="IdImage"
-              onChange={(e) => handleImageUpload(e, "id")}
+              onChange={(e) => setSelectedIdImage(e.target.files[0])}
             />
           </Form.Group>
         </div>
@@ -334,9 +436,11 @@ const PharmSignupForm = () => {
             <Form.Label>Upload Pharmacy Degree</Form.Label>
             <Form.Control
               type="file"
-              accept="image/*"
+              accept=".pdf"
               name="PharmacyDegreeImage"
-              onChange={(e) => handleImageUpload(e, "pharmacyDegree")}
+              onChange={(e) =>
+                setSelectedPharmacyDegreeImage(e.target.files[0])
+              }
             />
           </Form.Group>
         </div>
@@ -347,9 +451,11 @@ const PharmSignupForm = () => {
             <Form.Label>Upload Working License</Form.Label>
             <Form.Control
               type="file"
-              accept="image/*"
+              accept=".pdf"
               name="WorkingLicenseImage"
-              onChange={(e) => handleImageUpload(e, "workingLicense")}
+              onChange={(e) =>
+                setSelectedWorkingLicenseImage(e.target.files[0])
+              }
             />
           </Form.Group>
         </div>
