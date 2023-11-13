@@ -6,8 +6,6 @@ const Patient = require("./Models/Patient");
 const Order = require("./Models/Order");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
-const Wallet = require("./Models/Wallet");
-
 const validateUsername = async (username) => {
   try {
     console.log(username);
@@ -46,8 +44,6 @@ const passwordandsavePatient = async (newPatient) => {
   newPatient.password = await bcrypt.hash(newPatient.password, 10);
   await newPatient.save();
   const idd = newPatient._id;
-  const newWallet = new Wallet({ userId: idd, Amount: 0 });
-  await newWallet.save();
 };
 
 const insertDummyDataAdmin = async (array) => {

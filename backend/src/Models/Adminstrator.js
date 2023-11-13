@@ -12,6 +12,11 @@ const adminstratorSchema = new Schema(
       type: String,
       required: true,
     },
+    email: {
+      type: String,
+      required: true,
+      default: "abdelaal.ayaa@gmail.com",
+    },
   },
   { timestamps: true }
 );

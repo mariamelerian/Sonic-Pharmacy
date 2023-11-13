@@ -1,11 +1,10 @@
 const Order = require("../Models/Order");
 const Cart = require("../Models/Cart");
 const Medicine = require("../Models/Medicine");
+const Patient = require("../Models/Patient");
 
-const createOrder = async () => {
+const createOrder = async (userId, address) => {
   try {
-    const userId = req.session.userId; // Assuming the user ID is in the session
-
     const cart = await Cart.findOne({ user: userId });
     const items = cart.items;
 
@@ -19,6 +18,7 @@ const createOrder = async () => {
       totalPrice: cart.total + 50,
       status: "Pending",
       patient: userId,
+      address: address,
     };
     const order = new Order(orderData);
     await order.save();
@@ -39,9 +39,42 @@ const createOrder = async () => {
 };
 
 const checkout = async (req, res) => {
-  //redirect to payment gateway
-  //clear cart
   //create order
+  try {
+    await createOrder(req.session.userId, req.body.address);
+
+    //clear cart
+    const userId = req.session.userId;
+
+    res.status(200).json({ message: "Order created" });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const checkoutWallet = async (req, res) => {
+  //check wallet balance
+  const userId = req.session.userId;
+  const cart = await Cart.findOne({ user: userId });
+  const user = await Patient.findById(userId);
+  let wallet = user.wallet;
+  if (wallet < cart.total + 50) {
+    res.status(400).json({ message: "Insufficient funds" });
+  } else {
+    //create order
+    try {
+      await createOrder(req.session.userId, req.body.address);
+      wallet -= cart.total + 50;
+      user.wallet = wallet;
+      await user.save();
+
+      res.status(200).json({ message: "Order created" });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({ message: error.message });
+    }
+  }
 };
 
 const getAllOrders = async (req, res) => {
@@ -212,4 +245,5 @@ module.exports = {
   updateOrderByNumber,
   cancelOrderByNumber,
   deleteOrderByNumber,
+  checkoutWallet,
 };

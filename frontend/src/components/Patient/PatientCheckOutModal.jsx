@@ -76,10 +76,8 @@ function PatientCheckOutModal({
     setSetVisibility(false); // Set visibility to false when closing the modal
   };
 
-  const handleBookMedicine = () => {
-    // Perform booking logic here
-    // You can use the selectedMedicine, bookingName, paymentMethod, creditCard, and deliveryAddress states to submit the booking request
-    // Update the bookingStatus state accordingly
+  const handlePaymentMethodChange = (e) => {
+    setPaymentMethod(e.target.value);
   };
 
   const handleDeliveryAddressChange = (e) => {
@@ -89,6 +87,48 @@ function PatientCheckOutModal({
   const totalTextStyle = {
     fontWeight: "bold",
     fontSize: "1.5em", // Adjust the font size as needed
+  };
+
+  const placeorder = async () => {
+    if (deliveryAddress === "") {
+      alert("Please enter delivery address");
+      return;
+    } else {
+      if (paymentMethod === "wallet") {
+        try {
+          const response = await axios.post("/checkoutWallet", {
+            address: deliveryAddress,
+          });
+          if (response.status === 200) {
+            console.log("Order placed");
+            setBookingStatus("success");
+          } else if (response.status === 400) {
+            alert("Insufficient balance");
+            return;
+          } else {
+            console.log("Server error" + response.status);
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
+      } else if (paymentMethod === "creditCard") {
+      } else {
+        //cash
+        try {
+          const response = await axios.post("/checkoutCash", {
+            address: deliveryAddress,
+          });
+          if (response.status === 200) {
+            console.log("Order placed");
+            setBookingStatus("success");
+          } else {
+            console.log("Server error" + response.status);
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+    }
   };
 
   return (
@@ -124,7 +164,7 @@ function PatientCheckOutModal({
                     name="paymentMethod"
                     value="wallet"
                     checked={paymentMethod === "wallet"}
-                    // onChange={handlePaymentMethodChange}
+                    onChange={handlePaymentMethodChange}
                   />
                   <Form.Check
                     type="radio"
@@ -132,7 +172,7 @@ function PatientCheckOutModal({
                     name="paymentMethod"
                     value="creditCard"
                     checked={paymentMethod === "creditCard"}
-                    // onChange={handlePaymentMethodChange}
+                    onChange={handlePaymentMethodChange}
                   />
                   <Form.Check
                     type="radio"
@@ -140,7 +180,7 @@ function PatientCheckOutModal({
                     name="paymentMethod"
                     value="cashOnDelivery"
                     checked={paymentMethod === "cashOnDelivery"}
-                    // onChange={handlePaymentMethodChange}
+                    onChange={handlePaymentMethodChange}
                   />
                 </Form.Group>
               </Form>
@@ -235,7 +275,11 @@ function PatientCheckOutModal({
         ) : (
           <div>
             <Link to="/patient/patient-checkoutcomplete">
-              <Button variant="success" style={{ marginRight: "10px" }}>
+              <Button
+                variant="success"
+                style={{ marginRight: "10px" }}
+                onClick={placeorder}
+              >
                 Order
               </Button>
             </Link>
