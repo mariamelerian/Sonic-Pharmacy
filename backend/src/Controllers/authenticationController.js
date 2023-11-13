@@ -49,11 +49,11 @@ const login = async (req, res) => {
 
     if (patient1) {
       const auth = await bcrypt.compare(password, patient1.password);
-      console.log(auth);
       if (auth) {
         const token = createToken(patient1._id, "patient");
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge } * 1000);
         req.session.userId = patient1._id;
+        console.log("logged in user: " + req.session.userId);
         return res.status(200).json({ message: "Patient", user: patient1 });
       }
       return res.status(401).json({ message: "Invalid credentials" });

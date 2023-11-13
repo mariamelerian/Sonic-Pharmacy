@@ -16,9 +16,6 @@ const validateUsername = async (username) => {
     const existingPatient = await Patient.findOne({ username: username });
     const existingPharmacist = await Pharmacist.findOne({ username: username });
     if (existingAdmin || existingPatient || existingPharmacist) {
-      console.log(existingAdmin);
-      console.log(existingPatient);
-      console.log(existingPharmacist);
       return false;
     }
     return true;

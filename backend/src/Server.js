@@ -126,7 +126,7 @@ app.get("/medicines", getMedicines);
 app.get("/medicine", getMedicine);
 app.get("/medicineByName", searchMedicine);
 app.get("/medicineNames", medicineNamesIds);
-app.get("/medicineSales/:pharmacistId", getMedicineSale);
+app.get("/medicineSales", getMedicineSale);
 app.get("/medicinalUses", getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
