@@ -88,17 +88,17 @@ app.use(
 app.use(cookieParser());
 const port = process.env.PORT || "8000";
 
-//Apply middleware to all routes except the login route
-app.use((req, res, next) => {
-  // Check if the route is not the login route
-  if (req.path !== "/login") {
-    // Apply your middleware to all routes except login
-    requireAuth(req, res, next);
-  } else {
-    // If it's the login route, skip the middleware
-    next();
-  }
-});
+// //Apply middleware to all routes except the login route
+// app.use((req, res, next) => {
+//   // Check if the route is not the login route
+//   if (req.path !== "/login") {
+//     // Apply your middleware to all routes except login
+//     requireAuth(req, res, next);
+//   } else {
+//     // If it's the login route, skip the middleware
+//     next();
+//   }
+// });
 
 // Mongo DB
 const MongoURI = process.env.MONGO_URI;
