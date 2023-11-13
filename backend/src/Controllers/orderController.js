@@ -1,5 +1,6 @@
 const Order = require("../Models/Order");
 const Cart = require("../Models/Cart");
+const Medicine = require("../Models/Medicine");
 
 const createOrder = async () => {
   try {
@@ -21,6 +22,12 @@ const createOrder = async () => {
     };
     const order = new Order(orderData);
     await order.save();
+
+    cart.items.map(async (item) => {
+      const medicine = await Medicine.findById(item.medicine);
+      medicine.sales += item.quantity;
+      await medicine.save();
+    });
 
     // Clear the cart
     cart.items = [];

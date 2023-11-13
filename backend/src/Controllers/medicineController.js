@@ -1,22 +1,19 @@
 const Medicine = require("../Models/Medicine");
 const fs = require("fs");
 
-
-const multer = require('multer');
-const path = require('path');
+const multer = require("multer");
+const path = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const extension = path.extname(file.originalname);
     cb(null, uniqueSuffix + extension);
-  }
+  },
 });
-
-
 
 const getMedicines = async (req, res) => {
   try {
@@ -56,13 +53,8 @@ const searchMedicine = async (req, res) => {
 };
 
 const getMedicineSale = async (req, res) => {
-  const pharmacistId = req.session.userId;
-
   try {
-    const sales = await Medicine.find(
-      { "sales.pharmacist": pharmacistId },
-      "name sales"
-    );
+    const sales = await Medicine.find({}, "_id name sales");
     res.status(200).json(sales);
   } catch (error) {
     res.status(500).json({ message: error.message });

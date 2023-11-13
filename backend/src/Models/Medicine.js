@@ -24,19 +24,11 @@ const medicineSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  sales: [
-    {
-      pharmacist: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Pharmacist", // Reference to the Pharmacist model
-        required: true,
-      },
-      saleAmount: {
-        type: Number,
-        required: true,
-      },
-    },
-  ],
+  sales: {
+    type: Number,
+    required: true,
+    default: 10,
+  },
   activeIngredients: {
     type: [String], // Assuming an array of strings for active ingredients
     required: true,
