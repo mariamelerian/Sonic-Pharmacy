@@ -368,12 +368,10 @@ const getDeliveryAddresses = async (req, res) => {
   try {
     const patient = await Patient.findById(userId);
     if (!patient) {
-      res.status(404).json({ message: "Patient not found" });
+      return res.status(404).json({ message: "Patient not found" });
     }
-    let addresses = patient.addresses;
-    if (!addresses) {
-      addresses = [];
-    }
+
+    let addresses = patient.addresses || [];
     res.status(200).json(addresses);
   } catch (error) {
     res.status(500).json({ message: "Failed to retrieve addresses" });

@@ -6,7 +6,7 @@ import { Button } from "react-bootstrap";
 import axios from "axios";
 
 function ViewPersonalInfo() {
-  const user = useSelector((state) => state.patientLogin);
+  const user = useSelector((state) => state.patientPharmLogin);
   const [showChangePass, setShowChangePass] = useState(false);
   const [showAddAddressInput, setShowAddAddressInput] = useState(false);
   const [newAddress, setNewAddress] = useState(""); // Store the input value

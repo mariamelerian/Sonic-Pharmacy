@@ -7,7 +7,6 @@ import { deleteFilterArray } from "../../state/filterMedicine";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import AddMedicineModal from "./PhNewMedicineModal";
-import { StrictMode } from "react";
 
 function PhShowMedicines() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -124,29 +123,29 @@ function PhShowMedicines() {
   };
 
   return (
-    <StrictMode>
-      <div>
-        {showMedicineForm && (
-          <AddMedicineModal fetchData={fetchData} onClose={onClose} />
-        )}
+    <div>
+      {showMedicineForm && (
+        <AddMedicineModal fetchData={fetchData} onClose={onClose} />
+      )}
 
-        <Form className="my-4 mx-3">
-          <Form.Control
-            type="text"
-            placeholder="Search Medicines"
-            value={searchTerm}
-            onChange={handleSearch}
-          />
-        </Form>
-        {loading ? (
-          <div className="text-center">
-            <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-          </div>
-        ) : (
-          <Row>
-            {filteredMedicines.map((medicine, index) => (
+      <Form className="my-4 mx-3">
+        <Form.Control
+          type="text"
+          placeholder="Search Medicines"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </Form>
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      ) : (
+        <Row>
+          {Array.isArray(filteredMedicines) &&
+            filteredMedicines.map((medicine, index) => (
               <Col key={medicine._id} lg={6} md={6} sm={12}>
                 <Card className="mb-4 mx-3 bg-light">
                   <Card.Header className="text-center">
@@ -275,6 +274,7 @@ function PhShowMedicines() {
                             )
                           )}
                         </div>
+
                         <div className="medicine-quantity">
                           Quantity: {medicine.quantity}
                         </div>
@@ -297,20 +297,19 @@ function PhShowMedicines() {
                 </Card>
               </Col>
             ))}
-            <Col lg={6} md={6} sm={12}>
-              <Card className="mb-4 mx-3 bg-light">
-                <Card.Body className="text-center">
-                  <Button variant="primary" onClick={toggleMedicineForm}>
-                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                    Add New Medicine
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        )}
-      </div>
-    </StrictMode>
+          <Col lg={6} md={6} sm={12}>
+            <Card className="mb-4 mx-3 bg-light">
+              <Card.Body className="text-center">
+                <Button variant="primary" onClick={toggleMedicineForm}>
+                  <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                  Add New Medicine
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      )}
+    </div>
   );
 }
 

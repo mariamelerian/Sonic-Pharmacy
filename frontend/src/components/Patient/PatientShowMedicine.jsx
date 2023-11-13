@@ -15,7 +15,6 @@ function PatientShowMedicine() {
   const [error, setError] = useState(null);
   const [filterMedicinalUse, setFilterMedicinalUse] = useState("");
   const [selectedMedicine, setSelectedMedicine] = useState(null);
-  const id = useSelector((state) => state.patientLogin.userId);
   const dispatch = useDispatch();
 
   const medicineImage = {
