@@ -7,8 +7,8 @@ import { useDispatch } from "react-redux";
 import FormPassword from "../FormPassword";
 import FormInput from "../FormInput";
 import ForgotPassword from "../../pages/Guest/ForgotPassword";
-import { setCredentialsAdmin } from "../../state/loginAdminReducer";
-import { setCredentialsPatient } from "../../state/loginPatientReducer";
+import { setCredentialsAdminPharm } from "../../state/loginAdminReducer";
+import { setCredentialsPatientPharm } from "../../state/loginPatientReducer";
 import { setCredentialsPharmacist } from "../../state/loginPharmacistReducer";
 
 const LoginForm = () => {
@@ -44,7 +44,7 @@ const LoginForm = () => {
 
         if (type === "Patient") {
           dispatch(
-            setCredentialsPatient({
+            setCredentialsPatientPharm({
               username: username,
               birthdate: user.dateOfBirth,
               email: user.email,
@@ -84,7 +84,7 @@ const LoginForm = () => {
         }
         if (type === "Admin") {
           dispatch(
-            setCredentialsAdmin({
+            setCredentialsAdminPharm({
               username: username,
               userId: user._id,
             })
