@@ -92,8 +92,25 @@ function PatientCheckOutModal({
   const placeorder = async () => {
     if (deliveryAddress === "") {
       alert("Please enter delivery address");
+      return;
     } else {
       if (paymentMethod === "wallet") {
+        try {
+          const response = await axios.post("/checkoutWallet", {
+            address: deliveryAddress,
+          });
+          if (response.status === 200) {
+            console.log("Order placed");
+            setBookingStatus("success");
+          } else if (response.status === 400) {
+            alert("Insufficient balance");
+            return;
+          } else {
+            console.log("Server error" + response.status);
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
       } else if (paymentMethod === "creditCard") {
       } else {
         //cash

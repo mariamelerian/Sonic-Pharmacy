@@ -33,9 +33,6 @@ const {
   createCustomer,
   chargePayment,
   getPatientById,
-  getWallet,
-  subWalletAmount,
-  addWalletAmount,
   getDeliveryAddresses,
   addDeliveryAddress,
   deleteAddress,
@@ -131,7 +128,6 @@ app.get("/medicinalUses", getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
 app.get("/pharmacistApplications", getInactivePharmacists);
-app.get("/wallet/:userId?", getWallet);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", createAdmin);
@@ -155,8 +151,6 @@ app.put("/patientChangePassword", patientChangePassword);
 app.put("/adminChangePassword/:userId?", adminChangePassword);
 app.put("/pharmacistChangePassword/:userId?", pharmacistChangePassword);
 app.put("/resetPassword", resetPassword);
-app.put("/addWalletAmount/:userId?", addWalletAmount);
-app.put("/subWalletAmount/:userId?", subWalletAmount);
 
 app.delete("/deleteAdmin", requireAuth, deleteAdmin);
 app.delete("/deletePatient", requireAuth, deletePatient);
@@ -180,6 +174,7 @@ app.get("/allOrders", orderController.getAllOrders);
 app.get("/patientorders/:userId?", orderController.getPatientOrders);
 app.get("/orders/:orderId", orderController.getOrderById);
 app.post("/checkoutCash", orderController.checkout);
+app.post("/checkoutWallet", orderController.checkoutWallet);
 app.put("/orders/update/:orderId", orderController.updateOrderByID);
 app.put(
   "/orders/updatebynumber/:orderNumber/:userId?",
@@ -198,8 +193,8 @@ app.delete(
 
 //DUMMY DATA
 
-// const dummyData = require("./dummyData/order");
-// const Patient = require("./Models/Adminstrator");
+// const dummyData = require("./dummyData/patient");
+// // const Patient = require("./Models/Adminstrator");
 // const {
 //   insertDummyDataPatient,
 //   insertDummyDataAdmin,
@@ -207,7 +202,7 @@ app.delete(
 //   insertDummyDataOrder,
 // } = require("./utils");
 
-//insertDummyDataPatient(dummyData);
+// insertDummyDataPatient(dummyData);
 //insertDummyDataAdmin(dummyData);
 //insertDummyDataPharmacist(dummyData);
 //insertDummyDataOrder(dummyData);

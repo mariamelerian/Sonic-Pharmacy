@@ -1,6 +1,7 @@
 const Order = require("../Models/Order");
 const Cart = require("../Models/Cart");
 const Medicine = require("../Models/Medicine");
+const Patient = require("../Models/Patient");
 
 const createOrder = async (userId, address) => {
   try {
@@ -42,19 +43,37 @@ const checkout = async (req, res) => {
   try {
     await createOrder(req.session.userId, req.body.address);
 
-    console.log("Order created");
-
     //clear cart
     const userId = req.session.userId;
-    const cart = await Cart.findOne({ user: userId });
-    cart.items = [];
-    cart.total = 0;
-    await cart.save();
 
     res.status(200).json({ message: "Order created" });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ message: error.message });
+  }
+};
+
+const checkoutWallet = async (req, res) => {
+  //check wallet balance
+  const userId = req.session.userId;
+  const cart = await Cart.findOne({ user: userId });
+  const user = await Patient.findById(userId);
+  let wallet = user.wallet;
+  if (wallet < cart.total + 50) {
+    res.status(400).json({ message: "Insufficient funds" });
+  } else {
+    //create order
+    try {
+      await createOrder(req.session.userId, req.body.address);
+      wallet -= cart.total + 50;
+      user.wallet = wallet;
+      await user.save();
+
+      res.status(200).json({ message: "Order created" });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 
@@ -226,4 +245,5 @@ module.exports = {
   updateOrderByNumber,
   cancelOrderByNumber,
   deleteOrderByNumber,
+  checkoutWallet,
 };
