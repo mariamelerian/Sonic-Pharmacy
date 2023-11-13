@@ -294,22 +294,28 @@ function CartItems() {
           <div style={lineStyle2}></div>
 
           <div style={{ display: "flex", justifyContent: "right" }}>
-            <Button
-              variant="primary"
-              style={checkoutButtonStyle}
-              onClick={() => setCheckout(true)}
-            >
-              Proceed to Checkout
-            </Button>
-            {
-            checkout && 
-            (
-              <PatientCheckOutModal
-                subtotal={subtotal?.toFixed(2)}
-                total={total?.toFixed(2)}
-                delivery={delivery}
-              />
-            )}
+            {/* <Link to="/patient/patient-checkout">
+    <Button variant="primary" style={checkoutButtonStyle}>
+      Proceed to Checkout
+    </Button>
+  </Link> */}
+          
+             <Button
+    variant="primary"
+    style={checkoutButtonStyle}
+    onClick={() => setCheckout(true)}
+  >
+    Proceed to Checkout
+  </Button>
+            
+             {checkout && (
+    <PatientCheckOutModal
+      subtotal={subtotal?.toFixed(2)}
+      total={total?.toFixed(2)}
+      delivery={delivery}
+      handleClose={() => setCheckout(false)} // Function to close the modal
+    />
+  )}
             <div style={{ width: "50px" }}></div>
             
 

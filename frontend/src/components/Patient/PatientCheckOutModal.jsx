@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Modal, Button, Form, Tab, Tabs } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { updatePatientAddresses } from "../../state/loginPatientReducer";
+import { Link } from 'react-router-dom';
+import CheckOutDoneModal from "./PatientCheckOutDoneModal";
 
 function PatientCheckOutModal({ subtotal, total, delivery }) {
   const [selectedMedicine, setSelectedMedicine] = useState(null);
@@ -18,6 +20,7 @@ function PatientCheckOutModal({ subtotal, total, delivery }) {
     setDeliveryAddress("");
     setUseExistingAddress(false);
     setBookingStatus("");
+    
   };
 
   const handleBookMedicine = () => {
@@ -40,7 +43,8 @@ function PatientCheckOutModal({ subtotal, total, delivery }) {
   };
 
   return (
-    <Modal onHide={handleClose}>
+    <Modal show={true} onHide={handleClose}>
+    {/* <Modal onHide={handleClose}> */}
       <Modal.Header closeButton>
         <Modal.Title>Order Medicine</Modal.Title>
       </Modal.Header>
@@ -175,25 +179,25 @@ function PatientCheckOutModal({ subtotal, total, delivery }) {
         )}
       </Modal.Body>
       <Modal.Footer>
-        {bookingStatus === "success" ? (
-          <Button variant="success" onClick={handleClose}>
-            Close
-          </Button>
-        ) : (
-          <div>
-            <Button
-              variant="success"
-              onClick={handleBookMedicine}
-              style={{ marginRight: "10px" }}
-            >
-              Order
-            </Button>
-            <Button variant="danger" onClick={handleClose}>
-              Cancel
-            </Button>
-          </div>
-        )}
-      </Modal.Footer>
+  {bookingStatus === "success" ? (
+    <Button variant="success" onClick={handleClose}>
+      Close
+    </Button>
+  ) : (
+    <div>
+      <Link to="/patient/patient-checkoutcomplete">
+        <Button variant="success" style={{ marginRight: "10px" }}>
+          Order
+        </Button>
+      </Link>
+      <Link to="/patient/patient-cart">
+        <Button variant="danger" onClick={handleClose}>
+          Cancel
+        </Button>
+      </Link>
+    </div>
+  )}
+</Modal.Footer>
     </Modal>
   );
 }
