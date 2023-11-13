@@ -1,14 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import ChangePass from "../../forms/ChangePass";
 import { Button } from "react-bootstrap";
+import axios from "axios";
 
 function ViewPersonalInfo() {
   const user = useSelector((state) => state.patientLogin);
   const [showChangePass, setShowChangePass] = useState(false);
   const [showAddAddressInput, setShowAddAddressInput] = useState(false);
   const [newAddress, setNewAddress] = useState(""); // Store the input value
+  const [addresses, setAddresses] = useState([]); // Store the addresses
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/patientAddresses");
+
+      if (response.status === 200) {
+        await setAddresses(response.data);
+        console.log(response.data);
+      } else {
+        console.log("Server error");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        await setAddresses(["No Adresses Found"]);
+      } else if (error.response && error.response.status === 500) {
+        await setAddresses(["Server error"]);
+        console.log(error.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const listItemStyle = {
     fontSize: "1rem",
@@ -36,9 +62,23 @@ function ViewPersonalInfo() {
     setNewAddress(e.target.value);
   };
 
-  const handleSaveNewAddress = () => {
+  const handleSaveNewAddress = async () => {
     // Perform the logic to save the new address
     console.log("New address:", newAddress);
+
+    try {
+      const response = await axios.post("/addAddress", {
+        address: newAddress,
+      });
+      if (response.status === 200) {
+        console.log("added new address");
+        setAddresses(response.data);
+      } else {
+        console.log("Server error");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
 
     // Reset the state and hide the input field
     setNewAddress("");
@@ -90,18 +130,16 @@ function ViewPersonalInfo() {
           <div style={listItemStyle}>
             <span style={{ color: "#099BA0" }}>My Addresses:</span>
           </div>
-          <div style={{ marginLeft: "2rem" }}>
-            <span>Address 1:</span>
-            {/* Display existing address 1 */}
-          </div>
-          <div style={{ marginLeft: "2rem" }}>
-            <span>Address 2:</span>
-            {/* Display existing address 2 */}
-          </div>
-          <div style={{ marginLeft: "2rem" }}>
-            <span>Address 3:</span>
-            {/* Display existing address 3 */}
-          </div>
+          {
+            /* Display existing addresses */
+            addresses.map((address, index) => (
+              <div key={index} style={{ marginLeft: "2rem" }}>
+                <span>Address {index + 1}:</span>
+                {address}
+              </div>
+            ))
+          }
+
           {showAddAddressInput ? (
             <div>
               <input

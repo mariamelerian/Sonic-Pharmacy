@@ -34,7 +34,6 @@ const {
   createCustomer,
   chargePayment,
   getPatientById,
-  allAddresses,
   getWallet,
   subWalletAmount,
   addWalletAmount,
@@ -123,7 +122,7 @@ app.get("/", (req, res) => {
 app.get("/admins", getAdmins);
 app.get("/patients", getPatients);
 app.get("/patientById/:patientId", getPatientById);
-app.get("/patientAddresses/", getDeliveryAddresses);
+app.get("/patientAddresses", getDeliveryAddresses);
 app.get("/medicines", getMedicines);
 app.get("/medicine", getMedicine);
 app.get("/medicineByName", searchMedicine);

@@ -18,6 +18,7 @@ const PatientNewAddressForm = ({ textStyle }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     // Perform form submission here, for example, sending the data to a server.
   };
 
@@ -29,9 +30,35 @@ const PatientNewAddressForm = ({ textStyle }) => {
     // You can add validation logic here if needed.
 
     // Perform further actions, e.g., sending data to the server.
+    const address =
+      country +
+      " " +
+      city +
+      " " +
+      streetName +
+      " " +
+      buildingNum +
+      " " +
+      floor +
+      " " +
+      postalCode;
 
-    setLoading(false);
-    navigate("/patient");
+    try {
+      const response = await axios.post("/newPatientAddress", {
+        address: address,
+      });
+      if (response.status === 200) {
+        setError("Address Added successfully");
+        setLoading(false);
+        navigate("/patient");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setError("Please fill in all the required fields");
+      } else if (error.response && error.response.status === 500) {
+        setError("Server Error");
+      }
+    }
   };
 
   return (

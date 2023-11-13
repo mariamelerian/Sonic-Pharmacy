@@ -366,11 +366,14 @@ const getDeliveryAddresses = async (req, res) => {
   const userId = req.session.userId;
 
   try {
-    const patient = await Patient.find({ userId });
+    const patient = await Patient.findById(userId);
     if (!patient) {
       res.status(404).json({ message: "Patient not found" });
     }
-    const addresses = patient.addresses;
+    let addresses = patient.addresses;
+    if (!addresses) {
+      addresses = [];
+    }
     res.status(200).json(addresses);
   } catch (error) {
     res.status(500).json({ message: "Failed to retrieve addresses" });
@@ -381,7 +384,7 @@ const addDeliveryAddress = async (req, res) => {
   const userId = req.session.userId;
   const { address } = req.body;
   try {
-    const patient = await Patient.find({ userId });
+    const patient = await Patient.findById(userId);
     if (!patient) {
       res.status(404).json({ message: "Patient not found" });
     }
@@ -390,8 +393,9 @@ const addDeliveryAddress = async (req, res) => {
     }
     patient.addresses.push(address);
     await patient.save();
-    res.status(200).json({ message: "Address added successfully" });
+    res.status(200).json(patient.addresses);
   } catch (error) {
+    console.log("error adding address" + error.messsage);
     res.status(500).json({ message: "Failed to add address" });
   }
 };
@@ -401,7 +405,7 @@ const deleteAddress = async (req, res) => {
   const { address } = req.body;
 
   try {
-    const patient = await Patient.find({ userId });
+    const patient = await Patient.findById(userId);
     if (!patient) {
       res.status(404).json({ message: "Patient not found" });
     }

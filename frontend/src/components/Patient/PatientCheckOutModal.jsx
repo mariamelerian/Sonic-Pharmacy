@@ -1,20 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Tab, Tabs } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { updatePatientAddresses } from "../../state/loginPatientReducer";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import CheckOutDoneModal from "./PatientCheckOutDoneModal";
+import axios from "axios";
 
-function PatientCheckOutModal({ subtotal, total, delivery,visibility,
-  onHide }) {
+function PatientCheckOutModal({
+  subtotal,
+  total,
+  delivery,
+  visibility,
+  onHide,
+}) {
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("wallet");
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [useExistingAddress, setUseExistingAddress] = useState(false);
   const [bookingStatus, setBookingStatus] = useState("");
   const [setVisibility, setSetVisibility] = useState(true); // Initialize with true
-  const addresses = useSelector((state) => state.patientLogin.addresses);
+  const [addresses, setAddresses] = useState([]);
   const dispatch = useDispatch();
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/patientAddresses");
+
+      if (response.status === 200) {
+        await setAddresses(response.data);
+        console.log(response.data);
+      } else {
+        console.log("Server error");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        await setAddresses(["No Adresses Found"]);
+      } else if (error.response && error.response.status === 500) {
+        await setAddresses(["Server error"]);
+        console.log(error.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleSaveNewAddress = async () => {
+    // Perform the logic to save the new address
+    const newAddress = deliveryAddress;
+    console.log("New address:", newAddress);
+
+    try {
+      const response = await axios.post("/addAddress", {
+        address: newAddress,
+      });
+      if (response.status === 200) {
+        console.log("added new address");
+        setAddresses(response.data);
+      } else {
+        console.log("Server error");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    setUseExistingAddress(true);
+  };
 
   const handleClose = () => {
     setSelectedMedicine(null);
@@ -23,8 +74,6 @@ function PatientCheckOutModal({ subtotal, total, delivery,visibility,
     setUseExistingAddress(false);
     setBookingStatus("");
     setSetVisibility(false); // Set visibility to false when closing the modal
-
-
   };
 
   const handleBookMedicine = () => {
@@ -37,10 +86,6 @@ function PatientCheckOutModal({ subtotal, total, delivery,visibility,
     setDeliveryAddress(e.target.value);
   };
 
-  const handleAddNewAddress = () => {
-    dispatch(updatePatientAddresses(deliveryAddress));
-  };
-
   const totalTextStyle = {
     fontWeight: "bold",
     fontSize: "1.5em", // Adjust the font size as needed
@@ -48,7 +93,7 @@ function PatientCheckOutModal({ subtotal, total, delivery,visibility,
 
   return (
     <Modal show={visibility} onHide={onHide}>
-    {/* <Modal onHide={handleClose}> */}
+      {/* <Modal onHide={handleClose}> */}
       <Modal.Header closeButton>
         <Modal.Title>Order Medicine</Modal.Title>
       </Modal.Header>
@@ -165,7 +210,7 @@ function PatientCheckOutModal({ subtotal, total, delivery,visibility,
                     {/* Add teal button for adding new address */}
                     <Button
                       variant="info"
-                      onClick={handleAddNewAddress}
+                      onClick={handleSaveNewAddress}
                       className="mb-3"
                       style={{
                         backgroundColor: "#05afb9",
@@ -183,25 +228,25 @@ function PatientCheckOutModal({ subtotal, total, delivery,visibility,
         )}
       </Modal.Body>
       <Modal.Footer>
-  {bookingStatus === "success" ? (
-    <Button variant="success" onClick={onHide}>
-      Close
-    </Button>
-  ) : (
-    <div>
-      <Link to="/patient/patient-checkoutcomplete">
-        <Button variant="success" style={{ marginRight: "10px" }}>
-          Order
-        </Button>
-      </Link>
-      <Link to="/patient/patient-cart">
-        <Button variant="danger" onClick={onHide}>
-          Cancel
-        </Button>
-      </Link>
-    </div>
-  )}
-</Modal.Footer>
+        {bookingStatus === "success" ? (
+          <Button variant="success" onClick={onHide}>
+            Close
+          </Button>
+        ) : (
+          <div>
+            <Link to="/patient/patient-checkoutcomplete">
+              <Button variant="success" style={{ marginRight: "10px" }}>
+                Order
+              </Button>
+            </Link>
+            <Link to="/patient/patient-cart">
+              <Button variant="danger" onClick={onHide}>
+                Cancel
+              </Button>
+            </Link>
+          </div>
+        )}
+      </Modal.Footer>
     </Modal>
   );
 }

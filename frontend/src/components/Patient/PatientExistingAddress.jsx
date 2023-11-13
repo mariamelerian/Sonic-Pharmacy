@@ -1,17 +1,34 @@
-import React, { useState } from "react";
-
-const addressArray = [
-  ["Ahmed Oraby", 18, "3rd floor"],
-  ["Lebanon Street", 10, "10th floor"],
-  ["sheikh zayed",11,"4th floor"]
-  // Add more address details here if needed
-];
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function PatientExistingAddress() {
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(null);
+  const [addressArray, setAddressArray] = useState([]);
 
   const handleAddressSelection = (index) => {
     setSelectedAddressIndex(index);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/patientAddresses");
+
+      if (response.status === 200) {
+        await setAddressArray(response.data);
+      } else {
+        console.log("Server error");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        await setAddressArray(["No Adresses Found"]);
+      } else if (error.response && error.response.status === 500) {
+        await setAddressArray(["Server error"]);
+      }
+    }
   };
 
   return (
@@ -25,7 +42,7 @@ function PatientExistingAddress() {
               checked={selectedAddressIndex === index}
               onChange={() => handleAddressSelection(index)}
             />
-            {address[1]}, {address[0]}, {address[2]}
+            {address}
           </label>
         </div>
       ))}
