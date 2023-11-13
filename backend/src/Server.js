@@ -191,6 +191,8 @@ app.delete(
   orderController.deleteOrderByNumber
 );
 
+app.post("/checkoutStripe", orderController.checkoutStripe);
+
 //DUMMY DATA
 
 // const dummyData = require("./dummyData/patient");

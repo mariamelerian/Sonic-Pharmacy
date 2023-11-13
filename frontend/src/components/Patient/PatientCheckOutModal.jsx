@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Tab, Tabs } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import CheckOutDoneModal from "./PatientCheckOutDoneModal";
@@ -112,6 +113,25 @@ function PatientCheckOutModal({
           console.log(error.message);
         }
       } else if (paymentMethod === "creditCard") {
+        //get sripe session id
+        try {
+          const response = await axios.post("/checkoutStripe", {
+            address: deliveryAddress,
+          });
+          if (response.status === 200) {
+            console.log("Order placed");
+            const sessionurl = response.data.url;
+            if (response.data.url) {
+              window.location.href = response.data.url;
+
+              setBookingStatus("success");
+            }
+          } else {
+            console.log("Server error" + response.status);
+          }
+        } catch (error) {
+          console.log(error.message);
+        }
       } else {
         //cash
         try {
