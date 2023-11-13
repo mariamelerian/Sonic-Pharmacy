@@ -44,7 +44,7 @@ function PharmacistProfileBox() {
   });
 
   const _id = useSelector((state) => state.pharmacistLogin.userId);
-  const [showChangePass, setShowChangePass] = useState("false");
+  const [showChangePass, setShowChangePass] = useState(false); // Set initial state to false
 
   const toggleChangePass = () => {
     setShowChangePass(!showChangePass);
@@ -62,15 +62,18 @@ function PharmacistProfileBox() {
           <span>{profileData.username}</span>
         </p>
 
-        <p class="d-flex flex-row">
-          <div style={inputLabel}>Password:</div>
-          <span onClick={toggleChangePass}>
-            {showChangePass ? "close" : "change password"}
-          </span>
-          {showChangePass && (
-            <ChangePass patient={false} api="/pharmacistChangePassword" />
-          )}
-        </p>
+       <p className="d-flex flex-row">
+  <div style={inputLabel}>Password:</div>
+  <span
+    onClick={toggleChangePass}
+    style={{ textDecoration: "underline", color: "blue", cursor: "pointer" }}
+  >
+    {showChangePass ? "close" : "change password"}
+  </span>
+  {showChangePass && (
+    <ChangePass patient={false} api="/pharmacistChangePassword" />
+  )}
+</p>
         <p class="d-flex flex-row">
           <div style={inputLabel}>Email: </div>
 
