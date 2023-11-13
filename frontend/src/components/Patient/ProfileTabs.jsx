@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 function ProfileTabs() {
   const [activeKey, setActiveKey] = useState("first");
   const [refreshFlag, setRefreshFlag] = useState(false);
-  const wallet = useSelector((state) => state.patientLogin.wallet);
+  const wallet = useSelector((state) => state.patientPharmLogin.wallet);
 
   const handleSelect = (selectedKey) => {
     setActiveKey(selectedKey);
