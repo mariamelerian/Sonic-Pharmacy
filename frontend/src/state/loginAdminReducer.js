@@ -7,15 +7,15 @@ const initialState = {
 };
 
 const loginSlice = createSlice({
-  name: "loginAdmin",
+  name: "loginAdminPharm",
   initialState,
   reducers: {
-    setCredentialsAdmin: (state, action) => {
+    setCredentialsAdminPharm: (state, action) => {
       state.userName = action.payload.userName;
       state.userId = action.payload.userId;
       state.isLoggedIn = action.payload.isLoggedIn;
     },
-    logoutAdmin: (state, action) => {
+    logoutAdminPharm: (state, action) => {
       state.userName = "";
       state.userId = "";
       state.isLoggedIn = false;
@@ -30,6 +30,6 @@ const loginSlice = createSlice({
   },
 });
 
-export const { setCredentialsAdmin, logoutAdmin, setUserIdAdmin } =
+export const { setCredentialsAdminPharm, logoutAdminPharm, setUserIdAdmin } =
   loginSlice.actions;
 export default loginSlice.reducer;

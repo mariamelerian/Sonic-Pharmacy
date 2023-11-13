@@ -18,10 +18,10 @@ const initialState = {
 };
 
 const loginSlice = createSlice({
-  name: "loginPatient",
+  name: "loginPatientPharm",
   initialState,
   reducers: {
-    setCredentialsPatient: (state, action) => {
+    setCredentialsPatientPharm: (state, action) => {
       state.password = action.payload.password;
       state.username = action.payload.username;
       state.birthdate = action.payload.birthdate;
@@ -36,13 +36,13 @@ const loginSlice = createSlice({
       state.wallet = action.payload.wallet;
       state.addresses = action.payload.addresses;
     },
-    updatePatientWallet: (state, action) => {
+    updatePatientPharmWallet: (state, action) => {
       state.wallet = action.payload.wallet;
     },
     updatePatientAddresses: (state, action) => {
       state.addresses = [...state.addresses, ...action.payload.addresses];
     },
-    logoutPatient: (state, action) => {
+    logoutPatientPharm: (state, action) => {
       state.username = "";
       state.name = "";
       state.email = "";
@@ -73,10 +73,10 @@ const loginSlice = createSlice({
 });
 
 export const {
-  setCredentialsPatient,
-  updatePatientWallet,
+  setCredentialsPatientPharm,
+  updatePatientPharmWallet,
   updatePatientAddresses,
-  logoutPatient,
+  logoutPatientPharm,
   clearPassword,
   setUserId,
 } = loginSlice.actions;

@@ -4,8 +4,8 @@ import GuestMainImg from "../../components/Guest/GuestMainImg";
 import GuestBox from "../../components/Guest/GuestBox";
 import GuestBurgerMenu from "../../components/Guest/GuestBurgerMenu";
 import { logoutPharmacist } from "../../state/loginPharmacistReducer";
-import { logoutAdmin } from "../../state/loginAdminReducer";
-import { logoutPatient } from "../../state/loginPatientReducer";
+import { logoutAdminPharm } from "../../state/loginAdminReducer";
+import { logoutPatientPharm } from "../../state/loginPatientReducer";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
@@ -14,8 +14,8 @@ function GuestHomePage() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(logoutPharmacist());
-    dispatch(logoutAdmin());
-    dispatch(logoutPatient());
+    dispatch(logoutAdminPharm());
+    dispatch(logoutPatientPharm());
     logout();
   }, []);
 

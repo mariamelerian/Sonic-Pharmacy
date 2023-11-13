@@ -24,15 +24,15 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   filterMedicine: filterMedicine,
-  adminLogin: loginAdminReducer,
-  patientLogin: loginPatientReducer,
+  adminPharmLogin: loginAdminReducer,
+  patientPharmLogin: loginPatientReducer,
   pharmacistLogin: loginPharmacistReducer,
   forgotEmail: forgotEmail,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const store = configureStore({
+const store2 = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -42,4 +42,4 @@ const store = configureStore({
     }),
 });
 
-export default store;
+export default store2;
