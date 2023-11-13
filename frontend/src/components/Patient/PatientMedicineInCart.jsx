@@ -12,7 +12,6 @@ function CartItems() {
   const [checkout, setCheckout] = useState(false);
   const [medicine, setMedicine] = useState({ items: [] });
   const [error1, setError] = useState(null);
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -95,13 +94,13 @@ function CartItems() {
     }
   };
 
-  const handleDeleteItem = async (itemId) => {
+   const handleDeleteItem = async (itemId) => {
     const response = await axios.post(`/removefromcart/${itemId}`);
     console.log(response.data);
-  
+
     setMedicine((prevMedicine) => {
       const newItems = prevMedicine.items.filter((item) => item.medicine !== itemId);
-  
+
       return {
         ...prevMedicine,
         items: newItems,
@@ -294,22 +293,29 @@ function CartItems() {
           <div style={lineStyle2}></div>
 
           <div style={{ display: "flex", justifyContent: "right" }}>
-            <Button
-              variant="primary"
-              style={checkoutButtonStyle}
-              onClick={() => setCheckout(true)}
-            >
-              Proceed to Checkout
-            </Button>
-            {
-            checkout && 
-            (
-              <PatientCheckOutModal
-                subtotal={subtotal?.toFixed(2)}
-                total={total?.toFixed(2)}
-                delivery={delivery}
-              />
-            )}
+            {/* <Link to="/patient/patient-checkout">
+    <Button variant="primary" style={checkoutButtonStyle}>
+      Proceed to Checkout
+    </Button>
+  </Link> */}
+          
+             <Button
+    variant="primary"
+    style={checkoutButtonStyle}
+    onClick={() => setCheckout(true)}
+  >
+    Proceed to Checkout
+  </Button>
+            
+  {checkout && (
+        <PatientCheckOutModal
+          subtotal={subtotal?.toFixed(2)}
+          total={total?.toFixed(2)}
+          delivery={delivery}
+          visibility={checkout} // Pass the checkout state
+          onHide={() => setCheckout(false)} // Function to hide the modal
+        />
+  )}
             <div style={{ width: "50px" }}></div>
             
 

@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import { Modal, Button, Form, Tab, Tabs } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { updatePatientAddresses } from "../../state/loginPatientReducer";
+import { Link } from 'react-router-dom';
+import CheckOutDoneModal from "./PatientCheckOutDoneModal";
 
-function PatientCheckOutModal({ subtotal, total, delivery }) {
+function PatientCheckOutModal({ subtotal, total, delivery,visibility,
+  onHide }) {
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("wallet");
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [useExistingAddress, setUseExistingAddress] = useState(false);
   const [bookingStatus, setBookingStatus] = useState("");
+  const [setVisibility, setSetVisibility] = useState(true); // Initialize with true
   const addresses = useSelector((state) => state.patientLogin.addresses);
   const dispatch = useDispatch();
 
@@ -18,6 +22,9 @@ function PatientCheckOutModal({ subtotal, total, delivery }) {
     setDeliveryAddress("");
     setUseExistingAddress(false);
     setBookingStatus("");
+    setSetVisibility(false); // Set visibility to false when closing the modal
+
+
   };
 
   const handleBookMedicine = () => {
@@ -40,7 +47,8 @@ function PatientCheckOutModal({ subtotal, total, delivery }) {
   };
 
   return (
-    <Modal onHide={handleClose}>
+    <Modal show={visibility} onHide={onHide}>
+    {/* <Modal onHide={handleClose}> */}
       <Modal.Header closeButton>
         <Modal.Title>Order Medicine</Modal.Title>
       </Modal.Header>
@@ -175,25 +183,25 @@ function PatientCheckOutModal({ subtotal, total, delivery }) {
         )}
       </Modal.Body>
       <Modal.Footer>
-        {bookingStatus === "success" ? (
-          <Button variant="success" onClick={handleClose}>
-            Close
-          </Button>
-        ) : (
-          <div>
-            <Button
-              variant="success"
-              onClick={handleBookMedicine}
-              style={{ marginRight: "10px" }}
-            >
-              Order
-            </Button>
-            <Button variant="danger" onClick={handleClose}>
-              Cancel
-            </Button>
-          </div>
-        )}
-      </Modal.Footer>
+  {bookingStatus === "success" ? (
+    <Button variant="success" onClick={onHide}>
+      Close
+    </Button>
+  ) : (
+    <div>
+      <Link to="/patient/patient-checkoutcomplete">
+        <Button variant="success" style={{ marginRight: "10px" }}>
+          Order
+        </Button>
+      </Link>
+      <Link to="/patient/patient-cart">
+        <Button variant="danger" onClick={onHide}>
+          Cancel
+        </Button>
+      </Link>
+    </div>
+  )}
+</Modal.Footer>
     </Modal>
   );
 }

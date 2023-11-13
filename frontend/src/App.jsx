@@ -24,12 +24,13 @@ import PharmacistProfile from "./pages/Pharmacist/PharmacistProfile";
 import MedicineInCart from "./components/Patient/PatientMedicineInCart";
 import PatientExistingAddress from "./components/Patient/PatientExistingAddress";
 import CartItems from "./components/Patient/PatientMedicineInCart";
-import PatientCheckOutModal from "./components/Patient/PatientCheckOutModal";
+// import PatientCheckOutModal from "./components/Patient/PatientCheckOutModal";
 import ForgotPassword from "./pages/Guest/ForgotPassword";
 
 import OTPVerification from "./pages/Guest/OTPVerification";
 import ResetPassword from "./pages/Guest/ResetPassword";
 import PasswordChanged from "./pages/Guest/PasswordChanged";
+import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
   
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
@@ -87,7 +88,9 @@ function App() {
           <Route path="patient-cart" element={<PatientCart />} />
 
           <Route path="patient-cartItem" element={<CartItems />} />
-          <Route path="patient-checkout" element={<PatientCheckOutModal />} />
+          {/* <Route path="patient-checkout" element={<PatientCheckOutModal />} /> */}
+          <Route path="patient-checkoutcomplete" element={<CheckOutDoneModal />} />
+          
 
           <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />
           <Route path="profile" element={<PatientProfile />} />
