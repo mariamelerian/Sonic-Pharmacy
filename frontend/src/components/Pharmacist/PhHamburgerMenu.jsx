@@ -9,6 +9,8 @@ import {
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { useState } from "react";
   import { slide as Menu } from "react-burger-menu";
+  import { Link } from "react-router-dom";
+
   function PhHamburgerMenu() {
     const [menuOpen, setMenuOpen] = useState(false);
   
@@ -238,7 +240,7 @@ import {
             <a
               id="appointment"
               className="menu-item"
-              href="/doctor/doctor-appointments"
+              href="/"
               onClick={closeMenu}
               style={{
                 color: "var(--gray-600, #6C757D)",
@@ -257,6 +259,7 @@ import {
               <FontAwesomeIcon
                 icon={faRightFromBracket}
                 style={{ marginRight: "0.5rem" }}
+                
               />
               Logout
             </a>
