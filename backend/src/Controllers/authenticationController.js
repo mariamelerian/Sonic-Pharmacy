@@ -7,6 +7,8 @@ const maxAge = 3 * 24 * 6 * 60;
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const randomstring = require("randomstring");
+const Pharmacist = require("../Models/Pharmacist.js");
+const Patient = require("../Models/Patient.js");
 
 const emailService = "youstina2307@outlook.com"; // e.g., 'gmail'
 const emailUser = "youstina2307@outlook.com";
@@ -47,11 +49,11 @@ const login = async (req, res) => {
 
     if (patient1) {
       const auth = await bcrypt.compare(password, patient1.password);
-      console.log(auth);
       if (auth) {
         const token = createToken(patient1._id, "patient");
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge } * 1000);
         req.session.userId = patient1._id;
+        console.log("logged in user: " + req.session.userId);
         return res.status(200).json({ message: "Patient", user: patient1 });
       }
       return res.status(401).json({ message: "Invalid credentials" });
@@ -110,6 +112,7 @@ let otpNum;
 
 const otp = async (req, res) => {
   const { email } = req.body;
+  req.session.email = email;
 
   if (!email) {
     return res.status(400).json({ error: "Email is required" });
@@ -154,6 +157,30 @@ const verifyOtp = async (req, res) => {
   }
 };
 
+const resetPassword = async (req, res) => {
+  let user = await Patient.findOne({ email: req.session.email });
+
+  if (!user) {
+    user = await Pharmacist.findOne({ email: req.session.email });
+    if (!user) return res.status(404).json({ error: "User not found" });
+  }
+
+  console.log("change password" + req.session.email);
+  console.log(user);
+
+  const { newPassword } = req.body;
+
+  // Hash the new password and update the user's document
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  user.password = hashedPassword;
+
+  console.log(user.password);
+  await user.save();
+
+  return res.status(200).json({ message: "Password updated successfully" });
+};
+
 module.exports = {
   login,
   requireAuth,
@@ -161,4 +188,5 @@ module.exports = {
   updateUserInfoInCookie,
   otp,
   verifyOtp,
+  resetPassword,
 };

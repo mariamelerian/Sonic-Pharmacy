@@ -192,72 +192,6 @@ const patientLogin = async (req, res) => {
   }
 };
 
-const patientSendPasswordResetOTP = async function (req, res) {
-  // Find the user with the given email address
-
-  const user = await Patient.findOneByID(req.params.id);
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-
-  // Generate a new OTP
-  const OTP = otpGenerator.generate(6, {
-    digits: true,
-    alphabets: false,
-    upperCase: false,
-    specialChars: false,
-  });
-
-  // Save the OTP and its expiry time to the user's document
-  user.passwordReset.OTP = OTP;
-  user.passwordReset.OTP_expiry = new Date(Date.now() + 30 * 60000); // OTP is valid for 30 minutes
-  await user.save();
-
-  // Send an email with the OTP to the user
-  const transporter = nodemailer.createTransport({
-    // Replace with your email service and credentials
-    service: "gmail",
-    auth: {
-      user: "your_email@example.com",
-      pass: "your_email_password",
-    },
-  });
-
-  const mailOptions = {
-    from: "your_email@example.com",
-    to: user.email,
-    subject: "Password reset OTP",
-    text: `Your password reset OTP is ${OTP}. It will be valid for the next 30 minutes. If you didn't request a password reset,
-     please ignore this email.`,
-  };
-
-  await transporter.sendMail(mailOptions);
-};
-const patientCheckPasswordResetOTP = async function (req, res) {
-  // Find the user with the given email address
-  const email = req.email;
-  const OTP = req.OTP;
-  const user = await Patient.findOneByID(req.params.id);
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-
-  // Check if the OTP provided by the user matches the OTP stored in the document
-  if (user.passwordReset.OTP !== OTP) {
-    return res.status(409).json({ error: "InValid OTP" });
-  }
-
-  // Check if the OTP has expired (it's valid for 30 minutes)
-  if (user.passwordReset.OTP_expiry.getTime() < Date.now()) {
-    return res.status(409).json({ error: "OTP expired" });
-  }
-
-  // If the OTP is valid, return true
-  return res.status(200).json({ error: "Successful" });
-};
-
 const patientChangePassword = async (req, res) => {
   const user = await Patient.findById(req.session.userId);
   console.log("change password " + user);
@@ -424,8 +358,6 @@ module.exports = {
   updatePatientInfo,
   getPatients,
   patientLogin,
-  patientSendPasswordResetOTP,
-  patientCheckPasswordResetOTP,
   patientChangePassword,
   createCustomer,
   chargePayment,

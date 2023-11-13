@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, destination: "public/uploads" });
 
 const registerPharmacist = async (req, res) => {
   try {
@@ -42,7 +42,7 @@ const registerPharmacist = async (req, res) => {
       req.body.picture = imageSrc;
     }
 
-    const modifiedReqBody = { ...req.body, documents: [] };
+    const modifiedReqBody = { ...req.body, files: [] };
 
     const newPharmacist = new Pharmacist(modifiedReqBody);
     newPharmacist.password = await bcrypt.hash(req.body.password, 10);
@@ -50,9 +50,7 @@ const registerPharmacist = async (req, res) => {
 
     const id = savedPharmacist._id;
 
-    req.params.pharmacistId = id;
-
-    uploadDocuments(req, res);
+    uploadDocuments(req, res, id);
 
     return res.status(201).json(savedPharmacist);
   } catch (error) {
@@ -60,25 +58,26 @@ const registerPharmacist = async (req, res) => {
   }
 };
 
-const uploadDocuments = (req, res) => {
-  const pharmacistId = req.params.pharmacistId;
+const uploadDocuments = (req, res, pharmacistId) => {
+  console.log(req.body.files);
 
-  upload.array("documents", 7)(req, res, async (err) => {
+  upload.array("files", 7)(req, res, async (err) => {
     if (err) {
       return res.status(400).json({ message: "Error uploading the files" });
     }
+
+    console.log(req.body.files);
 
     // Update the pharmacist's licenseDocuments field with the filenames
     const filenames = req.body.files.map((file) => file.filename);
     try {
       const pharmacist = await Pharmacist.findByIdAndUpdate(
         pharmacistId,
-        { $push: { documents: { $each: filenames } } },
+        { $push: { files: filenames } },
         { new: true }
       );
-      res.status(200).json({ message: "documents uploaded", pharmacist });
     } catch (error) {
-      res.status(500).json({ message: "Failed to update pharmacist" });
+      throw new Error("error uploading documents " + error.message);
     }
   });
 };

@@ -168,21 +168,25 @@ const PharmSignupForm = () => {
       isLoading(false);
       return;
     } else {
+      const formData = new FormData();
+
+      formData.append("username", username);
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("dateOfBirth", birthdate);
+      formData.append("hourlyRate", rate);
+      formData.append("affiliation", affiliation);
+      formData.append("education", education);
+      formData.append("idImage", selectedIdImage);
+      formData.append("pharmacyDegreeImage", selectedPharmacyDegreeImage);
+      formData.append("workingLicenseImage", selectedWorkingLicenseImage);
+
       try {
-        const response = await axios.post("/newPharmacist", {
-          username: username,
-          name: name,
-          email: email,
-          password: password,
-          dateOfBirth: birthdate,
-          hourlyRate: rate,
-          affiliation: affiliation,
-          education: education,
-          files: [
-            selectedIdImage,
-            selectedPharmacyDegreeImage,
-            selectedWorkingLicenseImage,
-          ],
+        const response = await axios.post("/newPharmacist", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
 
         if (response.status === 201) {

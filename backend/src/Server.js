@@ -22,14 +22,13 @@ const {
   updateUserInfoInCookie,
   otp,
   verifyOtp,
+  resetPassword,
 } = require("./Controllers/authenticationController");
 const {
   createPatient,
   deletePatient,
   updatePatientInfo,
   getPatients,
-  patientSendPasswordResetOTP,
-  patientCheckPasswordResetOTP,
   patientChangePassword,
   createCustomer,
   chargePayment,
@@ -127,7 +126,7 @@ app.get("/medicines", getMedicines);
 app.get("/medicine", getMedicine);
 app.get("/medicineByName", searchMedicine);
 app.get("/medicineNames", medicineNamesIds);
-app.get("/medicineSales/:pharmacistId", getMedicineSale);
+app.get("/medicineSales", getMedicineSale);
 app.get("/medicinalUses", getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
@@ -152,9 +151,10 @@ app.post("/verifyOtp", verifyOtp);
 app.put("/updatePatient", requireAuth, updatePatientInfo);
 app.put("/updateMedicine", requireAuth, updateMedicine);
 app.put("/updatePharmacist", requireAuth, updatePharmacist);
-app.put("/patientChangePassword/:userId?", patientChangePassword);
+app.put("/patientChangePassword", patientChangePassword);
 app.put("/adminChangePassword/:userId?", adminChangePassword);
 app.put("/pharmacistChangePassword/:userId?", pharmacistChangePassword);
+app.put("/resetPassword", resetPassword);
 app.put("/addWalletAmount/:userId?", addWalletAmount);
 app.put("/subWalletAmount/:userId?", subWalletAmount);
 
