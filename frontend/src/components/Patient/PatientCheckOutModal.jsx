@@ -5,12 +5,14 @@ import { updatePatientAddresses } from "../../state/loginPatientReducer";
 import { Link } from 'react-router-dom';
 import CheckOutDoneModal from "./PatientCheckOutDoneModal";
 
-function PatientCheckOutModal({ subtotal, total, delivery }) {
+function PatientCheckOutModal({ subtotal, total, delivery,visibility,
+  onHide }) {
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("wallet");
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [useExistingAddress, setUseExistingAddress] = useState(false);
   const [bookingStatus, setBookingStatus] = useState("");
+  const [setVisibility, setSetVisibility] = useState(true); // Initialize with true
   const addresses = useSelector((state) => state.patientLogin.addresses);
   const dispatch = useDispatch();
 
@@ -20,7 +22,9 @@ function PatientCheckOutModal({ subtotal, total, delivery }) {
     setDeliveryAddress("");
     setUseExistingAddress(false);
     setBookingStatus("");
-    
+    setSetVisibility(false); // Set visibility to false when closing the modal
+
+
   };
 
   const handleBookMedicine = () => {
@@ -43,7 +47,7 @@ function PatientCheckOutModal({ subtotal, total, delivery }) {
   };
 
   return (
-    <Modal show={true} onHide={handleClose}>
+    <Modal show={visibility} onHide={onHide}>
     {/* <Modal onHide={handleClose}> */}
       <Modal.Header closeButton>
         <Modal.Title>Order Medicine</Modal.Title>
@@ -180,7 +184,7 @@ function PatientCheckOutModal({ subtotal, total, delivery }) {
       </Modal.Body>
       <Modal.Footer>
   {bookingStatus === "success" ? (
-    <Button variant="success" onClick={handleClose}>
+    <Button variant="success" onClick={onHide}>
       Close
     </Button>
   ) : (
@@ -191,7 +195,7 @@ function PatientCheckOutModal({ subtotal, total, delivery }) {
         </Button>
       </Link>
       <Link to="/patient/patient-cart">
-        <Button variant="danger" onClick={handleClose}>
+        <Button variant="danger" onClick={onHide}>
           Cancel
         </Button>
       </Link>
