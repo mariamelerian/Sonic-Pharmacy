@@ -10,11 +10,15 @@ const Wallet = require("./Models/Wallet");
 
 const validateUsername = async (username) => {
   try {
+    console.log(username);
     // check if username already exists in database
-    const existingAdmin = await Adminstrator.findOne({ username });
-    const existingPatient = await Patient.findOne({ username });
-    const existingPharmacist = await Pharmacist.findOne({ username });
+    const existingAdmin = await Adminstrator.findOne({ username: username });
+    const existingPatient = await Patient.findOne({ username: username });
+    const existingPharmacist = await Pharmacist.findOne({ username: username });
     if (existingAdmin || existingPatient || existingPharmacist) {
+      console.log(existingAdmin);
+      console.log(existingPatient);
+      console.log(existingPharmacist);
       return false;
     }
     return true;

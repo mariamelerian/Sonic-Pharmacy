@@ -22,14 +22,13 @@ const {
   updateUserInfoInCookie,
   otp,
   verifyOtp,
+  resetPassword,
 } = require("./Controllers/authenticationController");
 const {
   createPatient,
   deletePatient,
   updatePatientInfo,
   getPatients,
-  patientSendPasswordResetOTP,
-  patientCheckPasswordResetOTP,
   patientChangePassword,
   createCustomer,
   chargePayment,
@@ -152,9 +151,10 @@ app.post("/verifyOtp", verifyOtp);
 app.put("/updatePatient", requireAuth, updatePatientInfo);
 app.put("/updateMedicine", requireAuth, updateMedicine);
 app.put("/updatePharmacist", requireAuth, updatePharmacist);
-app.put("/patientChangePassword/:userId?", patientChangePassword);
+app.put("/patientChangePassword", patientChangePassword);
 app.put("/adminChangePassword/:userId?", adminChangePassword);
 app.put("/pharmacistChangePassword/:userId?", pharmacistChangePassword);
+app.put("/resetPassword", resetPassword);
 app.put("/addWalletAmount/:userId?", addWalletAmount);
 app.put("/subWalletAmount/:userId?", subWalletAmount);
 
