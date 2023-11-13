@@ -15,7 +15,7 @@ const createOrder = async () => {
       number: orderNumber,
       date: new Date(),
       items: items,
-      totalPrice: cart.total,
+      totalPrice: cart.total + 50,
       status: "Pending",
       patient: userId,
     };

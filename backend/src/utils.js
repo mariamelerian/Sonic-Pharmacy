@@ -4,6 +4,8 @@ const Adminstrator = require("./Models/Adminstrator");
 const Pharmacist = require("./Models/Pharmacist");
 const Patient = require("./Models/Patient");
 const fs = require("fs");
+const bcrypt = require("bcrypt");
+const Wallet = require("./Models/Wallet");
 
 const validateUsername = async (username) => {
   try {
@@ -20,9 +22,8 @@ const validateUsername = async (username) => {
   }
 };
 
-const insertDummyData = (array, model) => {
+const insertDummyDataPatient = async (array) => {
   array.forEach((element) => {
-    /*
     if (!element.picture) {
       let picture = {};
       const path = require("path");
@@ -32,10 +33,19 @@ const insertDummyData = (array, model) => {
       const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
       element.picture = imageSrc;
     }
-    */
-    const newModel = new model(element);
-    newModel.save();
+
+    const newPatient = new Patient(element);
+
+    passwordandsavePatient(newPatient);
   });
 };
 
-module.exports = { validateUsername, insertDummyData };
+const passwordandsavePatient = async (newPatient) => {
+  newPatient.password = await bcrypt.hash(newPatient.password, 10);
+  await newPatient.save();
+  const idd = newPatient._id;
+  const newWallet = new Wallet({ userId: idd, Amount: 0 });
+  await newWallet.save();
+};
+
+module.exports = { validateUsername, insertDummyDataPatient };

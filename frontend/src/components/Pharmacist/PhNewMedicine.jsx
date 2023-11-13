@@ -35,6 +35,26 @@ function MedicineForm({ onClose, fetchData }) {
     try {
       onClose();
       const activeIngredientsArray = ingredients.split("-");
+      let picture = null;
+      if (setSelectedImage != null) {
+        const fs = require("fs");
+        const path = require("path");
+
+        // Assuming setSelectedImage is a File object
+        const selectedImagePath = setSelectedImage.path;
+
+        // Read the image file as a buffer
+        const imageBuffer = fs.readFileSync(selectedImagePath);
+
+        // Convert the buffer to a base64-encoded string
+        const base64ImageData = imageBuffer.toString("base64");
+
+        // Create a data URL for the image
+        const imageSrc = `data:${setSelectedImage.type};base64,${base64ImageData}`;
+
+        // Assign the data URL to req.body.picture
+        picture = imageSrc;
+      }
       const response = await axios.post("/newMedicine", {
         picture: selectedImage,
         name: medicineName,
@@ -44,6 +64,7 @@ function MedicineForm({ onClose, fetchData }) {
         sales: sales,
         activeIngredients: activeIngredientsArray,
         medicinalUse: medicinalUse,
+        picture: picture,
       });
 
       if (response.status === 200) {
@@ -73,6 +94,9 @@ function MedicineForm({ onClose, fetchData }) {
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
+
+    if (!file) return;
+
     setSelectedImage(file);
   };
 
@@ -139,7 +163,7 @@ function MedicineForm({ onClose, fetchData }) {
               onChange={(e) => setIngredients(e.target.value)}
             />
           </Form.Group>
-         
+
           <Form.Group>
             <Form.Label>Quantity</Form.Label>
             <Form.Control
@@ -149,7 +173,7 @@ function MedicineForm({ onClose, fetchData }) {
               onChange={(e) => setQuantity(e.target.value)}
             />
           </Form.Group>
-          
+
           <Form.Group>
             <Form.Label>Sales</Form.Label>
             <Form.Control

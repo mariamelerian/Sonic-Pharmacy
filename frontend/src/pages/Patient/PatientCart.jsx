@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import AppNavbar from '../../components/AppNavigation/AppNavbar';
-import PatientHamburgerMenu from '../../components/Patient/PatientHamburgerMenu';
-import EmptyCart from '../../components/Patient/PatientEmptyCart';
-import CartItems from '../../components/Patient/PatientMedicineInCart';
-import medicineBlueImg from  '../../Assets/Patient/medicineBlueImg.jpg';
+import React, { useState } from "react";
+import AppNavbar from "../../components/AppNavigation/AppNavbar";
+import PatientHamburgerMenu from "../../components/Patient/PatientHamburgerMenu";
+import EmptyCart from "../../components/Patient/PatientEmptyCart";
+import CartItems from "../../components/Patient/PatientMedicineInCart";
+import medicineBlueImg from "../../Assets/Patient/medicineBlueImg.jpg";
 
 function PatientCart() {
   // Replace the example cart data state with your "medicine" data state
@@ -40,7 +40,8 @@ function PatientCart() {
           <EmptyCart /> // Display the empty cart component
         ) : (
           <div>
-            <CartItems items={medicine} /> {/* Pass the "medicine" array to the new component */}
+            <CartItems items={medicine} />{" "}
+            {/* Pass the "medicine" array to the new component */}
           </div>
         )}
       </div>
