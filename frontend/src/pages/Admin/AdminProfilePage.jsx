@@ -9,7 +9,7 @@ function AdminProfilePage() {
   const [activeKey, setActiveKey] = useState("first");
   const [refreshFlag, setRefreshFlag] = useState(false);
   const [showChangePass, setShowChangePass] = useState(false);
-  const user = useSelector((state) => state.adminLogin);
+  const user = useSelector((state) => state.adminPharmLogin);
 
   const listItemStyle = {
     fontSize: "1rem", // Font size for all information
