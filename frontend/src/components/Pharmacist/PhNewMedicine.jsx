@@ -37,55 +37,52 @@ function MedicineForm({ onClose, fetchData }) {
       const activeIngredientsArray = ingredients.split("-");
       let picture = null;
       if (setSelectedImage != null) {
-        const fs = require("fs");
-        const path = require("path");
-
-        // Assuming setSelectedImage is a File object
-        const selectedImagePath = setSelectedImage.path;
-
-        // Read the image file as a buffer
-        const imageBuffer = fs.readFileSync(selectedImagePath);
-
-        // Convert the buffer to a base64-encoded string
-        const base64ImageData = imageBuffer.toString("base64");
-
-        // Create a data URL for the image
-        const imageSrc = `data:${setSelectedImage.type};base64,${base64ImageData}`;
-
-        // Assign the data URL to req.body.picture
-        picture = imageSrc;
-      }
-      const response = await axios.post("/newMedicine", {
-        picture: selectedImage,
-        name: medicineName,
-        price: price,
-        description: description,
-        quantity: quantity,
-        sales: sales,
-        activeIngredients: activeIngredientsArray,
-        medicinalUse: medicinalUse,
-        picture: picture,
-      });
-
-      if (response.status === 200) {
         console.log("here");
-        setSuccess(true);
-        setTimeout(() => {
-          setSuccess(false); // Clear the error after 5 seconds
-        }, 5000);
-        fetchData();
-      } else if (response.status === 500) {
-        setError("Medicine not found");
-      } else {
-        setError("Error");
+        // Read the file as a data URL
+        // Create a FileReader instance
+        const reader = new FileReader();
+        // Set the image once loaded into file reader
+        reader.onload = async (e) => {
+          let imageSrc = reader.result.split(",")[1];
+          imageSrc = "data:image/jpeg;base64," + imageSrc + "";
+          console.log(imageSrc);
+
+          picture = imageSrc;
+
+          console.log("sending response");
+          const response = await axios.post("/newMedicine", {
+            picture: selectedImage,
+            name: medicineName,
+            price: price,
+            description: description,
+            quantity: quantity,
+            sales: sales,
+            activeIngredients: activeIngredientsArray,
+            medicinalUse: medicinalUse,
+            picture: picture,
+          });
+
+          console.log(response);
+
+          if (response.status === 200) {
+            console.log("here");
+            setSuccess(true);
+            setTimeout(() => {
+              setSuccess(false); // Clear the error after 5 seconds
+            }, 5000);
+            fetchData();
+          } else if (response.status === 500) {
+            setError("Medicine not found");
+          } else {
+            setError("Error");
+          }
+        };
+
+        reader.readAsDataURL(selectedImage);
       }
     } catch (error) {
       setSuccess(false);
-      if (error.response && error.response.status === 500) {
-        setError("Server error");
-      } else {
-        setError(error.response.status);
-      }
+      setError(error.message);
     }
     setTimeout(() => {
       setError(null); // Clear the error after 5 seconds

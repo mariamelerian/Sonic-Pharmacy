@@ -95,6 +95,8 @@ const createMedicine = async (req, res) => {
     req.body.picture = imageSrc;
   }
 
+  console.log("new medicine", req.body);
+
   try {
     const medicine = await Medicine.create(req.body);
     // const newMedicine = await medicine.save();
