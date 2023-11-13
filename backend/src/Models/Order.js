@@ -42,8 +42,7 @@ const orderSchema = new Schema({
     required: true,
   },
   address: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Address", // Reference to the Address model
+    type: String,
     required: true,
   },
 });

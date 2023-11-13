@@ -179,7 +179,7 @@ const orderController = require("./Controllers/orderController");
 app.get("/allOrders", orderController.getAllOrders);
 app.get("/patientorders/:userId?", orderController.getPatientOrders);
 app.get("/orders/:orderId", orderController.getOrderById);
-app.post("/checkout", orderController.checkout);
+app.post("/checkoutCash", orderController.checkout);
 app.put("/orders/update/:orderId", orderController.updateOrderByID);
 app.put(
   "/orders/updatebynumber/:orderNumber/:userId?",

@@ -2,10 +2,8 @@ const Order = require("../Models/Order");
 const Cart = require("../Models/Cart");
 const Medicine = require("../Models/Medicine");
 
-const createOrder = async () => {
+const createOrder = async (userId, address) => {
   try {
-    const userId = req.session.userId; // Assuming the user ID is in the session
-
     const cart = await Cart.findOne({ user: userId });
     const items = cart.items;
 
@@ -19,6 +17,7 @@ const createOrder = async () => {
       totalPrice: cart.total + 50,
       status: "Pending",
       patient: userId,
+      address: address,
     };
     const order = new Order(orderData);
     await order.save();
@@ -39,9 +38,24 @@ const createOrder = async () => {
 };
 
 const checkout = async (req, res) => {
-  //redirect to payment gateway
-  //clear cart
   //create order
+  try {
+    await createOrder(req.session.userId, req.body.address);
+
+    console.log("Order created");
+
+    //clear cart
+    const userId = req.session.userId;
+    const cart = await Cart.findOne({ user: userId });
+    cart.items = [];
+    cart.total = 0;
+    await cart.save();
+
+    res.status(200).json({ message: "Order created" });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
 };
 
 const getAllOrders = async (req, res) => {
