@@ -198,14 +198,15 @@ app.delete(
 );
 
 //DUMMY DATA
-const dummyData = require("./dummyData/order");
-const Patient = require("./Models/Adminstrator");
-const {
-  insertDummyDataPatient,
-  insertDummyDataAdmin,
-  insertDummyDataPharmacist,
-  insertDummyDataOrder,
-} = require("./utils");
+
+// const dummyData = require("./dummyData/order");
+// const Patient = require("./Models/Adminstrator");
+// const {
+//   insertDummyDataPatient,
+//   insertDummyDataAdmin,
+//   insertDummyDataPharmacist,
+//   insertDummyDataOrder,
+// } = require("./utils");
 
 //insertDummyDataPatient(dummyData);
 //insertDummyDataAdmin(dummyData);
