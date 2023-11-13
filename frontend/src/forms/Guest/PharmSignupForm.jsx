@@ -178,6 +178,11 @@ const PharmSignupForm = () => {
           hourlyRate: rate,
           affiliation: affiliation,
           education: education,
+          files: [
+            selectedIdImage,
+            selectedPharmacyDegreeImage,
+            selectedWorkingLicenseImage,
+          ],
         });
 
         if (response.status === 201) {

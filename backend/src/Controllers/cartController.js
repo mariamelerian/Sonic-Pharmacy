@@ -26,14 +26,27 @@ const addToCart = async (req, res) => {
 
     if (selectedMedicine) {
       // Add the medicine to the cart in the session
-      const medicine = {
-        medicine: selectedMedicine._id,
-        name: selectedMedicine.name,
-        price: selectedMedicine.price,
-        quantity: 1,
-      };
-      cart.items.push(medicine);
-      cart.total += medicine.price;
+
+      //check if medicine in cart
+      const flag = cart.items.find((item) => item.medicine == medicineId);
+      if (flag) {
+        cart.items.forEach((item) => {
+          if (item.medicine == medicineId) {
+            item.quantity++;
+            item.price += selectedMedicine.price;
+            cart.total += selectedMedicine.price;
+          }
+        });
+      } else {
+        const medicine = {
+          medicine: selectedMedicine._id,
+          name: selectedMedicine.name,
+          price: selectedMedicine.price,
+          quantity: 1,
+        };
+        cart.items.push(medicine);
+        cart.total += medicine.price;
+      }
       await cart.save();
       res.status(200).json({ message: "Medicine added to the cart" });
     } else {

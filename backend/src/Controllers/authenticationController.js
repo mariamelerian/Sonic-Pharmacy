@@ -35,36 +35,37 @@ const login = async (req, res) => {
     const admin1 = await administratorModel.findOne({ username });
 
     if (doctor1) {
-      const auth = bcrypt.compare(password, doctor1.password);
+      const auth = await bcrypt.compare(password, doctor1.password);
       if (auth) {
         const token = createToken(doctor1._id, "pharmacist");
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge } * 1000);
         req.session.userId = doctor1._id;
         return res.status(200).json({ message: "Pharmacist", user: doctor1 });
       }
-      throw Error("incorrect password");
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     if (patient1) {
-      const auth = bcrypt.compare(password, patient1.password);
+      const auth = await bcrypt.compare(password, patient1.password);
+      console.log(auth);
       if (auth) {
         const token = createToken(patient1._id, "patient");
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge } * 1000);
         req.session.userId = patient1._id;
         return res.status(200).json({ message: "Patient", user: patient1 });
       }
-      throw Error("incorrect password");
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     if (admin1) {
-      const auth = bcrypt.compare(password, admin1.password);
+      const auth = await bcrypt.compare(password, admin1.password);
       if (auth) {
         const token = createToken(admin1._id, "administrator");
         res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge } * 1000);
         req.session.userId = admin1._id;
         return res.status(200).json({ message: "Admin", user: admin1 });
       }
-      throw Error("incorrect password");
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     return res.status(401).json({ message: "Invalid credentials" });

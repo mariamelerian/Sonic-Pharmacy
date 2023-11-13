@@ -200,14 +200,8 @@ app.delete(
   orderController.deleteOrderByNumber
 );
 
-/*
-//inserting dummy data
-// const dummyData = require("./dummyData/patient");
+const dummyData = require("./dummyData/patient");
 const Patient = require("./Models/Patient");
+const { insertDummyDataPatient } = require("./utils");
 
-const dummyData = require("./dummyData/order");
-const Cart = require("./Models/Order");
-
-const { insertDummyData } = require("./utils.js");
-insertDummyData(dummyData, Cart);
-*/
+//insertDummyDataPatient(dummyData);

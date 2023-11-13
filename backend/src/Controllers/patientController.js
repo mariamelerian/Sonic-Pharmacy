@@ -261,16 +261,18 @@ const patientCheckPasswordResetOTP = async function (req, res) {
 
 const patientChangePassword = async (req, res) => {
   const user = await Patient.findById(req.session.userId);
-  console.log(req.params.userId);
+  console.log("change password " + user);
 
   if (!user) {
     return res.status(404).json({ error: "Patient not found" });
   }
 
   const { oldPassword, newPassword } = req.body;
+  console.log(oldPassword);
 
   // Check if the old password is correct
   const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+  console.log(isPasswordCorrect);
 
   if (!isPasswordCorrect) {
     return res.status(409).json({ error: "Invalid old password" });
@@ -281,6 +283,7 @@ const patientChangePassword = async (req, res) => {
 
   user.password = hashedPassword;
 
+  console.log(user.password);
   await user.save();
 
   return res.status(200).json({ message: "Password updated successfully" });

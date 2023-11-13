@@ -41,7 +41,10 @@ const registerPharmacist = async (req, res) => {
       const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
       req.body.picture = imageSrc;
     }
-    const newPharmacist = new Pharmacist(req.body);
+
+    const modifiedReqBody = { ...req.body, documents: [] };
+
+    const newPharmacist = new Pharmacist(modifiedReqBody);
     newPharmacist.password = await bcrypt.hash(req.body.password, 10);
     const savedPharmacist = await newPharmacist.save();
 
@@ -66,7 +69,7 @@ const uploadDocuments = (req, res) => {
     }
 
     // Update the pharmacist's licenseDocuments field with the filenames
-    const filenames = req.files.map((file) => file.filename);
+    const filenames = req.body.files.map((file) => file.filename);
     try {
       const pharmacist = await Pharmacist.findByIdAndUpdate(
         pharmacistId,
