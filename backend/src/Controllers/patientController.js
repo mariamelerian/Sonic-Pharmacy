@@ -5,7 +5,6 @@ const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
-const Address = require("../models/address");
 const { create } = require("../Models/Pharmacist.js");
 const bcrypt = require("bcrypt");
 const Wallet = require("../Models/Wallet.js");
@@ -363,96 +362,57 @@ const chargePayment = async (req, res) => {
   }
 };
 
-const addAddress = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+const getDeliveryAddresses = async (req, res) => {
+  const userId = req.session.userId;
 
   try {
-    const { userId, Country, City, Street, Building } = req.body;
-
-    const address = new Address({ userId, Country, City, Street, Building });
-    await address.save();
-
-    res.status(201).json(address);
+    const patient = await Patient.find({ userId });
+    if (!patient) {
+      res.status(404).json({ message: "Patient not found" });
+    }
+    const addresses = patient.addresses;
+    res.status(200).json(addresses);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to add address" });
+    res.status(500).json({ message: "Failed to retrieve addresses" });
+  }
+};
+
+const addDeliveryAddress = async (req, res) => {
+  const userId = req.session.userId;
+  const { address } = req.body;
+  try {
+    const patient = await Patient.find({ userId });
+    if (!patient) {
+      res.status(404).json({ message: "Patient not found" });
+    }
+    if (!patient.addresses) {
+      patient.addresses = [];
+    }
+    patient.addresses.push(address);
+    await patient.save();
+    res.status(200).json({ message: "Address added successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to add address" });
   }
 };
 
 const deleteAddress = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  const userId = req.session.userId;
+  const { address } = req.body;
 
   try {
-    const { userId } = req.params;
-    const { _id } = req.body;
-
-    const address = await Address.findOneAndDelete({ _id });
-    if (!address) {
-      res.status(404).json({ error: "Address not found" });
-    } else {
-      res.json(address);
+    const patient = await Patient.find({ userId });
+    if (!patient) {
+      res.status(404).json({ message: "Patient not found" });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to delete address" });
-  }
-};
-
-const updateAddress = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  try {
-    const { addressId, Country, City, Street, Building } = req.body;
-
-    const address = await Address.findOneAndUpdate(
-      { addressId },
-      { Country, City, Street, Building },
-      { new: true }
-    );
-
-    if (!address) {
-      res.status(404).json({ error: "Address not found" });
-    } else {
-      res.json(address);
+    const index = patient.addresses.indexOf(address);
+    if (index > -1) {
+      patient.addresses.splice(index, 1);
     }
+    await patient.save();
+    res.status(200).json({ message: "Address deleted successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to update address" });
-  }
-};
-
-const allAddresses = async (req, res) => {
-  const users = await Address.find();
-  res.status(200).send(users);
-};
-
-const viewAddresses = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  try {
-    const { userId } = req.params;
-
-    const addresses = await Address.find({ userId });
-    if (!addresses || addresses.length === 0) {
-      res.status(404).json({ error: "Addresses not found" });
-    } else {
-      res.json(addresses);
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to get addresses" });
+    res.status(500).json({ message: "Failed to delete address" });
   }
 };
 
@@ -468,12 +428,10 @@ module.exports = {
   createCustomer,
   chargePayment,
   getPatientById,
-  addAddress,
-  updateAddress,
-  viewAddresses,
-  deleteAddress,
-  allAddresses,
   getWallet,
   addWalletAmount,
   subWalletAmount,
+  getDeliveryAddresses,
+  addDeliveryAddress,
+  deleteAddress,
 };

@@ -33,15 +33,14 @@ const {
   patientChangePassword,
   createCustomer,
   chargePayment,
-  addAddress,
-  updateAddress,
-  viewAddresses,
-  deleteAddress,
   getPatientById,
   allAddresses,
   getWallet,
   subWalletAmount,
   addWalletAmount,
+  getDeliveryAddresses,
+  addDeliveryAddress,
+  deleteAddress,
 } = require("./Controllers/patientController");
 
 const {
@@ -124,6 +123,7 @@ app.get("/", (req, res) => {
 app.get("/admins", getAdmins);
 app.get("/patients", getPatients);
 app.get("/patientById/:patientId", getPatientById);
+app.get("/patientAddresses/", getDeliveryAddresses);
 app.get("/medicines", getMedicines);
 app.get("/medicine", getMedicine);
 app.get("/medicineByName", searchMedicine);
@@ -133,8 +133,6 @@ app.get("/medicinalUses", getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
 app.get("/pharmacistApplications", getInactivePharmacists);
-app.get("/addresses", viewAddresses);
-app.get("/allAddresses", allAddresses);
 app.get("/wallet/:userId?", getWallet);
 
 app.post("/newPatient", createPatient);
@@ -142,7 +140,7 @@ app.post("/newAdmin", createAdmin);
 app.post("/newPharmacist", registerPharmacist);
 app.post("/newMedicine", createMedicine);
 app.post("/filterMedicine", filterMedicine);
-app.post("/addAddress", addAddress);
+app.post("/addAddress", addDeliveryAddress);
 
 //authentication
 app.post("/login", login);
@@ -155,7 +153,6 @@ app.post("/verifyOtp", verifyOtp);
 app.put("/updatePatient", requireAuth, updatePatientInfo);
 app.put("/updateMedicine", requireAuth, updateMedicine);
 app.put("/updatePharmacist", requireAuth, updatePharmacist);
-app.put("/updateAddress", requireAuth, updateAddress);
 app.put("/patientChangePassword/:userId?", patientChangePassword);
 app.put("/adminChangePassword/:userId?", adminChangePassword);
 app.put("/pharmacistChangePassword/:userId?", pharmacistChangePassword);
@@ -200,8 +197,17 @@ app.delete(
   orderController.deleteOrderByNumber
 );
 
-const dummyData = require("./dummyData/patient");
-const Patient = require("./Models/Patient");
-const { insertDummyDataPatient } = require("./utils");
+//DUMMY DATA
+const dummyData = require("./dummyData/order");
+const Patient = require("./Models/Adminstrator");
+const {
+  insertDummyDataPatient,
+  insertDummyDataAdmin,
+  insertDummyDataPharmacist,
+  insertDummyDataOrder,
+} = require("./utils");
 
 //insertDummyDataPatient(dummyData);
+//insertDummyDataAdmin(dummyData);
+//insertDummyDataPharmacist(dummyData);
+//insertDummyDataOrder(dummyData);

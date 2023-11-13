@@ -3,6 +3,7 @@
 const Adminstrator = require("./Models/Adminstrator");
 const Pharmacist = require("./Models/Pharmacist");
 const Patient = require("./Models/Patient");
+const Order = require("./Models/Order");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 const Wallet = require("./Models/Wallet");
@@ -48,4 +49,55 @@ const passwordandsavePatient = async (newPatient) => {
   await newWallet.save();
 };
 
-module.exports = { validateUsername, insertDummyDataPatient };
+const insertDummyDataAdmin = async (array) => {
+  array.forEach((element) => {
+    const newPatient = new Adminstrator(element);
+
+    passwordandsaveAdmin(newPatient);
+  });
+};
+
+const passwordandsaveAdmin = async (newPatient) => {
+  newPatient.password = await bcrypt.hash(newPatient.password, 10);
+  await newPatient.save();
+};
+
+const insertDummyDataPharmacist = async (array) => {
+  array.forEach((element) => {
+    /*
+    if (!element.picture) {
+      let picture = {};
+      const path = require("path");
+      const filePath = path.join(__dirname, "./res/default-medicine-pic.jpg");
+      const imageBuffer = fs.readFileSync(filePath);
+      const base64ImageData = imageBuffer.toString("base64");
+      const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
+      element.picture = imageSrc;
+    }
+    */
+
+    const newPatient = new Pharmacist(element);
+
+    passwordandsavePharmacist(newPatient);
+  });
+};
+
+const passwordandsavePharmacist = async (newPatient) => {
+  newPatient.password = await bcrypt.hash(newPatient.password, 10);
+  await newPatient.save();
+};
+
+const insertDummyDataOrder = async (array) => {
+  array.forEach((element) => {
+    const newPatient = new Order(element);
+    newPatient.save();
+  });
+};
+
+module.exports = {
+  validateUsername,
+  insertDummyDataPatient,
+  insertDummyDataAdmin,
+  insertDummyDataPharmacist,
+  insertDummyDataOrder,
+};
