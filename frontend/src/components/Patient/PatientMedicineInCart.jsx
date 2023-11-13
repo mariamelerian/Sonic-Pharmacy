@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import { Container, Button } from "react-bootstrap";
+import { Container, Button,Spinner } from "react-bootstrap";
 import medicineBlueImg from "../../Assets/Patient/medicineBlueImg.jpg";
 import PatientCheckOutModal from "./PatientCheckOutModal";
 import axios from "axios";
-
+import EmptyCart from "./PatientEmptyCart";
 function CartItems() {
   const [loading, setLoading] = useState(true);
   const [checkout, setCheckout] = useState(false);
@@ -98,16 +98,17 @@ function CartItems() {
   const handleDeleteItem = async (itemId) => {
     const response = await axios.post(`/removefromcart/${itemId}`);
     console.log(response.data);
-
+  
     setMedicine((prevMedicine) => {
-      const newItems = prevMedicine.items.filter((item) => item.id !== itemId);
-
+      const newItems = prevMedicine.items.filter((item) => item.medicine !== itemId);
+  
       return {
         ...prevMedicine,
         items: newItems,
       };
     });
   };
+  
 
   const plusMinusButtonStyle = {
     width: "24px",
@@ -189,12 +190,24 @@ function CartItems() {
     marginTop: "50px", // Push the button more to the bottom
     marginBottom: "50px",
   };
-
+ 
   if (loading) {
+    return (
+      <div className="text-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
+  }
+  
+  else if(medicine.items.length === 0) {
     //show the cart page without loading
     return (
+
       <div className="cart">
         <h2 style={{ fontSize: "48px" }}>My Cart</h2>
+        <EmptyCart />
       </div>
     );
   } else {
@@ -288,7 +301,9 @@ function CartItems() {
             >
               Proceed to Checkout
             </Button>
-            {checkout && (
+            {
+            checkout && 
+            (
               <PatientCheckOutModal
                 subtotal={subtotal?.toFixed(2)}
                 total={total?.toFixed(2)}
@@ -296,6 +311,7 @@ function CartItems() {
               />
             )}
             <div style={{ width: "50px" }}></div>
+            
 
             <Link to="/patient/patient-medicine">
               <Button variant="primary" style={checkoutButtonStyle}>
