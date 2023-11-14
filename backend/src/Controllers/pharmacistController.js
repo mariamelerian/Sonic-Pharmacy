@@ -17,17 +17,43 @@ const bcrypt = require("bcrypt");
 // });
 
 // const upload = multer({ storage: storage, destination: "public/uploads" });
-const storage = multer.memoryStorage(); // Store files in memory
-const upload = multer({
-  storage: storage,
-  fileFilter: function (req, file, callback) {
-    // Your file filter logic here
-    callback(null, true);
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
   },
-  limits: {
-    fileSize: 1024 * 1024 * 2, // Limit file size to 2MB
+  filename: function (req, file, cb) {
+    if (!req.locals) {
+      req.locals = {};
+    }
+    if (!req.locals.docs) {
+      req.locals.docs = [];
+    }
+
+    const uniqueFileName = `${Date.now()}-${file.originalname}`;
+    req.locals.docs.push(`uploads/${uniqueFileName}`);
+    cb(null, `${Date.now()}-${file.originalname}`);
   },
-}).array("files", 7); // Accept up to 7 files
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "application/pdf" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/jpg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(
+      new Error(
+        "Invalid file type. Only PDF, PNG, JPEG, and JPG files are allowed."
+      ),
+      false
+    );
+  }
+};
+upload = multer({ storage, fileFilter });
 
 // const registerPharmacist = async (req, res) => {
 //   try {
@@ -71,45 +97,66 @@ const upload = multer({
 
 const registerPharmacist = async (req, res) => {
   try {
-    const { username } = req.body;
+    // const { username, email, password } = req.body;
+    const username = req.body.username;
+    const password = req.body.password;
+    const email = req.body.email;
+    const education = req.body.education;
+    const hourlyRate = req.body.hourlyRate;
+    const dateOfBirth = req.body.dateOfBirth;
+    const name = req.body.name;
+    const affiliation = req.body.affiliation;
+    // Debugging: log the received data
+    console.log("Received data:", req.body);
+
+    req.body.files = req.locals?.docs;
+    const files = req.body.files;
+
+    // Validate username
     const validation = await validateUsername(username);
-    // check if username already exists in database
+
     if (!validation) {
       return res.status(408).send("Username already exists");
     }
-    //check if email exists
-    const { email } = req.body;
-    const existing = await Pharmacist.findOne({ email });
-    if (existing) {
+
+    // Check if email exists
+    const existingPharmacist = await Pharmacist.findOne({ email });
+    if (existingPharmacist) {
       return res.status(409).json({ message: "Email is already registered" });
     }
-    //add default picture
-    if (!req.body.picture) {
-      const path = require("path");
-      const filePath = path.join(__dirname, "../res/default-profile-pic.jpg");
-      const imageBuffer = fs.readFileSync(filePath);
-      const base64ImageData = imageBuffer.toString("base64");
-      const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
-      req.body.picture = imageSrc;
-    }
 
-    // Create a modified request body with an empty array for files
-    const modifiedReqBody = { ...req.body, files: [] };
-    console.log("we");
-    // Create a new Pharmacist instance with the modified request body
-    const newPharmacist = new Pharmacist(modifiedReqBody);
-    console.log("we2");
+    // Debugging: log the password before hashing
+    console.log("Password before hashing:", password);
+
     // Hash the password
-    newPharmacist.password = await bcrypt.hash(req.body.password, 10);
-    console.log("we3");
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Debugging: log the hashed password
+    console.log("Hashed password:", hashedPassword);
+
+    // Create a new Pharmacist instance with the modified request body
+    const newPharmacist = new Pharmacist({
+      username,
+      email,
+      password: hashedPassword,
+      picture: req.body.picture,
+      education,
+      hourlyRate,
+      affiliation,
+      dateOfBirth,
+      name,
+      files,
+    });
+
     // Save the Pharmacist instance
-    const savedPharmacist = await newPharmacist.save();
-    const id = savedPharmacist._id;
-    console.log("we4");
+    await newPharmacist.save();
+
+    console.log("before");
+
     // Upload documents and associate them with the pharmacist
-    uploadDocuments(req, res, id);
-    console.log("we5");
-    return res.status(201).json(savedPharmacist);
+    // uploadDocuments(req.body, res, newPharmacist._id);
+
+    return res.status(201).json(newPharmacist);
   } catch (error) {
     console.error(error);
     return res.status(400).json({ error: error.message });
@@ -140,35 +187,30 @@ const registerPharmacist = async (req, res) => {
 //   });
 // };
 
-const uploadDocuments = (req, res, pharmacistId) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      console.error("Multer error:", err);
-      return res.status(400).json({ message: "Error uploading the files" });
-    }
+// const uploadDocuments = (req, res, pharmacistId) => {
+//   upload(req, res, async (err) => {
+//     if (err) {
+//       console.error("Multer error:", err);
+//       return res.status(400).json({ message: "Error uploading the files" });
+//     }
 
-    console.log("Uploaded files:", req.files);
-
-    // Update the pharmacist's files field with the filenames
-    const filenames = req.files.map((file) => ({
-      filename: file.originalname,
-      mimetype: file.mimetype,
-      buffer: file.buffer,
-    }));
-
-    try {
-      const pharmacist = await Pharmacist.findByIdAndUpdate(
-        pharmacistId,
-        { $push: { files: filenames } },
-        { new: true }
-      );
-      console.log("Files uploaded and associated with the pharmacist.");
-    } catch (error) {
-      console.error("Error uploading documents:", error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  });
-};
+//     try {
+//       const potential = await Pharmacist.findById(pharmacistId);
+//       // Update the pharmacist's files field with the filenames
+//       const filenames = req.files.forEach((file) => {
+//         potential.files.push({
+//           filename: file.originalname,
+//           mimetype: file.mimetype,
+//           buffer: file.buffer,
+//         });
+//       });
+//       console.log("Files uploaded and associated with the pharmacist.");
+//     } catch (error) {
+//       console.error("Error uploading documents:", error);
+//       return res.status(500).json({ message: "Internal server error" });
+//     }
+//   });
+// };
 
 const getPharmacists = async (req, res) => {
   try {
@@ -363,4 +405,5 @@ module.exports = {
   pharmacistSendPasswordResetOTP,
   pharmacistCheckPasswordResetOTP,
   pharmacistChangePassword,
+  upload,
 };

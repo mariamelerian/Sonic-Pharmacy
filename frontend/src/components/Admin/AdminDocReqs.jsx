@@ -56,6 +56,7 @@ export default function AdminDocReqs() {
           docRate={user.hourlyRate}
           docAffiliation={user.affiliation}
           docEducation={user.education}
+          docFiles={user.files}
         />
       ))}
     </Container>

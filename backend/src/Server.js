@@ -1,12 +1,16 @@
 // External variables
 const express = require("express");
 const mongoose = require("mongoose");
+const multer = require("multer");
 mongoose.set("strictQuery", false);
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
 
 //imports
 const {
@@ -60,6 +64,8 @@ const {
   pharmacistChangePassword,
 } = require("./Controllers/pharmacistController");
 
+const pharmacistController = require("./Controllers/pharmacistController");
+
 const {
   MedicinalUseArray,
   getMedicinalUses,
@@ -83,16 +89,16 @@ app.use(cookieParser());
 const port = process.env.PORT || "8000";
 
 //Apply middleware to all routes except the login route
-app.use((req, res, next) => {
-  // Check if the route is not the login route
-  if (req.path !== "/login") {
-    // Apply your middleware to all routes except login
-    requireAuth(req, res, next);
-  } else {
-    // If it's the login route, skip the middleware
-    next();
-  }
-});
+// app.use((req, res, next) => {
+//   // Check if the route is not the login route
+//   if (req.path !== "/login") {
+//     // Apply your middleware to all routes except login
+//     requireAuth(req, res, next);
+//   } else {
+//     // If it's the login route, skip the middleware
+//     next();
+//   }
+// });
 
 // Mongo DB
 const MongoURI = process.env.MONGO_URI;
@@ -131,14 +137,19 @@ app.get("/pharmacistApplications", getInactivePharmacists);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", createAdmin);
-app.post("/newPharmacist", registerPharmacist);
+// app.post("/newPharmacist", registerPharmacist );
+app.post(
+  "/newPharmacist",
+  pharmacistController.upload.array("files", 5),
+  registerPharmacist
+);
 app.post("/newMedicine", createMedicine);
 app.post("/filterMedicine", filterMedicine);
 app.post("/addAddress", addDeliveryAddress);
 
 //authentication
 app.post("/login", login);
-app.post("/requireAuth");
+// app.post("/requireAuth");
 app.post("/logout", logout);
 app.put("/updCookie", updateUserInfoInCookie);
 app.post("/otp", otp);

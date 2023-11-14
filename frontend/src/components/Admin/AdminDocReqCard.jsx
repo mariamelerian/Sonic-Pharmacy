@@ -12,6 +12,7 @@ export default function AdminDocReqCard({
   docAffiliation,
   docBirthDate,
   id,
+  docFiles,
 }) {
   const [isVisible, setIsVisible] = useState(true);
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -103,6 +104,7 @@ export default function AdminDocReqCard({
                   docRate={docRate}
                   docAffiliation={docAffiliation}
                   docEducation={docEducation}
+                  docFiles={docFiles}
                   onApprove={() => setShowAcceptModal(true)}
                   onReject={() => setShowRejectModal(true)}
                 />

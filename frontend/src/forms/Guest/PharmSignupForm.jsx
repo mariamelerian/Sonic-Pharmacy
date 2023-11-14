@@ -180,130 +180,135 @@ const PharmSignupForm = () => {
       formData.append("hourlyRate", rate);
       formData.append("affiliation", affiliation);
       formData.append("education", education);
+      formData.append("files", selectedIdImage);
+      formData.append("files", selectedPharmacyDegreeImage);
+      formData.append("files", selectedWorkingLicenseImage);
 
-      if (selectedIdImage) {
-        try {
-          // Read the file data as a Uint8Array
-          const fileArrayBuffer = await selectedIdImage.arrayBuffer();
-          const fileUint8Array = new Uint8Array(fileArrayBuffer);
+      console.log(selectedIdImage);
 
-          // Format the file
-          const formattedFile = {
-            filename: selectedIdImage.name,
-            mimetype: selectedIdImage.type,
-            buffer: {
-              type: "Buffer",
-              data: Array.from(fileUint8Array),
-            },
-          };
+      // if (selectedIdImage) {
+      //   try {
+      //     // Read the file data as a Uint8Array
+      //     const fileArrayBuffer = await selectedIdImage.arrayBuffer();
+      //     const fileUint8Array = new Uint8Array(fileArrayBuffer);
 
-          console.log(`Processed file: ${selectedIdImage.name}`);
+      //     // Format the file
+      //     const formattedFile = {
+      //       filename: selectedIdImage.name,
+      //       mimetype: selectedIdImage.type,
+      //       buffer: {
+      //         type: "Buffer",
+      //         data: Array.from(fileUint8Array),
+      //       },
+      //     };
 
-          // Check if any errors occurred during processing
-          if (!formattedFile) {
-            console.error("Error processing file:", selectedIdImage.name);
-            return;
-          }
+      //     console.log(`Processed file: ${selectedIdImage.name}`);
 
-          const blob = new Blob([formattedFile.buffer.data], {
-            type: formattedFile.mimetype,
-          });
+      //     // Check if any errors occurred during processing
+      //     if (!formattedFile) {
+      //       console.error("Error processing file:", selectedIdImage.name);
+      //       return;
+      //     }
 
-          formData.append("files", blob, formattedFile.filename);
+      //     const blob = new Blob([formattedFile.buffer.data], {
+      //       type: formattedFile.mimetype,
+      //     });
 
-          console.log("formData after processing:", formattedFile.buffer.data);
-        } catch (error) {
-          console.error("Error processing file:", selectedIdImage.name, error);
-        }
-      }
+      //     formData.append("files", blob, formattedFile.filename);
 
-      if (selectedPharmacyDegreeImage) {
-        try {
-          // Read the file data as a Uint8Array
-          const fileArrayBuffer =
-            await selectedPharmacyDegreeImage.arrayBuffer();
-          const fileUint8Array = new Uint8Array(fileArrayBuffer);
+      //     console.log("formData after processing:", formattedFile.buffer.data);
+      //   } catch (error) {
+      //     console.error("Error processing file:", selectedIdImage.name, error);
+      //   }
+      // }
 
-          // Format the file
-          const formattedFile = {
-            filename: selectedPharmacyDegreeImage.name,
-            mimetype: selectedPharmacyDegreeImage.type,
-            buffer: {
-              type: "Buffer",
-              data: Array.from(fileUint8Array),
-            },
-          };
+      // if (selectedPharmacyDegreeImage) {
+      //   try {
+      //     // Read the file data as a Uint8Array
+      //     const fileArrayBuffer =
+      //       await selectedPharmacyDegreeImage.arrayBuffer();
+      //     const fileUint8Array = new Uint8Array(fileArrayBuffer);
 
-          console.log(`Processed file: ${selectedPharmacyDegreeImage.name}`);
+      //     // Format the file
+      //     const formattedFile = {
+      //       filename: selectedPharmacyDegreeImage.name,
+      //       mimetype: selectedPharmacyDegreeImage.type,
+      //       buffer: {
+      //         type: "Buffer",
+      //         data: Array.from(fileUint8Array),
+      //       },
+      //     };
 
-          // Check if any errors occurred during processing
-          if (!formattedFile) {
-            console.error(
-              "Error processing file:",
-              selectedPharmacyDegreeImage.name
-            );
-            return;
-          }
+      //     console.log(`Processed file: ${selectedPharmacyDegreeImage.name}`);
 
-          const blob = new Blob([formattedFile.buffer.data], {
-            type: formattedFile.mimetype,
-          });
+      //     // Check if any errors occurred during processing
+      //     if (!formattedFile) {
+      //       console.error(
+      //         "Error processing file:",
+      //         selectedPharmacyDegreeImage.name
+      //       );
+      //       return;
+      //     }
 
-          formData.append("files", blob, formattedFile.filename);
+      //     const blob = new Blob([formattedFile.buffer.data], {
+      //       type: formattedFile.mimetype,
+      //     });
 
-          console.log("formData after processing:", formattedFile.buffer.data);
-        } catch (error) {
-          console.error(
-            "Error processing file:",
-            selectedPharmacyDegreeImage.name,
-            error
-          );
-        }
-      }
+      //     formData.append("files", blob, formattedFile.filename);
 
-      if (selectedWorkingLicenseImage) {
-        try {
-          // Read the file data as a Uint8Array
-          const fileArrayBuffer =
-            await selectedWorkingLicenseImage.arrayBuffer();
-          const fileUint8Array = new Uint8Array(fileArrayBuffer);
+      //     console.log("formData after processing:", formattedFile.buffer.data);
+      //   } catch (error) {
+      //     console.error(
+      //       "Error processing file:",
+      //       selectedPharmacyDegreeImage.name,
+      //       error
+      //     );
+      //   }
+      // }
 
-          // Format the file
-          const formattedFile = {
-            filename: selectedWorkingLicenseImage.name,
-            mimetype: selectedWorkingLicenseImage.type,
-            buffer: {
-              type: "Buffer",
-              data: Array.from(fileUint8Array),
-            },
-          };
+      // if (selectedWorkingLicenseImage) {
+      //   try {
+      //     // Read the file data as a Uint8Array
+      //     const fileArrayBuffer =
+      //       await selectedWorkingLicenseImage.arrayBuffer();
+      //     const fileUint8Array = new Uint8Array(fileArrayBuffer);
 
-          console.log(`Processed file: ${selectedWorkingLicenseImage.name}`);
+      //     // Format the file
+      //     const formattedFile = {
+      //       filename: selectedWorkingLicenseImage.name,
+      //       mimetype: selectedWorkingLicenseImage.type,
+      //       buffer: {
+      //         type: "Buffer",
+      //         data: Array.from(fileUint8Array),
+      //       },
+      //     };
 
-          // Check if any errors occurred during processing
-          if (!formattedFile) {
-            console.error(
-              "Error processing file:",
-              selectedWorkingLicenseImage.name
-            );
-            return;
-          }
+      //     console.log(`Processed file: ${selectedWorkingLicenseImage.name}`);
 
-          const blob = new Blob([formattedFile.buffer.data], {
-            type: formattedFile.mimetype,
-          });
+      //     // Check if any errors occurred during processing
+      //     if (!formattedFile) {
+      //       console.error(
+      //         "Error processing file:",
+      //         selectedWorkingLicenseImage.name
+      //       );
+      //       return;
+      //     }
 
-          formData.append("files", blob, formattedFile.filename);
+      //     const blob = new Blob([formattedFile.buffer.data], {
+      //       type: formattedFile.mimetype,
+      //     });
 
-          console.log("formData after processing:", formattedFile.buffer.data);
-        } catch (error) {
-          console.error(
-            "Error processing file:",
-            selectedWorkingLicenseImage.name,
-            error
-          );
-        }
-      }
+      //     formData.append("files", blob, formattedFile.filename);
+
+      //     console.log("formData after processing:", formattedFile.buffer.data);
+      //   } catch (error) {
+      //     console.error(
+      //       "Error processing file:",
+      //       selectedWorkingLicenseImage.name,
+      //       error
+      //     );
+      //   }
+      // }
 
       try {
         const response = await axios.post("/newPharmacist", formData, {
