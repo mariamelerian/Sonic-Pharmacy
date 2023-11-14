@@ -103,8 +103,21 @@ export default function AdminDocReqDetails({
             </div>
             {docFiles.map((file, index) => (
               <div key={index} style={rowStyle}>
-                <span style={titleStyle}>File {index + 1}: </span>
-                {file.replace(/^.*[\\\/]/, "").replace(/\d+-/g, "")}
+                <span style={titleStyle}>
+                  {index === 0 ? (
+                    <strong>ID:</strong>
+                  ) : index === 1 ? (
+                    <strong>Pharmacy Degree:</strong>
+                  ) : index === 2 ? (
+                    <strong>Working License:</strong>
+                  ) : (
+                    file
+                  )}
+                  <span style={{ fontWeight: "lighter" }}>
+                    {" "}
+                    {file.replace(/^.*[\\\/]/, "").replace(/\d+-/g, "")}
+                  </span>
+                </span>
               </div>
             ))}
           </div>
