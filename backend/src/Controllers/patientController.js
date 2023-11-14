@@ -8,8 +8,6 @@ const { validationResult } = require("express-validator");
 const { create } = require("../Models/Pharmacist.js");
 const bcrypt = require("bcrypt");
 
-const stripe = require("stripe")("<your_stripe_secret_key>");
-
 const createPatient = async (req, res) => {
   const {
     username,
@@ -173,80 +171,6 @@ const patientChangePassword = async (req, res) => {
   return res.status(200).json({ message: "Password updated successfully" });
 };
 
-//dont forget to put stripe secret key at line 8
-const createCustomer = async (req, res) => {
-  const user = await Patient.findById(req.params.id);
-  if (!user) {
-    return res.status(404).json({ error: "Patient not found" });
-  }
-  const name = user.name;
-  const email = user.email;
-  const card = req.card;
-
-  const paymentMethod = await stripe.paymentMethods.create({
-    type: "card",
-    card: {
-      number: card.number,
-      exp_month: card.exp_month,
-      exp_year: card.exp_year,
-      cvc: card.cvc,
-    },
-  });
-
-  const customer = await stripe.customers.create({
-    name: name,
-    email: email,
-    payment_method: paymentMethod.id,
-    invoice_settings: {
-      default_payment_method: paymentMethod.id,
-    },
-  });
-
-  return res.status(200).json({
-    customerId: customer.id,
-    card_last4: paymentMethod.card.last4,
-    card_exp_month: paymentMethod.card.exp_month,
-    card_exp_year: paymentMethod.card.exp_year,
-  });
-};
-
-const chargePayment = async (req, res) => {
-  const user = await Patient.findById(req.params.userId);
-  if (!user) {
-    return res.status(404).json({ error: "Patient not found" });
-  }
-  const customerId = req.params.userId;
-  const amount = req.amount;
-  const currency = req.currency;
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: amount * 100,
-    currency: currency,
-    payment_method: customerId,
-    off_session: true, // Set to true for one-time payments
-    confirm: true, // Confirm the payment right away
-  });
-
-  // Check the status of the payment intent
-  switch (paymentIntent.status) {
-    case "requires_action":
-    case "requires_source_action":
-      // Additional action required (e.g. 3DS authentication)
-      return {
-        status: "pending",
-        client_secret: paymentIntent.client_secret,
-      };
-    case "succeeded":
-      // Payment confirmed and complete
-      await createOrder();
-      return res
-        .status(200)
-        .json({ status: "paid", paymentId: paymentIntent.id });
-    default:
-      // Payment failed (or unknown status)
-      return res.status(409).json({ status: "failed" });
-  }
-};
-
 const getDeliveryAddresses = async (req, res) => {
   const userId = req.session.userId;
 
@@ -310,8 +234,6 @@ module.exports = {
   getPatients,
   patientLogin,
   patientChangePassword,
-  createCustomer,
-  chargePayment,
   getPatientById,
   getDeliveryAddresses,
   addDeliveryAddress,

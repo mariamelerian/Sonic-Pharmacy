@@ -76,6 +76,7 @@ export default function PatientMyOrders() {
               orderStatus={order.status}
               orderCost={order.totalPrice}
               orderDate={order.date}
+              address={order.address}
               items={order.items}
               handleChangeState={handleChangeState}
             />

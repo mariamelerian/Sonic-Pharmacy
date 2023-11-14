@@ -13,6 +13,7 @@ export default function PatientMyOrdersCard({
   orderDate,
   items,
   handleChangeState,
+  address,
 }) {
   return (
     <Container style={{ width: "1000px", padding: "0px" }}>
@@ -39,6 +40,7 @@ export default function PatientMyOrdersCard({
               orderStatus={orderStatus}
               orderCost={orderCost}
               orderDate={orderDate}
+              address={address}
               items={items}
               handleChangeState={handleChangeState}
             />

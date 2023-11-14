@@ -3,6 +3,10 @@ const Cart = require("../Models/Cart");
 const Medicine = require("../Models/Medicine");
 const Patient = require("../Models/Patient");
 
+const stripe = require("stripe")(
+  "sk_test_51O9lZ0IQTS4vUIMWJeAJ5Ds71jNbeQFj6v8mO7leS2cDIJuLy1fwNzoiXPKZV5KdoMpfzocfJ6hBusxPIjbGeveF00RTnmVYCX"
+);
+
 const createOrder = async (userId, address) => {
   try {
     const cart = await Cart.findOne({ user: userId });
@@ -74,6 +78,38 @@ const checkoutWallet = async (req, res) => {
       console.log(error.message);
       res.status(500).json({ message: error.message });
     }
+  }
+};
+
+const checkoutStripe = async (req, res) => {
+  const userId = req.session.userId;
+  const cart = await Cart.findOne({ user: userId });
+
+  let line_items = [];
+  cart.items.map((item) => {
+    line_items.push({
+      price_data: {
+        currency: "usd",
+        product_data: { name: item.name },
+        unit_amount: item.price * 100, //in cents
+      },
+      quantity: item.quantity,
+    });
+  });
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: line_items,
+    mode: "payment",
+    success_url: "http://localhost:3000/patient/patient-myOrders",
+    cancel_url: "http://localhost:3000/patient/patient-cart",
+  });
+
+  if (!session)
+    return res.status(500).json({ message: "Failed to create the session" });
+  else {
+    createOrder(req.session.userId, req.body.address);
+    res.status(200).json({ url: session.url });
   }
 };
 
@@ -246,4 +282,5 @@ module.exports = {
   cancelOrderByNumber,
   deleteOrderByNumber,
   checkoutWallet,
+  checkoutStripe,
 };

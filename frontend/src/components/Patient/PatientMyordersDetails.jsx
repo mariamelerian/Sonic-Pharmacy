@@ -11,10 +11,13 @@ export default function PatientMyordersDetails({
   orderStatus, //if status is en route then we can cancel the order
   orderCost,
   orderDate,
+  address,
 
   items,
   handleChangeState,
 }) {
+
+  // console.log('Address:', address);
   const rowStyle = {
     display: "flex",
     flexDirection: "row",
@@ -108,6 +111,10 @@ export default function PatientMyordersDetails({
                 </div>
               </>
             ))}
+            <div style={rowStyle}>
+              <span style={titleStyle}> Delivery Adress:</span>
+              {address} 
+            </div>
 
             <div style={rowStyle}>
               <span style={titleStyle}> Total Cost:</span>
