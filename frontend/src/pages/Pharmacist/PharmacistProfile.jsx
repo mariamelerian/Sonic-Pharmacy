@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { Container, Tab, Col, Row, Nav } from "react-bootstrap";
 import AppNavbar from "../../components/AppNavigation/AppNavbar";
-/* import { useSelector } from "react-redux"; */
 import PhHamburgerMenu from "../../components/Pharmacist/PhHamburgerMenu";
 import PharmacistProfileBox from "../../components/Pharmacist/PharmacistProfileBox";
 
 function PharmacistProfile() {
   const [activeKey, setActiveKey] = useState("first");
   const [refreshFlag, setRefreshFlag] = useState(false);
-/*   const wallet = useSelector((state) => state.doctorLogin.wallet); */
 
   const handleSelect = (selectedKey) => {
     setActiveKey(selectedKey);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Tab, Tabs } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import CheckOutDoneModal from "./PatientCheckOutDoneModal";
+import { updatePatientPharmWallet } from "../../state/loginPatientReducer";
 import axios from "axios";
 
 function PatientCheckOutModal({
@@ -11,6 +11,7 @@ function PatientCheckOutModal({
   delivery,
   visibility,
   onHide,
+  fetchCart,
 }) {
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("wallet");
@@ -19,6 +20,8 @@ function PatientCheckOutModal({
   const [bookingStatus, setBookingStatus] = useState("");
   const [setVisibility, setSetVisibility] = useState(true); // Initialize with true
   const [addresses, setAddresses] = useState([]);
+  const [error, setError] = useState(null);
+  const myWallet = useSelector((state) => state.patientPharmLogin.wallet);
   const dispatch = useDispatch();
 
   const fetchData = async () => {
@@ -27,16 +30,14 @@ function PatientCheckOutModal({
 
       if (response.status === 200) {
         await setAddresses(response.data);
-        console.log(response.data);
-      } else {
-        console.log("Server error");
+        setError(null);
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
         await setAddresses(["No Adresses Found"]);
+        setError(null);
       } else if (error.response && error.response.status === 500) {
-        await setAddresses(["Server error"]);
-        console.log(error.message);
+        await setError("Server error");
       }
     }
   };
@@ -55,13 +56,11 @@ function PatientCheckOutModal({
         address: newAddress,
       });
       if (response.status === 200) {
-        console.log("added new address");
         setAddresses(response.data);
-      } else {
-        console.log("Server error");
+        setError(null);
       }
     } catch (error) {
-      console.log(error.message);
+      setError(error.message);
     }
 
     setUseExistingAddress(true);
@@ -91,7 +90,7 @@ function PatientCheckOutModal({
 
   const placeorder = async () => {
     if (deliveryAddress === "") {
-      alert("Please enter delivery address");
+      setError("Please enter delivery address");
       return;
     } else {
       if (paymentMethod === "wallet") {
@@ -100,16 +99,27 @@ function PatientCheckOutModal({
             address: deliveryAddress,
           });
           if (response.status === 200) {
-            console.log("Order placed");
+            const newWallet = myWallet - total;
+            dispatch(
+              updatePatientPharmWallet({
+                wallet: newWallet,
+              })
+            );
+            setError(null);
+            fetchCart();
             setBookingStatus("success");
           } else if (response.status === 400) {
-            alert("Insufficient balance");
+            setError("Insufficient balance");
             return;
           } else {
-            console.log("Server error" + response.status);
+            setError("Server error" + response.status);
           }
         } catch (error) {
-          console.log(error.message);
+          if (error.message === "Request failed with status code 400") {
+            setError("Insufficient balance");
+          } else {
+            setError(error.message);
+          }
         }
       } else if (paymentMethod === "creditCard") {
       } else {
@@ -120,12 +130,14 @@ function PatientCheckOutModal({
           });
           if (response.status === 200) {
             console.log("Order placed");
+            setError(null);
+            fetchCart();
             setBookingStatus("success");
           } else {
-            console.log("Server error" + response.status);
+            setError("Server error" + response.status);
           }
         } catch (error) {
-          console.log(error.message);
+          setError(error.message);
         }
       }
     }
@@ -266,6 +278,7 @@ function PatientCheckOutModal({
             </Tab>
           </Tabs>
         )}
+        {error && <div className="error">{error}</div>}
       </Modal.Body>
       <Modal.Footer>
         {bookingStatus === "success" ? (
@@ -274,15 +287,14 @@ function PatientCheckOutModal({
           </Button>
         ) : (
           <div>
-            <Link to="/patient/patient-checkoutcomplete">
-              <Button
-                variant="success"
-                style={{ marginRight: "10px" }}
-                onClick={placeorder}
-              >
-                Order
-              </Button>
-            </Link>
+            <Button
+              variant="success"
+              style={{ marginRight: "10px" }}
+              onClick={placeorder}
+            >
+              Order
+            </Button>
+
             <Link to="/patient/patient-cart">
               <Button variant="danger" onClick={onHide}>
                 Cancel

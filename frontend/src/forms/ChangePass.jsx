@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
-import ChangePassSuccessModal from "../components/ChangePassSuccessModal";
+
 export default function ChangePass({ patient, api }) {
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
@@ -10,6 +10,12 @@ export default function ChangePass({ patient, api }) {
   const [error, setError] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  const onHide = () => {
+    setOldPass("");
+    setNewPass("");
+    setConfirmNewPass("");
+    setShowSuccessModal(false);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -105,24 +111,34 @@ export default function ChangePass({ patient, api }) {
           required
         />
 
-         <Button
-      variant="primary"
-      onClick={handleSubmit}
-      style={{
-        cursor: "pointer",
-        fontWeight: "bold",
-        fontSize: "0.9rem",
-        marginLeft: patient ? "8rem" : "0px",
-      }}
-    >
-      Save
-    </Button>
+        <Button
+          variant="primary"
+          onClick={handleSubmit}
+          style={{
+            cursor: "pointer",
+            fontWeight: "bold",
+            fontSize: "0.9rem",
+            marginLeft: patient ? "8rem" : "0px",
+          }}
+        >
+          Save
+        </Button>
       </Form>
       {/* {error && <div className="error">{error}</div>} */}
       {error && <div className="error">{error}</div>}
-
-{/* Render the success modal when showSuccessModal is true */}
-{showSuccessModal && <ChangePassSuccessModal onClose={() => setShowSuccessModal(false)} />}
+      {/* Render the success modal when showSuccessModal is true */}
+      {showSuccessModal && (
+        <Modal show={true} centered onHide={onHide}>
+          <Modal.Body className="text-center">
+            {`You have successfully changed your password!`}
+          </Modal.Body>
+          <Modal.Footer className="d-flex align-items-center justify-content-center">
+            <Button variant="primary" onClick={onHide}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </div>
   );
 }

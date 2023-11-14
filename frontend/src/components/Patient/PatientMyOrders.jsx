@@ -82,6 +82,7 @@ export default function PatientMyOrders() {
           ))}
         </Container>
       )}
+      {error1 && <div className="error">{error1}</div>}
     </>
   );
 }

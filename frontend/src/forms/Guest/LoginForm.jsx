@@ -66,15 +66,14 @@ const LoginForm = () => {
         if (type === "Pharmacist") {
           dispatch(
             setCredentialsPharmacist({
-              password: password,
-              userName: username,
+              username: username,
               birthdate: user.dateOfBirth,
               email: user.email,
               name: user.name,
               hourlyRate: user.hourlyRate,
               affiliation: user.affiliation,
               education: user.education,
-              documents: user.documents,
+              documents: user.files,
               userId: user._id,
               isLoggedIn: true,
             })
@@ -85,7 +84,7 @@ const LoginForm = () => {
         if (type === "Admin") {
           dispatch(
             setCredentialsAdminPharm({
-              username: username,
+              userName: username,
               userId: user._id,
             })
           );
@@ -157,20 +156,7 @@ const LoginForm = () => {
             Sign Up
           </div>
         </div> */}
-        {error1 && (
-          <div
-            style={{
-              marginTop: "2rem",
-              backgroundColor: "#f44336", // Red background color
-              color: "white", // White text color
-              padding: "10px", // Padding around the message
-              borderRadius: "5px", // Rounded corners
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)", // Box shadow for a subtle effect
-            }}
-          >
-            {error1}
-          </div>
-        )}
+        {error1 && <div className="error">{error1}</div>}
       </Form>
     </div>
   );

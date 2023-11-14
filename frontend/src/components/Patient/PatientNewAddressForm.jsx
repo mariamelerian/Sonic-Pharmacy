@@ -109,20 +109,7 @@ const PatientNewAddressForm = ({ textStyle }) => {
         >
           Add Delivery Address
         </button>
-        {error && (
-          <div
-            style={{
-              marginTop: "2rem",
-              backgroundColor: "#f44336", // Red background color
-              color: "white", // White text color
-              padding: "10px", // Padding around the message
-              borderRadius: "5px", // Rounded corners
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)", // Box shadow for a subtle effect
-            }}
-          >
-            {error}
-          </div>
-        )}
+        {error && <div className="error">{error}</div>}
       </Form>
     </div>
   );

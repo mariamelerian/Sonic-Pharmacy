@@ -97,7 +97,7 @@ function PatientShowMedicine() {
           </Spinner>
         </div>
       ) : error ? (
-        <div className="text-center text-danger">{error}</div>
+        <div className="error">{error}</div>
       ) : (
         <Row>
           {medicines.map((medicine, index) => (

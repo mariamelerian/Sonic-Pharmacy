@@ -91,7 +91,7 @@ function AdminProfilePage() {
                                 <span style={{ color: "#099BA0" }}>
                                   Username:
                                 </span>
-                                {user.username}
+                                {user.userName}
                               </div>
                               <div style={listItemStyle}>
                                 <span style={{ color: "#099BA0" }}>
@@ -99,15 +99,17 @@ function AdminProfilePage() {
                                 </span>{" "}
                                 <span>
                                   <label
-                                     style={{
+                                    style={{
                                       cursor: "pointer",
                                       fontWeight: "lighter",
-                                      textDecoration:  "underline" ,
-                                      color:  "blue" ,
+                                      textDecoration: "underline",
+                                      color: "blue",
                                     }}
                                     onClick={toggleChangePass} // Add your click handler here
                                   >
-                                    {showChangePass ? "close" : "change password"}
+                                    {showChangePass
+                                      ? "close"
+                                      : "change password"}
                                   </label>
                                 </span>
                                 {showChangePass && (

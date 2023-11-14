@@ -476,39 +476,8 @@ const PharmSignupForm = () => {
             Login
           </div>
         </div>
-        {error1 && (
-          <div
-            style={{
-              marginTop: "0.5rem",
-              marginBottom: "0.5rem",
-              fontSize: "0.85rem",
-              backgroundColor: "#f44336 ",
-              color: "white", // White text color
-              padding: "10px", // Padding around the message
-              borderRadius: "5px", // Rounded corners
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-            }}
-          >
-            {error1}
-          </div>
-        )}
-        {success && (
-          <div
-            className="d-flex justify-content-center"
-            style={{
-              marginTop: "0.5rem",
-              marginBottom: "0.5rem",
-              fontSize: "0.85rem",
-              backgroundColor: "#099BA0 ",
-              color: "white", // White text color
-              padding: "10px", // Padding around the message
-              borderRadius: "5px", // Rounded corners
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)", // Box shadow for a subtle effect
-            }}
-          >
-            {success}
-          </div>
-        )}
+        {error1 && <div className="error">{error1}</div>}
+        {success && <div className="msg">{success}</div>}
       </form>
     </div>
   );

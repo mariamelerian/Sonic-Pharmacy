@@ -102,11 +102,11 @@ function ViewPersonalInfo() {
         <ListGroup.Item>
           <div style={listItemStyle}>
             <span style={{ color: "#099BA0" }}>Name:</span>
-            {/* Display user's name */}
+            {user.name}
           </div>
           <div style={listItemStyle}>
             <span style={{ color: "#099BA0" }}>Username:</span>
-            {/* Display user's username */}
+            {user.username}
           </div>
           <div style={listItemStyle}>
             <span style={{ color: "#099BA0" }}>Password:</span>
@@ -121,11 +121,23 @@ function ViewPersonalInfo() {
           </div>
           <div style={listItemStyle}>
             <span style={{ color: "#099BA0" }}>Email:</span>
-            {/* Display user's email */}
+            {user.email}
           </div>
           <div style={listItemStyle}>
             <span style={{ color: "#099BA0" }}>Phone Number:</span>
-            {/* Display user's phone number */}
+            {user.phoneNumber}
+          </div>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0" }}>Emergency Contact Name:</span>{" "}
+            {user.emergencyName}
+          </div>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0" }}>Emergency Contact Number:</span>{" "}
+            {user.emergencyNumber}
+          </div>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0" }}>Emergency Relation:</span>{" "}
+            {user.emergencyRelation}
           </div>
           <div style={listItemStyle}>
             <span style={{ color: "#099BA0" }}>My Addresses:</span>
@@ -157,10 +169,6 @@ function ViewPersonalInfo() {
               Add New Address
             </Button>
           )}
-          {/* <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Emergency Relation:</span>{" "}
-            {user.emergencyRelation}
-          </div> */}
         </ListGroup.Item>
       </ListGroup>
     </div>

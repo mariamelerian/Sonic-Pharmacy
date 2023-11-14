@@ -62,18 +62,22 @@ function PharmacistProfileBox() {
           <span>{profileData.username}</span>
         </p>
 
-       <p className="d-flex flex-row">
-  <div style={inputLabel}>Password:</div>
-  <span
-    onClick={toggleChangePass}
-    style={{ textDecoration: "underline", color: "blue", cursor: "pointer" }}
-  >
-    {showChangePass ? "close" : "change password"}
-  </span>
-  {showChangePass && (
-    <ChangePass patient={false} api="/pharmacistChangePassword" />
-  )}
-</p>
+        <p className="d-flex flex-row">
+          <div style={inputLabel}>Password:</div>
+          <span
+            onClick={toggleChangePass}
+            style={{
+              textDecoration: "underline",
+              color: "blue",
+              cursor: "pointer",
+            }}
+          >
+            {showChangePass ? "close" : "change password"}
+          </span>
+          {showChangePass && (
+            <ChangePass patient={false} api="/pharmacistChangePassword" />
+          )}
+        </p>
         <p class="d-flex flex-row">
           <div style={inputLabel}>Email: </div>
 
