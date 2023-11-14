@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FormPassword from "../FormPassword";
 import "../forms.css";
-import { useDispatch, useSelector } from "react-redux";
-
+/* import { useDispatch, useSelector } from "react-redux";
+ */
 const ResetPasswordForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -13,10 +13,10 @@ const ResetPasswordForm = () => {
   const [message, setMessage] = useState(null);
   const [loading, isLoading] = useState(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const email = useSelector((state) => state.forgotEmail.email);
-
+  /*   const dispatch = useDispatch();
+   */
+  /*   const email = useSelector((state) => state.forgotEmail.email);
+   */
   //   const userEmail = useSelect87
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -74,9 +74,8 @@ const ResetPasswordForm = () => {
       try {
         isLoading(true);
         await axios
-          .post("/changePasswordForPatientForget", {
-            email: email,
-            newPassword: password,
+          .put("/resetpassword", {
+            /*   */ newPassword: password,
           })
           .then((response) => {
             if (response.status !== 200) {

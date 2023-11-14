@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { MedicinalUseArray } = require("./MedicinalUse");
+const Pharmacist = require("./Pharmacist"); // Import the Pharmacist model
 
 const medicineSchema = new mongoose.Schema({
   picture: {
@@ -25,7 +26,8 @@ const medicineSchema = new mongoose.Schema({
   },
   sales: {
     type: Number,
-    default: 0,
+    required: true,
+    default: 10,
   },
   activeIngredients: {
     type: [String], // Assuming an array of strings for active ingredients

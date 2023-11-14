@@ -11,6 +11,10 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import filterMedicine from "./filterMedicine";
+import forgotEmail from "./forgotEmail";
+import loginAdminReducer from "./loginAdminReducer";
+import loginPatientReducer from "./loginPatientReducer";
+import loginPharmacistReducer from "./loginPharmacistReducer";
 
 const persistConfig = {
   key: "root",
@@ -20,11 +24,15 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   filterMedicine: filterMedicine,
+  adminPharmLogin: loginAdminReducer,
+  patientPharmLogin: loginPatientReducer,
+  pharmacistLogin: loginPharmacistReducer,
+  forgotEmail: forgotEmail,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const store = configureStore({
+const store2 = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -34,4 +42,4 @@ const store = configureStore({
     }),
 });
 
-export default store;
+export default store2;

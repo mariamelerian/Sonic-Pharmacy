@@ -25,7 +25,7 @@ import { Provider } from "react-redux";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 
-import store from "./state/Store";
+import store from "./state/Store2";
 
 let persistor = persistStore(store);
 

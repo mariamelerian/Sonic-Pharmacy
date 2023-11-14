@@ -35,36 +35,54 @@ function MedicineForm({ onClose, fetchData }) {
     try {
       onClose();
       const activeIngredientsArray = ingredients.split("-");
-      const response = await axios.post("/newMedicine", {
-        picture: selectedImage,
-        name: medicineName,
-        price: price,
-        description: description,
-        quantity: quantity,
-        sales: sales,
-        activeIngredients: activeIngredientsArray,
-        medicinalUse: medicinalUse,
-      });
-
-      if (response.status === 200) {
+      let picture = null;
+      if (setSelectedImage != null) {
         console.log("here");
-        setSuccess(true);
-        setTimeout(() => {
-          setSuccess(false); // Clear the error after 5 seconds
-        }, 5000);
-        fetchData();
-      } else if (response.status === 500) {
-        setError("Medicine not found");
-      } else {
-        setError("Error");
+        // Read the file as a data URL
+        // Create a FileReader instance
+        const reader = new FileReader();
+        // Set the image once loaded into file reader
+        reader.onload = async (e) => {
+          let imageSrc = reader.result.split(",")[1];
+          imageSrc = "data:image/jpeg;base64," + imageSrc + "";
+          console.log(imageSrc);
+
+          picture = imageSrc;
+
+          console.log("sending response");
+          const response = await axios.post("/newMedicine", {
+            picture: selectedImage,
+            name: medicineName,
+            price: price,
+            description: description,
+            quantity: quantity,
+            sales: sales,
+            activeIngredients: activeIngredientsArray,
+            medicinalUse: medicinalUse,
+            picture: picture,
+          });
+
+          console.log(response);
+
+          if (response.status === 200) {
+            console.log("here");
+            setSuccess(true);
+            setTimeout(() => {
+              setSuccess(false); // Clear the error after 5 seconds
+            }, 5000);
+            fetchData();
+          } else if (response.status === 500) {
+            setError("Medicine not found");
+          } else {
+            setError("Error");
+          }
+        };
+
+        reader.readAsDataURL(selectedImage);
       }
     } catch (error) {
       setSuccess(false);
-      if (error.response && error.response.status === 500) {
-        setError("Server error");
-      } else {
-        setError(error.response.status);
-      }
+      setError(error.message);
     }
     setTimeout(() => {
       setError(null); // Clear the error after 5 seconds
@@ -73,6 +91,9 @@ function MedicineForm({ onClose, fetchData }) {
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
+
+    if (!file) return;
+
     setSelectedImage(file);
   };
 
@@ -139,7 +160,7 @@ function MedicineForm({ onClose, fetchData }) {
               onChange={(e) => setIngredients(e.target.value)}
             />
           </Form.Group>
-         
+
           <Form.Group>
             <Form.Label>Quantity</Form.Label>
             <Form.Control
@@ -149,7 +170,7 @@ function MedicineForm({ onClose, fetchData }) {
               onChange={(e) => setQuantity(e.target.value)}
             />
           </Form.Group>
-          
+
           <Form.Group>
             <Form.Label>Sales</Form.Label>
             <Form.Control
@@ -177,20 +198,7 @@ function MedicineForm({ onClose, fetchData }) {
             Cancel
           </Button> */}
         </div>
-        {error && (
-          <div
-            style={{
-              marginTop: "2rem",
-              backgroundColor: "#f44336", // Red background color
-              color: "white", // White text color
-              padding: "10px", // Padding around the message
-              borderRadius: "5px", // Rounded corners
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)", // Box shadow for a subtle effect
-            }}
-          >
-            {error}
-          </div>
-        )}
+        {error && <div className="error">{error}</div>}
       </Card.Body>
     </Card>
   );

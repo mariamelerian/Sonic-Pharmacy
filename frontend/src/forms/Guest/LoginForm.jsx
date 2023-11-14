@@ -3,19 +3,21 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-/* import { useDispatch } from "react-redux"; */
+import { useDispatch } from "react-redux";
 import FormPassword from "../FormPassword";
 import FormInput from "../FormInput";
 import ForgotPassword from "../../pages/Guest/ForgotPassword";
-/* import { setCredentials } from "../../state/loginPatientReducer"; */
+import { setCredentialsAdminPharm } from "../../state/loginAdminReducer";
+import { setCredentialsPatientPharm } from "../../state/loginPatientReducer";
+import { setCredentialsPharmacist } from "../../state/loginPharmacistReducer";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error1, setError] = useState(null);
   const [loading, isLoading] = useState(null);
-  const [open, setOpen] = React.useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,20 +27,90 @@ const LoginForm = () => {
     e.preventDefault();
     setError(null);
     isLoading(true);
-    // if (!email || !password) {
-    //   setError("Please fill in all the required fields");
-    //   isLoading(false);
-    //   return;
-    // }
-    // const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-    // if (!email.match(emailRegex)) {
-    //   setError("Invalid email format.");
-    //   console.log(error1);
-    //   isLoading(false);
-    //   return;
-    // }
+    if (!username || !password) {
+      setError("Please fill in all the required fields");
+      isLoading(false);
+      return;
+    }
     isLoading(false);
-    navigate("/patient");
+    try {
+      const response = await axios.post("/login", {
+        username: username,
+        password: password,
+      });
+      if (response.status === 200) {
+        const user = response.data.user;
+        const type = response.data.message;
+
+        if (type === "Patient") {
+          dispatch(
+            setCredentialsPatientPharm({
+              username: username,
+              birthdate: user.dateOfBirth,
+              email: user.email,
+              name: user.name,
+              gender: user.gender,
+              phoneNumber: user.mobileNumber,
+              userId: user._id,
+              emergencyName: user.emergencyFullName,
+              emergencyNumber: user.emergencyMobileNumber,
+              wallet: user.wallet,
+              emergencyRelation: user.emergencyRelation,
+              isLoggedIn: true,
+            })
+          );
+
+          isLoading(false);
+          navigate("/patient");
+        }
+        if (type === "Pharmacist") {
+          dispatch(
+            setCredentialsPharmacist({
+              username: username,
+              birthdate: user.dateOfBirth,
+              email: user.email,
+              name: user.name,
+              hourlyRate: user.hourlyRate,
+              affiliation: user.affiliation,
+              education: user.education,
+              documents: user.files,
+              userId: user._id,
+              isLoggedIn: true,
+            })
+          );
+          navigate("/pharmacist");
+          isLoading(false);
+        }
+        if (type === "Admin") {
+          dispatch(
+            setCredentialsAdminPharm({
+              userName: username,
+              userId: user._id,
+            })
+          );
+
+          navigate("/admin");
+          isLoading(false);
+        }
+      } else {
+        console.error("Login failed:", response.data);
+        setError("Login failed");
+        isLoading(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+
+      if (error.response && error.response.status === 401) {
+        console.log("Authentication error");
+        setError("Invalid Credentials");
+      } else if (error.response && error.response.status === 500) {
+        setError("Server Error");
+      } else {
+        setError("An error occurred while logging in. Please try again later.");
+      }
+
+      isLoading(false);
+    }
   };
 
   return (
@@ -58,14 +130,14 @@ const LoginForm = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Container className="forgot-password-container">
-      <a
-        href="/forgot-password"
-        className="forgot-password text-decoration-none"
-        style={{ cursor: "pointer" }}
-      >
-        Forgot Password?
-      </a>
-    </Container>
+          <a
+            href="/forgot-password"
+            className="forgot-password text-decoration-none"
+            style={{ cursor: "pointer" }}
+          >
+            Forgot Password?
+          </a>
+        </Container>
         <button
           className="w-100 btn-sm custom-button"
           disabled={loading}
@@ -84,20 +156,7 @@ const LoginForm = () => {
             Sign Up
           </div>
         </div> */}
-        {error1 && (
-          <div
-            style={{
-              marginTop: "2rem",
-              backgroundColor: "#f44336", // Red background color
-              color: "white", // White text color
-              padding: "10px", // Padding around the message
-              borderRadius: "5px", // Rounded corners
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)", // Box shadow for a subtle effect
-            }}
-          >
-            {error1}
-          </div>
-        )}
+        {error1 && <div className="error">{error1}</div>}
       </Form>
     </div>
   );

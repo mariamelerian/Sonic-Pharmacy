@@ -45,6 +45,15 @@ const patientSchema = new Schema(
       type: String,
       required: true,
     },
+    addresses: {
+      type: [String], // Assuming an array of strings for active ingredients
+      default: [],
+    },
+    wallet: {
+      type: Number,
+      default: 100,
+      required: true,
+    },
   },
   { timestamps: true }
 );

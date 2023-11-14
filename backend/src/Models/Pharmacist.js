@@ -50,6 +50,10 @@ const pharmacistSchema = new Schema(
       enum: ["Active", "Inactive", "Rejected"],
       default: "Inactive",
     },
+    files: {
+      type: [String], // Assuming an array of strings for active ingredients
+      default: [],
+    },
   },
   { timestamps: true }
 );

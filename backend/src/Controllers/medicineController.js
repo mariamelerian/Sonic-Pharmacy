@@ -1,6 +1,20 @@
 const Medicine = require("../Models/Medicine");
 const fs = require("fs");
 
+const multer = require("multer");
+const path = require("path");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const extension = path.extname(file.originalname);
+    cb(null, uniqueSuffix + extension);
+  },
+});
+
 const getMedicines = async (req, res) => {
   try {
     const medicines = await Medicine.find();
@@ -40,8 +54,8 @@ const searchMedicine = async (req, res) => {
 
 const getMedicineSale = async (req, res) => {
   try {
-    const medicines = await Medicine.find({}, "name quantity sales");
-    res.status(200).json(medicines);
+    const sales = await Medicine.find({}, "_id name sales");
+    res.status(200).json(sales);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -80,6 +94,8 @@ const createMedicine = async (req, res) => {
     const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
     req.body.picture = imageSrc;
   }
+
+  console.log("new medicine", req.body);
 
   try {
     const medicine = await Medicine.create(req.body);
@@ -129,6 +145,18 @@ const deleteMedicine = async (req, res) => {
   }
 };
 
+const medicineNamesIds = async (req, res) => {
+  try {
+    // Use Mongoose to find medicines and project only _id and name fields
+    const medicines = await Medicine.find({}, "_id name");
+
+    // Respond with the list of medicines
+    res.status(200).json(medicines);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to retrieve medicines" });
+  }
+};
+
 module.exports = {
   getMedicines,
   getMedicine,
@@ -138,4 +166,5 @@ module.exports = {
   createMedicine,
   updateMedicine,
   deleteMedicine,
+  medicineNamesIds,
 };

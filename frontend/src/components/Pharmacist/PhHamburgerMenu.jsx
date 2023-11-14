@@ -9,6 +9,8 @@ import {
   import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
   import { useState } from "react";
   import { slide as Menu } from "react-burger-menu";
+  import { Link } from "react-router-dom";
+
   function PhHamburgerMenu() {
     const [menuOpen, setMenuOpen] = useState(false);
   
@@ -185,6 +187,29 @@ import {
               My Profile
             </a>
    */}
+
+<hr className="menu-line" />
+          <a
+            id="profile"
+            className="menu-item"
+            href="/Pharmacist/pharmacist-profile"
+            onClick={closeMenu}
+            style={{
+              color: "var(--gray-600, #6C757D)",
+              fontFamily: "Roboto",
+              fontSize: "0.9375rem",
+              fontStyle: "normal",
+              fontWeight: 400,
+              lineHeight: "1rem" /* 106.667% */,
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none", // To remove underlines
+              padding: "0.5rem 0",
+            }}
+          >
+            <FontAwesomeIcon icon={faUser} style={{ marginRight: "0.5rem" }} />
+            My Profile
+          </a>
             <hr className="menu-line" />
             <a
               id="prescription"
@@ -215,7 +240,7 @@ import {
             <a
               id="appointment"
               className="menu-item"
-              href="/doctor/doctor-appointments"
+              href="/"
               onClick={closeMenu}
               style={{
                 color: "var(--gray-600, #6C757D)",
@@ -234,6 +259,7 @@ import {
               <FontAwesomeIcon
                 icon={faRightFromBracket}
                 style={{ marginRight: "0.5rem" }}
+                
               />
               Logout
             </a>

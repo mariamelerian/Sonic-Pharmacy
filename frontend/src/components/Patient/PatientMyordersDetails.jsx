@@ -3,14 +3,21 @@ import { Card, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faX } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 export default function PatientMyordersDetails({
-    orderNumber,
-    orderStatus,   //if status is en route then we can cancel the order
-    orderCost,
-    orderDate,
-    test
+  orderId,
+  orderNumber,
+  orderStatus, //if status is en route then we can cancel the order
+  orderCost,
+  orderDate,
+  address,
+
+  items,
+  handleChangeState,
 }) {
+
+  // console.log('Address:', address);
   const rowStyle = {
     display: "flex",
     flexDirection: "row",
@@ -24,23 +31,39 @@ export default function PatientMyordersDetails({
     fontSize: "15px",
   };
 
+  const handleCancel = async () => {
+    try {
+      const response = await axios.put(`/cancelOrder/${orderId}`);
+      if (response.status === 200) {
+        handleChangeState(orderId, "Cancelled");
+        orderStatus = "Cancelled";
+      } else {
+        console.log("error cancelling order");
+      }
+    } catch (error) {
+      console.log("error cancelling " + error.message);
+    }
+  };
+
   return (
     <Card style={{ width: "100%", border: "transparent" }}>
       <Card.Body>
         <div className="d-flex justify-content-end">
-         { orderStatus==='Pending' && <Button
-          variant = "secondary"
-            style={{
-              backgroundColor: "#f0f0f0",
-              marginLeft: "20px",
-              borderColor: "#f0f0f0",
-              width: "100px",
-              height: "40px",
-            }}
-          >
-    
-             Cancel
-          </Button>}
+          {orderStatus === "Pending" && (
+            <Button
+              onClick={() => handleCancel()}
+              variant="secondary"
+              style={{
+                backgroundColor: "#f0f0f0",
+                marginLeft: "20px",
+                borderColor: "#f0f0f0",
+                width: "100px",
+                height: "40px",
+              }}
+            >
+              Cancel
+            </Button>
+          )}
         </div>
 
         <Card.Text>
@@ -52,39 +75,52 @@ export default function PatientMyordersDetails({
               fontSize: "15px",
             }}
           >
+            <div
+              style={{
+                color: "#05afb9",
+                fontSize: "1.3rem",
+                fontWeight: "bold",
+                marginBottom: "0.5rem",
+              }}
+            >
+              {orderStatus}
+            </div>
+
             <div style={rowStyle}>
               <span style={titleStyle}>Order Number:</span>
               {orderNumber}
             </div>
             <div style={rowStyle}>
-              <span style={titleStyle}>Order Status:</span>
-              {orderStatus}
-            </div>
-            <div style={rowStyle}>
-              <span style={titleStyle}>Cost:</span>
-              {orderCost} LE
-            </div>
-            <div style={rowStyle}>
               <span style={titleStyle}>Date:</span>
               {orderDate}
             </div>
-            {test.map((item, index) => (
-                <>
-                 <div style={rowStyle}>
-                 <span style={titleStyle}>Quantity:</span>
-                {item.quantity}
+            {items.map((items, index) => (
+              <>
+                <div style={rowStyle}>
+                  <span style={titleStyle}>*Name:</span>
+                  {items.name}
                 </div>
-                        <div style={rowStyle}>
-                        <span style={titleStyle}>Price:</span>
-                       {item.price}
-                       </div>
-                       <div style={rowStyle}>
-                        <span style={titleStyle}>Name:</span>
-                       {item.name}
-                       </div>
-                       </>
-                  ))}
-     </div>
+
+                <div style={rowStyle}>
+                  <span style={titleStyle}>Price:</span>
+                  {items.price}
+                </div>
+                <div style={rowStyle}>
+                  <span style={titleStyle}>Quantity:</span>
+                  {items.quantity}
+                </div>
+              </>
+            ))}
+            <div style={rowStyle}>
+              <span style={titleStyle}> Delivery Adress:</span>
+              {address} 
+            </div>
+
+            <div style={rowStyle}>
+              <span style={titleStyle}> Total Cost:</span>
+              {orderCost} LE
+            </div>
+          </div>
         </Card.Text>
       </Card.Body>
     </Card>

@@ -6,11 +6,14 @@ import AccordionBody from "react-bootstrap/esm/AccordionBody";
 import PatientMyordersDetails from "./PatientMyordersDetails";
 
 export default function PatientMyOrdersCard({
-    orderNumber,
-    orderStatus,   //if status is en route then we can cancel the order
-    orderCost,
-    orderDate,
-    test
+  orderId,
+  orderNumber,
+  orderStatus, //if status is en route then we can cancel the order
+  orderCost,
+  orderDate,
+  items,
+  handleChangeState,
+  address,
 }) {
   return (
     <Container style={{ width: "1000px", padding: "0px" }}>
@@ -26,21 +29,21 @@ export default function PatientMyOrdersCard({
                   color: "#212529",
                 }}
               >
-                {orderNumber}
+                Order {orderNumber}
               </div>
-          {/*     <div style={{ fontSize: "15px", color: "#05afb9" }}>
-                {docSpecialty}
-              </div> */}
             </div>
           </Accordion.Header>
           <AccordionBody>
-              <PatientMyordersDetails
-                orderNumber={orderNumber}
-                orderStatus={orderStatus}
-                orderCost={orderCost}
-                orderDate={orderDate}
-                test = {test}
-                />
+            <PatientMyordersDetails
+              orderId={orderId}
+              orderNumber={orderNumber}
+              orderStatus={orderStatus}
+              orderCost={orderCost}
+              orderDate={orderDate}
+              address={address}
+              items={items}
+              handleChangeState={handleChangeState}
+            />
           </AccordionBody>
         </Accordion.Item>
       </Accordion>

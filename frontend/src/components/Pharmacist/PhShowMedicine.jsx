@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import AddMedicineModal from "./PhNewMedicineModal";
 
-
 function PhShowMedicines() {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
@@ -39,6 +38,7 @@ function PhShowMedicines() {
       })
     );
     setEditedMedicine(null);
+    console.log(responseData);
   }, []);
 
   const fetchData = async () => {
@@ -57,6 +57,7 @@ function PhShowMedicines() {
     }
   };
   const medicines = responseData;
+  console.log(medicines);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);

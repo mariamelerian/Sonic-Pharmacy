@@ -4,7 +4,7 @@ import { useState } from "react";
 import FormPassword from "../FormPassword";
 import FormInput from "../FormInput";
 import { useNavigate } from "react-router-dom";
-import { Card, Form, Button } from "react-bootstrap";//for uploding pics
+import { Card, Form, Button } from "react-bootstrap"; //for uploding pics
 
 const PharmSignupForm = () => {
   const [name, setName] = useState("");
@@ -19,11 +19,12 @@ const PharmSignupForm = () => {
   const [error1, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, isLoading] = useState(null);
-  const [agree, setAgree] = useState(false);
   const navigate = useNavigate();
   const [selectedIdImage, setSelectedIdImage] = useState(null); // Added
-  const [selectedPharmacyDegreeImage, setSelectedPharmacyDegreeImage] = useState(null);
-  const [selectedWorkingLicenseImage, setSelectedWorkingLicenseImage] = useState(null);
+  const [selectedPharmacyDegreeImage, setSelectedPharmacyDegreeImage] =
+    useState(null);
+  const [selectedWorkingLicenseImage, setSelectedWorkingLicenseImage] =
+    useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +41,10 @@ const PharmSignupForm = () => {
       !username ||
       !education ||
       !affiliation ||
-      !rate
+      !rate ||
+      !selectedIdImage ||
+      !selectedPharmacyDegreeImage ||
+      !selectedWorkingLicenseImage
     ) {
       setError("Please fill in all fields");
       console.log(error1);
@@ -166,16 +170,146 @@ const PharmSignupForm = () => {
       isLoading(false);
       return;
     } else {
+      const formData = new FormData();
+
+      formData.append("username", username);
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("dateOfBirth", birthdate);
+      formData.append("hourlyRate", rate);
+      formData.append("affiliation", affiliation);
+      formData.append("education", education);
+
+      if (selectedIdImage) {
+        try {
+          // Read the file data as a Uint8Array
+          const fileArrayBuffer = await selectedIdImage.arrayBuffer();
+          const fileUint8Array = new Uint8Array(fileArrayBuffer);
+
+          // Format the file
+          const formattedFile = {
+            filename: selectedIdImage.name,
+            mimetype: selectedIdImage.type,
+            buffer: {
+              type: "Buffer",
+              data: Array.from(fileUint8Array),
+            },
+          };
+
+          console.log(`Processed file: ${selectedIdImage.name}`);
+
+          // Check if any errors occurred during processing
+          if (!formattedFile) {
+            console.error("Error processing file:", selectedIdImage.name);
+            return;
+          }
+
+          const blob = new Blob([formattedFile.buffer.data], {
+            type: formattedFile.mimetype,
+          });
+
+          formData.append("files", blob, formattedFile.filename);
+
+          console.log("formData after processing:", formattedFile.buffer.data);
+        } catch (error) {
+          console.error("Error processing file:", selectedIdImage.name, error);
+        }
+      }
+
+      if (selectedPharmacyDegreeImage) {
+        try {
+          // Read the file data as a Uint8Array
+          const fileArrayBuffer =
+            await selectedPharmacyDegreeImage.arrayBuffer();
+          const fileUint8Array = new Uint8Array(fileArrayBuffer);
+
+          // Format the file
+          const formattedFile = {
+            filename: selectedPharmacyDegreeImage.name,
+            mimetype: selectedPharmacyDegreeImage.type,
+            buffer: {
+              type: "Buffer",
+              data: Array.from(fileUint8Array),
+            },
+          };
+
+          console.log(`Processed file: ${selectedPharmacyDegreeImage.name}`);
+
+          // Check if any errors occurred during processing
+          if (!formattedFile) {
+            console.error(
+              "Error processing file:",
+              selectedPharmacyDegreeImage.name
+            );
+            return;
+          }
+
+          const blob = new Blob([formattedFile.buffer.data], {
+            type: formattedFile.mimetype,
+          });
+
+          formData.append("files", blob, formattedFile.filename);
+
+          console.log("formData after processing:", formattedFile.buffer.data);
+        } catch (error) {
+          console.error(
+            "Error processing file:",
+            selectedPharmacyDegreeImage.name,
+            error
+          );
+        }
+      }
+
+      if (selectedWorkingLicenseImage) {
+        try {
+          // Read the file data as a Uint8Array
+          const fileArrayBuffer =
+            await selectedWorkingLicenseImage.arrayBuffer();
+          const fileUint8Array = new Uint8Array(fileArrayBuffer);
+
+          // Format the file
+          const formattedFile = {
+            filename: selectedWorkingLicenseImage.name,
+            mimetype: selectedWorkingLicenseImage.type,
+            buffer: {
+              type: "Buffer",
+              data: Array.from(fileUint8Array),
+            },
+          };
+
+          console.log(`Processed file: ${selectedWorkingLicenseImage.name}`);
+
+          // Check if any errors occurred during processing
+          if (!formattedFile) {
+            console.error(
+              "Error processing file:",
+              selectedWorkingLicenseImage.name
+            );
+            return;
+          }
+
+          const blob = new Blob([formattedFile.buffer.data], {
+            type: formattedFile.mimetype,
+          });
+
+          formData.append("files", blob, formattedFile.filename);
+
+          console.log("formData after processing:", formattedFile.buffer.data);
+        } catch (error) {
+          console.error(
+            "Error processing file:",
+            selectedWorkingLicenseImage.name,
+            error
+          );
+        }
+      }
+
       try {
-        const response = await axios.post("/newPharmacist", {
-          username: username,
-          name: name,
-          email: email,
-          password: password,
-          dateOfBirth: birthdate,
-          hourlyRate: rate,
-          affiliation: affiliation,
-          education: education,
+        const response = await axios.post("/newPharmacist", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
 
         if (response.status === 201) {
@@ -203,29 +337,6 @@ const PharmSignupForm = () => {
       }
     }
   };
-  const checkboxHandler = () => {
-    setAgree(!agree);
-  };
-  //for pic upload
-   // Modify handleImageUpload to handle each image type
-   const handleImageUpload = (e, imageType) => {
-    const file = e.target.files[0];
-
-    switch (imageType) {
-      case "id":
-        setSelectedIdImage(file);
-        break;
-      case "pharmacyDegree":
-        setSelectedPharmacyDegreeImage(file);
-        break;
-      case "workingLicense":
-        setSelectedWorkingLicenseImage(file);
-        break;
-      default:
-        break;
-    }
-  };
-  
 
   return (
     <div className="col-9 form-container">
@@ -306,47 +417,48 @@ const PharmSignupForm = () => {
           placeholder="**************"
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-       {/* // Section for "Upload ID" */}
-<div className="mb-4">
-  <Form.Group>
-    <Form.Label>Upload ID</Form.Label>
-    <Form.Control
-      type="file"
-      accept="image/*"
-      name="IdImage"
-      onChange={(e) => handleImageUpload(e, "id")}
-    />
-  </Form.Group>
-</div>
+        {/* // Section for "Upload ID" */}
+        <div className="mb-4">
+          <Form.Group>
+            <Form.Label>Upload ID</Form.Label>
+            <Form.Control
+              type="file"
+              accept=".pdf"
+              name="IdImage"
+              onChange={(e) => setSelectedIdImage(e.target.files[0])}
+            />
+          </Form.Group>
+        </div>
 
-{/* // Section for "Upload Pharmacy Degree" */}
-<div className="mb-4">
-  <Form.Group>
-    <Form.Label>Upload Pharmacy Degree</Form.Label>
-    <Form.Control
-      type="file"
-      accept="image/*"
-      name="PharmacyDegreeImage"
-      onChange={(e) => handleImageUpload(e, "pharmacyDegree")}
-    />
-  </Form.Group>
-</div>
+        {/* // Section for "Upload Pharmacy Degree" */}
+        <div className="mb-4">
+          <Form.Group>
+            <Form.Label>Upload Pharmacy Degree</Form.Label>
+            <Form.Control
+              type="file"
+              accept=".pdf"
+              name="PharmacyDegreeImage"
+              onChange={(e) =>
+                setSelectedPharmacyDegreeImage(e.target.files[0])
+              }
+            />
+          </Form.Group>
+        </div>
 
-{/* // Section for "Upload Working License" */}
-<div className="mb-4">
-  <Form.Group>
-    <Form.Label>Upload Working License</Form.Label>
-    <Form.Control
-      type="file"
-      accept="image/*"
-      name="WorkingLicenseImage"
-      onChange={(e) => handleImageUpload(e, "workingLicense")}
-    />
-  </Form.Group>
-</div>
-
-
-      
+        {/* // Section for "Upload Working License" */}
+        <div className="mb-4">
+          <Form.Group>
+            <Form.Label>Upload Working License</Form.Label>
+            <Form.Control
+              type="file"
+              accept=".pdf"
+              name="WorkingLicenseImage"
+              onChange={(e) =>
+                setSelectedWorkingLicenseImage(e.target.files[0])
+              }
+            />
+          </Form.Group>
+        </div>
         <button
           id="nextbtn"
           className="w-100 btn-sm custom-button"
@@ -364,39 +476,8 @@ const PharmSignupForm = () => {
             Login
           </div>
         </div>
-        {error1 && (
-          <div
-            style={{
-              marginTop: "0.5rem",
-              marginBottom: "0.5rem",
-              fontSize: "0.85rem",
-              backgroundColor: "#f44336 ",
-              color: "white", // White text color
-              padding: "10px", // Padding around the message
-              borderRadius: "5px", // Rounded corners
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)",
-            }}
-          >
-            {error1}
-          </div>
-        )}
-        {success && (
-          <div
-            className="d-flex justify-content-center"
-            style={{
-              marginTop: "0.5rem",
-              marginBottom: "0.5rem",
-              fontSize: "0.85rem",
-              backgroundColor: "#099BA0 ",
-              color: "white", // White text color
-              padding: "10px", // Padding around the message
-              borderRadius: "5px", // Rounded corners
-              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)", // Box shadow for a subtle effect
-            }}
-          >
-            {success}
-          </div>
-        )}
+        {error1 && <div className="error">{error1}</div>}
+        {success && <div className="msg">{success}</div>}
       </form>
     </div>
   );
