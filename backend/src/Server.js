@@ -91,7 +91,11 @@ const port = process.env.PORT || "8000";
 //Apply middleware to all routes except the login route
 // app.use((req, res, next) => {
 //   // Check if the route is not the login route
-//   if (req.path !== "/login") {
+//   if (
+//     req.path !== "/login"
+//     // req.path !== "/patient-signup" ||
+//     // req.path !== "/pharmacist-signup"
+//   ) {
 //     // Apply your middleware to all routes except login
 //     requireAuth(req, res, next);
 //   } else {
@@ -121,29 +125,29 @@ app.get("/", (req, res) => {
 // #Routing to userController here
 //lama bagy a test bakteb dool fi postman b3d el /
 //ba map kol method l http req
-app.get("/admins", getAdmins);
-app.get("/patients", getPatients);
+app.get("/admins", requireAuth, getAdmins);
+app.get("/patients", requireAuth, getPatients);
 app.get("/patientById/:patientId", getPatientById);
-app.get("/patientAddresses", getDeliveryAddresses);
-app.get("/medicines", getMedicines);
-app.get("/medicine", getMedicine);
-app.get("/medicineByName", searchMedicine);
-app.get("/medicineNames", medicineNamesIds);
-app.get("/medicineSales", getMedicineSale);
-app.get("/medicinalUses", getMedicinalUses);
+app.get("/patientAddresses", requireAuth, getDeliveryAddresses);
+app.get("/medicines", requireAuth, getMedicines);
+app.get("/medicine", requireAuth, getMedicine);
+app.get("/medicineByName", requireAuth, searchMedicine);
+app.get("/medicineNames", requireAuth, medicineNamesIds);
+app.get("/medicineSales", requireAuth, getMedicineSale);
+app.get("/medicinalUses", requireAuth, getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
-app.get("/pharmacistApplications", getInactivePharmacists);
+app.get("/pharmacistApplications", requireAuth, getInactivePharmacists);
 
 app.post("/newPatient", createPatient);
-app.post("/newAdmin", createAdmin);
+app.post("/newAdmin", requireAuth, createAdmin);
 // app.post("/newPharmacist", registerPharmacist );
 app.post(
   "/newPharmacist",
   pharmacistController.upload.array("files", 5),
   registerPharmacist
 );
-app.post("/newMedicine", createMedicine);
+app.post("/newMedicine", requireAuth, createMedicine);
 app.post("/filterMedicine", filterMedicine);
 app.post("/addAddress", addDeliveryAddress);
 
@@ -172,37 +176,63 @@ app.delete("/deleteAddress", requireAuth, deleteAddress);
 //NEW ROUTES
 // CART ROUTES
 const cartController = require("./Controllers/cartController");
-app.get("/cart/:userId?", cartController.viewCart);
-app.get("/allCarts", cartController.getAllCarts);
-app.put("/addtocart/:medicineId/:userId?", cartController.addToCart);
-app.post("/changequantity/:medicineId/:userId?", cartController.changeQuantity);
-app.post("/removefromcart/:medicineId/:userId?", cartController.removeFromCart);
-app.put("/clearcart/:userId?", cartController.clearCart);
+app.get("/cart/:userId?", requireAuth, cartController.viewCart);
+app.get("/allCarts", requireAuth, cartController.getAllCarts);
+app.put(
+  "/addtocart/:medicineId/:userId?",
+  requireAuth,
+  cartController.addToCart
+);
+app.post(
+  "/changequantity/:medicineId/:userId?",
+  requireAuth,
+  cartController.changeQuantity
+);
+app.post(
+  "/removefromcart/:medicineId/:userId?",
+  requireAuth,
+  cartController.removeFromCart
+);
+app.put("/clearcart/:userId?", requireAuth, cartController.clearCart);
 
 // ORDER ROUTES
 const orderController = require("./Controllers/orderController");
 app.get("/allOrders", orderController.getAllOrders);
-app.get("/patientorders/:userId?", orderController.getPatientOrders);
-app.get("/orders/:orderId", orderController.getOrderById);
-app.post("/checkoutCash", orderController.checkout);
-app.post("/checkoutWallet", orderController.checkoutWallet);
-app.put("/orders/update/:orderId", orderController.updateOrderByID);
+app.get(
+  "/patientorders/:userId?",
+  requireAuth,
+  orderController.getPatientOrders
+);
+app.get("/orders/:orderId", requireAuth, orderController.getOrderById);
+app.post("/checkoutCash", requireAuth, orderController.checkout);
+app.post("/checkoutWallet", requireAuth, orderController.checkoutWallet);
+app.put(
+  "/orders/update/:orderId",
+  requireAuth,
+  orderController.updateOrderByID
+);
 app.put(
   "/orders/updatebynumber/:orderNumber/:userId?",
+  requireAuth,
   orderController.updateOrderByNumber
 );
-app.put("/cancelorder/:orderId", orderController.cancelOrderByID);
+app.put("/cancelorder/:orderId", requireAuth, orderController.cancelOrderByID);
 app.put(
   "/cancelorderbynumber/:orderNumber/:userId?",
+  requireAuth,
   orderController.cancelOrderByNumber
 );
-app.delete("/deleteorder/:orderId", orderController.deleteOrderByID);
+app.delete(
+  "/deleteorder/:orderId",
+  requireAuth,
+  orderController.deleteOrderByID
+);
 app.delete(
   "/deleteorderbynumber/:orderNumber/:userId?",
   orderController.deleteOrderByNumber
 );
 
-app.post("/checkoutStripe", orderController.checkoutStripe);
+app.post("/checkoutStripe", requireAuth, orderController.checkoutStripe);
 
 //DUMMY DATA
 
