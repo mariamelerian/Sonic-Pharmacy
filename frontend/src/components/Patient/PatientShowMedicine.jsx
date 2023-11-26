@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Form, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { deleteFilterArray } from "../../state/filterMedicine";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import AddToCartModal from "./AddToCartModal"; // Import the modal component
+import AddToCartModal from "./AddToCartModal";
 
 function PatientShowMedicine() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -101,69 +101,94 @@ function PatientShowMedicine() {
       ) : (
         <Row>
           {medicines.map((medicine, index) => (
-            <Col key={medicine.medicineName} lg={6} md={6} sm={12}>
-              <Card className="mb-4 mx-3 bg-light">
-                <Card.Header className="text-center">
-                  {medicine.name}
-                </Card.Header>
-                <Card.Body className="text-center">
-                  <div className="medicine-image-container">
-                    <img
-                      src={medicine.picture}
-                      alt={medicine.name}
-                      style={medicineImage}
-                    />
-                  </div>
-                  <div className="medicine-price">
-                    Price: {medicine.price} LE
-                  </div>
-                  {expandedMedicine === index ? (
-                    <>
-                      <div className="medicine-description">
-                        <h6>Description</h6>
-                        <p>{medicine.description}</p>
-                      </div>
-                      <hr />
-                      <div className="medicine-use">
-                        <h6>Medicinal Use</h6>
-                        <p>{medicine.medicinalUse}</p>
-                      </div>
-                      <hr />
-                      <div className="medicine-activeIngredients">
-                        Active Ingredients:{" "}
-                        {medicine.activeIngredients.map((ingredient, index) => (
-                          <div key={index} style={{ marginBottom: "5px" }}>
-                            • {ingredient}
-                          </div>
-                        ))}
-                      </div>
-                      <hr />
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => handleAddToCart(medicine)}
-                      >
-                        Add to Cart
-                      </button>
-
-                      <div
-                        className="expand-button"
-                        onClick={() => handleExpand(index)}
-                      >
-                        <FontAwesomeIcon icon={faChevronUp} />
-                      </div>
-                    </>
-                  ) : (
-                    <div
-                      className="expand-button"
-                      onClick={() => handleExpand(index)}
-                    >
-                      <FontAwesomeIcon icon={faChevronDown} />
-                    </div>
-                  )}
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
+  <Col key={medicine.medicineName} lg={4} md={4} sm={12}>
+    <Card className="mb-4 mx-3 bg-light">
+      <Card.Body className="text-center">
+        <div className="medicine-container">
+          <div className="medicine-image-container">
+            <img
+              src={medicine.picture}
+              alt={medicine.name}
+              style={medicineImage}
+            />
+          </div>
+          <div className="details-container">
+            <div className="d-flex justify-content-between align-items-center mb-7 px-5">
+              <div
+                className="medicine-name font-weight-bold"
+                style={{
+                  fontSize: "24px",
+                  fontStyle: "normal",
+                  fontWeight: 700,
+                  lineHeight: "120%",
+                }}
+              >
+                {medicine.name}
+              </div>
+              <div
+                className="expand-button"
+                onClick={() => handleExpand(index)}
+              >
+                <FontAwesomeIcon icon={faInfoCircle} />
+              </div>
+            </div>
+            <div
+              className="info-price-container d-flex justify-content-between align-items-center px-5"
+              style={{
+                color: "#777777",
+                fontSize: "1rem",
+                fontStyle: "normal",
+                fontWeight: 500,
+                lineHeight: "100%",
+                marginBottom: "0.5rem",
+              }}
+            >
+              <div className="medicine-price">Price: {medicine.price} LE</div>
+            </div>
+            {expandedMedicine === index && (
+              <>
+                <div className="medicine-description">
+                  <h6>Description:</h6>
+                  <p style={{ marginBottom: "5px", fontSize: "14px" }}>
+                    {medicine.description}
+                  </p>
+                </div>
+                <div className="medicine-use">
+                  <h6>Medicinal Use:</h6>
+                  <p style={{ marginBottom: "5px", fontSize: "14px" }}>
+                    {medicine.medicinalUse}
+                  </p>
+                </div>
+                <div className="medicine-activeIngredients">
+                  <h6>Active Ingredients:</h6>
+                  <ul
+                    style={{
+                      listStyleType: "none",
+                      paddingLeft: 0,
+                      fontSize: "14px",
+                    }}
+                  >
+                    {medicine.activeIngredients.map((ingredient, index) => (
+                      <li key={index} style={{ marginBottom: "5px" }}>
+                        • {ingredient}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </>
+            )}
+            <button
+              className="btn btn-primary mt-3"
+              onClick={() => handleAddToCart(medicine)}
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </Card.Body>
+    </Card>
+  </Col>
+))}
         </Row>
       )}
       <AddToCartModal

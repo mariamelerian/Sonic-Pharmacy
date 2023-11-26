@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Container, Form, Row, Col } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { setFilterArray, deleteFilterArray } from "../state/filterMedicine";
 import axios from "axios";
@@ -47,62 +47,68 @@ function FilterMedicine({ onFilter }) {
   return (
     <Container
       style={{
-        height: "fit-content",
         flexShrink: 0,
-        width: "80%",
-        borderRadius: "2.5625rem 2.5625rem 3.25rem 3.25rem",
+        width: "97%",
         border: "1px solid var(--gray-400, #ced4da)",
         background: "var(--gray-white, #fff)",
-        padding: "1.6rem",
-        marginLeft: "2.2rem",
+        padding: "0.5rem", // Adjusted padding to make it thinner
+        marginLeft: "1.3rem",
       }}
     >
-      <div
-        style={{
-          fontSize: "30px",
-          fontStyle: "normal",
-          fontWeight: 700,
-          lineHeight: "120%",
-          marginBottom: "1rem",
-        }}
-      >
-        Filter Medicine
-      </div>
+      <Row>
+        <Col xs={12} md={9}>
+          <div
+            style={{
+              fontSize: "18px", // Adjusted font size
+              fontStyle: "normal",
+              fontWeight: 700,
+              lineHeight: "120%",
+              marginBottom: "0.5rem", // Adjusted margin
+            }}
+          >
+            Filter Medicine
+          </div>
 
-      <div className="mb-2">
-        <div
-          style={{
-            color: "#099BA0 ",
-            fontSize: "1.1rem",
-            fontStyle: "normal",
-            fontWeight: 500,
-            lineHeight: "100%",
-            marginBottom: "1rem",
-          }}
-        >
-          Medicinal Use
-        </div>
-        <Form.Control
-          as="select"
-          onChange={(e) => setSelectedMedicinalUse(e.target.value)}
-        >
-          <option value="">Select medicinal use</option>
-          {medicinalUseArray.map((use, index) => (
-            <option key={index} value={use}>
-              {`${use}`}
-            </option>
-          ))}
-        </Form.Control>
-      </div>
+          <div
+            style={{
+              color: "#099BA0 ",
+              fontSize: "1rem", // Adjusted font size
+              fontStyle: "normal",
+              fontWeight: 500,
+              lineHeight: "100%",
+              marginBottom: "0.5rem", // Adjusted margin
+            }}
+          >
+            Medicinal Use
+          </div>
 
-      <Container
-        fluid
-        className="d-flex align-items-center justify-content-center"
-      >
-        <Button className="custom-button" onClick={handleFilter}>
-          Apply
-        </Button>
-      </Container>
+          <Form.Control
+            as="select"
+            onChange={(e) => setSelectedMedicinalUse(e.target.value)}
+            style={{ width: "125%" }} // Adjusted width
+          >
+            <option value="">Select medicinal use</option>
+            {medicinalUseArray.map((use, index) => (
+              <option key={index} value={use}>
+                {`${use}`}
+              </option>
+            ))}
+          </Form.Control>
+        </Col>
+        <Col xs={12} md={3} className="d-flex align-items-end">
+  <Button
+    className="custom-button"
+    onClick={handleFilter}
+    style={{
+      height: "38px", // Adjusted height
+      marginLeft: "200px", // Adjusted margin-left
+      fontSize: "14px", // Adjusted font size
+    }}
+  >
+    Apply
+  </Button>
+</Col>
+      </Row>
     </Container>
   );
 }
