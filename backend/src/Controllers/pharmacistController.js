@@ -6,6 +6,18 @@ const otpGenerator = require("otp-generator");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const bcrypt = require("bcrypt");
+const Medicine = require("../Models/Medicine");
+const emailService = "youstina2307@outlook.com"; // e.g., 'gmail'
+const emailUser = "youstina2307@outlook.com";
+const emailPassword = "23july2002";
+
+const transporter = nodemailer.createTransport({
+  service: emailService,
+  auth: {
+    user: emailUser,
+    pass: emailPassword,
+  },
+});
 
 // const storage = multer.diskStorage({
 //   destination: (req, file, callback) => {
@@ -261,69 +273,28 @@ const pharmacistLogin = async (req, res) => {
   }
 };
 
-const pharmacistSendPasswordResetOTP = async (req, res) => {
-  // Find the user with the given email address
-  const user = await Pharmacist.findOneByID(req.params.id);
+const outOfStockEmail = async (req, res) => {
+  
+  try{
+  const medicineId=req.body;
+  const medicine1 = await Medicine.findById(medicineId);
+  if(!medicine1)
+  return res.status(404).json({ message:"Medicine not found"});
 
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-  const email = user.email;
-
-  // Generate a new OTP
-  const OTP = otpGenerator.generate(6, {
-    digits: true,
-    alphabets: false,
-    upperCase: false,
-    specialChars: false,
-  });
-
-  // Save the OTP and its expiry time to the user's document
-  user.passwordReset.OTP = OTP;
-  user.passwordReset.OTP_expiry = new Date(Date.now() + 30 * 60000); // OTP is valid for 30 minutes
-  await user.save();
-
-  // Send an email with the OTP to the user
-  const transporter = nodemailer.createTransport({
-    // Replace with your email service and credentials
-    service: "gmail",
-    auth: {
-      user: "your_email@example.com",
-      pass: "your_email_password",
-    },
-  });
-
+const pharmacists=await Pharmacist.find();
   const mailOptions = {
-    from: "your_email@example.com",
-    to: user.email,
+    from: emailUser,
+    to: pharmacists.map((pharmacist) => pharmacist.email).join(","),
     subject: "Password reset OTP",
-    text: `Your password reset OTP is ${OTP}. It will be valid for the next 30 minutes. If you didn't request a password reset,
-     please ignore this email.`,
+    text: `Please note that ${medicine1.name} medicine is out of stock.`,
   };
 
   await transporter.sendMail(mailOptions);
-};
-const pharmacistCheckPasswordResetOTP = async (req, res) => {
-  // Find the user with the given email address
-
-  const user = await Pharmacist.findOneByID(req.params.id);
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-  const OTP = user.passwordReset.OTP;
-  // Check if the OTP provided by the user matches the OTP stored in the document
-  if (user.passwordReset.OTP !== OTP) {
-    return res.status(409).json({ error: "InValid OTP" });
-  }
-
-  // Check if the OTP has expired (it's valid for 30 minutes)
-  if (user.passwordReset.OTP_expiry.getTime() < Date.now()) {
-    return res.status(409).json({ error: "OTP expired" });
-  }
-
-  // If the OTP is valid, return true
-  return res.status(200).json({ error: "Successful" });
+  return res.status(200).json({message:"Successful"});
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: "An error occurred while logging in" });
+}
 };
 
 const pharmacistChangePassword = async (req, res) => {
@@ -359,8 +330,6 @@ module.exports = {
   getInactivePharmacists,
   updatePharmacist,
   deletePharmacist,
-  pharmacistLogin,
-  pharmacistSendPasswordResetOTP,
-  pharmacistCheckPasswordResetOTP,
+  outOfStockEmail,
   pharmacistChangePassword,
 };

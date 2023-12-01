@@ -144,7 +144,25 @@ const deleteMedicine = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const getAlternativeMedicines = async (req, res) => {
+  try {
+  const { medicineId } = req.body; // Get the ID of the specified medicine from the request body
+  const medicine = await Medicine.findOne({ _id: medicineId }); // Find the specified medicine in the database
+  if(!medicine)
+  res.status(404).json({ message: "Medicine not found" });
+  const alternativeMedicines = await Medicine.find({ activeIngredients: { $in: medicine.activeIngredients } }); // Find all medicines that contain any of the active ingredients of the specified medicine
+  if(!alternativeMedicines)
+  res.sratus(409).json({message:"No Alternative Medicines"});
+  const index = alternativeMedicines.findIndex((med) => med._id.toString() === medicineId); // Find the index of the specified medicine in the list of alternative medicines
+  if (index !== -1) { // If the specified medicine is found in the list of alternative medicines
+    alternativeMedicines.splice(index, 1);}
 
+  res.send(alternativeMedicines); // Return the list of alternative medicines in the response body
+
+} catch (error) {
+  res.status(500).json({ message: error.message });
+}
+};
 const medicineNamesIds = async (req, res) => {
   try {
     // Use Mongoose to find medicines and project only _id and name fields
@@ -167,4 +185,5 @@ module.exports = {
   updateMedicine,
   deleteMedicine,
   medicineNamesIds,
+  getAlternativeMedicines,
 };

@@ -57,6 +57,7 @@ const checkout = async (req, res) => {
   }
 };
 
+
 const checkoutWallet = async (req, res) => {
   //check wallet balance
   const userId = req.session.userId;

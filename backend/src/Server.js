@@ -48,6 +48,7 @@ const {
   updateMedicine,
   deleteMedicine,
   medicineNamesIds,
+  getAlternativeMedicines,
 } = require("./Controllers/medicineController");
 
 const {
@@ -64,6 +65,11 @@ const {
   MedicinalUseArray,
   getMedicinalUses,
 } = require("./Models/MedicinalUse");
+
+const{
+  getChat,
+  sendMessage,
+}=require("./Controllers/chatController");
 
 //App variables
 const app = express();
@@ -83,16 +89,16 @@ app.use(cookieParser());
 const port = process.env.PORT || "8000";
 
 //Apply middleware to all routes except the login route
-app.use((req, res, next) => {
-  // Check if the route is not the login route
-  if (req.path !== "/login") {
-    // Apply your middleware to all routes except login
-    requireAuth(req, res, next);
-  } else {
-    // If it's the login route, skip the middleware
-    next();
-  }
-});
+// app.use((req, res, next) => {
+//   // Check if the route is not the login route
+//   if (req.path !== "/login") {
+//     // Apply your middleware to all routes except login
+//     requireAuth(req, res, next);
+//   } else {
+//     // If it's the login route, skip the middleware
+//     next();
+//   }
+// });
 
 // Mongo DB
 const MongoURI = process.env.MONGO_URI;
@@ -128,6 +134,10 @@ app.get("/medicinalUses", getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
 app.get("/pharmacistApplications", getInactivePharmacists);
+app.get("/getAlternativeMedicines",getAlternativeMedicines);
+app.get("/getChat",getChat);
+
+
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", createAdmin);
@@ -135,6 +145,7 @@ app.post("/newPharmacist", registerPharmacist);
 app.post("/newMedicine", createMedicine);
 app.post("/filterMedicine", filterMedicine);
 app.post("/addAddress", addDeliveryAddress);
+app.post("/sendMessage",sendMessage);
 
 //authentication
 app.post("/login", login);
