@@ -3,7 +3,8 @@ import {
   faRightFromBracket,
   faShoppingCart, 
   faBagShopping,
-  faUser
+  faUser,
+  faComments
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -308,6 +309,32 @@ function PatientHamburgerMenu() {
               style={{ marginRight: "0.5rem" }}
             />
             My Orders
+          </a>
+          <hr className="menu-line" />
+
+          <a
+            id="logout"
+            className="menu-item"
+            href="/patient/patient-chatwithpharmacist"
+            onClick={closeMenu}
+            style={{
+              color: "var(--gray-600, #6C757D)",
+              fontFamily: "Roboto",
+              fontSize: "0.9375rem",
+              fontStyle: "normal",
+              fontWeight: 400,
+              lineHeight: "1rem" /* 106.667% */,
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none", // To remove underlines
+              padding: "0.5rem 0",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faComments}
+              style={{ marginRight: "0.5rem" }}
+            />
+            Chat With Pharmacist
           </a>
           <hr className="menu-line" />
 
