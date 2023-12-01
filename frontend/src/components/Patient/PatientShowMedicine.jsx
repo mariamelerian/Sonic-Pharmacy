@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Form, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { deleteFilterArray } from "../../state/filterMedicine";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -146,43 +147,47 @@ function PatientShowMedicine() {
               <div className="medicine-price">Price: {medicine.price} LE</div>
             </div>
             {expandedMedicine === index && (
-              <>
-                <div className="medicine-description">
-                  <h6>Description:</h6>
-                  <p style={{ marginBottom: "5px", fontSize: "14px" }}>
-                    {medicine.description}
-                  </p>
-                </div>
-                <div className="medicine-use">
-                  <h6>Medicinal Use:</h6>
-                  <p style={{ marginBottom: "5px", fontSize: "14px" }}>
-                    {medicine.medicinalUse}
-                  </p>
-                </div>
-                <div className="medicine-activeIngredients">
-                  <h6>Active Ingredients:</h6>
-                  <ul
-                    style={{
-                      listStyleType: "none",
-                      paddingLeft: 0,
-                      fontSize: "14px",
-                    }}
-                  >
-                    {medicine.activeIngredients.map((ingredient, index) => (
-                      <li key={index} style={{ marginBottom: "5px" }}>
-                        • {ingredient}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </>
+           <>
+          <div className="medicine-description" style={{ textAlign: "left", paddingLeft: "50px", display: "flex", alignItems: "center" }}>
+  <h6 style={{ marginRight: "10px" , fontWeight: "bold" }}>Description:</h6>
+  <p style={{ marginBottom: "5px", fontSize: "14px" }}>
+    {medicine.description}
+  </p>
+</div>
+<div className="medicine-use" style={{ textAlign: "left", paddingLeft: "50px", display: "flex", alignItems: "center" }}>
+  <h6 style={{ marginRight: "10px", fontWeight: "bold" }}>Medicinal Use:</h6>
+  <p style={{ marginBottom: "5px", fontSize: "14px" }}>
+    {medicine.medicinalUse}
+  </p>
+</div>
+
+           <div className="medicine-activeIngredients" style={{ textAlign: "left", paddingLeft: "50px" }}>
+             <h6 style={{ marginRight: "10px", fontWeight: "bold" }}>Active Ingredients:</h6>
+             <ul
+               style={{
+                 listStyleType: "none",
+                 paddingLeft: 0,
+                 fontSize: "14px",
+               }}
+             >
+               {medicine.activeIngredients.map((ingredient, index) => (
+                 <li key={index} style={{ marginBottom: "5px" }}>
+                   • {ingredient}
+                 </li>
+               ))}
+             </ul>
+           </div>
+         </>
+         
+          
+           
             )}
-            <button
-              className="btn btn-primary mt-3"
-              onClick={() => handleAddToCart(medicine)}
-            >
-              Add to Cart
-            </button>
+           <button
+  className="btn btn-primary mt-3"
+  onClick={() => handleAddToCart(medicine)}
+>
+  Add to Cart <FontAwesomeIcon icon={faShoppingCart} />
+</button>
           </div>
         </div>
       </Card.Body>
