@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import HamburgerMenu from "../../components/Admin/AdminBurgerMenu";
 import AdminShowMedicine from "../../components/Admin/AdminShowMedicine";
@@ -10,13 +10,17 @@ function AdminMedicine() {
     <div>
       <AppNavbar hamburgerMenu={<HamburgerMenu />} />
       <Container fluid className="bg-light pt-3 mt-2">
-        <Container className="bg-white px-5 py-4 d-flex align-items-center justify-content-center">
-          <div className="col-5">
-            <FilterMedicine />
-          </div>
-          <div className="col-7">
-            <AdminShowMedicine />
-          </div>
+        <Container className="bg-white px-5 py-4">
+          <Row>
+            <Col xs={12} md={12}>
+              <FilterMedicine />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12} md={12}>
+              <AdminShowMedicine />
+            </Col>
+          </Row>
         </Container>
       </Container>
     </div>
