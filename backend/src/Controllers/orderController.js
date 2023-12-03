@@ -7,7 +7,7 @@ const stripe = require("stripe")(
   "sk_test_51O9lZ0IQTS4vUIMWJeAJ5Ds71jNbeQFj6v8mO7leS2cDIJuLy1fwNzoiXPKZV5KdoMpfzocfJ6hBusxPIjbGeveF00RTnmVYCX"
 );
 
-const createOrder = async (userId, address) => {
+const createOrder = async (userId, address, paymentMethod) => {
   try {
     const cart = await Cart.findOne({ user: userId });
     const items = cart.items;
@@ -15,14 +15,17 @@ const createOrder = async (userId, address) => {
     const count = await Order.countDocuments({ patient: userId });
     const orderNumber = count + 1;
 
+    const date = new Date();
+
     const orderData = {
       number: orderNumber,
-      date: new Date(),
+      date: date,
       items: items,
       totalPrice: cart.total + 50,
       status: "Pending",
       patient: userId,
       address: address,
+      paymentMethod: paymentMethod,
     };
     const order = new Order(orderData);
     await order.save();
@@ -30,6 +33,11 @@ const createOrder = async (userId, address) => {
     cart.items.map(async (item) => {
       const medicine = await Medicine.findById(item.medicine);
       medicine.sales += item.quantity;
+      medicine.quantity -= item.quantity;
+      medicine.salesData.push({
+        quantity: item.quantity,
+        date: date,
+      });
       await medicine.save();
     });
 
@@ -45,7 +53,11 @@ const createOrder = async (userId, address) => {
 const checkout = async (req, res) => {
   //create order
   try {
-    await createOrder(req.session.userId, req.body.address);
+    await createOrder(
+      req.session.userId,
+      req.body.address,
+      req.body.paymentMethod
+    );
 
     //clear cart
     const userId = req.session.userId;
@@ -56,7 +68,6 @@ const checkout = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const checkoutWallet = async (req, res) => {
   //check wallet balance
@@ -199,13 +210,36 @@ const updateOrderByNumber = async (req, res) => {
 
 const cancelOrderByID = async (req, res) => {
   const orderId = req.params.orderId;
-  console.log(orderId);
   try {
     const order = await Order.findById(orderId);
-    console.log(order);
     if (order) {
       order.status = "Cancelled";
+      if (order.paymentMethod != "COD") {
+        const patient = await Patient.findById(order.patient);
+        patient.wallet += order.totalPrice;
+        await patient.save();
+      }
       await order.save();
+      //reset medicine sales and quantity
+      for (let i = 0; i < order.items.length; i++) {
+        const item = order.items[i];
+        const medicine = await Medicine.findById(item.medicine);
+        if (medicine) {
+          medicine.sales -= item.quantity;
+          medicine.quantity += item.quantity;
+          medicine.salesData.map((sale) => {
+            //remove sales data
+            console.log(sale);
+            console.log(order.date);
+            console.log(item.quantity);
+            if (sale.date == order.date && sale.quantity == item.quantity) {
+              console.log("found");
+              medicine.salesData.splice(medicine.salesData.indexOf(sale), 1);
+            }
+          });
+          await medicine.save();
+        }
+      }
       res.status(200).json(order);
     } else {
       res.status(404).json({ message: "Order not found" });
@@ -225,7 +259,28 @@ const cancelOrderByNumber = async (req, res) => {
     const order = await Order.findOne({ number: orderNumber, patient: userId });
     if (order) {
       order.status = "Cancelled";
+      if (order.paymentMethod != "COD") {
+        const patient = await Patient.findById(order.patient);
+        patient.wallet += order.totalPrice;
+        await patient.save();
+      }
       await order.save();
+      //reset medicine sales and quantity
+      for (let i = 0; i < order.items.length; i++) {
+        const item = order.items[i];
+        const medicine = await Medicine.findById(item.medicine);
+        if (medicine) {
+          medicine.sales -= item.quantity;
+          medicine.quantity += item.quantity;
+          medicine.salesData.map((sale) => {
+            //remove sales data
+            if (sale.date == order.date && sale.quantity == item.quantity) {
+              medicine.salesData.splice(medicine.salesData.indexOf(sale), 1);
+            }
+          });
+          await medicine.save();
+        }
+      }
       res.status(200).json(order);
     } else {
       res.status(404).json({ message: "Order not found" });

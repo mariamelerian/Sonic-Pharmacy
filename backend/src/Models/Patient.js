@@ -51,7 +51,7 @@ const patientSchema = new Schema(
     },
     wallet: {
       type: Number,
-      default: 100,
+      default: 0,
       required: true,
     },
   },

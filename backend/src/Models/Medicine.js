@@ -29,14 +29,37 @@ const medicineSchema = new mongoose.Schema({
     required: true,
     default: 10,
   },
+
+  salesData: {
+    type: [
+      {
+        quantity: {
+          type: Number,
+          required: true,
+        },
+        date: {
+          type: Date,
+          required: true,
+          default: Date.now,
+        },
+      },
+    ],
+    required: true,
+    default: [],
+  },
   activeIngredients: {
-    type: [String], // Assuming an array of strings for active ingredients
+    type: [String],
     required: true,
   },
   medicinalUse: {
     type: String,
     // enum: MedicinalUseArray,
     required: true,
+  },
+  state: {
+    type: String,
+    enum: ["Active", "Archived"],
+    default: "Active",
   },
 });
 

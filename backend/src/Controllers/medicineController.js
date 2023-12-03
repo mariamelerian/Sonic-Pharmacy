@@ -17,7 +17,25 @@ const storage = multer.diskStorage({
 
 const getMedicines = async (req, res) => {
   try {
+    const medicines = await Medicine.find({ state: "Active" });
+    res.status(200).json(medicines);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getAllMedicines = async (req, res) => {
+  try {
     const medicines = await Medicine.find();
+    res.status(200).json(medicines);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getArchivedMedicines = async (req, res) => {
+  try {
+    const medicines = await Medicine.find({ state: "Archived" });
     res.status(200).json(medicines);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -41,6 +59,7 @@ const searchMedicine = async (req, res) => {
   try {
     const medicine = await Medicine.findOne({
       name: { $regex: new RegExp(name, "i") },
+      state: "Active",
     });
     if (medicine) {
       res.status(200).json(medicine);
@@ -77,6 +96,7 @@ const filterMedicine = async (req, res) => {
   try {
     const medicines = await Medicine.find({
       medicinalUse: { $in: medicinalUses },
+      state: "Active",
     });
     res.status(200).json(medicines);
   } catch (error) {
@@ -133,7 +153,11 @@ const deleteMedicine = async (req, res) => {
   const id = req.query._id;
 
   try {
-    const deletedMedicine = await Medicine.findByIdAndDelete(id);
+    const deletedMedicine = await Medicine.findByIdAndUpdate(
+      id,
+      { state: "Archived" },
+      { new: true }
+    );
 
     if (deletedMedicine) {
       res.status(200).json({ message: "Medicine deleted successfully" });
@@ -146,22 +170,27 @@ const deleteMedicine = async (req, res) => {
 };
 const getAlternativeMedicines = async (req, res) => {
   try {
-  const { medicineId } = req.body; // Get the ID of the specified medicine from the request body
-  const medicine = await Medicine.findOne({ _id: medicineId }); // Find the specified medicine in the database
-  if(!medicine)
-  res.status(404).json({ message: "Medicine not found" });
-  const alternativeMedicines = await Medicine.find({ activeIngredients: { $in: medicine.activeIngredients } }); // Find all medicines that contain any of the active ingredients of the specified medicine
-  if(!alternativeMedicines)
-  res.sratus(409).json({message:"No Alternative Medicines"});
-  const index = alternativeMedicines.findIndex((med) => med._id.toString() === medicineId); // Find the index of the specified medicine in the list of alternative medicines
-  if (index !== -1) { // If the specified medicine is found in the list of alternative medicines
-    alternativeMedicines.splice(index, 1);}
+    const { medicineId } = req.body; // Get the ID of the specified medicine from the request body
+    const medicine = await Medicine.findOne({ _id: medicineId }); // Find the specified medicine in the database
+    if (!medicine) res.status(404).json({ message: "Medicine not found" });
+    const alternativeMedicines = await Medicine.find({
+      activeIngredients: { $in: medicine.activeIngredients },
+      state: "Active",
+    }); // Find all medicines that contain any of the active ingredients of the specified medicine
+    if (!alternativeMedicines)
+      res.status(409).json({ message: "No Alternative Medicines" });
+    const index = alternativeMedicines.findIndex(
+      (med) => med._id.toString() === medicineId
+    ); // Find the index of the specified medicine in the list of alternative medicines
+    if (index !== -1) {
+      // If the specified medicine is found in the list of alternative medicines
+      alternativeMedicines.splice(index, 1);
+    }
 
-  res.send(alternativeMedicines); // Return the list of alternative medicines in the response body
-
-} catch (error) {
-  res.status(500).json({ message: error.message });
-}
+    res.send(alternativeMedicines); // Return the list of alternative medicines in the response body
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 const medicineNamesIds = async (req, res) => {
   try {
@@ -172,6 +201,103 @@ const medicineNamesIds = async (req, res) => {
     res.status(200).json(medicines);
   } catch (error) {
     res.status(500).json({ message: "Failed to retrieve medicines" });
+  }
+};
+
+const getTotalMonthSales = async (req, res) => {
+  try {
+    const month = req.body.month;
+    let s = {
+      sales: [],
+      totalRevenue: 0,
+      totalQuantitySold: 0,
+    };
+    const medicines = await Medicine.find();
+    for (let i = 0; i < medicines.length; i++) {
+      let medicine = medicines[i];
+      let totalRevenue = 0;
+      let totalQuantitySold = 0;
+      for (let j = 0; j < medicine.salesData.length; j++) {
+        let sale = medicine.salesData[j];
+
+        if (sale.date.getMonth() == month) {
+          totalRevenue += sale.quantity * medicine.price;
+          totalQuantitySold += sale.quantity;
+        }
+      }
+      s.sales.push({
+        medicineId: medicine._id,
+        medicineName: medicine.name,
+        totalRevenue: totalRevenue,
+        totalQuantitySold: totalQuantitySold,
+      });
+      s.totalRevenue += totalRevenue;
+      s.totalQuantitySold += totalQuantitySold;
+    }
+    res.status(200).json(s);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getFilteredSalesReport = async (req, res) => {
+  const { medicineIds, startDate, endDate } = req.body;
+
+  try {
+    let filteredSales = [];
+
+    // Filter sales based on medicineIds or date range
+    if (medicineIds && medicineIds.length > 0 && startDate && endDate) {
+      filteredSales = await Medicine.find({
+        _id: { $in: medicineIds },
+        sales: {
+          $elemMatch: {
+            date: { $gte: startDate, $lte: endDate },
+          },
+        },
+      });
+    } else if (medicineIds && medicineIds.length > 0) {
+      filteredSales = await Medicine.find({ _id: { $in: medicineIds } });
+    } else if (startDate && endDate) {
+      filteredSales = await Medicine.find({
+        sales: {
+          $elemMatch: {
+            date: { $gte: startDate, $lte: endDate },
+          },
+        },
+      });
+    }
+
+    let s = {
+      sales: [],
+      totalRevenue: 0,
+      totalQuantitySold: 0,
+    };
+
+    for (let i = 0; i < filteredSales.length; i++) {
+      let medicine = medicines[i];
+      let totalRevenue = 0;
+      let totalQuantitySold = 0;
+      for (let j = 0; j < medicine.salesData.length; j++) {
+        let sale = medicine.salesData[j];
+        if (sale.date.getMonth() == month) {
+          totalRevenue += sale.quantity * medicine.price;
+          totalQuantitySold += sale.quantity;
+        }
+      }
+      s.sales.push({
+        medicineId: medicine._id,
+        medicineName: medicine.name,
+        totalRevenue: totalRevenue,
+        totalQuantitySold: totalQuantitySold,
+      });
+      s.totalRevenue += totalRevenue;
+      s.totalQuantitySold += totalQuantitySold;
+    }
+
+    res.status(200).json(s);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -186,4 +312,8 @@ module.exports = {
   deleteMedicine,
   medicineNamesIds,
   getAlternativeMedicines,
+  getTotalMonthSales,
+  getFilteredSalesReport,
+  getAllMedicines,
+  getArchivedMedicines,
 };
