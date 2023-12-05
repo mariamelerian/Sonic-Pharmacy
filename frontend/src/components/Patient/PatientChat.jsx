@@ -54,7 +54,7 @@ const PatientChat = () => {
             {isFirstRender && "Hello, how can I help you today?"}
           </div>
         </div>
-        <div style={{ flex: 1, overflowY: 'auto', padding: '10px', width: '60%', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '10px', width: '60%' }}>
           {messages.map((message, index) => (
             <div
               key={index}

@@ -13,7 +13,7 @@ function PatientMedicine() {
       <Container fluid className="bg-light pt-3 mt-2">
         <Container className="bg-white px-5 py-4">
           <Row>
-            <Col xs={12} md={12}>
+            <Col xs={12} md={12} className= "mb-4">
               <FilterMedicine />
             </Col>
           </Row>
