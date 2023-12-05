@@ -98,6 +98,7 @@ function PatientCheckOutModal({
         try {
           const response = await axios.post("/checkoutWallet", {
             address: deliveryAddress,
+            paymentMethod: "Wallet",
           });
           if (response.status === 200) {
             const newWallet = myWallet - total;
@@ -127,6 +128,7 @@ function PatientCheckOutModal({
         try {
           const response = await axios.post("/checkoutStripe", {
             address: deliveryAddress,
+            paymentMethod: "Card",
           });
           if (response.status === 200) {
             console.log("Order placed");
@@ -147,6 +149,7 @@ function PatientCheckOutModal({
         try {
           const response = await axios.post("/checkoutCash", {
             address: deliveryAddress,
+            paymentMethod: "COD",
           });
           if (response.status === 200) {
             console.log("Order placed");

@@ -54,6 +54,11 @@ const pharmacistSchema = new Schema(
       type: [String], // Assuming an array of strings for active ingredients
       default: [],
     },
+    wallet: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
   },
   { timestamps: true }
 );

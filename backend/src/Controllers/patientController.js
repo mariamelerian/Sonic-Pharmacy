@@ -227,6 +227,19 @@ const deleteAddress = async (req, res) => {
   }
 };
 
+const getWallet = async (req, res) => {
+  const userId = req.session.userId;
+  try {
+    const patient = await Patient.findById(userId);
+    if (!patient) {
+      res.status(404).json({ message: "Patient not found" });
+    }
+    res.status(200).json(patient.wallet);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to retrieve wallet" });
+  }
+};
+
 module.exports = {
   createPatient,
   deletePatient,
@@ -238,4 +251,5 @@ module.exports = {
   getDeliveryAddresses,
   addDeliveryAddress,
   deleteAddress,
+  getWallet,
 };

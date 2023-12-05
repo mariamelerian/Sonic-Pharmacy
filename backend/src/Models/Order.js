@@ -45,6 +45,12 @@ const orderSchema = new Schema({
     type: String,
     required: true,
   },
+  paymentMethod: {
+    type: String,
+    enum: ["COD", "Wallet", "Card"],
+    default: "COD",
+    required: true,
+  },
 });
 
 const Order = mongoose.model("Order", orderSchema);

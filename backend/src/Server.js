@@ -40,6 +40,7 @@ const {
   getDeliveryAddresses,
   addDeliveryAddress,
   deleteAddress,
+  getWallet,
 } = require("./Controllers/patientController");
 
 const {
@@ -52,6 +53,10 @@ const {
   updateMedicine,
   deleteMedicine,
   medicineNamesIds,
+  getAlternativeMedicines,
+  getTotalMonthSales,
+  getFilteredSalesReport,
+  getAllMedicines,
 } = require("./Controllers/medicineController");
 
 const {
@@ -62,6 +67,7 @@ const {
   updatePharmacist,
   deletePharmacist,
   pharmacistChangePassword,
+  getPharmacistWallet,
 } = require("./Controllers/pharmacistController");
 
 const pharmacistController = require("./Controllers/pharmacistController");
@@ -70,6 +76,8 @@ const {
   MedicinalUseArray,
   getMedicinalUses,
 } = require("./Models/MedicinalUse");
+
+const { getChat, sendMessage } = require("./Controllers/chatController");
 
 //App variables
 const app = express();
@@ -88,21 +96,21 @@ app.use(
 app.use(cookieParser());
 const port = process.env.PORT || "8000";
 
-//Apply middleware to all routes except the login route
-// app.use((req, res, next) => {
-//   // Check if the route is not the login route
-//   if (
-//     req.path !== "/login"
+// //Apply middleware to all routes except the login route
+// // app.use((req, res, next) => {
+// //   // Check if the route is not the login route
+// //   if (
+//     req.path !== "/login" && req.path !== "/otp"
 //     // req.path !== "/patient-signup" ||
 //     // req.path !== "/pharmacist-signup"
 //   ) {
-//     // Apply your middleware to all routes except login
-//     requireAuth(req, res, next);
-//   } else {
-//     // If it's the login route, skip the middleware
-//     next();
-//   }
-// });
+// //     // Apply your middleware to all routes except login
+// //     requireAuth(req, res, next);
+// //   } else {
+// //     // If it's the login route, skip the middleware
+// //     next();
+// //   }
+// // });
 
 // Mongo DB
 const MongoURI = process.env.MONGO_URI;
@@ -138,6 +146,13 @@ app.get("/medicinalUses", requireAuth, getMedicinalUses);
 app.get("/pharmacists", getPharmacists);
 app.get("/pharmacist", getPharmacist);
 app.get("/pharmacistApplications", requireAuth, getInactivePharmacists);
+app.get("/getAlternativeMedicines", getAlternativeMedicines);
+app.get("/getChat", getChat);
+app.get("/getPatientWallet", getWallet);
+app.get("/getPharmacistWallet", getPharmacistWallet);
+app.get("/monthlySales", getTotalMonthSales);
+app.get("/filteredSales", getFilteredSalesReport);
+app.get("/allMedicines", getAllMedicines);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", requireAuth, createAdmin);
@@ -150,6 +165,7 @@ app.post(
 app.post("/newMedicine", requireAuth, createMedicine);
 app.post("/filterMedicine", filterMedicine);
 app.post("/addAddress", addDeliveryAddress);
+app.post("/sendMessage", sendMessage);
 
 //authentication
 app.post("/login", login);
@@ -236,15 +252,17 @@ app.post("/checkoutStripe", requireAuth, orderController.checkoutStripe);
 
 //DUMMY DATA
 
-// const dummyData = require("./dummyData/patient");
-// // const Patient = require("./Models/Adminstrator");
-// const {
-//   insertDummyDataPatient,
-//   insertDummyDataAdmin,
-//   insertDummyDataPharmacist,
-//   insertDummyDataOrder,
-// } = require("./utils");
+const dummyData = require("./dummyData/medicine");
+// const Patient = require("./Models/Adminstrator");
+const {
+  insertDummyDataPatient,
+  insertDummyDataAdmin,
+  insertDummyDataPharmacist,
+  insertDummyDataOrder,
+  insertDummyDataMedicine,
+} = require("./utils");
 
+//insertDummyDataMedicine(dummyData);
 // insertDummyDataPatient(dummyData);
 //insertDummyDataAdmin(dummyData);
 //insertDummyDataPharmacist(dummyData);
