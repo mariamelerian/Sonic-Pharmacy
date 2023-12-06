@@ -252,15 +252,15 @@ app.post("/checkoutStripe", requireAuth, orderController.checkoutStripe);
 
 //DUMMY DATA
 
-const dummyData = require("./dummyData/medicine");
-// const Patient = require("./Models/Adminstrator");
-const {
-  insertDummyDataPatient,
-  insertDummyDataAdmin,
-  insertDummyDataPharmacist,
-  insertDummyDataOrder,
-  insertDummyDataMedicine,
-} = require("./utils");
+// const dummyData = require("./dummyData/medicine");
+// // const Patient = require("./Models/Adminstrator");
+// const {
+//   insertDummyDataPatient,
+//   insertDummyDataAdmin,
+//   insertDummyDataPharmacist,
+//   insertDummyDataOrder,
+//   insertDummyDataMedicine,
+// } = require("./utils");
 
 //insertDummyDataMedicine(dummyData);
 // insertDummyDataPatient(dummyData);
