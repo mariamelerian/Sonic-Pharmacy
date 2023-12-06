@@ -206,7 +206,7 @@ const medicineNamesIds = async (req, res) => {
 
 const getTotalMonthSales = async (req, res) => {
   try {
-    const month = req.body.month;
+    const month = req.body.month; // number from 1 - 12
     let s = {
       sales: [],
       totalRevenue: 0,
@@ -241,23 +241,23 @@ const getTotalMonthSales = async (req, res) => {
 };
 
 const getFilteredSalesReport = async (req, res) => {
-  const { medicineIds, startDate, endDate } = req.body;
+  const { medicineNames, startDate, endDate } = req.body;
 
   try {
     let filteredSales = [];
 
     // Filter sales based on medicineIds or date range
-    if (medicineIds && medicineIds.length > 0 && startDate && endDate) {
+    if (medicineNames && medicineNames.length > 0 && startDate && endDate) {
       filteredSales = await Medicine.find({
-        _id: { $in: medicineIds },
+        name: { $in: medicineNames },
         sales: {
           $elemMatch: {
             date: { $gte: startDate, $lte: endDate },
           },
         },
       });
-    } else if (medicineIds && medicineIds.length > 0) {
-      filteredSales = await Medicine.find({ _id: { $in: medicineIds } });
+    } else if (medicineNames && medicineNames.length > 0) {
+      filteredSales = await Medicine.find({ name: { $in: medicineNames } });
     } else if (startDate && endDate) {
       filteredSales = await Medicine.find({
         sales: {
