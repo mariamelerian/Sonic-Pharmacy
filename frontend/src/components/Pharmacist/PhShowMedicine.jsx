@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Tabs, Tab } from "react-bootstrap";
 import PhShowActiveMedicine from "./PhShowActiveMedicine";
-//import PhShowActiveMedicine from "./PhShowActiveMedicine";
+import PhShowArchivedMedicine from "./PhShowArchivedMedicine";
 //archived medicine
 
 function PhShowMedicine() {
@@ -22,6 +22,9 @@ function PhShowMedicine() {
         {/* <PatientShowMedicine prescribed={false} /> */}
       </Tab>
       <Tab eventKey="Archived" title="Archived Medicine">
+      <PhShowArchivedMedicine/>
+
+
         {/* <PatientPrescribedMedicine prescribed={true} /> */}
         {/* <PatientPrescribedMedicine/> */}
       </Tab>

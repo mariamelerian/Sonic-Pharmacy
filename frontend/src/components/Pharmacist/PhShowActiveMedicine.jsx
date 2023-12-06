@@ -59,11 +59,30 @@ function PhShowActiveMedicine() {
   const medicines = responseData;
   console.log(medicines);
 
-//   const handleArchiveMedicine = (name) => {
+  const handleArchiveMedicine = async (med) => {
 
-//     console.log(medicines);
+    try {
+        const url = "/deleteMedicine";
 
-//   }
+        const response = await axios.put(url, {id: med.id});
+        if (response.status === 200) {
+          fetchData();
+        } else if (response.status === 404) {
+          setError("Medicine not found");
+        } else {
+          setError("Error");
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          setError("Medicine not found");
+        } else {
+          setError(
+            "An error occurred while updating medicine. Please try again later"
+          );
+        }
+      }
+  }
+
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -258,36 +277,41 @@ function PhShowActiveMedicine() {
                     </div>
                   ) : (
                     <div>
-                      <div className="medicine-price">
-                        Price: {medicine.price} LE
+                      <div className="medicine-price" style={{ paddingLeft: '40px' }}>
+  <strong>Price:</strong> {medicine.price} LE
+</div>
+
+                      <div className="medicine-description" style={{ paddingLeft: '40px' }}>
+                      <strong>Description:</strong>  {medicine.description}
                       </div>
-                      <div className="medicine-description">
-                        {medicine.description}
+                      <div className="medicine-use" style={{ paddingLeft: '40px' }}>
+                      <strong>Medicinal Use:</strong> {medicine.medicinalUse}
                       </div>
-                      <div className="medicine-use">
-                        Medicinal Use: {medicine.medicinalUse}
-                      </div>
-                      <div className="medicine-activeIngredients">
-                        Active Ingredients:{" "}
+                      <div className="medicine-activeIngredients" style={{ paddingLeft: '40px' }}>
+                      <strong>Active Ingredients:</strong>{" "}
                         {medicine.activeIngredients.map((ingredient, index) => (
                           <div key={index} style={{ marginBottom: "5px" }}>
                             • {ingredient}
                           </div>
                         ))}
                       </div>
-                      <div className="medicine-quantity">
-                        Quantity: {medicine.quantity}
+                      <div className="medicine-quantity" style={{ paddingLeft: '40px' }}>
+                      <strong>Quantity:</strong> {medicine.quantity}
                       </div>
-                      <div className="medicine-sales">
-                        Sales: {medicine.sales} LE
+                      <div className="medicine-sales" style={{ paddingLeft: '40px' }}>
+                      <strong>Sales:</strong> {medicine.sales} LE
                       </div>
                       
-                    <button
-  className="btn btn-primary mt-3"
-                      //onClick={() => handleArchiveMedicine(medicine._id)}
->
-  Archive Medicine
-</button>
+                      
+                      <div className="d-flex justify-content-center">
+  <button
+    className="btn btn-primary mt-3"
+    onClick={() => handleArchiveMedicine(medicine._id)}
+  >
+    Archive Medicine
+  </button>
+</div>
+
                     </div>
                   )}
                 </Card.Body>

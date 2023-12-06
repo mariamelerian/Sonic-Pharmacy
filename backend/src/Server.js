@@ -57,6 +57,8 @@ const {
   getTotalMonthSales,
   getFilteredSalesReport,
   getAllMedicines,
+  getArchivedMedicines,
+  unarchiveMedicine
 } = require("./Controllers/medicineController");
 
 const {
@@ -153,6 +155,7 @@ app.get("/getPharmacistWallet", getPharmacistWallet);
 app.get("/monthlySales", getTotalMonthSales);
 app.get("/filteredSales", getFilteredSalesReport);
 app.get("/allMedicines", getAllMedicines);
+app.get("/archivedMedicines", getArchivedMedicines);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", requireAuth, createAdmin);
@@ -182,10 +185,12 @@ app.put("/patientChangePassword", patientChangePassword);
 app.put("/adminChangePassword/:userId?", adminChangePassword);
 app.put("/pharmacistChangePassword/:userId?", pharmacistChangePassword);
 app.put("/resetPassword", resetPassword);
+app.put("/deleteMedicine", requireAuth, deleteMedicine);
+app.put("/unarchiveMedicine", unarchiveMedicine );
 
 app.delete("/deleteAdmin", requireAuth, deleteAdmin);
 app.delete("/deletePatient", requireAuth, deletePatient);
-app.delete("/deleteMedicine", requireAuth, deleteMedicine);
+
 app.delete("/deletePharmacist", requireAuth, deletePharmacist);
 app.delete("/deleteAddress", requireAuth, deleteAddress);
 

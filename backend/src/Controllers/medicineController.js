@@ -150,12 +150,32 @@ const updateMedicine = async (req, res) => {
 };
 
 const deleteMedicine = async (req, res) => {
-  const id = req.query._id;
+  const id = req.body.id;
 
   try {
     const deletedMedicine = await Medicine.findByIdAndUpdate(
       id,
       { state: "Archived" },
+      { new: true }
+    );
+
+    if (deletedMedicine) {
+      res.status(200).json({ message: "Medicine deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Medicine not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const unarchiveMedicine = async (req, res) => {
+  const id = req.body.id;
+
+  try {
+    const deletedMedicine = await Medicine.findByIdAndUpdate(
+      id,
+      { state: "Active" },
       { new: true }
     );
 
@@ -316,4 +336,5 @@ module.exports = {
   getFilteredSalesReport,
   getAllMedicines,
   getArchivedMedicines,
+  unarchiveMedicine
 };
