@@ -33,6 +33,7 @@ import PasswordChanged from "./pages/Guest/PasswordChanged";
 import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
 import PatientShowMedicine from "./components/Patient/PatientShowMedicine";
 import PatientChatWithPharmacist from "./pages/Patient/PatientChatWithPharmacist";
+import AdminSalesReportPage from "./pages/Admin/AdminSalesReportPage";
   
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
@@ -81,6 +82,7 @@ function App() {
           <Route path="patients-list" element={<AdminPatientsPage />} />
           <Route path="admins-list" element={<AdminAdminsPage />} />
           <Route path="admin-medicine" element={<AdminMedicine />} />
+          <Route path="admin-salesreport" element={<AdminSalesReportPage />} />
           <Route path="profile" element={<AdminProfilePage />} />
         </Route>
 
