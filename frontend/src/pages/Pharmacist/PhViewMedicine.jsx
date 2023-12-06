@@ -12,10 +12,10 @@ function PhMedicine() {
       <Container fluid className="bg-light pt-3 mt-2">
         <Container className="bg-white px-5 py-4">
           <Row>
-            <Col xs={12} md={5}>
+            <Col xs={12}>
               <FilterMedicine />
             </Col>
-            <Col xs={12} md={7}>
+            <Col xs={12}>
               <PhShowMedicines />
             </Col>
           </Row>
