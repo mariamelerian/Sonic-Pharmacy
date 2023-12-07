@@ -16,6 +16,7 @@ function PatientPrescribedMedicine() {
   const [error, setError] = useState(null);
   const [filterMedicinalUse, setFilterMedicinalUse] = useState("");
   const [selectedMedicine, setSelectedMedicine] = useState(null);
+  
   const dispatch = useDispatch();
 
   const medicineImage = {

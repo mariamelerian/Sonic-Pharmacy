@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Form, Spinner, Tabs, Tab  } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle ,faSearch} from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { deleteFilterArray } from "../../state/filterMedicine";
 import { useSelector, useDispatch } from "react-redux";
@@ -75,6 +75,23 @@ function PatientNonPrescribedMedicine() {
     setSelectedMedicine(null);
   };
 
+  const handleFindAlternatives = async (medicine) => {
+    // setSelectedMedicine(medicine);
+    // try {
+    //   const response = await axios.put(`/addtocart/${medicine._id}`);
+    //   if (response.status === 200) {
+    //     setError(null);
+    //   } else {
+    //     setError("Error");
+    //   }
+    // } catch (error) {
+    //   setError(
+    //     "An error occurred while adding to cart. Please try again later"
+    //   );
+    // }
+    // setSelectedMedicine(null);
+  };
+
   const handleCloseModal = () => {
     setSelectedMedicine(null);
   };
@@ -145,8 +162,17 @@ function PatientNonPrescribedMedicine() {
                 marginBottom: "0.5rem",
               }}
             >
-              <div className="medicine-price">Price: {medicine.price} LE</div>
-            </div>
+  <div className="medicine-price">Price: {medicine.price} LE</div>
+  {medicine.quantity === 0 && (
+    <div style={{ marginTop: '5px' }}>
+      <div style={{ backgroundColor: 'white', color: 'red', border: '1px solid red', borderRadius: '5px', padding: '5px' }}>
+        
+        Out of Stock
+      </div>
+    </div>
+  )}
+</div>
+
             {expandedMedicine === index && (
            <>
           <div className="medicine-description" style={{ textAlign: "left", paddingLeft: "50px", display: "flex", alignItems: "center" }}>
@@ -183,12 +209,22 @@ function PatientNonPrescribedMedicine() {
           
            
             )}
-           <button
-  className="btn btn-primary mt-3"
-  onClick={() => handleAddToCart(medicine)}
->
-  Add to Cart <FontAwesomeIcon icon={faShoppingCart} />
-</button>
+           {medicine.quantity === 0 ? (
+            <div style={{ marginTop: '5px' }}>
+              <button className="btn btn-primary mt-3"
+               onClick={() => handleFindAlternatives(medicine)}>
+             
+                Find Alternatives <FontAwesomeIcon icon={faSearch} />
+              </button>
+            </div>
+          ) : (
+            <button
+              className="btn btn-primary mt-3"
+              onClick={() => handleAddToCart(medicine)}
+            >
+              Add to Cart <FontAwesomeIcon icon={faShoppingCart} />
+            </button>
+          )}
           </div>
         </div>
       </Card.Body>
