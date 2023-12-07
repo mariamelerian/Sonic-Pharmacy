@@ -33,7 +33,7 @@ import PasswordChanged from "./pages/Guest/PasswordChanged";
 import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
 import PatientShowMedicine from "./components/Patient/PatientShowMedicine";
 import PatientChatWithPharmacist from "./pages/Patient/PatientChatWithPharmacist";
-import ChatPat from "./components/ChatPat";
+//import ChatPat from "./components/ChatPat";
   
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
