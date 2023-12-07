@@ -33,6 +33,7 @@ import PasswordChanged from "./pages/Guest/PasswordChanged";
 import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
 import PatientShowMedicine from "./components/Patient/PatientShowMedicine";
 import PatientChatWithPharmacist from "./pages/Patient/PatientChatWithPharmacist";
+import ChatPat from "./components/ChatPat";
   
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
@@ -105,6 +106,8 @@ function App() {
         <Route path="Pharmacist">
           <Route index element={<PharmacistHomePage />} />
           <Route path="ph-medicine" element={<PhMedicine />} />
+          {/* <Route path="ph-medicine" element={<ChatPat />} /> */}
+
           <Route path="pharmacist-profile" element={<PharmacistProfile />} />
         </Route>
 
