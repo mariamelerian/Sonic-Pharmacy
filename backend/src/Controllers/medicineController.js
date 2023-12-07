@@ -110,9 +110,14 @@ const createMedicine = async (req, res) => {
     const path = require("path");
     const filePath = path.join(__dirname, "../res/default-medicine-pic.jpg");
     const imageBuffer = fs.readFileSync(filePath);
-    const base64ImageData = imageBuffer.toString("base64");
-    const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
-    req.body.picture = imageSrc;
+    sharp(imageBuffer)
+      .resize({ width: 100 }) // Adjust width as needed
+      .toBuffer()
+      .then((compressedImageBuffer) => {
+        const base64ImageData = compressedImageBuffer.toString("base64");
+        const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
+        req.body.picture = imageSrc;
+      });
   }
 
   console.log("new medicine", req.body);
@@ -151,7 +156,6 @@ const updateMedicine = async (req, res) => {
 
 const deleteMedicine = async (req, res) => {
   const id = req.body.id;
-
   try {
     const deletedMedicine = await Medicine.findByIdAndUpdate(
       id,
@@ -165,6 +169,7 @@ const deleteMedicine = async (req, res) => {
       res.status(404).json({ message: "Medicine not found" });
     }
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({ message: error.message });
   }
 };
@@ -336,5 +341,5 @@ module.exports = {
   getFilteredSalesReport,
   getAllMedicines,
   getArchivedMedicines,
-  unarchiveMedicine
+  unarchiveMedicine,
 };

@@ -57,15 +57,12 @@ function PhShowArchivedMedicine() {
     }
   };
   const medicines = responseData;
-  console.log(medicines);
 
   const handleUnarchiveMedicine = async (med) => {
-    med.status="Archived";
+    try {
+      const response = await axios.put("/unarchiveMedicine", { id: med });
 
-    try{
-    const response = await axios.put("/unarchiveMedicine", {id: med.id});
-
-    if (response.status === 200) {
+      if (response.status === 200) {
         fetchData();
       } else if (response.status === 404) {
         setError("Medicine not found");
@@ -80,9 +77,8 @@ function PhShowArchivedMedicine() {
           "An error occurred while updating medicine. Please try again later"
         );
       }
-
-  }
-}
+    }
+  };
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -171,7 +167,7 @@ function PhShowArchivedMedicine() {
         <Row>
           {filteredMedicines.map((medicine, index) => (
             <Col key={medicine.name} lg={4} md={4} sm={12}>
-            <Card className="mb-4 mx-3 bg-light">
+              <Card className="mb-4 mx-3 bg-light">
                 <Card.Header>
                   <div className="d-flex justify-content-end">
                     <FontAwesomeIcon
@@ -189,7 +185,7 @@ function PhShowArchivedMedicine() {
                   <div> {medicine.name} </div>
                 </Card.Header>
                 <Card.Body>
-                <div className="medicine-image-container">
+                  <div className="medicine-image-container">
                     <img
                       src={medicine.picture}
                       alt={medicine.name}
@@ -202,7 +198,7 @@ function PhShowArchivedMedicine() {
                     />
                   </div>
                   {editedMedicine === index ? (
-                    <div style={{ paddingLeft: "20px"}}>
+                    <div style={{ paddingLeft: "20px" }}>
                       <Form.Group>
                         <Form.Label>Price</Form.Label>
                         <Form.Control
@@ -278,39 +274,56 @@ function PhShowArchivedMedicine() {
                     </div>
                   ) : (
                     <div>
-                      <div className="medicine-price" style={{ paddingLeft: '40px' }}>
-  <strong>Price:</strong> {medicine.price} LE
-</div>
+                      <div
+                        className="medicine-price"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Price:</strong> {medicine.price} LE
+                      </div>
 
-                      <div className="medicine-description" style={{ paddingLeft: '40px' }}>
-                      <strong>Description:</strong>  {medicine.description}
+                      <div
+                        className="medicine-description"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Description:</strong> {medicine.description}
                       </div>
-                      <div className="medicine-use" style={{ paddingLeft: '40px' }}>
-                      <strong>Medicinal Use:</strong> {medicine.medicinalUse}
+                      <div
+                        className="medicine-use"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Medicinal Use:</strong> {medicine.medicinalUse}
                       </div>
-                      <div className="medicine-activeIngredients" style={{ paddingLeft: '40px' }}>
-                      <strong>Active Ingredients:</strong>{" "}
+                      <div
+                        className="medicine-activeIngredients"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Active Ingredients:</strong>{" "}
                         {medicine.activeIngredients.map((ingredient, index) => (
                           <div key={index} style={{ marginBottom: "5px" }}>
                             • {ingredient}
                           </div>
                         ))}
                       </div>
-                      <div className="medicine-quantity" style={{ paddingLeft: '40px' }}>
-                      <strong>Quantity:</strong> {medicine.quantity}
+                      <div
+                        className="medicine-quantity"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Quantity:</strong> {medicine.quantity}
                       </div>
-                      <div className="medicine-sales" style={{ paddingLeft: '40px' }}>
-                      <strong>Sales:</strong> {medicine.sales} LE
+                      <div
+                        className="medicine-sales"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Sales:</strong> {medicine.sales} LE
                       </div>
                       <div className="d-flex justify-content-center">
-  <button
-    className="btn btn-primary mt-3"
-    onClick={() => handleUnarchiveMedicine(medicine._id)}
-  >
-    Unarchive
-  </button>
-</div>
-
+                        <button
+                          className="btn btn-primary mt-3"
+                          onClick={() => handleUnarchiveMedicine(medicine._id)}
+                        >
+                          Unarchive
+                        </button>
+                      </div>
                     </div>
                   )}
                 </Card.Body>
@@ -327,16 +340,6 @@ function PhShowArchivedMedicine() {
               </Card>
             </Col>
           ))}
-          <Col lg={6} md={6} sm={12}>
-            <Card className="mb-4 mx-3 bg-light">
-              <Card.Body className="text-center">
-                <Button variant="primary" onClick={toggleMedicineForm}>
-                  <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                  Add New Medicine
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>
         </Row>
       )}
     </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Card, Form, Button } from "react-bootstrap";
+import ImageCompressor from "image-compressor";
 
 function MedicineForm({ onClose, fetchData }) {
   const [medicineName, setMedicineName] = useState(null);
@@ -16,7 +17,6 @@ function MedicineForm({ onClose, fetchData }) {
   const [selectedImage, setSelectedImage] = useState(null); // New state variable for the selected image file
 
   const handleSave = async (e) => {
-    console.log("wselt henaaaa");
     e.preventDefault();
     setError(null);
     if (
@@ -37,45 +37,63 @@ function MedicineForm({ onClose, fetchData }) {
       const activeIngredientsArray = ingredients.split("-");
       let picture = null;
       if (setSelectedImage != null) {
-        console.log("here");
         // Read the file as a data URL
         // Create a FileReader instance
         const reader = new FileReader();
         // Set the image once loaded into file reader
         reader.onload = async (e) => {
-          let imageSrc = reader.result.split(",")[1];
-          imageSrc = "data:image/jpeg;base64," + imageSrc + "";
-          console.log(imageSrc);
+          const img = new Image();
+          img.src = reader.result;
 
-          picture = imageSrc;
+          img.onload = async () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
 
-          console.log("sending response");
-          const response = await axios.post("/newMedicine", {
-            picture: selectedImage,
-            name: medicineName,
-            price: price,
-            description: description,
-            quantity: quantity,
-            sales: sales,
-            activeIngredients: activeIngredientsArray,
-            medicinalUse: medicinalUse,
-            picture: picture,
-          });
+            const targetWidth = 100;
+            const targetHeight = (targetWidth / img.width) * img.height;
 
-          console.log(response);
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
 
-          if (response.status === 200) {
-            console.log("here");
-            setSuccess(true);
-            setTimeout(() => {
-              setSuccess(false); // Clear the error after 5 seconds
-            }, 5000);
-            fetchData();
-          } else if (response.status === 500) {
-            setError("Medicine not found");
-          } else {
-            setError("Error");
-          }
+            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+            const base64ImageData = canvas.toDataURL("image/jpeg");
+            picture = base64ImageData;
+
+            console.log(picture);
+
+            console.log("sending response");
+            const response = await axios.post("/newMedicine", {
+              picture: selectedImage,
+              name: medicineName,
+              price: price,
+              description: description,
+              quantity: quantity,
+              sales: sales,
+              activeIngredients: activeIngredientsArray,
+              medicinalUse: medicinalUse,
+              picture: picture,
+            });
+
+            console.log(response);
+
+            if (response.status === 200) {
+              console.log("here");
+              setSuccess(true);
+              setTimeout(() => {
+                setSuccess(false); // Clear the error after 5 seconds
+              }, 5000);
+              fetchData();
+            } else if (response.status === 500) {
+              setError("Medicine not found");
+            } else {
+              setError("Error");
+            }
+          };
+          // let imageSrc = reader.result.split(",")[1];
+          // imageSrc = "data:image/jpeg;base64," + imageSrc + "";
+          // console.log(imageSrc);
+
+          // picture = imageSrc;
         };
 
         reader.readAsDataURL(selectedImage);
@@ -84,14 +102,10 @@ function MedicineForm({ onClose, fetchData }) {
       setSuccess(false);
       setError(error.message);
     }
-    setTimeout(() => {
-      setError(null); // Clear the error after 5 seconds
-    }, 5000);
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-
+  const handleImageUpload = async (e) => {
+    let file = e.target.files[0];
     if (!file) return;
 
     setSelectedImage(file);

@@ -60,28 +60,29 @@ function PhShowActiveMedicine() {
   console.log(medicines);
 
   const handleArchiveMedicine = async (med) => {
+    axios.defaults.headers.post["Content-Type"] = "application/json";
 
     try {
-        const url = "/deleteMedicine";
+      const url = `/deleteMedicine`;
 
-        const response = await axios.put(url, {id: med.id});
-        if (response.status === 200) {
-          fetchData();
-        } else if (response.status === 404) {
-          setError("Medicine not found");
-        } else {
-          setError("Error");
-        }
-      } catch (error) {
-        if (error.response && error.response.status === 404) {
-          setError("Medicine not found");
-        } else {
-          setError(
-            "An error occurred while updating medicine. Please try again later"
-          );
-        }
+      const response = await axios.put(url, { id: med });
+      if (response.status === 200) {
+        fetchData();
+      } else if (response.status === 404) {
+        setError("Medicine not found");
+      } else {
+        setError("Error");
       }
-  }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setError("Medicine not found");
+      } else {
+        setError(
+          "An error occurred while updating medicine. Please try again later"
+        );
+      }
+    }
+  };
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -170,7 +171,7 @@ function PhShowActiveMedicine() {
         <Row>
           {filteredMedicines.map((medicine, index) => (
             <Col key={medicine.name} lg={4} md={4} sm={12}>
-            <Card className="mb-4 mx-3 bg-light">
+              <Card className="mb-4 mx-3 bg-light">
                 <Card.Header>
                   <div className="d-flex justify-content-end">
                     <FontAwesomeIcon
@@ -188,7 +189,7 @@ function PhShowActiveMedicine() {
                   <div> {medicine.name} </div>
                 </Card.Header>
                 <Card.Body>
-                <div className="medicine-image-container">
+                  <div className="medicine-image-container">
                     <img
                       src={medicine.picture}
                       alt={medicine.name}
@@ -201,7 +202,7 @@ function PhShowActiveMedicine() {
                     />
                   </div>
                   {editedMedicine === index ? (
-                    <div style={{ paddingLeft: "20px"}}>
+                    <div style={{ paddingLeft: "20px" }}>
                       <Form.Group>
                         <Form.Label>Price</Form.Label>
                         <Form.Control
@@ -277,41 +278,57 @@ function PhShowActiveMedicine() {
                     </div>
                   ) : (
                     <div>
-                      <div className="medicine-price" style={{ paddingLeft: '40px' }}>
-  <strong>Price:</strong> {medicine.price} LE
-</div>
+                      <div
+                        className="medicine-price"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Price:</strong> {medicine.price} LE
+                      </div>
 
-                      <div className="medicine-description" style={{ paddingLeft: '40px' }}>
-                      <strong>Description:</strong>  {medicine.description}
+                      <div
+                        className="medicine-description"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Description:</strong> {medicine.description}
                       </div>
-                      <div className="medicine-use" style={{ paddingLeft: '40px' }}>
-                      <strong>Medicinal Use:</strong> {medicine.medicinalUse}
+                      <div
+                        className="medicine-use"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Medicinal Use:</strong> {medicine.medicinalUse}
                       </div>
-                      <div className="medicine-activeIngredients" style={{ paddingLeft: '40px' }}>
-                      <strong>Active Ingredients:</strong>{" "}
+                      <div
+                        className="medicine-activeIngredients"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Active Ingredients:</strong>{" "}
                         {medicine.activeIngredients.map((ingredient, index) => (
                           <div key={index} style={{ marginBottom: "5px" }}>
                             • {ingredient}
                           </div>
                         ))}
                       </div>
-                      <div className="medicine-quantity" style={{ paddingLeft: '40px' }}>
-                      <strong>Quantity:</strong> {medicine.quantity}
+                      <div
+                        className="medicine-quantity"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Quantity:</strong> {medicine.quantity}
                       </div>
-                      <div className="medicine-sales" style={{ paddingLeft: '40px' }}>
-                      <strong>Sales:</strong> {medicine.sales} LE
+                      <div
+                        className="medicine-sales"
+                        style={{ paddingLeft: "40px" }}
+                      >
+                        <strong>Sales:</strong> {medicine.sales} LE
                       </div>
-                      
-                      
-                      <div className="d-flex justify-content-center">
-  <button
-    className="btn btn-primary mt-3"
-    onClick={() => handleArchiveMedicine(medicine._id)}
-  >
-    Archive Medicine
-  </button>
-</div>
 
+                      <div className="d-flex justify-content-center">
+                        <button
+                          className="btn btn-primary mt-3"
+                          onClick={() => handleArchiveMedicine(medicine._id)}
+                        >
+                          Archive Medicine
+                        </button>
+                      </div>
                     </div>
                   )}
                 </Card.Body>

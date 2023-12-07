@@ -60,6 +60,7 @@ const medicineSchema = new mongoose.Schema({
     type: String,
     enum: ["Active", "Archived"],
     default: "Active",
+    required: true,
   },
 });
 
