@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import AddToCartModal from "./AddToCartModal";
 import PatientEmptyPrescribedMedicine from "./PatientEmptyPrescribedMedicine";
+import AlternativeMedicinesModal from "./AlternativeMedicinesModal";
 
 function PatientNonPrescribedMedicine() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,6 +18,8 @@ function PatientNonPrescribedMedicine() {
   const [error, setError] = useState(null);
   const [filterMedicinalUse, setFilterMedicinalUse] = useState("");
   const [selectedMedicine, setSelectedMedicine] = useState(null);
+  const [showAlternativeModal, setShowAlternativeModal] = useState(false);
+  const [alternativeMedicines, setAlternativeMedicines] = useState([]);
   const dispatch = useDispatch();
 
   const medicineImage = {
@@ -76,20 +79,23 @@ function PatientNonPrescribedMedicine() {
   };
 
   const handleFindAlternatives = async (medicine) => {
-    // setSelectedMedicine(medicine);
-    // try {
-    //   const response = await axios.put(`/addtocart/${medicine._id}`);
-    //   if (response.status === 200) {
-    //     setError(null);
-    //   } else {
-    //     setError("Error");
-    //   }
-    // } catch (error) {
-    //   setError(
-    //     "An error occurred while adding to cart. Please try again later"
-    //   );
-    // }
-    // setSelectedMedicine(null);
+    const matchingMedicines = medicines.filter(
+      (m) =>
+        m._id !== medicine._id &&
+        m.activeIngredients.some(
+          (ingredient) =>
+            ingredient.toLowerCase() ===
+            medicine.activeIngredients[0].toLowerCase()
+        )
+    );
+
+    setAlternativeMedicines(matchingMedicines);
+    setShowAlternativeModal(true);
+  };
+
+  const handleCloseAlternativeModal = () => {
+    setShowAlternativeModal(false);
+    setAlternativeMedicines([]);
   };
 
   const handleCloseModal = () => {
@@ -211,11 +217,12 @@ function PatientNonPrescribedMedicine() {
             )}
            {medicine.quantity === 0 ? (
             <div style={{ marginTop: '5px' }}>
-              <button className="btn btn-primary mt-3"
-               onClick={() => handleFindAlternatives(medicine)}>
-             
-                Find Alternatives <FontAwesomeIcon icon={faSearch} />
-              </button>
+               <button
+            className="btn btn-primary mt-3"
+            onClick={() => handleFindAlternatives(medicine)}
+          >
+            Find Alternatives <FontAwesomeIcon icon={faSearch} />
+          </button>
             </div>
           ) : (
             <button
@@ -237,6 +244,13 @@ function PatientNonPrescribedMedicine() {
         show={showModal}
         handleClose={handleCloseModal}
         itemName={selectedMedicine?.name}
+      />
+
+      {/* Add the AlternativeMedicinesModal component */}
+      <AlternativeMedicinesModal
+        show={showAlternativeModal}
+        handleClose={handleCloseAlternativeModal}
+        alternativeMedicines={alternativeMedicines}
       />
     </div>
   );

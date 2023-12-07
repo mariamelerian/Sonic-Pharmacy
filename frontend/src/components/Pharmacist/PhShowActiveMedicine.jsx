@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Form, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MedicineForm from "./PhNewMedicine";
-import { faPlus, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faPenToSquare,faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { deleteFilterArray } from "../../state/filterMedicine";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";

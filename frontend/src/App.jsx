@@ -86,7 +86,8 @@ function App() {
         </Route>
 
         <Route path="Patient">
-          <Route index element={<PatientHomePage />} />
+          {/* <Route index element={<PatientHomePage />} /> */}
+          <Route index element={<PatientMedicine />}/>
           <Route path="patient-medicine" element={<PatientMedicine />} />
           {/* <Route path="patient-medicine" element={<FilterMedicine />} /> */}
           <Route path="patient-cart" element={<PatientCart />} />
@@ -104,7 +105,9 @@ function App() {
         </Route>
 
         <Route path="Pharmacist">
-          <Route index element={<PharmacistHomePage />} />
+          {/* <Route index element={<PharmacistHomePage />} /> */}
+          <Route index element={<PhMedicine />} />
+
           <Route path="ph-medicine" element={<PhMedicine />} />
           {/* <Route path="ph-medicine" element={<ChatPat />} /> */}
 

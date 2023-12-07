@@ -4,7 +4,7 @@ import PatientPrescribedMedicine from "./PatientShowPrescribedMedicine";
 import PatientNonPrescribedMedicine from "./PatientShowNonPrescribedMedcine";
 
 function MedicineTabs() {
-  const [key, setKey] = useState("prescribed");
+  const [key, setKey] = useState("nonPrescribed");
 
   return (
     

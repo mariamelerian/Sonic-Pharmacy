@@ -41,6 +41,10 @@ function PhShowArchivedMedicine() {
     console.log(responseData);
   }, []);
 
+  
+        
+       
+   
   const fetchData = async () => {
     try {
       const response = await axios.get("/archivedMedicines");
