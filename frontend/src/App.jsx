@@ -34,6 +34,7 @@ import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
 import PatientShowMedicine from "./components/Patient/PatientShowMedicine";
 import PatientChatWithPharmacist from "./pages/Patient/PatientChatWithPharmacist";
 import AdminSalesReportPage from "./pages/Admin/AdminSalesReportPage";
+import PharmacistSalesReportPage from "./pages/Pharmacist/PharmacistSalesReportPage";
   
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
@@ -108,6 +109,7 @@ function App() {
           <Route index element={<PharmacistHomePage />} />
           <Route path="ph-medicine" element={<PhMedicine />} />
           <Route path="pharmacist-profile" element={<PharmacistProfile />} />
+          <Route path="ph-salesreport" element={<PharmacistSalesReportPage />} />
         </Route>
 
         <Route path="*" element={<>Page not found</>} />

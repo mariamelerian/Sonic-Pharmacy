@@ -1,19 +1,19 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import AppNavbar from "../../components/AppNavigation/AppNavbar";
-import HamburgerMenu from "../../components/Admin/AdminBurgerMenu";
-import FilterByMonth from "../../components/FilterByMonth";
 import ShowSalesReport from "../../components/ShowSalesReport";
+import PhHamburgerMenu from "../../components/Pharmacist/PhHamburgerMenu";
+import FilterForTotalSalesParm from "../../components/FilterForTotalSalesPharm";
 
-function AdminSalesReportPage() {
+function PharmacistSalesReportPage() {
   return (
     <div>
-      <AppNavbar hamburgerMenu={<HamburgerMenu />} />
+      <AppNavbar hamburgerMenu={<PhHamburgerMenu />} />
       <Container fluid className="bg-light pt-3 mt-2">
         <Container className="bg-white px-5 py-4">
           <Row>
             <Col xs={12} md={12}>
-              <FilterByMonth />
+              <FilterForTotalSalesParm />
             </Col>
           </Row>
           <Row>
@@ -27,4 +27,4 @@ function AdminSalesReportPage() {
   );
 }
 
-export default AdminSalesReportPage;
+export default PharmacistSalesReportPage;

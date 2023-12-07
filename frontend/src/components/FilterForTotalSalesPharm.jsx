@@ -3,7 +3,7 @@ import { Button, Container, Form, Row, Col } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 
-function FilterByMonth({ onFilter }) {
+function FilterForTotalSalesParm({ onFilter }) {
   const [selectedMonth, setSelectedMonth] = useState("");
 
   const [error, setError] = useState(null);
@@ -70,7 +70,61 @@ function FilterByMonth({ onFilter }) {
               </option>
             ))}
           </Form.Control>
+
+          <div
+            style={{
+              color: "#099BA0 ",
+              fontSize: "1rem", // Adjusted font size
+              fontStyle: "normal",
+              fontWeight: 500,
+              lineHeight: "100%",
+              marginBottom: "0.5rem", // Adjusted margin
+            }}
+          >
+            Medicine
+          </div>
+
+          <Form.Control
+            as="select"
+            onChange={(e) => setSelectedMonth(e.target.key)}
+            style={{ width: "100%" }} // Adjusted width
+          >
+            <option value="">Select Medicine</option>
+            {months.map((use, index) => (
+              <option key={index} value={use}>
+                {`${use}`}
+              </option>
+            ))}
+          </Form.Control>
+
+          <div
+            style={{
+              color: "#099BA0 ",
+              fontSize: "1rem", // Adjusted font size
+              fontStyle: "normal",
+              fontWeight: 500,
+              lineHeight: "100%",
+              marginBottom: "0.5rem", // Adjusted margin
+            }}
+          >
+            Date
+          </div>
+
+          <Form.Control
+            as="select"
+            onChange={(e) => setSelectedMonth(e.target.key)}
+            style={{ width: "100%" }} // Adjusted width
+          >
+            <option value="">Select Date</option>
+            {months.map((use, index) => (
+              <option key={index} value={use}>
+                {`${use}`}
+              </option>
+            ))}
+          </Form.Control>
+
         </Col>
+        
         <Col xs={12} md={3} className="d-flex align-items-end">
   <Button
     className="custom-button"
@@ -89,4 +143,4 @@ function FilterByMonth({ onFilter }) {
   );
 }
 
-export default FilterByMonth;
+export default FilterForTotalSalesParm;
