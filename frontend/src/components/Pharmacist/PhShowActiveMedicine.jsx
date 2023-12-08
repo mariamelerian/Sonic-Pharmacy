@@ -26,8 +26,8 @@ function PhShowActiveMedicine() {
   const dispatch = useDispatch();
 
   const medicineImage = {
-    width: "15rem",
-    height: "15rem",
+    width: "14rem",
+    height: "14rem",
   };
 
   useEffect(() => {
