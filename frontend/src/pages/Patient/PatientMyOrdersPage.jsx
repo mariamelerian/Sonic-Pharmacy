@@ -7,6 +7,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import PatientMyOrders from "../../components/Patient/PatientMyOrders";
 import PatientHamburgerMenu from "../../components/Patient/PatientHamburgerMenu";
+import ChatPat from "../../components/ChatPat";
 
 
 export default function PatientMyOrdersPage() {
@@ -50,7 +51,8 @@ export default function PatientMyOrdersPage() {
             <PatientMyOrders />
           
           </Container>
-      
+          <ChatPat who="patient" />
+
     </>
   );
 }

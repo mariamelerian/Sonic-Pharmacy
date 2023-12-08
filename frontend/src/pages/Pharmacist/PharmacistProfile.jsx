@@ -3,6 +3,7 @@ import { Container, Tab, Col, Row, Nav } from "react-bootstrap";
 import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import PhHamburgerMenu from "../../components/Pharmacist/PhHamburgerMenu";
 import PharmacistProfileBox from "../../components/Pharmacist/PharmacistProfileBox";
+import ChatPat from "../../components/ChatPat";
 
 function PharmacistProfile() {
   const [activeKey, setActiveKey] = useState("first");
@@ -65,6 +66,8 @@ function PharmacistProfile() {
           </Row>
         </Container>
       </Container>
+      <ChatPat who="pharmacist" />
+
     </div>
   );
 }

@@ -4,6 +4,7 @@ import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import PhHamburgerMenu from "../../components/Pharmacist/PhHamburgerMenu";
 import PhShowMedicines from "../../components/Pharmacist/PhShowMedicine";
 import FilterMedicine from "../../components/FilterMedicine";
+import ChatPat from "../../components/ChatPat";
 
 function PhMedicine() {
   return (
@@ -21,7 +22,10 @@ function PhMedicine() {
           </Row>
         </Container>
       </Container>
+      <ChatPat who="pharmacist" />
+
     </div>
+    
   );
 }
 

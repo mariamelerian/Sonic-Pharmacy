@@ -5,6 +5,7 @@ import { Container, Row } from "react-bootstrap";
 import PharmImg from "../../components/Pharmacist/PharmImg";
 import PhHamburgerMenu from "../../components/Pharmacist/PhHamburgerMenu";
 import { faBriefcaseMedical } from "@fortawesome/free-solid-svg-icons";
+import ChatPat from "../../components/ChatPat";
 
 export default function PharmacistHomePage() {
   return (
@@ -38,6 +39,8 @@ export default function PharmacistHomePage() {
           />
         </div>
       </Container>
+      <ChatPat who="pharmacist" />
+
     </>
   );
 }
