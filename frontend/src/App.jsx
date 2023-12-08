@@ -34,10 +34,10 @@ import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
 import PatientShowMedicine from "./components/Patient/PatientShowMedicine";
 import PatientChatWithPharmacist from "./pages/Patient/PatientChatWithPharmacist";
 //import ChatPat from "./components/ChatPat";
-  
+import AdminSalesReportPage from "./pages/Admin/AdminSalesReportPage";
+import PharmacistSalesReportPage from "./pages/Pharmacist/PharmacistSalesReportPage";
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
-
 
 function App() {
   return (
@@ -55,7 +55,6 @@ function App() {
           <Route path="password-changed" element={<PasswordChanged />} />
           <Route index element={<ForgotPassword />} />
         </Route>
-
 
         <Route path="GuestHomePage">
           <Route index element={<GuestHomePage />} />
@@ -82,6 +81,7 @@ function App() {
           <Route path="patients-list" element={<AdminPatientsPage />} />
           <Route path="admins-list" element={<AdminAdminsPage />} />
           <Route path="admin-medicine" element={<AdminMedicine />} />
+          <Route path="admin-salesreport" element={<AdminSalesReportPage />} />
           <Route path="profile" element={<AdminProfilePage />} />
         </Route>
 
@@ -93,11 +93,14 @@ function App() {
 
           <Route path="patient-cartItem" element={<CartItems />} />
           {/* <Route path="patient-checkout" element={<PatientCheckOutModal />} /> */}
-          <Route path="patient-checkoutcomplete" element={<CheckOutDoneModal />} />
-          <Route path="patient-chatwithpharmacist" element={<PatientChatWithPharmacist />} />
-
-          
-          
+          <Route
+            path="patient-checkoutcomplete"
+            element={<CheckOutDoneModal />}
+          />
+          <Route
+            path="patient-chatwithpharmacist"
+            element={<PatientChatWithPharmacist />}
+          />
 
           <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />
           <Route path="profile" element={<PatientProfile />} />
@@ -109,6 +112,10 @@ function App() {
           {/* <Route path="ph-medicine" element={<ChatPat />} /> */}
 
           <Route path="pharmacist-profile" element={<PharmacistProfile />} />
+          <Route
+            path="ph-salesreport"
+            element={<PharmacistSalesReportPage />}
+          />
         </Route>
 
         <Route path="*" element={<>Page not found</>} />
