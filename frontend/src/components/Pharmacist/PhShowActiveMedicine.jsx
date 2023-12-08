@@ -23,6 +23,7 @@ function PhShowActiveMedicine() {
   const [quantity, setQuantity] = useState(null);
   const [medicinalUse, setMedicinalUse] = useState(null);
   const [activeIngredients, setActiveIngredients] = useState(null);
+  const [expandedMedicines, setExpandedMedicines] = useState([]);
   const dispatch = useDispatch();
 
   const medicineImage = {
@@ -147,6 +148,15 @@ function PhShowActiveMedicine() {
     setQuantity(null);
   };
 
+  const toggleMedicineDetails = (index) => {
+    setExpandedMedicines((prevExpandedMedicines) => {
+      const isExpanded = prevExpandedMedicines.includes(index);
+      return isExpanded
+        ? prevExpandedMedicines.filter((expandedIndex) => expandedIndex !== index)
+        : [...prevExpandedMedicines, index];
+    });
+  };
+
   return (
     <div>
       {showMedicineForm && (
@@ -186,7 +196,7 @@ function PhShowActiveMedicine() {
                       onClick={() => handleEditMedicine(index)}
                     />
                   </div>
-                  <div> {medicine.name} </div>
+                  {/* <div> {medicine.name} </div> */}
                 </Card.Header>
                 <Card.Body>
                   <div className="medicine-image-container">
@@ -201,6 +211,41 @@ function PhShowActiveMedicine() {
                       }}
                     />
                   </div>
+                  <div className="details-container">
+            <div className="d-flex justify-content-between align-items-center mb-7 px-5">
+              <div
+                className="medicine-name font-weight-bold"
+                style={{
+                  fontSize: "24px",
+                  fontStyle: "normal",
+                  fontWeight: 700,
+                  lineHeight: "120%",
+                }}
+              >
+                {medicine.name}
+              </div>
+              <div
+                className="expand-button"
+                // onClick={() => handleExpand(index)}
+              >
+                <FontAwesomeIcon icon={faInfoCircle} />
+              </div>
+            </div>
+            </div>
+            <div
+              className="info-price-container d-flex justify-content-between align-items-center px-5"
+              style={{
+                color: "#777777",
+                fontSize: "1rem",
+                fontStyle: "normal",
+                fontWeight: 500,
+                lineHeight: "100%",
+                marginBottom: "0.5rem",
+              }}
+            >
+  <div className="medicine-price">Price: {medicine.price} LE</div>
+
+</div>
                   {editedMedicine === index ? (
                     <div style={{ paddingLeft: "20px" }}>
                       <Form.Group>
@@ -280,26 +325,26 @@ function PhShowActiveMedicine() {
                     <div>
                       <div
                         className="medicine-price"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Price:</strong> {medicine.price} LE
                       </div>
 
                       <div
                         className="medicine-description"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Description:</strong> {medicine.description}
                       </div>
                       <div
                         className="medicine-use"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Medicinal Use:</strong> {medicine.medicinalUse}
                       </div>
                       <div
                         className="medicine-activeIngredients"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Active Ingredients:</strong>{" "}
                         {medicine.activeIngredients.map((ingredient, index) => (
@@ -310,13 +355,13 @@ function PhShowActiveMedicine() {
                       </div>
                       <div
                         className="medicine-quantity"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Quantity:</strong> {medicine.quantity}
                       </div>
                       <div
                         className="medicine-sales"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Sales:</strong> {medicine.sales} LE
                       </div>
