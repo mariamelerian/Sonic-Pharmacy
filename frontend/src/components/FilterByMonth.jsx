@@ -9,19 +9,29 @@ function FilterByMonth({ onFilter }) {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
 
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-
-  
-
-
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   const handleFilter = () => {
+    console.log(selectedMonth);
     //TODO: send to backend
   };
 
   return (
     <Container
-    className="mx-auto"
+      className="mx-auto"
       style={{
         flexShrink: 0,
         width: "82%",
@@ -72,18 +82,18 @@ function FilterByMonth({ onFilter }) {
           </Form.Control>
         </Col>
         <Col xs={12} md={3} className="d-flex align-items-end">
-  <Button
-    className="custom-button"
-    onClick={handleFilter}
-    style={{
-      height: "38px", // Adjusted height
-      marginLeft: "150px", // Adjusted margin-left
-      fontSize: "14px", // Adjusted font size
-    }}
-  >
-    Apply
-  </Button>
-</Col>
+          <Button
+            className="custom-button"
+            onClick={handleFilter}
+            style={{
+              height: "38px", // Adjusted height
+              marginLeft: "150px", // Adjusted margin-left
+              fontSize: "14px", // Adjusted font size
+            }}
+          >
+            Apply
+          </Button>
+        </Col>
       </Row>
     </Container>
   );

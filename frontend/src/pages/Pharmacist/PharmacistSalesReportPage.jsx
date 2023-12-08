@@ -4,6 +4,7 @@ import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import ShowSalesReport from "../../components/ShowSalesReport";
 import PhHamburgerMenu from "../../components/Pharmacist/PhHamburgerMenu";
 import FilterForTotalSalesParm from "../../components/FilterForTotalSalesPharm";
+import SalesReportPage from "../../components/SalesReport";
 
 function PharmacistSalesReportPage() {
   return (
@@ -11,16 +12,7 @@ function PharmacistSalesReportPage() {
       <AppNavbar hamburgerMenu={<PhHamburgerMenu />} />
       <Container fluid className="bg-light pt-3 mt-2">
         <Container className="bg-white px-5 py-4">
-          <Row>
-            <Col xs={12} md={12}>
-              <FilterForTotalSalesParm />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12} md={12}>
-              <ShowSalesReport />
-            </Col>
-          </Row>
+          <SalesReportPage />
         </Container>
       </Container>
     </div>
