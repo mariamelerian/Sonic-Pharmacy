@@ -94,7 +94,9 @@ const updatePatientInfo = async (req, res) => {
 
 const deletePatient = async (req, res) => {
   try {
-    const deletedPharmacist = await Patient.findByIdAndDelete(req.query._id);
+    const id = req.query.id;
+    console.log(id);
+    const deletedPharmacist = await Patient.findByIdAndDelete(id);
     if (!deletedPharmacist) {
       return res.status(404).json({ error: "Patient not found" });
     }
