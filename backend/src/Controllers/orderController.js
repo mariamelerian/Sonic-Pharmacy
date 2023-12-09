@@ -2,6 +2,10 @@ const Order = require("../Models/Order");
 const Cart = require("../Models/Cart");
 const Medicine = require("../Models/Medicine");
 const Patient = require("../Models/Patient");
+const emailService = "youstina2307@outlook.com"; // e.g., 'gmail'
+const emailUser = "youstina2307@outlook.com";
+const emailPassword = "23july2002";
+const nodemailer = require("nodemailer");
 
 const stripe = require("stripe")(
   "sk_test_51O9lZ0IQTS4vUIMWJeAJ5Ds71jNbeQFj6v8mO7leS2cDIJuLy1fwNzoiXPKZV5KdoMpfzocfJ6hBusxPIjbGeveF00RTnmVYCX"
