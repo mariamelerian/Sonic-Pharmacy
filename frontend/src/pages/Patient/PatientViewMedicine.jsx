@@ -4,6 +4,7 @@ import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import HamburgerMenu from "../../components/Patient/PatientHamburgerMenu";
 import PatientShowMedicine from "../../components/Patient/PatientShowMedicine";
 import FilterMedicine from "../../components/FilterMedicine";
+import ChatPat from "../../components/ChatPat";
 
 function PatientMedicine() {
   
@@ -24,6 +25,8 @@ function PatientMedicine() {
           </Row>
         </Container>
       </Container>
+      <ChatPat who="patient" />
+
     </div>
   );
 }

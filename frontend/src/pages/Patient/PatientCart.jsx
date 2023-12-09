@@ -4,6 +4,7 @@ import PatientHamburgerMenu from "../../components/Patient/PatientHamburgerMenu"
 import EmptyCart from "../../components/Patient/PatientEmptyCart";
 import CartItems from "../../components/Patient/PatientMedicineInCart";
 import medicineBlueImg from "../../Assets/Patient/medicineBlueImg.jpg";
+import ChatPat from "../../components/ChatPat";
 
 function PatientCart() {
   return (
@@ -18,7 +19,10 @@ function PatientCart() {
         </div>
         {/* )} */}
       </div>
+      <ChatPat who="patient" />
+
     </div>
+    
   );
 }
 

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Form, Spinner, Tabs, Tab  } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle ,faSearch} from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { deleteFilterArray } from "../../state/filterMedicine";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import AddToCartModal from "./AddToCartModal";
+import PatientEmptyPrescribedMedicine from "./PatientEmptyPrescribedMedicine";
+import AlternativeMedicinesModal from "./AlternativeMedicinesModal";
 
 function PatientPrescribedMedicine() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,12 +18,13 @@ function PatientPrescribedMedicine() {
   const [error, setError] = useState(null);
   const [filterMedicinalUse, setFilterMedicinalUse] = useState("");
   const [selectedMedicine, setSelectedMedicine] = useState(null);
-  
+  const [showAlternativeModal, setShowAlternativeModal] = useState(false);
+  const [alternativeMedicines, setAlternativeMedicines] = useState([]);
   const dispatch = useDispatch();
 
   const medicineImage = {
-    width: "15rem",
-    height: "15rem",
+    width: "14rem",
+    height: "14rem",
   };
 
   useEffect(() => {
@@ -75,6 +78,26 @@ function PatientPrescribedMedicine() {
     setSelectedMedicine(null);
   };
 
+  const handleFindAlternatives = async (medicine) => {
+    const matchingMedicines = medicines.filter(
+      (m) =>
+        m._id !== medicine._id &&
+        m.activeIngredients.some(
+          (ingredient) =>
+            ingredient.toLowerCase() ===
+            medicine.activeIngredients[0].toLowerCase()
+        )
+    );
+
+    setAlternativeMedicines(matchingMedicines);
+    setShowAlternativeModal(true);
+  };
+
+  const handleCloseAlternativeModal = () => {
+    setShowAlternativeModal(false);
+    setAlternativeMedicines([]);
+  };
+
   const handleCloseModal = () => {
     setSelectedMedicine(null);
   };
@@ -107,6 +130,27 @@ function PatientPrescribedMedicine() {
     <Card className="mb-4 mx-3 bg-light">
       <Card.Body className="text-center">
         <div className="medicine-container">
+         {/* Add the "Prescribed" label with a box */}
+    <div
+      className="prescribed-label"
+      style={{
+        position: 'absolute', // Set position to absolute
+        top: '5px', // Set distance from the top
+        right: '5px', // Set distance from the right
+        paddingRight:'5px',
+        paddingLeft:'5px',
+        paddingBottom:'5px',
+
+
+        borderColor:'lightgreen',
+        background: 'white', // Set background color
+        borderRadius: '8px', // Set border-radius for curved corners
+        padding: '8px', // Set padding for space inside the box
+      }}
+    >
+      <span style={{ color: "#007bff", fontWeight: "bold" }}>Prescribed</span>
+    </div>
+
           <div className="medicine-image-container">
             <img
               src={medicine.picture}
@@ -145,9 +189,18 @@ function PatientPrescribedMedicine() {
                 marginBottom: "0.5rem",
               }}
             >
-              <div className="medicine-price">Price: {medicine.price} LE</div>
-              <div> Prescribed</div>
-            </div>
+  <div className="medicine-price">Price: {medicine.price} LE</div>
+  {medicine.quantity === 0 && (
+    <div style={{ marginTop: '5px' }}>
+      <div style={{ backgroundColor: 'white', color: 'red', border: '1px solid red', borderRadius: '5px', padding:'5px' }}>
+        
+        Out of Stock 
+      </div>
+    </div>
+  )}
+</div>
+
+
             {expandedMedicine === index && (
            <>
           <div className="medicine-description" style={{ textAlign: "left", paddingLeft: "50px", display: "flex", alignItems: "center" }}>
@@ -184,12 +237,23 @@ function PatientPrescribedMedicine() {
           
            
             )}
-           <button
-  className="btn btn-primary mt-3"
-  onClick={() => handleAddToCart(medicine)}
->
-  Add to Cart <FontAwesomeIcon icon={faShoppingCart} />
-</button>
+           {medicine.quantity === 0 ? (
+            <div style={{ marginTop: '5px' }}>
+               <button
+            className="btn btn-primary mt-3"
+            onClick={() => handleFindAlternatives(medicine)}
+          >
+            Find Alternatives <FontAwesomeIcon icon={faSearch} />
+          </button>
+            </div>
+          ) : (
+            <button
+              className="btn btn-primary mt-3"
+              onClick={() => handleAddToCart(medicine)}
+            >
+              Add to Cart <FontAwesomeIcon icon={faShoppingCart} />
+            </button>
+          )}
           </div>
         </div>
       </Card.Body>
@@ -202,6 +266,13 @@ function PatientPrescribedMedicine() {
         show={showModal}
         handleClose={handleCloseModal}
         itemName={selectedMedicine?.name}
+      />
+
+      {/* Add the AlternativeMedicinesModal component */}
+      <AlternativeMedicinesModal
+        show={showAlternativeModal}
+        handleClose={handleCloseAlternativeModal}
+        alternativeMedicines={alternativeMedicines}
       />
     </div>
   );

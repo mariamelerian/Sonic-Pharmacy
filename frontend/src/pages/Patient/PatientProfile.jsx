@@ -2,6 +2,7 @@ import { Container, Row } from "react-bootstrap";
 import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import ProfileTabs from "../../components/Patient/ProfileTabs";
 import PatientHamburgerMenu from "../../components/Patient/PatientHamburgerMenu";
+import ChatPat from "../../components/ChatPat";
 
 function PatientProfile() {
   return (
@@ -16,6 +17,7 @@ function PatientProfile() {
           </Row>
         </Container>
       </Container>
+      <ChatPat who="patient" />
     </div>
   );
 }

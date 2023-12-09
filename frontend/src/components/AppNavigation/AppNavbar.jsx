@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import logo from "../../Assets/ClinicLogo.png";
+import NotificationsPanel from "../NotificationsPanel";
 const AppNavbar = (props) => {
   const { hamburgerMenu } = props;
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const [who, setWho] = useState("");
+  
   const handleMenuClick = () => {
     setMenuOpen(!menuOpen);
   };

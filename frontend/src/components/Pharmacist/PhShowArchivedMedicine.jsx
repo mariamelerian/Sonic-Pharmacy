@@ -26,8 +26,8 @@ function PhShowArchivedMedicine() {
   const dispatch = useDispatch();
 
   const medicineImage = {
-    width: "15rem",
-    height: "15rem",
+    width: "14rem",
+    height: "14rem",
   };
 
   useEffect(() => {
@@ -41,6 +41,10 @@ function PhShowArchivedMedicine() {
     console.log(responseData);
   }, []);
 
+  
+        
+       
+   
   const fetchData = async () => {
     try {
       const response = await axios.get("/archivedMedicines");
