@@ -26,10 +26,7 @@ export default function ChatPat({ who }) {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(null);
   const [chosen, setChosen] = useState(false);
-  const [chosenName, setChosenName] = useState("");
   const [myMessage, setMyMessage] = useState("");
-  const [myContacts, setMyContacts] = useState([]);
-  const [chatData, setChatData] = useState([]);
   const [chats, setChats] = useState([]);
 
   ////////////////////////////video
@@ -39,6 +36,19 @@ export default function ChatPat({ who }) {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/getPatientChat", {
+        params: { patientId: localStorage.getItem("userId") },
+      });
+      if (response.status === 200) {
+        setChats(response.data.messages);
+      }
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
 
   const buttonStyle = {
     position: "fixed",
@@ -126,106 +136,17 @@ export default function ChatPat({ who }) {
   const buttonTextPosition = isHovered ? "0" : "-100%";
   const buttonTextOpacity = isHovered ? 1 : 0;
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const callUser = (id) => {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: stream,
-    });
-    peer.on("signal", (data) => {
-      socketRef.current.emit("callUser", {
-        userToCall: id,
-        signalData: data,
-        from: me,
-        name: name,
-      });
-    });
-    peer.on("stream", (stream) => {
-      userVideoRef.current.srcObject = stream;
-    });
-    socketRef.current.on("callAccepted", (signal) => {
-      setCallAccepted(true);
-      peer.signal(signal);
-    });
-
-    connectionRef.current = peer;
-  };
-
-  const answerCall = () => {
-    setCallAccepted(true);
-    const peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream: stream,
-    });
-    peer.on("signal", (data) => {
-      socketRef.current.emit("answerCall", { signal: data, to: caller });
-    });
-    peer.on("stream", (stream) => {
-      userVideoRef.current.srcObject = stream;
-    });
-
-    peer.signal(callerSignal);
-    connectionRef.current = peer;
-  };
-
-  const leaveCall = () => {
-    setCallEnded(true);
-    connectionRef.current.destroy();
-  };
-
-  const setChat = (name) => {
-    setChosen(true);
-    setIsOpen(false);
-    setChosenName(name);
-    fetchChatData(name);
-  };
-
-  const setVideoChat = () => {
-    setCalling(true);
-  };
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("/getChats", {
-        params: { userId: localStorage.getItem("userId") },
-      });
-      if (response.status === 200) {
-        setChats(response.data);
-      }
-    } catch (error) {
-      setError(error.response.data.message);
-    }
-  };
-
-  const fetchChatData = async (name) => {
-    const id = name.split("-")[1];
-    console.log(id);
-    try {
-      const response = await axios.post("/viewChat", { _id: id });
-      if (response.status === 200) {
-        setChatData(response.data.chat.messages);
-      }
-    } catch (error) {
-      setChatData([]);
-      setError(error.response.data.message);
-    }
-  };
-
   const sendMessage = async () => {
-    const id = chosenName.split("-")[1];
+    const id = localStorage.getItem("userId");
     if (myMessage) {
       try {
-        const response = await axios.post("/sendMessage", {
-          recipientID: id,
-          message: myMessage,
+        const response = await axios.post("/sendPatientChatMessage", {
+          patiendId: localStorage.get("userId"),
+          sender: "Patient",
+          content: myMessage,
         });
         if (response.status === 200) {
-          fetchChatData(chosenName);
+          fetchData();
           setMyMessage("");
         }
       } catch (error) {
@@ -234,36 +155,6 @@ export default function ChatPat({ who }) {
     }
   };
 
-  useEffect(() => {
-    socketRef.current = io.connect("http://localhost:8000");
-    if (idToCall !== "" && calling) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then((stream) => {
-          setStream(stream);
-          if (myVideoRef.current) {
-            myVideoRef.current.srcObject = stream;
-          }
-        })
-        .catch((error) => {
-          console.error("Error accessing media devices:", error);
-        });
-
-      socketRef.current.on("me", (id) => {
-        setMe(id);
-        console.log("socket it:", id);
-      });
-
-      socketRef.current.on("callUser", (data) => {
-        setReceivingCall(true);
-        setCaller(data.from);
-        setName(data.name);
-        setCallerSignal(data.signal);
-      });
-      callUser(idToCall); // Initiating the call
-    }
-  }, [idToCall, calling, myVideoRef]);
-
   return (
     <div>
       {!isOpen && (
@@ -271,8 +162,7 @@ export default function ChatPat({ who }) {
           style={buttonStyle}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          onClick={openChat}
-          onClick={() => setIsOpen(true)}
+          onClick={() => setIsOpen(true)} //trigger openning chat
         >
           <div style={buttonContentStyle}>
             <FontAwesomeIcon
@@ -287,62 +177,13 @@ export default function ChatPat({ who }) {
                 whiteSpace: "nowrap",
               }}
             >
-              {who === "patient"
-                ? "Chat with a Pharmacist"
-                : "Chat with a patient"}
+              {"Chat with a Pharmacist"}
             </span>
           </div>
         </Button>
       )}
-      {isOpen && (
-        <Container
-          fluid
-          className="d-flex flex-column bg-light"
-          style={containerStyle}
-        >
-          <Navbar
-            className="d-flex justify-content-between p-1"
-            style={{ backgroundColor: "#05afb9", width: "100%" }}
-          >
-            <div style={{ color: "white", marginLeft: "1rem" }}>
-              {who === "patient" ? "Your Pharmacists" : "Your Patients"}
-            </div>
-            <Button
-              variant="link"
-              onClick={() => {
-                setIsOpen(false);
-              }}
-              style={{ alignSelf: "flex-end" }}
-            >
-              <FontAwesomeIcon icon={faTimes} style={{ color: "white" }} />
-            </Button>
-          </Navbar>
 
-          <ListGroup
-            as="ol"
-            className="flex-grow-1"
-            style={{ overflowY: "auto" }}
-          >
-            {myContacts.map((name, index) => (
-              <ListGroup.Item
-                key={index}
-                as="li"
-                className="d-flex justify-content-between align-items-start"
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setChat(name);
-                  setIdToCall(name.split("-")[1]);
-                }}
-              >
-                <div className="d-flex flex-column">
-                  <div>{name.split("-")[0]}</div>
-                </div>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </Container>
-      )}
-      {chosen && (
+      {isOpen && (
         <div>
           {" "}
           <Container
@@ -365,24 +206,16 @@ export default function ChatPat({ who }) {
                   }}
                   onClick={() => {
                     setChosen(false);
-                    setChosenName("");
-                    setChatData([]);
                     setIsOpen(true);
                   }}
                 />
-                {chosenName.split("-")[0]}
+                {"Chat with a Pharmacist"}
               </div>
               <div>
-                <FontAwesomeIcon
-                  icon={faVideo}
-                  onClick={() => setVideoChat()}
-                  style={{ cursor: "pointer" }}
-                />
                 <Button
                   variant="link"
                   onClick={() => {
-                    setChosen(false);
-                    setCalling(false);
+                    setIsOpen(false);
                   }}
                   style={{ color: "white", alignSelf: "flex-end" }}
                 >
@@ -398,18 +231,23 @@ export default function ChatPat({ who }) {
               style={{ width: "100%", padding: "10px", overflowY: "auto" }}
               className="d-flex flex-column"
             >
-              {chatData.map((item, index) => (
+              {/* <change */}
+              {chats.map((item, index) => (
                 <div
                   key={index}
-                  className={item[0] === who ? "text-end" : "text-start"}
-                  style={item[0] === who ? { ...myMsg } : { ...otherMsg }}
+                  className={
+                    item.sender === "Patient" ? "text-end" : "text-start"
+                  }
+                  style={
+                    item.sender === "Patient" ? { ...myMsg } : { ...otherMsg }
+                  }
                 >
-                  <div>{item[3]}</div>
+                  <div>{item.content}</div>
                   <div style={{ fontSize: "0.6rem", textAlign: "end" }}>
-                    {item[1].split("-")[2]}
+                    {/* {item[1].split("-")[2]}
                     {"/"}
-                    {item[1].split("-")[1]} {item[2]}
-                    {item[0] === who && (
+                    {item[1].split("-")[1]} {item[2]} */}
+                    {item.sender === "Patient" && (
                       <FontAwesomeIcon
                         icon={faCheckDouble}
                         style={{ marginLeft: "0.3rem", color: "#adb5bd " }}
@@ -443,108 +281,6 @@ export default function ChatPat({ who }) {
               />
             </div>
           </Container>
-          <Modal show={calling}>
-            <Modal.Header style={{ fontSize: "1.5rem" }}>
-              {chosenName.split("-")[0]}'s Room
-            </Modal.Header>
-            <Modal.Body className="d-flex flex-column justify-content-center align-items-center">
-              <div style={{ fontSize: "1.1rem" }}>
-                <strong>Personal key: </strong>
-                {me}{" "}
-                <div className="video" style={{ marginTop: "0.3rem" }}>
-                  {stream && (
-                    <video
-                      playsInline
-                      muted
-                      ref={myVideoRef}
-                      autoPlay
-                      style={{ width: "25rem" }}
-                    />
-                  )}
-                </div>
-              </div>
-              {/* <CopyToClipboard text={me} style={{ marginBottom: "2rem" }}>
-                <Button color="primary">Copy ID</Button>
-              </CopyToClipboard> */}
-              <div
-                className="d-flex justify-content-between"
-                style={{
-                  height: "2.5rem",
-                  width: "25rem",
-                  marginTop: "1rem",
-                }}
-              >
-                <FormControl
-                  id="filled-basic"
-                  label="ID to call"
-                  placeholder="Enter key to call"
-                  onChange={(e) => setIdToCall(e.target.value)}
-                  style={{ width: "18rem" }}
-                />
-                <Button
-                  color="primary"
-                  onClick={() => callUser(idToCall)}
-                  style={{ width: "5rem" }}
-                  disabled={idToCall === ""}
-                >
-                  Call{" "}
-                  <FontAwesomeIcon
-                    icon={faPhone}
-                    style={{ fontSize: "0.9rem", marginLeft: "0.3rem" }}
-                  />
-                </Button>
-              </div>
-              {/* Render user video when call is accepted */}
-              {callAccepted && !callEnded && (
-                <div className="d-flex flex-column justify-content-center align-items-center">
-                  <video
-                    playsInline
-                    muted
-                    ref={userVideoRef}
-                    autoPlay
-                    style={{ width: "25rem", marginTop: "1rem" }}
-                  />
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      leaveCall();
-                    }}
-                    style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}
-                  >
-                    End Call{" "}
-                    <FontAwesomeIcon
-                      icon={faPhoneSlash}
-                      style={{ fontSize: "0.9rem", marginLeft: "0.3rem" }}
-                    />
-                  </Button>
-                </div>
-              )}
-
-              {receivingCall && !callAccepted && (
-                <Button
-                  color="primary"
-                  onClick={answerCall}
-                  style={{
-                    animation: "vibrate 0.5s infinite",
-                    // Other button styles
-                  }}
-                >
-                  Answer
-                </Button>
-              )}
-            </Modal.Body>
-            <Modal.Footer>
-              {" "}
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setCalling(false);
-                }}
-              >
-                Exit room
-              </Button>
-            </Modal.Footer>
-          </Modal>
         </div>
       )}
     </div>

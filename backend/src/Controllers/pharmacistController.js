@@ -361,7 +361,6 @@ module.exports = {
   getInactivePharmacists,
   updatePharmacist,
   deletePharmacist,
-  outOfStockEmail,
   pharmacistChangePassword,
   upload,
   getPharmacistWallet,
