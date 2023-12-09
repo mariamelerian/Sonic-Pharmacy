@@ -231,7 +231,8 @@ const medicineNamesIds = async (req, res) => {
 
 const getTotalMonthSales = async (req, res) => {
   try {
-    const month = req.body.month; // number from 1 - 12
+    const month = req.query.month; // number from 0 - 11
+    console.log(month);
     let s = {
       sales: [],
       totalRevenue: 0,
@@ -245,6 +246,7 @@ const getTotalMonthSales = async (req, res) => {
       for (let j = 0; j < medicine.salesData.length; j++) {
         let sale = medicine.salesData[j];
 
+        console.log(sale.date.getMonth());
         if (sale.date.getMonth() == month) {
           totalRevenue += sale.quantity * medicine.price;
           totalQuantitySold += sale.quantity;
@@ -266,30 +268,67 @@ const getTotalMonthSales = async (req, res) => {
 };
 
 const getFilteredSalesReport = async (req, res) => {
-  const { medicineNames, startDate, endDate } = req.body;
+  let { medicineNames, startDate, endDate } = req.query;
 
+  //print current date as a normal date string
+  console.log(startDate);
   try {
     let filteredSales = [];
 
     // Filter sales based on medicineIds or date range
-    if (medicineNames && medicineNames.length > 0 && startDate && endDate) {
+    if (medicineNames && startDate) {
       filteredSales = await Medicine.find({
-        name: { $in: medicineNames },
-        sales: {
-          $elemMatch: {
-            date: { $gte: startDate, $lte: endDate },
-          },
-        },
+        name: medicineNames,
       });
-    } else if (medicineNames && medicineNames.length > 0) {
-      filteredSales = await Medicine.find({ name: { $in: medicineNames } });
-    } else if (startDate && endDate) {
-      filteredSales = await Medicine.find({
-        sales: {
-          $elemMatch: {
-            date: { $gte: startDate, $lte: endDate },
-          },
-        },
+
+      filteredSales = filteredSales.filter((medicine) => {
+        for (let i = 0; i < medicine.salesData.length; i++) {
+          const sale = medicine.salesData[i];
+          const saleDate = sale.date.toISOString().split("T")[0];
+          if (saleDate >= startDate && saleDate <= endDate) {
+            return true;
+          }
+        }
+        return false;
+      });
+
+      //only keep sales within the date range
+      filteredSales = filteredSales.filter((medicine) => {
+        medicine.salesData = medicine.salesData.filter((sale) => {
+          const saleDate = sale.date.toISOString().split("T")[0];
+          console.log(saleDate);
+          console.log(startDate);
+
+          return saleDate == startDate;
+        });
+        return medicine.salesData.length > 0;
+      });
+    } else if (medicineNames) {
+      filteredSales = await Medicine.find({ name: medicineNames });
+    } else if (startDate) {
+      filteredSales = await Medicine.find();
+
+      filteredSales = filteredSales.filter((medicine) => {
+        for (let i = 0; i < medicine.salesData.length; i++) {
+          const sale = medicine.salesData[i];
+          const saleDate = sale.date.toISOString().split("T")[0];
+          if (saleDate >= startDate && saleDate <= endDate) {
+            return true;
+          }
+        }
+        return false;
+      });
+
+      //only keep sales within the date range
+      filteredSales = filteredSales.filter((medicine) => {
+        medicine.salesData = medicine.salesData.filter((sale) => {
+          const saleDate = sale.date.toISOString().split("T")[0];
+          console.log(saleDate);
+          console.log(startDate);
+
+          return saleDate == startDate;
+        });
+        return medicine.salesData.length > 0;
       });
     }
 
@@ -300,15 +339,13 @@ const getFilteredSalesReport = async (req, res) => {
     };
 
     for (let i = 0; i < filteredSales.length; i++) {
-      let medicine = medicines[i];
+      let medicine = filteredSales[i];
       let totalRevenue = 0;
       let totalQuantitySold = 0;
       for (let j = 0; j < medicine.salesData.length; j++) {
         let sale = medicine.salesData[j];
-        if (sale.date.getMonth() == month) {
-          totalRevenue += sale.quantity * medicine.price;
-          totalQuantitySold += sale.quantity;
-        }
+        totalRevenue += sale.quantity * medicine.price;
+        totalQuantitySold += sale.quantity;
       }
       s.sales.push({
         medicineId: medicine._id,
@@ -322,6 +359,7 @@ const getFilteredSalesReport = async (req, res) => {
 
     res.status(200).json(s);
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({ message: error.message });
   }
 };

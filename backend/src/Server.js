@@ -58,7 +58,7 @@ const {
   getFilteredSalesReport,
   getAllMedicines,
   getArchivedMedicines,
-  unarchiveMedicine
+  unarchiveMedicine,
 } = require("./Controllers/medicineController");
 
 const {
@@ -90,7 +90,7 @@ app.use(
   session({
     secret: "sonic123",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { secure: false }, // Set to true in a production environment with HTTPS
   })
 );
@@ -145,8 +145,8 @@ app.get("/medicineByName", requireAuth, searchMedicine);
 app.get("/medicineNames", requireAuth, medicineNamesIds);
 app.get("/medicineSales", requireAuth, getMedicineSale);
 app.get("/medicinalUses", requireAuth, getMedicinalUses);
-app.get("/pharmacists", getPharmacists);
-app.get("/pharmacist", getPharmacist);
+app.get("/pharmacists", requireAuth, getPharmacists);
+app.get("/pharmacist", requireAuth, getPharmacist);
 app.get("/pharmacistApplications", requireAuth, getInactivePharmacists);
 app.get("/getAlternativeMedicines", getAlternativeMedicines);
 app.get("/getChat", getChat);
@@ -186,7 +186,7 @@ app.put("/adminChangePassword/:userId?", adminChangePassword);
 app.put("/pharmacistChangePassword/:userId?", pharmacistChangePassword);
 app.put("/resetPassword", resetPassword);
 app.put("/deleteMedicine", requireAuth, deleteMedicine);
-app.put("/unarchiveMedicine", unarchiveMedicine );
+app.put("/unarchiveMedicine", unarchiveMedicine);
 
 app.delete("/deleteAdmin", requireAuth, deleteAdmin);
 app.delete("/deletePatient", requireAuth, deletePatient);

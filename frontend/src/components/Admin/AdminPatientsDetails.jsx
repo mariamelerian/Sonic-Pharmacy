@@ -1,7 +1,14 @@
-
 import { Card, Col, Row, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan,faCalendar, faClock, faCheckCircle, faTimesCircle, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrashCan,
+  faCalendar,
+  faClock,
+  faCheckCircle,
+  faTimesCircle,
+  faChevronDown,
+  faChevronUp,
+} from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -9,59 +16,7 @@ import { Modal } from "react-bootstrap";
 import axios from "axios";
 
 function AdminPatientsDetails() {
-  const Patients = [
-    {
-      PatientName: 'Bob',
-      username: 'Bobby123',
-      email : 'bobbybob@gmail.com',
-      date: "2023-10-15",
-      gender: 'Male',
-      mobileNumber : '0123456789',
-      emergencyContactFN: "BobbyMom",
-      emergencyContactMN: "0154878966",
-      emergencyContactR: "Sister",
-            /*   time: "10:00 AM",
-      status: "Confirmed", */
-   /*    upcomingAppointments: [
-        {
-          date: "2023-10-20",
-          time: "9:30 AM",
-          status: "Confirmed",
-        },
-        {
-          date: "2023-10-25",
-          time: "11:00 AM",
-          status: "Confirmed",
-        },
-      ], */
-      /* age: 35,
-      gender: "Male", */
-      /* medicalHistory: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor euismod lacus, non cursus nunc fringilla ut.", */
-    },
-    {
-        PatientName: 'Dora',
-      username: 'Explorer123',
-      email : 'dodo@gmail.com',
-      date: "1960-4-15",
-      gender: 'Female',
-      mobileNumber : '0325796415',
-      emergencyContactFN: "Mozo",
-      emergencyContactMN: "07569841",
-      emergencyContactR: "Brother",
-    },  
-    {
-        PatientName: 'Danny',
-      username: 'Danny456',
-      email : 'Dannyghost@gmail.com',
-      date: "2011-12-8",
-      gender: 'Male',
-      mobileNumber : '078963254',
-      emergencyContactFN: "Jaz",
-      emergencyContactMN: "023698547",
-      emergencyContactR: "Sister",
-    },  
-    // Add more patient objects as needed
-  ];
+  const [patients, setPatients] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -69,7 +24,7 @@ function AdminPatientsDetails() {
     setSearchTerm(event.target.value);
   };
 
-  const filteredPatients = Patients.filter((patient) =>
+  const filteredPatients = patients.filter((patient) =>
     patient.PatientName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -92,17 +47,17 @@ function AdminPatientsDetails() {
   const [showModal, setShowModal] = useState(false);
   const [showAddNewAdmin, setShowAddNewAdmin] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
- 
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:8000/patients");
+    setLoading(true);
     try {
+      const response = await axios.get("/patients");
       if (response.status === 200) {
-         setResponseData(response.data);
+        setResponseData(response.data);
       } else {
         console.log("Server error");
       }
@@ -112,13 +67,14 @@ function AdminPatientsDetails() {
         setError("No data found.");
       } else if (error.response && error.response.status === 500) {
         setError("Server Error");
+      } else if (error.response && error.response.status === 401) {
+        setError("Unauthorized");
       }
       setLoading(false);
     }
   };
 
   const users = responseData;
-
 
   const toggleViewModal = (user) => {
     setSelectedPatient(user);
@@ -140,18 +96,17 @@ function AdminPatientsDetails() {
 
   const handleClose = () => setShowModal(false);
 
-
   const deleteUser = async (id) => {
     setError(null);
+    console.log(id);
     setId(id);
     setShowModal(true);
   };
 
   const actuallyDelete = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8000/deletePatient?_id=${id}`
-      );
+      axios.defaults.headers.post["Content-Type"] = "application/json";
+      const response = await axios.delete(`/deletePatient?id=${id}`, null);
 
       if (response.status === 200) {
         fetchData();
@@ -165,12 +120,11 @@ function AdminPatientsDetails() {
       setError(null); // Clear the error after 5 seconds
     }, 5000);
     setShowModal(false);
-  };
-  
+  };
 
   return (
     <>
-    <Modal show={showModal} onHide={handleClose}>
+      <Modal show={showModal} onHide={handleClose}>
         <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
         <Modal.Footer className="d-flex align-items-center justify-content-center">
           <Button variant="danger" onClick={actuallyDelete}>
@@ -180,18 +134,25 @@ function AdminPatientsDetails() {
             No
           </Button>
         </Modal.Footer>
-      </Modal>
+              
+      </Modal>
       <div>
-        <Table striped bordered hover variant="light" style={{ width: '1000px' }}>
+        <Table
+          striped
+          bordered
+          hover
+          variant="light"
+          style={{ width: "1000px" }}
+        >
           <thead>
             <tr>
-              <th style={{ color: '#099BA0' }}>Username</th>
-              <th style={{ color: '#099BA0' }}>Name</th>
+              <th style={{ color: "#099BA0" }}>Username</th>
+              <th style={{ color: "#099BA0" }}>Name</th>
             </tr>
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user._id} >
+              <tr key={user._id}>
                 <td onClick={() => toggleViewModal(user)}>{user.username} </td>
                 <td onClick={() => toggleViewModal(user)}>{user.name}</td>
                 <td>
@@ -222,11 +183,16 @@ function AdminPatientsDetails() {
                 <p>Username: {selectedPatient.username}</p>
                 <p>Name: {selectedPatient.name}</p>
                 <p>Email: {selectedPatient.email}</p>
-      <p>Date of Birth: {selectedPatient.dateOfBirth}</p>
-      <p>Gender: {selectedPatient.gender}</p>
-      <p>Mobile Number: {selectedPatient.mobileNumber}</p>
-      <p>Emergency Contact Name: {selectedPatient.emergencyFullName}</p>
-      <p>Emergency Contact Number: {selectedPatient.emergencyMobileNumber}</p>
+                <p>Date of Birth: {selectedPatient.dateOfBirth}</p>
+                <p>Gender: {selectedPatient.gender}</p>
+                <p>Mobile Number: {selectedPatient.mobileNumber}</p>
+                <p>
+                  Emergency Contact Name: {selectedPatient.emergencyFullName}
+                </p>
+                <p>
+                  Emergency Contact Number:{" "}
+                  {selectedPatient.emergencyMobileNumber}
+                </p>
               </div>
             )}
           </Modal.Body>

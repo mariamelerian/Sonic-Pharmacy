@@ -1,7 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
 import { Card, Form, Button } from "react-bootstrap";
-import ImageCompressor from "image-compressor";
 
 function MedicineForm({ onClose, fetchData }) {
   const [medicineName, setMedicineName] = useState(null);

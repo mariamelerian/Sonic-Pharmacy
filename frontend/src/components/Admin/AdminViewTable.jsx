@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,7 +12,6 @@ export default function AdminViewTable() {
   const [username, setUsername] = useState("");
   const [error, setError] = useState(null);
   const [showAddNewAdmin, setShowAddNewAdmin] = useState(false);
-  
 
   useEffect(() => {
     fetchData();
@@ -20,9 +19,9 @@ export default function AdminViewTable() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/admins");
+      const response = await axios.get("/admins");
       if (response.status === 200) {
-       setResponseData(response.data);
+        setResponseData(response.data);
       } else {
         console.log("Server error");
       }
@@ -44,10 +43,10 @@ export default function AdminViewTable() {
   const toggleAddNewAdmin = () => {
     setShowAddNewAdmin(!showAddNewAdmin);
   };
-  
-  const closeForm = ()=>{
+
+  const closeForm = () => {
     setShowAddNewAdmin(false);
-  }
+  };
 
   const addBtnText = showAddNewAdmin ? "Close Form" : "Add new Adminstrator";
   const btnStyle = {
@@ -64,40 +63,33 @@ export default function AdminViewTable() {
 
   return (
     <>
-
-
-
-<Button style={btnStyle} id="newAdminForm" onClick={toggleAddNewAdmin}>{addBtnText}
-      {showAddNewAdmin? <FontAwesomeIcon
-                icon={faXmark}
-                style={iconStyle}
-              />:<FontAwesomeIcon
-              icon={faPlus}
-              style={iconStyle}
-            />
-      }
+      <Button style={btnStyle} id="newAdminForm" onClick={toggleAddNewAdmin}>
+        {addBtnText}
+        {showAddNewAdmin ? (
+          <FontAwesomeIcon icon={faXmark} style={iconStyle} />
+        ) : (
+          <FontAwesomeIcon icon={faPlus} style={iconStyle} />
+        )}
       </Button>
-      {showAddNewAdmin && <AddNewAdmin fetchData={fetchData} closeForm={closeForm} />}
+      {showAddNewAdmin && (
+        <AddNewAdmin fetchData={fetchData} closeForm={closeForm} />
+      )}
 
-     <Table striped bordered hover variant="light" style={{ width: "1000px" }}>
-    <thead>
-      <tr>
-        <th style={{ color: "#099BA0" }}>Username</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {users.map((user) => (
-        <tr key={user.id}>
-          <td>{user.username}</td>
-          
-        </tr>
-      ))}
-    </tbody>
-  </Table>
+      <Table striped bordered hover variant="light" style={{ width: "1000px" }}>
+        <thead>
+          <tr>
+            <th style={{ color: "#099BA0" }}>Username</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>{user.username}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </>
-   
-  
-
   );
 }

@@ -5,6 +5,7 @@ import {
   faBriefcaseMedical,
   faRightFromBracket,
   faUser,
+  faFileLines,
   faCalendarCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -284,6 +285,32 @@ function HamburgerMenu() {
             />
             Medicine
           </a>
+
+          <hr className="menu-line" />
+          <a
+            id="appointment"
+            className="menu-item"
+            href="/admin/admin-salesreport"
+            onClick={closeMenu}
+            style={{
+              color: "var(--gray-600, #6C757D)",
+              fontFamily: "Roboto",
+              fontSize: "0.9375rem",
+              fontStyle: "normal",
+              fontWeight: 400,
+              lineHeight: "1rem" /* 106.667% */,
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none", // To remove underlines
+              padding: "0.5rem 0",
+            }}
+          >
+            <FontAwesomeIcon icon={faFileLines}
+            style={{ marginRight: "0.5rem" }} />
+            Sales Report
+          </a>
+
+
           <hr className="menu-line" />
           <a
             id="logout"
