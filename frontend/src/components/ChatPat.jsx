@@ -10,10 +10,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Container, ListGroup, Navbar } from "react-bootstrap";
 import axios from "axios";
-import Peer from "simple-peer";
-import io from "socket.io-client";
-
-const socket = io.connect("http://localhost:8000");
 
 export default function ChatPat({ who }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -24,92 +20,15 @@ export default function ChatPat({ who }) {
   const [myMessage, setMyMessage] = useState("");
   const [myContacts, setMyContacts] = useState([]);
   const [chatData, setChatData] = useState([]);
+  const [chats, setChats] = useState([]);
 
   ////////////////////////////video
   const [me, setMe] = useState("");
-  const [stream, setStream] = useState();
-  const [receivingCall, setReceivingCall] = useState(false);
-  const [calling, setCalling] = useState(false);
-  const [caller, setCaller] = useState("");
-  const [callerSignal, setCallerSignal] = useState();
-  const [callAccepted, setCallAccepted] = useState(false);
-  const [idToCall, setIdToCall] = useState("");
-  const [callEnded, setCallEnded] = useState(false);
   const [name, setName] = useState("");
-  const myVideo = useRef();
-  const userVideo = useRef();
-  const connectionRef = useRef();
 
   useEffect(() => {
     fetchData();
-
-    //video
-    // navigator.mediaDevices
-    //   .getUserMedia({ video: true, audio: true })
-    //   .then((stream) => {
-    //     setStream(stream);
-    //     myVideo.current.srcObject = stream;
-    //   });
-
-    // socket.on("me", (id) => {
-    //   setMe(id);
-    // });
-
-    // socket.on("callUser", (data) => {
-    //   setReceivingCall(true);
-    //   setCaller(data.from);
-    //   setName(data.name);
-    //   setCallerSignal(data.signal);
-    // });
   }, []);
-
-  const callUser = (id) => {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: stream,
-    });
-    peer.on("signal", (data) => {
-      socket.emit("callUser", {
-        userToCall: id,
-        signalData: data,
-        from: me,
-        name: name,
-      });
-    });
-    peer.on("stream", (stream) => {
-      userVideo.current.srcObject = stream;
-    });
-    socket.on("callAccepted", (signal) => {
-      setCallAccepted(true);
-      peer.signal(signal);
-    });
-
-    connectionRef.current = peer;
-  };
-
-  const answerCall = () => {
-    setCallAccepted(true);
-    const peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream: stream,
-    });
-    peer.on("signal", (data) => {
-      socket.emit("answerCall", { signal: data, to: caller });
-    });
-    peer.on("stream", (stream) => {
-      userVideo.current.srcObject = stream;
-    });
-
-    peer.signal(callerSignal);
-    connectionRef.current = peer;
-  };
-
-  const leaveCall = () => {
-    setCallEnded(true);
-    connectionRef.current.destroy();
-  };
 
   const buttonStyle = {
     position: "fixed",
@@ -206,9 +125,11 @@ export default function ChatPat({ who }) {
 
   const fetchData = async () => {
     try {
-      const response = await axios.post("/viewChats");
+      const response = await axios.get("/getChats", {
+        params: { userId: localStorage.getItem("userId") },
+      });
       if (response.status === 200) {
-        setMyContacts(response.data.chatNames);
+        setChats(response.data);
       }
     } catch (error) {
       setError(error.response.data.message);
@@ -260,31 +181,31 @@ export default function ChatPat({ who }) {
   return (
     <div>
       {!isOpen && (
-         <Button
-         style={buttonStyle}
-         onMouseEnter={() => setIsHovered(true)}
-         onMouseLeave={() => setIsHovered(false)}
-         onClick={openChat}
-       >
-         <div style={buttonContentStyle}>
-           <FontAwesomeIcon
-             icon={faMessage}
-             style={{ color: "white", marginRight: "5px" }}
-           />
-           <span
-             style={{
-               transition: "0.3s ease-in-out",
-               transform: `translateX(${buttonTextPosition})`,
-               opacity: buttonTextOpacity,
-               whiteSpace: "nowrap",
-             }}
-           >
-             {who === "patient"
-               ? "Chat with a pharmacist"
-               : "Chat with a patient"}
-           </span>
-         </div>
-       </Button>
+        <Button
+          style={buttonStyle}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onClick={openChat}
+        >
+          <div style={buttonContentStyle}>
+            <FontAwesomeIcon
+              icon={faMessage}
+              style={{ color: "white", marginRight: "5px" }}
+            />
+            <span
+              style={{
+                transition: "0.3s ease-in-out",
+                transform: `translateX(${buttonTextPosition})`,
+                opacity: buttonTextOpacity,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {who === "patient"
+                ? "Chat with a pharmacist"
+                : "Chat with a patient"}
+            </span>
+          </div>
+        </Button>
       )}
       {isOpen && (
         <Container

@@ -79,7 +79,12 @@ const {
   getMedicinalUses,
 } = require("./Models/MedicinalUse");
 
-const { getChat, sendMessage } = require("./Controllers/chatController");
+const {
+  getChat,
+  sendMessage,
+  getChats,
+  createNewChat,
+} = require("./Controllers/chatController");
 
 //App variables
 const app = express();
@@ -150,6 +155,7 @@ app.get("/pharmacist", requireAuth, getPharmacist);
 app.get("/pharmacistApplications", requireAuth, getInactivePharmacists);
 app.get("/getAlternativeMedicines", getAlternativeMedicines);
 app.get("/getChat", getChat);
+app.get("/getChats", getChats);
 app.get("/getPatientWallet", getWallet);
 app.get("/getPharmacistWallet", getPharmacistWallet);
 app.get("/monthlySales", getTotalMonthSales);
@@ -169,6 +175,7 @@ app.post("/newMedicine", requireAuth, createMedicine);
 app.post("/filterMedicine", filterMedicine);
 app.post("/addAddress", addDeliveryAddress);
 app.post("/sendMessage", sendMessage);
+app.post("/newChat", createNewChat);
 
 //authentication
 app.post("/login", login);

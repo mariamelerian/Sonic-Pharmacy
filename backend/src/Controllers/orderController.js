@@ -7,6 +7,24 @@ const stripe = require("stripe")(
   "sk_test_51O9lZ0IQTS4vUIMWJeAJ5Ds71jNbeQFj6v8mO7leS2cDIJuLy1fwNzoiXPKZV5KdoMpfzocfJ6hBusxPIjbGeveF00RTnmVYCX"
 );
 
+const notifyPharmacistsOutOfStock = async (medicine) => {
+  try {
+    const pharmacists = await Pharmacist.find();
+    const mailOptions = {
+      from: emailUser,
+      to: pharmacists.map((pharmacist) => pharmacist.email).join(","),
+      subject: "Medicine out of stock",
+      text: `Please note that ${medicine.name} medicine is out of stock.`,
+    };
+
+    await transporter.sendMail(mailOptions);
+    return res.status(200).json({ message: "Successful" });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ message: "Failed to send the email" });
+  }
+};
+
 const createOrder = async (userId, address, paymentMethod) => {
   try {
     const cart = await Cart.findOne({ user: userId });
@@ -39,6 +57,11 @@ const createOrder = async (userId, address, paymentMethod) => {
         date: date,
       });
       await medicine.save();
+
+      if (medicine.quantity == 0) {
+        //notify pharmacist that medicine is out of stock
+        notifyPharmacistsOutOfStock(medicine);
+      }
     });
 
     // Clear the cart
