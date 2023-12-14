@@ -32,15 +32,11 @@ import ResetPassword from "./pages/Guest/ResetPassword";
 import PasswordChanged from "./pages/Guest/PasswordChanged";
 import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
 import PatientShowMedicine from "./components/Patient/PatientShowMedicine";
-<<<<<<< Updated upstream
-import PatientChatWithPharmacist from "./pages/Patient/PatientChatWithPharmacist";
-//import ChatPat from "./components/ChatPat";
+
 import AdminSalesReportPage from "./pages/Admin/AdminSalesReportPage";
 import PharmacistSalesReportPage from "./pages/Pharmacist/PharmacistSalesReportPage";
-=======
 import ChatPat from "./components/ChatPat";
-  
->>>>>>> Stashed changes
+
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
 
@@ -99,22 +95,15 @@ function App() {
 
           <Route path="patient-cartItem" element={<CartItems />} />
           {/* <Route path="patient-checkout" element={<PatientCheckOutModal />} /> */}
-<<<<<<< Updated upstream
           <Route
             path="patient-checkoutcomplete"
             element={<CheckOutDoneModal />}
           />
           <Route
             path="patient-chatwithpharmacist"
-            element={<PatientChatWithPharmacist />}
+            element={<ChatPat />}
           />
-=======
-          <Route path="patient-checkoutcomplete" element={<CheckOutDoneModal />} />
-          {/* <Route path="patient-chatwithpharmacist" element={<PatientChatWithPharmacist />} /> */}
-          <Route path="patient-chatwithpharmacist" element={<ChatPat />} />
-          
-          
->>>>>>> Stashed changes
+
 
           <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />
           <Route path="profile" element={<PatientProfile />} />
