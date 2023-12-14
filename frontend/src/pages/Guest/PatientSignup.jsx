@@ -17,7 +17,7 @@ function PatientSignup() {
 
   return (
     <div>
-      <AppNavbarGuest hamburgerMenu={<GuestBurgerMenu />} />
+      <AppNavbar hamburgerMenu={<GuestBurgerMenu />} />
       <Container fluid className="bg-light pt-3 mt-2">
         <Container className="bg-white px-5 py-4 d-flex align-items-center justify-content-center">
           <div className="d-flex w-100 align-items-center">
