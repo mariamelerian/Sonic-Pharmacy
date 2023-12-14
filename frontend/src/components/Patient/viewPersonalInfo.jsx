@@ -109,10 +109,10 @@ function ViewPersonalInfo() {
             {user.username}
           </div>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Password:</span>
+            <span style={{ color: "#099BA0" }}>Password:</span>{" "}
             <span>
               <label style={labelStyle} onClick={toggleChangePass}>
-                {showChangePass ? "close" : "change password"}
+                {showChangePass ? "Close" : "Change Password"}
               </label>
             </span>
             {showChangePass && (

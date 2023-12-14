@@ -157,6 +157,17 @@ const LoginForm = () => {
           </div>
         </div> */}
         {error1 && <div className="error">{error1}</div>}
+
+        <Container className="signup-container">
+          <a
+            href="/patient-signup"
+            className="signup text-decoration-none"
+            style={{ cursor: "pointer" }}
+          >
+            Don't have an account? Sign Up.
+          </a>
+        </Container>
+
       </Form>
     </div>
   );

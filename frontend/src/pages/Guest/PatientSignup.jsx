@@ -7,6 +7,7 @@ import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import RegPhoto from "../../components/Guest/RegPhoto";
 import PatientSignupForm from "../../forms/Guest/PatientSignupForm";
 import GuestBurgerMenu from "../../components/Guest/GuestBurgerMenu";
+import AppNavbarGuest from "../../components/AppNavigation/AppNavbarGuest";
 
 function PatientSignup() {
 /*   const dispatch = useDispatch();
