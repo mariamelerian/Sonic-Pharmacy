@@ -75,7 +75,7 @@ export default function PatientMyordersDetails({
               fontSize: "15px",
             }}
           >
-            <div
+            {/* <div
               style={{
                 color: "#05afb9",
                 fontSize: "1.3rem",
@@ -84,16 +84,16 @@ export default function PatientMyordersDetails({
               }}
             >
               {orderStatus}
-            </div>
+            </div> */}
 
             <div style={rowStyle}>
               <span style={titleStyle}>Order Number:</span>
               {orderNumber}
             </div>
-            <div style={rowStyle}>
+            {/* <div style={rowStyle}>
               <span style={titleStyle}>Date:</span>
               {orderDate}
-            </div>
+            </div> */}
             {items.map((items, index) => (
               <>
                 <div style={rowStyle}>
@@ -112,7 +112,7 @@ export default function PatientMyordersDetails({
               </>
             ))}
             <div style={rowStyle}>
-              <span style={titleStyle}> Delivery Adress:</span>
+              <span style={titleStyle}> Delivery Address:</span>
               {address} 
             </div>
 

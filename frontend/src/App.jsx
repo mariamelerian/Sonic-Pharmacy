@@ -32,11 +32,10 @@ import ResetPassword from "./pages/Guest/ResetPassword";
 import PasswordChanged from "./pages/Guest/PasswordChanged";
 import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
 import PatientShowMedicine from "./components/Patient/PatientShowMedicine";
-
+import PatientChatWithPharmacist from "./pages/Patient/PatientChatWithPharmacist";
+//import ChatPat from "./components/ChatPat";
 import AdminSalesReportPage from "./pages/Admin/AdminSalesReportPage";
 import PharmacistSalesReportPage from "./pages/Pharmacist/PharmacistSalesReportPage";
-import ChatPat from "./components/ChatPat";
-
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
 
@@ -44,9 +43,9 @@ function App() {
   return (
     <div className="bg-light">
       <Routes>
-        <Route path="/" element={<GuestHomePage />} />
+        {/* <Route path="/" element={<GuestHomePage />} /> */}
 
-        <Route path="login">
+        <Route path="/">
           <Route index element={<Login />} />
         </Route>
 
@@ -83,12 +82,14 @@ function App() {
           <Route path="admins-list" element={<AdminAdminsPage />} />
           <Route path="admin-medicine" element={<AdminMedicine />} />
           <Route path="admin-salesreport" element={<AdminSalesReportPage />} />
+          
+
           <Route path="profile" element={<AdminProfilePage />} />
         </Route>
 
         <Route path="Patient">
           {/* <Route index element={<PatientHomePage />} /> */}
-          <Route index element={<PatientMedicine />}/>
+          <Route index element={<PatientMedicine />} />
           <Route path="patient-medicine" element={<PatientMedicine />} />
           {/* <Route path="patient-medicine" element={<FilterMedicine />} /> */}
           <Route path="patient-cart" element={<PatientCart />} />
@@ -99,10 +100,12 @@ function App() {
             path="patient-checkoutcomplete"
             element={<CheckOutDoneModal />}
           />
+
           <Route
             path="patient-chatwithpharmacist"
             element={<ChatPat />}
           />
+
 
 
           <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />
@@ -112,6 +115,7 @@ function App() {
         <Route path="Pharmacist">
           {/* <Route index element={<PharmacistHomePage />} /> */}
           <Route index element={<PhMedicine />} />
+          <Route path="ph-notifications" element={<PharmTest/>} />
 
           <Route path="ph-medicine" element={<PhMedicine />} />
           {/* <Route path="ph-medicine" element={<ChatPat />} /> */}

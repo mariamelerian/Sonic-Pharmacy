@@ -315,29 +315,6 @@ const pharmacistLogin = async (req, res) => {
   }
 };
 
-const outOfStockEmail = async (req, res) => {
-  try {
-    const medicineId = req.body;
-    const medicine1 = await Medicine.findById(medicineId);
-    if (!medicine1)
-      return res.status(404).json({ message: "Medicine not found" });
-
-    const pharmacists = await Pharmacist.find();
-    const mailOptions = {
-      from: emailUser,
-      to: pharmacists.map((pharmacist) => pharmacist.email).join(","),
-      subject: "Password reset OTP",
-      text: `Please note that ${medicine1.name} medicine is out of stock.`,
-    };
-
-    await transporter.sendMail(mailOptions);
-    return res.status(200).json({ message: "Successful" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "An error occurred while logging in" });
-  }
-};
-
 const pharmacistChangePassword = async (req, res) => {
   const user = await Pharmacist.findById(req.session.userId);
 
@@ -377,6 +354,19 @@ const getPharmacistWallet = async (req, res) => {
   }
 };
 
+const pharmacistNotifications = async (req, res) => {
+  const pharmacistId = req.session.userId;
+  try {
+    const pharmacist = await Pharmacist.findById(pharmacistId);
+    if (!pharmacist) {
+      return res.status(404).json({ message: "Pharmacist not found" });
+    }
+    res.status(200).json(pharmacist.notifications);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   registerPharmacist,
   getPharmacists,
@@ -384,8 +374,8 @@ module.exports = {
   getInactivePharmacists,
   updatePharmacist,
   deletePharmacist,
-  outOfStockEmail,
   pharmacistChangePassword,
   upload,
   getPharmacistWallet,
+  pharmacistNotifications,
 };

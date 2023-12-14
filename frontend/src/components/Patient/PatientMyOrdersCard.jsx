@@ -19,20 +19,34 @@ export default function PatientMyOrdersCard({
     <Container style={{ width: "1000px", padding: "0px" }}>
       <Accordion defaultactiveKey={1} className="acc mt-4">
         <Accordion.Item eventKey={0}>
-          <Accordion.Header>
-            <div className="d-flex" style={{ flexDirection: "column" }}>
+        <Accordion.Header>
+           <div className="d-flex" style={{ flexDirection: "row", alignItems: "center" }}>
               <div
                 style={{
-                  fontSize: "17px",
-                  marginBottom: "5px",
-                  fontWeight: "bold",
-                  color: "#212529",
+                fontSize: "17px",
+                marginRight: "10px",
+                fontWeight: "bold",
+                color: "#212529",
                 }}
-              >
-                Order {orderNumber}
-              </div>
+                 >
+               Order {orderNumber}
+             </div>
+           <div
+               style={{
+               color: "#05afb9",
+               fontSize: "1.3rem",
+               fontWeight: "bold",
+               alignItems: "right" 
+                }}
+               >
+               {orderStatus}
+             </div>
+             <div >
+              {orderDate}
             </div>
-          </Accordion.Header>
+             </div>
+        </Accordion.Header>
+
           <AccordionBody>
             <PatientMyordersDetails
               orderId={orderId}

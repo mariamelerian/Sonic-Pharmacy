@@ -70,6 +70,7 @@ const {
   deletePharmacist,
   pharmacistChangePassword,
   getPharmacistWallet,
+  pharmacistNotifications,
 } = require("./Controllers/pharmacistController");
 
 const pharmacistController = require("./Controllers/pharmacistController");
@@ -79,7 +80,10 @@ const {
   getMedicinalUses,
 } = require("./Models/MedicinalUse");
 
-const { getChat, sendMessage } = require("./Controllers/chatController");
+const {
+  sendPatientMessage,
+  patientChat,
+} = require("./Controllers/chatController");
 
 //App variables
 const app = express();
@@ -149,13 +153,14 @@ app.get("/pharmacists", requireAuth, getPharmacists);
 app.get("/pharmacist", requireAuth, getPharmacist);
 app.get("/pharmacistApplications", requireAuth, getInactivePharmacists);
 app.get("/getAlternativeMedicines", getAlternativeMedicines);
-app.get("/getChat", getChat);
 app.get("/getPatientWallet", getWallet);
 app.get("/getPharmacistWallet", getPharmacistWallet);
 app.get("/monthlySales", getTotalMonthSales);
 app.get("/filteredSales", getFilteredSalesReport);
 app.get("/allMedicines", getAllMedicines);
 app.get("/archivedMedicines", getArchivedMedicines);
+app.get("/patientChat", requireAuth, patientChat);
+app.get("/viewNotifications", requireAuth, pharmacistNotifications);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", requireAuth, createAdmin);
@@ -168,7 +173,6 @@ app.post(
 app.post("/newMedicine", requireAuth, createMedicine);
 app.post("/filterMedicine", filterMedicine);
 app.post("/addAddress", addDeliveryAddress);
-app.post("/sendMessage", sendMessage);
 
 //authentication
 app.post("/login", login);
@@ -177,6 +181,7 @@ app.post("/logout", logout);
 app.put("/updCookie", updateUserInfoInCookie);
 app.post("/otp", otp);
 app.post("/verifyOtp", verifyOtp);
+app.post("/sendPatientChatMessage", sendPatientMessage);
 
 app.put("/updatePatient", requireAuth, updatePatientInfo);
 app.put("/updateMedicine", requireAuth, updateMedicine);

@@ -3,6 +3,14 @@
 const Cart = require("../Models/Cart");
 const Medicine = require("../Models/Medicine");
 
+const checkQuantity = async (quantity, medID) => {
+  const med = await Medicine.findById(medID);
+  if (med.quantity < quantity) {
+    return false;
+  }
+  return true;
+};
+
 // Add a medicine to the cart
 const addToCart = async (req, res) => {
   const medicineId = req.params.medicineId;
@@ -32,6 +40,12 @@ const addToCart = async (req, res) => {
       if (flag) {
         cart.items.forEach((item) => {
           if (item.medicine == medicineId) {
+            //check if medicine has available quantity
+            if (!checkQuantity(item.quantity + 1, medicineId)) {
+              res.status(400).json({
+                message: "Medicine quantity not available",
+              });
+            }
             item.quantity++;
             item.price += selectedMedicine.price;
             cart.total += selectedMedicine.price;
