@@ -2,12 +2,11 @@ import React, { useState } from "react";
 
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
+import { Link } from "react-router-dom";
 import logo from "../../Assets/ClinicLogo.png";
-import NotificationsPanel from "../NotificationsPanel";
-const AppNavbar = (props) => {
+const AppNavbarGuest = (props) => {
   const { hamburgerMenu } = props;
   const [menuOpen, setMenuOpen] = useState(false);
-  const [who, setWho] = useState("");
 
   const handleMenuClick = () => {
     setMenuOpen(!menuOpen);
@@ -33,15 +32,45 @@ const AppNavbar = (props) => {
               color: "#ff6b35",
               fontSize: "3rem",
               fontWeight: "700",
-              paddingLeft: "2.3rem",
+              paddingLeft: "0.3rem",
             }}
           >
-            Pharmacy
+            El7a2ny Pharmacy
           </div>
+
+          <div
+            style={{
+              position: "relative",
+              display: "inline-block",
+              fontSize: "1.7rem",
+              cursor: "pointer",
+              color: "#212529",
+            }}
+          ></div>
+
+        {!props && (
+            <Link
+              className="d-flex"
+              style={{ color: "#05afb9", fontSize: "1.15rem" }}
+              to={"/PharmSignup"}
+            >
+              Register as a Doctor
+            </Link>
+          )}
+          {props && (
+            <Link
+              className="d-flex"
+              style={{ color: "#05afb9", fontSize: "1.15rem", paddingRight:"10.5rem" }}
+              to={"/"}
+            >
+              Login
+            </Link>
+          )}
+          
         </Container>
       </Navbar>
     </div>
   );
 };
 
-export default AppNavbar;
+export default AppNavbarGuest;

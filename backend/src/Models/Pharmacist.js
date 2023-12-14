@@ -59,6 +59,10 @@ const pharmacistSchema = new Schema(
       default: 0,
       required: true,
     },
+    notifications: {
+      type: [String],
+      default: [],
+    },
   },
   { timestamps: true }
 );

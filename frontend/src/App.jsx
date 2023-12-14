@@ -42,9 +42,9 @@ function App() {
   return (
     <div className="bg-light">
       <Routes>
-        <Route path="/" element={<GuestHomePage />} />
+        {/* <Route path="/" element={<GuestHomePage />} /> */}
 
-        <Route path="login">
+        <Route path="/">
           <Route index element={<Login />} />
         </Route>
 
@@ -88,7 +88,7 @@ function App() {
 
         <Route path="Patient">
           {/* <Route index element={<PatientHomePage />} /> */}
-          <Route index element={<PatientMedicine />}/>
+          <Route index element={<PatientMedicine />} />
           <Route path="patient-medicine" element={<PatientMedicine />} />
           {/* <Route path="patient-medicine" element={<FilterMedicine />} /> */}
           <Route path="patient-cart" element={<PatientCart />} />
@@ -99,10 +99,12 @@ function App() {
             path="patient-checkoutcomplete"
             element={<CheckOutDoneModal />}
           />
+
           <Route
             path="patient-chatwithpharmacist"
             element={<ChatPat />}
           />
+
 
           <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />
           <Route path="profile" element={<PatientProfile />} />
