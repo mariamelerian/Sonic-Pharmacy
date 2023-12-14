@@ -3,6 +3,8 @@ import { Button, Container, Form, Row, Col } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { setFilterArray, deleteFilterArray } from "../state/filterMedicine";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 function FilterMedicine({ onFilter }) {
   const [selectedMedicinalUse, setSelectedMedicinalUse] = useState("");
@@ -48,14 +50,14 @@ function FilterMedicine({ onFilter }) {
     <Container
       style={{
         flexShrink: 0,
-        width: "97%",
+        width: "35%", // Adjusted width for a smaller container
+        // marginLeft: 0,
         border: "1px solid var(--gray-400, #ced4da)",
         background: "var(--gray-white, #fff)",
         padding: "0.5rem", // Adjusted padding to make it thinner
-        marginLeft: "1.3rem",
       }}
     >
-      <Row>
+      <Row style={{ justifyContent: "flex-start" }}>
         <Col xs={12} md={9}>
           <div
             style={{
@@ -82,32 +84,44 @@ function FilterMedicine({ onFilter }) {
             Medicinal Use
           </div>
 
-          <Form.Control
-            as="select"
-            onChange={(e) => setSelectedMedicinalUse(e.target.value)}
-            style={{ width: "125%" }} // Adjusted width
-          >
-            <option value="">Select medicinal use</option>
-            {medicinalUseArray.map((use, index) => (
-              <option key={index} value={use}>
-                {`${use}`}
-              </option>
-            ))}
-          </Form.Control>
+          <div style={{ position: "relative" }}>
+            <Form.Control
+              as="select"
+              onChange={(e) => setSelectedMedicinalUse(e.target.value)}
+              style={{ width: "100%" }} // Adjusted width
+            >
+              <option value="">Select medicinal use</option>
+              {medicinalUseArray.map((use, index) => (
+                <option key={index} value={use}>
+                  {`${use}`}
+                </option>
+              ))}
+            </Form.Control>
+            <FontAwesomeIcon
+              icon={faAngleDown}
+              style={{
+                position: "absolute",
+                top: "50%",
+                right: "10px",
+                transform: "translateY(-50%)",
+                color: "#555", // Adjust the color as needed
+              }}
+            />
+          </div>
         </Col>
         <Col xs={12} md={3} className="d-flex align-items-end">
-  <Button
-    className="custom-button"
-    onClick={handleFilter}
-    style={{
-      height: "38px", // Adjusted height
-      marginLeft: "200px", // Adjusted margin-left
-      fontSize: "14px", // Adjusted font size
-    }}
-  >
-    Apply
-  </Button>
-</Col>
+          <Button
+            className="custom-button"
+            onClick={handleFilter}
+            style={{
+              height: "38px", // Adjusted height
+              marginLeft: "0.5rem", // Adjusted margin-left for spacing
+              fontSize: "14px", // Adjusted font size
+            }}
+          >
+            Apply
+          </Button>
+        </Col>
       </Row>
     </Container>
   );

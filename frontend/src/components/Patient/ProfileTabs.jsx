@@ -92,7 +92,7 @@ function ProfileTabs() {
                       fontSize: "30px",
                       fontWeight: "600",
                       marginBottom: "10px",
-                      marginLeft: "22rem",
+                      marginLeft: "23.5rem",
                       marginTop: "3rem",
                     }}
                   >
