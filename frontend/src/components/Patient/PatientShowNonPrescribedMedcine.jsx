@@ -88,10 +88,11 @@ function PatientNonPrescribedMedicine() {
             medicine.activeIngredients[0].toLowerCase()
         )
     );
-
+  
     setAlternativeMedicines(matchingMedicines);
     setShowAlternativeModal(true);
   };
+  
 
   const handleCloseAlternativeModal = () => {
     setShowAlternativeModal(false);

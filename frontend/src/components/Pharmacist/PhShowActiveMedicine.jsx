@@ -148,6 +148,14 @@ function PhShowActiveMedicine() {
     setQuantity(null);
   };
 
+  // const toggleMedicineDetails = (index) => {
+  //   setExpandedMedicines((prevExpandedMedicines) => {
+  //     const isExpanded = prevExpandedMedicines.includes(index);
+  //     return isExpanded
+  //       ? prevExpandedMedicines.filter((expandedIndex) => expandedIndex !== index)
+  //       : [...prevExpandedMedicines, index];
+  //   });
+  // };
   const toggleMedicineDetails = (index) => {
     setExpandedMedicines((prevExpandedMedicines) => {
       const isExpanded = prevExpandedMedicines.includes(index);
@@ -226,8 +234,9 @@ function PhShowActiveMedicine() {
               </div>
               <div
                 className="expand-button"
-                // onClick={() => handleExpand(index)}
-              >
+                // onClick={() => handleExpand(index)}  
+                onClick={() => toggleMedicineDetails(index)}>
+              
                 <FontAwesomeIcon icon={faInfoCircle} />
               </div>
             </div>
