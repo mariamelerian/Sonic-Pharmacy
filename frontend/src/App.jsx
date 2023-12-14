@@ -32,12 +32,11 @@ import ResetPassword from "./pages/Guest/ResetPassword";
 import PasswordChanged from "./pages/Guest/PasswordChanged";
 import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
 import PatientShowMedicine from "./components/Patient/PatientShowMedicine";
-import PatientChatWithPharmacist from "./pages/Patient/PatientChatWithPharmacist";
 //import ChatPat from "./components/ChatPat";
 import AdminSalesReportPage from "./pages/Admin/AdminSalesReportPage";
 import PharmacistSalesReportPage from "./pages/Pharmacist/PharmacistSalesReportPage";
-
-//import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
+import ChatPat from "./components/ChatPat";
+import PharmTest from "./pages/Pharmacist/PharmTest";
 
 function App() {
   return (
@@ -82,6 +81,8 @@ function App() {
           <Route path="admins-list" element={<AdminAdminsPage />} />
           <Route path="admin-medicine" element={<AdminMedicine />} />
           <Route path="admin-salesreport" element={<AdminSalesReportPage />} />
+          
+
           <Route path="profile" element={<AdminProfilePage />} />
         </Route>
 
@@ -100,7 +101,7 @@ function App() {
           />
           <Route
             path="patient-chatwithpharmacist"
-            element={<PatientChatWithPharmacist />}
+            element={<ChatPat />}
           />
 
           <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />
@@ -110,6 +111,7 @@ function App() {
         <Route path="Pharmacist">
           {/* <Route index element={<PharmacistHomePage />} /> */}
           <Route index element={<PhMedicine />} />
+          <Route path="ph-notifications" element={<PharmTest/>} />
 
           <Route path="ph-medicine" element={<PhMedicine />} />
           {/* <Route path="ph-medicine" element={<ChatPat />} /> */}
