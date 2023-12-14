@@ -16,7 +16,6 @@ export default function PatientMyordersDetails({
   items,
   handleChangeState,
 }) {
-
   // console.log('Address:', address);
   const rowStyle = {
     display: "flex",
@@ -86,34 +85,60 @@ export default function PatientMyordersDetails({
               {orderStatus}
             </div> */}
 
-            <div style={rowStyle}>
-              <span style={titleStyle}>Order Number:</span>
-              {orderNumber}
-            </div>
             {/* <div style={rowStyle}>
               <span style={titleStyle}>Date:</span>
               {orderDate}
             </div> */}
-            {items.map((items, index) => (
-              <>
-                <div style={rowStyle}>
-                  <span style={titleStyle}>*Name:</span>
-                  {items.name}
-                </div>
+            <ul>
+              {items.map((items, index) => (
+                <li
+                  style={{
+                    display: "flex",
+                    marginBottom: "5px",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    display: "block",
+                    width: "100%",
+                  }}
+                >
+                  <div
+                    style={{
+                      ...rowStyle,
+                      display: "inline-block",
+                      width: "30%",
+                    }}
+                  >
+                    <span style={titleStyle}>Name:</span>
+                    {items.name}
+                  </div>
 
-                <div style={rowStyle}>
-                  <span style={titleStyle}>Price:</span>
-                  {items.price}
-                </div>
-                <div style={rowStyle}>
-                  <span style={titleStyle}>Quantity:</span>
-                  {items.quantity}
-                </div>
-              </>
-            ))}
+                  <div
+                    style={{
+                      ...rowStyle,
+                      display: "inline-block",
+                      width: "30%",
+                    }}
+                  >
+                    <span style={titleStyle}>Price:</span>
+                    {items.price}
+                  </div>
+                  <div
+                    style={{
+                      ...rowStyle,
+                      display: "inline-block",
+                      width: "30%",
+                    }}
+                  >
+                    <span style={titleStyle}>Quantity:</span>
+                    {items.quantity}
+                  </div>
+                </li>
+              ))}
+            </ul>
             <div style={rowStyle}>
               <span style={titleStyle}> Delivery Address:</span>
-              {address} 
+              {address}
             </div>
 
             <div style={rowStyle}>

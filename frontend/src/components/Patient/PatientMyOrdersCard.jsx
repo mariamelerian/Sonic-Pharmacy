@@ -19,33 +19,51 @@ export default function PatientMyOrdersCard({
     <Container style={{ width: "1000px", padding: "0px" }}>
       <Accordion defaultactiveKey={1} className="acc mt-4">
         <Accordion.Item eventKey={0}>
-        <Accordion.Header>
-           <div className="d-flex" style={{ flexDirection: "row", alignItems: "center" }}>
+          <Accordion.Header>
+            <div
+              className="d-flex justify-content-between align-items-center"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                display: "block",
+                width: "100%",
+              }}
+            >
               <div
                 style={{
-                fontSize: "17px",
-                marginRight: "10px",
-                fontWeight: "bold",
-                color: "#212529",
+                  fontSize: "17px",
+                  marginRight: "30%",
+                  fontWeight: "bold",
+                  color: "#212529",
+                  display: "inline-block",
                 }}
-                 >
-               Order {orderNumber}
-             </div>
-           <div
-               style={{
-               color: "#05afb9",
-               fontSize: "1.3rem",
-               fontWeight: "bold",
-               alignItems: "right" 
+              >
+                Order {orderNumber}
+              </div>
+              <div
+                style={{
+                  display: "inline-block",
                 }}
-               >
-               {orderStatus}
-             </div>
-             <div >
-              {orderDate}
+              >
+                {orderDate.split("T")[0].split("-").reverse().join("/")}
+              </div>
+              <div
+                style={{
+                  color:
+                    orderStatus == "Pending" || orderStatus == "Cancelled"
+                      ? "#FF0000"
+                      : "#05afb9",
+                  fontSize: "1.3rem",
+                  fontWeight: "bold",
+                  display: "inline-block",
+                }}
+              >
+                {orderStatus}
+              </div>
             </div>
-             </div>
-        </Accordion.Header>
+          </Accordion.Header>
 
           <AccordionBody>
             <PatientMyordersDetails
