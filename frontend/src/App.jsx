@@ -32,10 +32,10 @@ import ResetPassword from "./pages/Guest/ResetPassword";
 import PasswordChanged from "./pages/Guest/PasswordChanged";
 import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
 import PatientShowMedicine from "./components/Patient/PatientShowMedicine";
-import PatientChatWithPharmacist from "./pages/Patient/PatientChatWithPharmacist";
-//import ChatPat from "./components/ChatPat";
+import ChatPat from "./components/ChatPat";
 import AdminSalesReportPage from "./pages/Admin/AdminSalesReportPage";
 import PharmacistSalesReportPage from "./pages/Pharmacist/PharmacistSalesReportPage";
+import PharmTest from "./pages/Pharmacist/PharmTest";
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
 

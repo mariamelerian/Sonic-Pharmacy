@@ -17,10 +17,10 @@ const AlternativeMedicinesModal = ({ show, handleClose, alternativeMedicines }) 
             <div className="medicine-name font-weight-bold">
               {medicine.name}
             </div>
-            <div className="medicine-description">
+            {/* <div className="medicine-description">
               <h6>Description:</h6>
               <p>{medicine.description}</p>
-            </div>
+            </div> */}
             <div className="medicine-activeIngredients">
               <h6>Active Ingredients:</h6>
               <ul className="list-unstyled">
