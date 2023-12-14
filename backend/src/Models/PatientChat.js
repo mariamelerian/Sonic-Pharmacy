@@ -6,22 +6,25 @@ const PatientChatSchema = new mongoose.Schema({
     ref: "Patient", // Reference to the Patient model
     required: true,
   },
-  messages: [
-    {
-      sender: {
-        type: String,
-        enum: ["Patient", "Pharmacist"],
-        required: true,
+  messages: {
+    type: [
+      {
+        sender: {
+          type: String,
+          enum: ["Patient", "Pharmacist"],
+          required: true,
+        },
+        content: {
+          type: String,
+          required: true,
+        },
       },
-      content: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
-  default: [],
+    ],
+    default: [],
+    required: true,
+  },
 });
 
-const PatientChat = mongoose.model("Chat", PatientChatSchema);
+const PatientChat = mongoose.model("patientChat", PatientChatSchema);
 
 module.exports = PatientChat;

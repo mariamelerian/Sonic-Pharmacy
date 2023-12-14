@@ -39,13 +39,13 @@ export default function ChatPat({ who }) {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("/getPatientChat", {
-        params: { patientId: localStorage.getItem("userId") },
-      });
+      const response = await axios.get("/patientChat");
       if (response.status === 200) {
+        console.log(response.data.messages);
         setChats(response.data.messages);
       }
     } catch (error) {
+      console.log(error.message);
       setError(error.response.data.message);
     }
   };
@@ -137,19 +137,18 @@ export default function ChatPat({ who }) {
   const buttonTextOpacity = isHovered ? 1 : 0;
 
   const sendMessage = async () => {
-    const id = localStorage.getItem("userId");
     if (myMessage) {
       try {
         const response = await axios.post("/sendPatientChatMessage", {
-          patiendId: localStorage.get("userId"),
           sender: "Patient",
           content: myMessage,
         });
         if (response.status === 200) {
-          fetchData();
+          setChats(response.data.messages);
           setMyMessage("");
         }
       } catch (error) {
+        console.log(error.message);
         setError(error.response.data.message);
       }
     }
