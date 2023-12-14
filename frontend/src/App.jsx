@@ -43,9 +43,9 @@ function App() {
   return (
     <div className="bg-light">
       <Routes>
-        <Route path="/" element={<GuestHomePage />} />
+        {/* <Route path="/" element={<GuestHomePage />} /> */}
 
-        <Route path="login">
+        <Route path="/">
           <Route index element={<Login />} />
         </Route>
 
