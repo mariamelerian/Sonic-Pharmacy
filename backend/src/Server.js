@@ -181,7 +181,7 @@ app.post("/logout", logout);
 app.put("/updCookie", updateUserInfoInCookie);
 app.post("/otp", otp);
 app.post("/verifyOtp", verifyOtp);
-app.post("/sendPatientChatMessage", sendPatientMessage);
+app.post("/sendPatientChatMessage", requireAuth, sendPatientMessage);
 
 app.put("/updatePatient", requireAuth, updatePatientInfo);
 app.put("/updateMedicine", requireAuth, updateMedicine);

@@ -16,26 +16,31 @@ const createNewChat = async (req, res) => {
 };
 
 const sendPatientMessage = async (req, res) => {
-  const { patiendId, sender, content } = req.body;
-  const chat = await PatientChat.find({ userId: patientId });
+  const { sender, content } = req.body;
+  const patientId = req.session.userId;
+  const chat = await PatientChat.findOne({ userId: patientId });
   if (!chat) {
     const newChat = await PatientChat.create({ userId: patiendId });
     newChat.messages.push({ sender, content });
     await newChat.save();
     res.status(200).send(newChat);
+    return;
   } else {
-    chat.messages.push({ sender, content });
+    console.log("chat function" + chat.messages);
+    chat.messages.push({ sender: sender, content: content });
     await chat.save();
     res.status(200).send(chat);
   }
 };
 
 const patientChat = async (req, res) => {
-  const { patientId } = req.params;
-  const chat = await PatientChat.find({ userId: patientId });
+  patientId = req.session.userId;
+
+  const chat = await PatientChat.findOne({ userId: patientId });
   if (!chat) {
     const newChat = await PatientChat.create({ userId: patientId });
     res.status(200).send(newChat);
+    return;
   }
   res.status(200).send(chat);
 };
@@ -74,6 +79,7 @@ const getChatsWithPharmacists = async (req, res) => {
 const getChat = async (req, res) => {
   const { chatId } = req.params;
   const chat = await Chat.findById(chatId);
+  console.log(chat);
   res.status(200).send(chat);
 };
 
