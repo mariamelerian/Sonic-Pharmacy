@@ -354,6 +354,19 @@ const getPharmacistWallet = async (req, res) => {
   }
 };
 
+const pharmacistNotifications = async (req, res) => {
+  const pharmacistId = req.session.userId;
+  try {
+    const pharmacist = await Pharmacist.findById(pharmacistId);
+    if (!pharmacist) {
+      return res.status(404).json({ message: "Pharmacist not found" });
+    }
+    res.status(200).json(pharmacist.notifications);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   registerPharmacist,
   getPharmacists,
@@ -364,4 +377,5 @@ module.exports = {
   pharmacistChangePassword,
   upload,
   getPharmacistWallet,
+  pharmacistNotifications,
 };

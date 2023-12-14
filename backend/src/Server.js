@@ -70,6 +70,7 @@ const {
   deletePharmacist,
   pharmacistChangePassword,
   getPharmacistWallet,
+  pharmacistNotifications,
 } = require("./Controllers/pharmacistController");
 
 const pharmacistController = require("./Controllers/pharmacistController");
@@ -159,6 +160,7 @@ app.get("/filteredSales", getFilteredSalesReport);
 app.get("/allMedicines", getAllMedicines);
 app.get("/archivedMedicines", getArchivedMedicines);
 app.get("/patientChat", requireAuth, patientChat);
+app.get("/viewNotifications", requireAuth, pharmacistNotifications);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", requireAuth, createAdmin);

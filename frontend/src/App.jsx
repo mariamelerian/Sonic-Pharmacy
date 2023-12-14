@@ -32,7 +32,6 @@ import ResetPassword from "./pages/Guest/ResetPassword";
 import PasswordChanged from "./pages/Guest/PasswordChanged";
 import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
 import PatientShowMedicine from "./components/Patient/PatientShowMedicine";
-import PatientChatWithPharmacist from "./pages/Patient/PatientChatWithPharmacist";
 //import ChatPat from "./components/ChatPat";
 import AdminSalesReportPage from "./pages/Admin/AdminSalesReportPage";
 import PharmacistSalesReportPage from "./pages/Pharmacist/PharmacistSalesReportPage";
@@ -87,7 +86,7 @@ function App() {
 
         <Route path="Patient">
           {/* <Route index element={<PatientHomePage />} /> */}
-          <Route index element={<PatientMedicine />}/>
+          <Route index element={<PatientMedicine />} />
           <Route path="patient-medicine" element={<PatientMedicine />} />
           {/* <Route path="patient-medicine" element={<FilterMedicine />} /> */}
           <Route path="patient-cart" element={<PatientCart />} />
@@ -97,10 +96,6 @@ function App() {
           <Route
             path="patient-checkoutcomplete"
             element={<CheckOutDoneModal />}
-          />
-          <Route
-            path="patient-chatwithpharmacist"
-            element={<PatientChatWithPharmacist />}
           />
 
           <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />

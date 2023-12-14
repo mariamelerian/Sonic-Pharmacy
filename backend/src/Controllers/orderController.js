@@ -21,6 +21,13 @@ const notifyPharmacistsOutOfStock = async (medicine) => {
       text: `Please note that ${medicine.name} medicine is out of stock.`,
     };
 
+    pharmacists.map((pharmacist) => {
+      pharmacist.notifications.push(
+        `Please note that ${medicine.name} medicine is out of stock.`
+      );
+      pharmacist.save();
+    });
+
     await transporter.sendMail(mailOptions);
     return res.status(200).json({ message: "Successful" });
   } catch (error) {

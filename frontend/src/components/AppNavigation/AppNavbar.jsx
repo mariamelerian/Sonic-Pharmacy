@@ -8,7 +8,7 @@ const AppNavbar = (props) => {
   const { hamburgerMenu } = props;
   const [menuOpen, setMenuOpen] = useState(false);
   const [who, setWho] = useState("");
-  
+
   const handleMenuClick = () => {
     setMenuOpen(!menuOpen);
   };
