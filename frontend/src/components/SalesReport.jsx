@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Form, Table } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 function SalesReportPage() {
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -57,6 +59,26 @@ function SalesReportPage() {
           setError("Server Error");
         }
       }
+    } else if (selectedMonth === "") {
+      try {
+        const response = await axios.get("/monthlySales", {
+          params: {
+            month: "",
+          },
+        });
+        if (response.status === 200) {
+          setSales(response.data);
+          console.log("response.data", response.data);
+        } else {
+          console.log("Server error");
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          setError("Not found.");
+        } else if (error.response && error.response.status === 500) {
+          setError("Server Error");
+        }
+      }
     } else if (selectedMedicine !== "" || selectedDate !== "") {
       try {
         const response = await axios.get("/filteredSales", {
@@ -86,6 +108,7 @@ function SalesReportPage() {
 
   useEffect(() => {
     fetchMedicines();
+    handleFilter();
   }, []);
 
   const fetchMedicines = async () => {
@@ -130,7 +153,7 @@ function SalesReportPage() {
             className="mx-auto"
             style={{
               flexShrink: 0,
-              width: "82%",
+              width: "55%",
               border: "1px solid var(--gray-400, #ced4da)",
               background: "var(--gray-white, #fff)",
               padding: "0.5rem", // Adjusted padding to make it thinner
@@ -164,24 +187,38 @@ function SalesReportPage() {
                   Month
                 </div>
 
-                <Form.Control
-                  as="select"
-                  onChange={(e) =>
-                    setSelectedMonth(
-                      months.findIndex((value, index) => {
-                        return value == e.target.value;
-                      })
-                    )
-                  }
-                  style={{ width: "100%" }} // Adjusted width
+                <div
+                  style={{ position: "relative", display: "inline-block" }}
+                  className="d-flex"
                 >
-                  <option value="">Select Month</option>
-                  {months.map((use, index) => (
-                    <option key={index} value={use}>
-                      {`${use}`}
-                    </option>
-                  ))}
-                </Form.Control>
+                  <Form.Control
+                    as="select"
+                    onChange={(e) =>
+                      setSelectedMonth(
+                        months.findIndex((value, index) => {
+                          return value == e.target.value;
+                        })
+                      )
+                    }
+                    style={{ width: "100%" }} // Adjusted width
+                  >
+                    <option value="">Select Month</option>
+                    {months.map((use, index) => (
+                      <option key={index} value={use}>
+                        {`${use}`}
+                      </option>
+                    ))}
+                  </Form.Control>
+                  <FontAwesomeIcon
+                    icon={faAngleDown}
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      right: "1rem",
+                      transform: "translateY(-50%)",
+                    }}
+                  />
+                </div>
 
                 <div
                   style={{
@@ -196,18 +233,32 @@ function SalesReportPage() {
                   Medicine
                 </div>
 
-                <Form.Control
-                  as="select"
-                  onChange={(e) => setSelectedMedicine(e.target.value)}
-                  style={{ width: "100%" }} // Adjusted width
+                <div
+                  style={{ position: "relative", display: "inline-block" }}
+                  className="d-flex"
                 >
-                  <option value="">Select Medicine</option>
-                  {medicines.map((use, index) => (
-                    <option key={index} value={use.name}>
-                      {`${use.name}`}
-                    </option>
-                  ))}
-                </Form.Control>
+                  <Form.Control
+                    as="select"
+                    onChange={(e) => setSelectedMedicine(e.target.value)}
+                    style={{ width: "100%" }} // Adjusted width
+                  >
+                    <option value="">Select Medicine</option>
+                    {medicines.map((use, index) => (
+                      <option key={index} value={use.name}>
+                        {`${use.name}`}
+                      </option>
+                    ))}
+                  </Form.Control>
+                  <FontAwesomeIcon
+                    icon={faAngleDown}
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      right: "1rem",
+                      transform: "translateY(-50%)",
+                    }}
+                  />
+                </div>
 
                 <div
                   style={{
@@ -222,15 +273,13 @@ function SalesReportPage() {
                   Date
                 </div>
 
-                <div>
-                  <input
-                    type="date"
-                    id="datePicker"
-                    name="datePicker"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                  />
-                </div>
+                <Form.Control
+                  style={{ marginBottom: "1rem" }}
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  onKeyDown={(e) => e.preventDefault()}
+                />
               </Col>
 
               <Col xs={12} md={3} className="d-flex align-items-end">
@@ -238,9 +287,11 @@ function SalesReportPage() {
                   className="custom-button"
                   onClick={handleFilter}
                   style={{
-                    height: "38px", // Adjusted height
-                    marginLeft: "150px", // Adjusted margin-left
-                    fontSize: "14px", // Adjusted font size
+                    // marginLeft: "4rem", // Adjusted margin-left
+                    fontSize: "1rem",
+                    width: "8rem",
+                    // Adjusted font size
+                    marginBottom: "1rem",
                   }}
                 >
                   Apply
