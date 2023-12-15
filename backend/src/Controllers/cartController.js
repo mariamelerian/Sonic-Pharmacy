@@ -141,6 +141,12 @@ const changeQuantity = async (req, res) => {
   const medicine = await Medicine.findById(medicineId);
 
   if (medicineInCart) {
+    const oldQuantity = medicineInCart.quantity;
+    if (oldQuantity + 1 > medicine.quantity) {
+      return res
+        .status(400)
+        .json({ message: "Medicine quantity not available" });
+    }
     medicineInCart.quantity = quantity;
     oldPrice = medicineInCart.price;
     medicineInCart.price = medicine.price * quantity;

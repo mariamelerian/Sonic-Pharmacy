@@ -67,28 +67,34 @@ function CartItems() {
         quantity: newQuantity,
       });
 
-      const price = response.data.items.filter(
-        (item) => item.medicine === itemId
-      )[0].price;
+      if (response.status === 200) {
+        const price = response.data.items.filter(
+          (item) => item.medicine === itemId
+        )[0].price;
 
-      setMedicine((prevMedicine) => {
-        if (prevMedicine && prevMedicine.items) {
-          const updatedItems = prevMedicine.items.map((item) =>
-            item.medicine === itemId
-              ? { ...item, quantity: newQuantity, price: price }
-              : item
-          );
+        setMedicine((prevMedicine) => {
+          if (prevMedicine && prevMedicine.items) {
+            const updatedItems = prevMedicine.items.map((item) =>
+              item.medicine === itemId
+                ? { ...item, quantity: newQuantity, price: price }
+                : item
+            );
 
-          return {
-            ...prevMedicine,
-            items: updatedItems,
-            total: response.data.total,
-          };
-        }
+            return {
+              ...prevMedicine,
+              items: updatedItems,
+              total: response.data.total,
+            };
+          }
 
-        // Return the unchanged state if items or prevMedicine is not defined
-        return prevMedicine;
-      });
+          // Return the unchanged state if items or prevMedicine is not defined
+          return prevMedicine;
+        });
+      } else {
+        console.log("Server error");
+        if (response.status === 400)
+          setError("Cannot change quantity to more than available quantity");
+      }
     } catch (error) {
       console.error("Error:", error.message);
     }
@@ -156,10 +162,12 @@ function CartItems() {
 
   const trashIconStyle = {
     color: "red",
+    marginLeft: "auto", // Push the icon to the right
     cursor: "pointer", // Add cursor style
     fontSize: "18px", // Make the icon 1.5 times bigger (adjust the size as needed)
     border: "none", // Remove the border
-    marginLeft: "900px", // Move the icon to the right by 900px
+
+    marginRight: "70px", // Move the icon to the right by 200px
     backgroundColor: "transparent",
   };
 
@@ -312,7 +320,10 @@ function CartItems() {
                 delivery={delivery}
                 visibility={checkout} // Pass the checkout state
                 fetchCart={fetchData}
-                onHide={() => setCheckout(false)} // Function to hide the modal
+                onHide={() => {
+                  fetchData();
+                  setCheckout(false);
+                }} // Function to hide the modal
               />
             )}
             <div style={{ width: "50px" }}></div>

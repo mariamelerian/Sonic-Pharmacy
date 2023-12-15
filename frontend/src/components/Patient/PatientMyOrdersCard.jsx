@@ -15,6 +15,16 @@ export default function PatientMyOrdersCard({
   handleChangeState,
   address,
 }) {
+  let orderColor = "#05afb9";
+  if (orderStatus == "Cancelled") {
+    orderColor = "#FF0000";
+  } else if (orderStatus == "Delivered") {
+    orderColor = "00FF00";
+  } else if (orderStatus == "Pending") {
+    //lighter red
+    orderColor = "#FF8080";
+  }
+
   return (
     <Container style={{ width: "1000px", padding: "0px" }}>
       <Accordion defaultactiveKey={1} className="acc mt-4">
@@ -37,6 +47,7 @@ export default function PatientMyOrdersCard({
                   marginRight: "30%",
                   fontWeight: "bold",
                   color: "#212529",
+                  width: "30%",
                   display: "inline-block",
                 }}
               >
@@ -45,19 +56,21 @@ export default function PatientMyOrdersCard({
               <div
                 style={{
                   display: "inline-block",
+                  width: "30%",
                 }}
               >
                 {orderDate.split("T")[0].split("-").reverse().join("/")}
               </div>
+
               <div
                 style={{
-                  color:
-                    orderStatus == "Pending" || orderStatus == "Cancelled"
-                      ? "#FF0000"
-                      : "#05afb9",
+                  color: orderColor,
                   fontSize: "1.3rem",
                   fontWeight: "bold",
                   display: "inline-block",
+                  width: "30%",
+                  marginRight: "10px",
+                  textAlign: "center",
                 }}
               >
                 {orderStatus}

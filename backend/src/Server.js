@@ -161,6 +161,11 @@ app.get("/allMedicines", getAllMedicines);
 app.get("/archivedMedicines", getArchivedMedicines);
 app.get("/patientChat", requireAuth, patientChat);
 app.get("/viewNotifications", requireAuth, pharmacistNotifications);
+app.get(
+  "/phNewNotifications",
+  requireAuth,
+  pharmacistController.getNewNotificationFlag
+);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", requireAuth, createAdmin);
@@ -218,6 +223,11 @@ app.post(
   "/removefromcart/:medicineId/:userId?",
   requireAuth,
   cartController.removeFromCart
+);
+app.post(
+  "/notificationFlag",
+  requireAuth,
+  pharmacistController.toggleNotifications
 );
 app.put("/clearcart/:userId?", requireAuth, cartController.clearCart);
 
