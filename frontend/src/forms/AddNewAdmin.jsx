@@ -9,18 +9,18 @@ export default function AddNewAdmin({ fetchData, closeForm }) {
   const [username, setUsername] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState(""); // Add email state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    if (username == "" || password == "" || confirmPassword == "") {
+    if (username === "" || password === "" || confirmPassword === "" || name === "" || email === "") {
       setError("Please fill in all the required fields");
-      console.log(error);
       return;
     }
     if (password !== confirmPassword) {
       setError("Passwords don't match");
-      console.log(error);
       return;
     }
     const passwordRegex = /^(?=.*\d).{8,}$/;
@@ -28,7 +28,6 @@ export default function AddNewAdmin({ fetchData, closeForm }) {
       setError(
         "Password should contain at least 8 characters including minimum 1 number. Try again"
       );
-      console.log(error);
       return;
     }
 
@@ -36,15 +35,19 @@ export default function AddNewAdmin({ fetchData, closeForm }) {
       const response = await axios.post("http://localhost:8000/newAdmin", {
         username: username,
         password: password,
+        name: name,
+        email: email, // Add email to the request
       });
       if (response.status === 201) {
         setSuccess(true);
         setTimeout(() => {
           setSuccess(false); // Clear the error after 5 seconds
         }, 5000);
+        setName("");
         setUsername("");
         setPassword("");
         setConfirmPassword("");
+        setEmail("");
         closeForm();
         fetchData();
       } else if (response.status === 409) {
@@ -62,9 +65,6 @@ export default function AddNewAdmin({ fetchData, closeForm }) {
         );
       }
     }
-    // setTimeout(() => {
-    //   setError(null); // Clear the error after 5 seconds
-    // }, 5000);
   };
 
   return (
@@ -76,10 +76,28 @@ export default function AddNewAdmin({ fetchData, closeForm }) {
         <Form.Control
           className="m-3"
           type="text"
+          name="name"
+          placeholder="Enter name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <Form.Control
+          className="m-3"
+          type="text"
           name="username"
           placeholder="Enter username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <Form.Control
+          className="m-3"
+          type="email"
+          name="email"
+          placeholder="Enter email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <Form.Control
