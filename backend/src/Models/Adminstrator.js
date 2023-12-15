@@ -3,6 +3,11 @@ const Schema = mongoose.Schema;
 
 const adminstratorSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: true,
+      default: "John Doe",
+    },
     username: {
       type: String,
       required: true,
