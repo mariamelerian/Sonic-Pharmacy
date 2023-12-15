@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 import axios from "axios";
 import PatientMyOrdersCard from "./PatientMyOrdersCard";
 
@@ -46,44 +46,56 @@ export default function PatientMyOrders() {
   };
 
   return (
-    //loadingggggggggggggg
     <>
-      {orders.length == 0 ? (
+      {" "}
+      {loading && (
         <div
           style={{
-            fontSize: "24px",
-            fontWeight: "bold",
-            color: "#212529",
-          }}
-        >
-          No Orders Found
-        </div>
-      ) : (
-        <Container
-          className="bg-white px-5 py-4 d-flex align-items-center justify-content-center"
-          style={{
-            margin: "20px",
             display: "flex",
-            flexDirection: "column",
-            marginLeft: "100px",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
           }}
         >
-          {orders.map((order, index) => (
-            <PatientMyOrdersCard
-              key={index}
-              orderId={order._id}
-              orderNumber={order.number}
-              orderStatus={order.status}
-              orderCost={order.totalPrice}
-              orderDate={order.date}
-              address={order.address}
-              items={order.items}
-              handleChangeState={handleChangeState}
-            />
-          ))}
-        </Container>
+          <Spinner animation="border" role="status">
+            <span className="sr-only">Loading...</span>
+          </Spinner>
+        </div>
       )}
-      {error1 && <div className="error">{error1}</div>}
+      {!loading && (
+        <div>
+          {orders.length == 0 ? (
+            <div className="msg" style={{ marginTop: "5rem" }}>
+              No Orders Found
+            </div>
+          ) : (
+            <Container
+              className="bg-white px-5 py-4 d-flex align-items-center justify-content-center"
+              style={{
+                // margin: "20px",
+                display: "flex",
+                flexDirection: "column",
+                // marginLeft: "100px",
+              }}
+            >
+              {orders.map((order, index) => (
+                <PatientMyOrdersCard
+                  key={index}
+                  orderId={order._id}
+                  orderNumber={order.number}
+                  orderStatus={order.status}
+                  orderCost={order.totalPrice}
+                  orderDate={order.date}
+                  address={order.address}
+                  items={order.items}
+                  handleChangeState={handleChangeState}
+                />
+              ))}
+            </Container>
+          )}
+          {error1 && <div className="error">{error1}</div>}
+        </div>
+      )}
     </>
   );
 }

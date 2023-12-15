@@ -147,7 +147,7 @@
   color: var(--theme-secondary, #ff6b35);
 
   /* Body/Underline */
-  font-family: Helvetica Neue;
+  /* font-family: Helvetica Neue; */
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
@@ -163,7 +163,7 @@
   justify-content: center;
   align-items: center;
   gap: 0.25rem;
-  font-family: Helvetica Neue;
+  /* font-family: Helvetica Neue; */
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
@@ -265,7 +265,7 @@ button.mb-3.btn-secondary.btn-interest-selected.btn.btn-primary {
 }
 
 .signup-container {
-  padding-top: 1.0rem;
+  padding-top: 1rem;
   padding-left: 0;
   padding-right: 0;
   display: flex;

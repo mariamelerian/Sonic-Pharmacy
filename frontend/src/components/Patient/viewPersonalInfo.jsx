@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import ChangePass from "../../forms/ChangePass";
-import { Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import axios from "axios";
 
 function ViewPersonalInfo() {
@@ -37,10 +37,9 @@ function ViewPersonalInfo() {
   }, []);
 
   const listItemStyle = {
-    fontSize: "1rem",
-    marginBottom: "0.7rem",
-    verticalAlign: "top",
-    fontWeight: "600",
+    fontSize: "1.05rem", // Font size for all information
+    marginBottom: "0.75rem", // Margin bottom for all information
+    verticalAlign: "top", // Align items at the top of each column
   };
 
   const labelStyle = {
@@ -86,7 +85,7 @@ function ViewPersonalInfo() {
   };
 
   return (
-    <div>
+    <div style={{ width: "40rem" }}>
       <div
         className="d-flex justify-content-center align-items-center"
         style={{
@@ -94,6 +93,7 @@ function ViewPersonalInfo() {
           fontWeight: "600",
           color: "#212529",
           lineHeight: "1.5",
+          marginBottom: "1rem",
         }}
       >
         Personal Information
@@ -101,18 +101,22 @@ function ViewPersonalInfo() {
       <ListGroup>
         <ListGroup.Item>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Name:</span>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>Name: </span>
             {user.name}
           </div>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Username:</span>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Username:{" "}
+            </span>
             {user.username}
           </div>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Password:</span>{" "}
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Password:
+            </span>{" "}
             <span>
               <label style={labelStyle} onClick={toggleChangePass}>
-                {showChangePass ? "Close" : "Change Password"}
+                {showChangePass ? "close" : "change password"}
               </label>
             </span>
             {showChangePass && (
@@ -120,52 +124,82 @@ function ViewPersonalInfo() {
             )}
           </div>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Email:</span>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Email:{" "}
+            </span>
             {user.email}
           </div>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Phone Number:</span>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Phone Number:{" "}
+            </span>
             {user.phoneNumber}
           </div>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Emergency Contact Name:</span>{" "}
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Emergency Contact Name:
+            </span>{" "}
             {user.emergencyName}
           </div>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Emergency Contact Number:</span>{" "}
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Emergency Contact Number:
+            </span>{" "}
             {user.emergencyNumber}
           </div>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>Emergency Relation:</span>{" "}
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Emergency Relation:
+            </span>{" "}
             {user.emergencyRelation}
           </div>
           <div style={listItemStyle}>
-            <span style={{ color: "#099BA0" }}>My Addresses:</span>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              My Addresses:
+            </span>
           </div>
-          {
-            /* Display existing addresses */
-            addresses.map((address, index) => (
-              <div key={index} style={{ marginLeft: "2rem" }}>
-                <span>Address {index + 1}:</span>
-                {address}
-              </div>
-            ))
-          }
+          {addresses.map(
+            (address, index) =>
+              address != null && (
+                <div
+                  key={index}
+                  style={{
+                    marginLeft: "2rem",
+                    paddingLeft: "1rem",
+                    textIndent: "-1rem",
+                    fontSize: "1.05rem",
+                  }}
+                >
+                  &#8226; {address}
+                </div>
+              )
+          )}
 
           {showAddAddressInput ? (
-            <div>
-              <input
-                type="text"
-                placeholder="Enter new address"
-                value={newAddress}
-                onChange={handleNewAddressInputChange}
-              />
-              <Button variant="primary" onClick={handleSaveNewAddress}>
+            <div className="d-flex flex-row" style={{ marginTop: "0.5rem" }}>
+              <Form.Group>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter new address"
+                  value={newAddress}
+                  style={{ width: "15rem" }}
+                  onChange={handleNewAddressInputChange}
+                />
+              </Form.Group>
+              <Button
+                variant="primary"
+                style={{ marginLeft: "0.5rem" }}
+                onClick={handleSaveNewAddress}
+              >
                 Save
               </Button>
             </div>
           ) : (
-            <Button variant="primary" onClick={handleAddNewAddressClick}>
+            <Button
+              variant="primary"
+              style={{ marginTop: "0.5rem" }}
+              onClick={handleAddNewAddressClick}
+            >
               Add New Address
             </Button>
           )}

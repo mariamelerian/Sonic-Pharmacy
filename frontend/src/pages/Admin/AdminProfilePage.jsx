@@ -38,97 +38,51 @@ function AdminProfilePage() {
       <AppNavbar hamburgerMenu={<AdminBurgerMenu />} />
       <Container fluid className="bg-light pt-3 mt-2">
         <Container className="bg-white px-5 py-4 d-flex align-items-center justify-content-center">
-          <Row className="w-100">
-            <div className="w-100 mt-5">
-              <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-                <Row>
-                  <Col lg={3}>
-                    <Nav
-                      variant="pills"
-                      className="flex-column"
-                      activeKey={activeKey}
-                      onSelect={handleSelect}
-                    >
-                      <Nav.Item>
-                        <Nav.Link
-                          eventKey="first"
-                          style={{
-                            background:
-                              activeKey === "first" ? "#05afb9" : "white",
-                            color: activeKey === "first" ? "white" : "black",
-                            border:
-                              activeKey === "first"
-                                ? "none"
-                                : "1px solid rgb(189, 189, 189)",
-                            marginBottom: "1rem",
-                            fontSize: "1.2rem",
-                            fontWeight: "600",
-                          }}
-                        >
-                          Personal Information
-                        </Nav.Link>
-                      </Nav.Item>
-                    </Nav>
-                  </Col>
-                  <Col lg={9}>
-                    <Tab.Content>
-                      <Tab.Pane eventKey="first">
-                        <div>
-                          <div
-                            className="d-flex justify-content-center align-items-center"
-                            style={{
-                              fontSize: "2.5rem", // Increase font size for the title
-                              fontWeight: "600",
-                              color: "#212529",
-                              lineHeight: "1.5",
-                            }}
-                          >
-                            Personal Information
-                          </div>
-                          <ListGroup>
-                            <ListGroup.Item>
-                              <div style={listItemStyle}>
-                                <span style={{ color: "#099BA0" }}>
-                                  Username:
-                                </span>
-                                {user.userName}
-                              </div>
-                              <div style={listItemStyle}>
-                                <span style={{ color: "#099BA0" }}>
-                                  Password:
-                                </span>{" "}
-                                <span>
-                                  <label
-                                    style={{
-                                      cursor: "pointer",
-                                      fontWeight: "lighter",
-                                      textDecoration: "underline",
-                                      color: "blue",
-                                    }}
-                                    onClick={toggleChangePass} // Add your click handler here
-                                  >
-                                    {showChangePass
-                                      ? "close"
-                                      : "change password"}
-                                  </label>
-                                </span>
-                                {showChangePass && (
-                                  <ChangePass
-                                    patient={true}
-                                    api="/adminChangePassword"
-                                  />
-                                )}
-                              </div>
-                            </ListGroup.Item>
-                          </ListGroup>
-                        </div>
-                      </Tab.Pane>
-                    </Tab.Content>
-                  </Col>
-                </Row>
-              </Tab.Container>
+          <div>
+            <div
+              className="d-flex justify-content-center align-items-center"
+              style={{
+                fontSize: "2.5rem",
+                fontWeight: "600",
+                color: "#212529",
+                lineHeight: "1.5",
+                marginBottom: "1rem",
+              }}
+            >
+              Personal Information
             </div>
-          </Row>
+            <ListGroup>
+              <ListGroup.Item>
+                <div style={listItemStyle}>
+                  <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+                    Username:
+                  </span>
+                  {user.userName}
+                </div>
+                <div style={listItemStyle}>
+                  <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+                    Password:
+                  </span>{" "}
+                  <span>
+                    <label
+                      style={{
+                        cursor: "pointer",
+                        fontWeight: "lighter",
+                        textDecoration: "underline",
+                        color: "blue",
+                      }}
+                      onClick={toggleChangePass} // Add your click handler here
+                    >
+                      {showChangePass ? "close" : "change password"}
+                    </label>
+                  </span>
+                  {showChangePass && (
+                    <ChangePass patient={true} api="/adminChangePassword" />
+                  )}
+                </div>
+              </ListGroup.Item>
+            </ListGroup>
+          </div>
         </Container>
       </Container>
     </div>

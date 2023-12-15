@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { faArrowDown, faPerson } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, Button, Col, Container, Row } from "react-bootstrap";
 import AccordionBody from "react-bootstrap/esm/AccordionBody";
 import PatientMyordersDetails from "./PatientMyordersDetails";
@@ -15,53 +13,41 @@ export default function PatientMyOrdersCard({
   handleChangeState,
   address,
 }) {
+  let statusColor = "#05afb9 ";
+
+  if (orderStatus === "Cancelled") {
+    statusColor = "#ff6b35 ";
+  } else if (orderStatus === "Completed") {
+    statusColor = "black";
+  }
   return (
-    <Container style={{ width: "1000px", padding: "0px" }}>
+    <Container style={{ width: "64rem" }}>
       <Accordion defaultactiveKey={1} className="acc mt-4">
         <Accordion.Item eventKey={0}>
-          <Accordion.Header>
+          <Accordion.Header className="d-flex flex-row align-items-center justify-content-between">
             <div
-              className="d-flex justify-content-between align-items-center"
               style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                display: "block",
-                width: "100%",
+                fontWeight: "bold",
+                fontSize: "1.2rem",
+                marginRight: "21rem",
+              }}
+            >{`Order ${orderNumber}`}</div>
+            <div
+              style={{
+                fontSize: "1.1rem",
+                marginRight: "21rem",
               }}
             >
-              <div
-                style={{
-                  fontSize: "17px",
-                  marginRight: "30%",
-                  fontWeight: "bold",
-                  color: "#212529",
-                  display: "inline-block",
-                }}
-              >
-                Order {orderNumber}
-              </div>
-              <div
-                style={{
-                  display: "inline-block",
-                }}
-              >
-                {orderDate.split("T")[0].split("-").reverse().join("/")}
-              </div>
-              <div
-                style={{
-                  color:
-                    orderStatus == "Pending" || orderStatus == "Cancelled"
-                      ? "#FF0000"
-                      : "#05afb9",
-                  fontSize: "1.3rem",
-                  fontWeight: "bold",
-                  display: "inline-block",
-                }}
-              >
-                {orderStatus}
-              </div>
+              {orderDate.split("T")[0].split("-").reverse().join("/")}
+            </div>
+            <div
+              style={{
+                fontWeight: "bold",
+                fontSize: "1.3rem",
+                color: statusColor,
+              }}
+            >
+              {orderStatus}
             </div>
           </Accordion.Header>
 

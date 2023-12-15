@@ -1,8 +1,8 @@
 import React from "react";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, ListGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { faX } from "@fortawesome/free-solid-svg-icons";
+import { faPrescriptionBottle } from "@fortawesome/free-solid-svg-icons";
+
 import axios from "axios";
 
 export default function PatientMyordersDetails({
@@ -12,24 +12,9 @@ export default function PatientMyordersDetails({
   orderCost,
   orderDate,
   address,
-
   items,
   handleChangeState,
 }) {
-  // console.log('Address:', address);
-  const rowStyle = {
-    display: "flex",
-    flexDirection: "row",
-    marginBottom: "5px",
-  };
-
-  const titleStyle = {
-    color: "#212529",
-    marginRight: "5px",
-    fontWeight: "bold",
-    fontSize: "15px",
-  };
-
   const handleCancel = async () => {
     try {
       const response = await axios.put(`/cancelOrder/${orderId}`);
@@ -45,108 +30,67 @@ export default function PatientMyordersDetails({
   };
 
   return (
-    <Card style={{ width: "100%", border: "transparent" }}>
-      <Card.Body>
-        <div className="d-flex justify-content-end">
-          {orderStatus === "Pending" && (
-            <Button
-              onClick={() => handleCancel()}
-              variant="secondary"
+    <Card style={{ border: "transparent" }}>
+      <Card.Body className="d-flex flex-column justify-content-center align-items-center">
+        <ListGroup style={{ width: "100%" }}>
+          {items.map((item, index) => (
+            <ListGroup.Item
+              key={index}
               style={{
-                backgroundColor: "#f0f0f0",
-                marginLeft: "20px",
-                borderColor: "#f0f0f0",
-                width: "100px",
-                height: "40px",
+                border: "1px solid #ccc",
+                borderRadius: "0.5rem",
+                marginBottom: "1rem",
+                padding: "0.75rem",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "50rem",
+                marginLeft: "3.5rem",
+                backgroundColor: "#f0f0f0 ",
               }}
             >
-              Cancel
-            </Button>
-          )}
-        </div>
-
-        <Card.Text>
+              <div style={{ fontSize: "1.1rem", fontWeight: "bold" }}>
+                <FontAwesomeIcon
+                  icon={faPrescriptionBottle}
+                  style={{ marginRight: "0.7rem" }}
+                />
+                {item.name}
+              </div>
+              <div style={{ fontSize: "1.1rem" }}>${item.price}</div>
+              <div style={{ fontSize: "1.1rem" }}>
+                Quantity: {item.quantity}
+              </div>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+        <div
+          className="d-flex justify-content-between"
+          style={{ width: "50rem", marginLeft: "-1rem" }}
+        >
+          <div style={{ fontSize: "1.1rem" }}>Delivering to {address}</div>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              flexWrap: "wrap",
-              fontSize: "15px",
+              fontWeight: "bold",
+              fontSize: "1.3rem",
+              justifyContent: "flex-end",
             }}
           >
-            {/* <div
-              style={{
-                color: "#05afb9",
-                fontSize: "1.3rem",
-                fontWeight: "bold",
-                marginBottom: "0.5rem",
-              }}
-            >
-              {orderStatus}
-            </div> */}
-
-            {/* <div style={rowStyle}>
-              <span style={titleStyle}>Date:</span>
-              {orderDate}
-            </div> */}
-            <ul>
-              {items.map((items, index) => (
-                <li
-                  style={{
-                    display: "flex",
-                    marginBottom: "5px",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    display: "block",
-                    width: "100%",
-                  }}
-                >
-                  <div
-                    style={{
-                      ...rowStyle,
-                      display: "inline-block",
-                      width: "30%",
-                    }}
-                  >
-                    <span style={titleStyle}>Name:</span>
-                    {items.name}
-                  </div>
-
-                  <div
-                    style={{
-                      ...rowStyle,
-                      display: "inline-block",
-                      width: "30%",
-                    }}
-                  >
-                    <span style={titleStyle}>Price:</span>
-                    {items.price}
-                  </div>
-                  <div
-                    style={{
-                      ...rowStyle,
-                      display: "inline-block",
-                      width: "30%",
-                    }}
-                  >
-                    <span style={titleStyle}>Quantity:</span>
-                    {items.quantity}
-                  </div>
-                </li>
-              ))}
-            </ul>
-            <div style={rowStyle}>
-              <span style={titleStyle}> Delivery Address:</span>
-              {address}
-            </div>
-
-            <div style={rowStyle}>
-              <span style={titleStyle}> Total Cost:</span>
-              {orderCost.toFixed(2)} LE
-                          </div>
+            Total: ${orderCost.toFixed(2)}
           </div>
-        </Card.Text>
+        </div>
+        {orderStatus === "Pending" && (
+          <Button
+            onClick={() => handleCancel()}
+            variant="secondary"
+            style={{
+              marginLeft: "55rem",
+              marginTop: "1rem",
+              marginBottom: "-1rem",
+            }}
+          >
+            Cancel
+          </Button>
+        )}
       </Card.Body>
     </Card>
   );
