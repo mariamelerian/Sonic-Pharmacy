@@ -131,7 +131,7 @@ function PatientPrescribedMedicine() {
       <Card.Body className="text-center">
         <div className="medicine-container">
          {/* Add the "Prescribed" label with a box */}
-    <div
+         {medicine.quantity === 0 && (<div
       className="prescribed-label"
       style={{
         position: 'absolute', // Set position to absolute
@@ -142,14 +142,19 @@ function PatientPrescribedMedicine() {
         paddingBottom:'5px',
 
 
-        borderColor:'lightgreen',
-        background: 'white', // Set background color
+        // borderColor:'lightgreen',
+        // background: 'white', // Set background color
         borderRadius: '8px', // Set border-radius for curved corners
         padding: '8px', // Set padding for space inside the box
       }}
     >
-      <span style={{ color: "#007bff", fontWeight: "bold" }}>Prescribed</span>
+            <div style={{ backgroundColor: 'white', color: 'red', border: '1px solid red', borderRadius: '5px', padding:'5px' }}>
+        
+        Out of Stock 
+      </div>
+
     </div>
+      )} 
 
           <div className="medicine-image-container">
             <img
@@ -190,14 +195,7 @@ function PatientPrescribedMedicine() {
               }}
             >
   <div className="medicine-price">Price: {medicine.price} LE</div>
-  {medicine.quantity === 0 && (
-    <div style={{ marginTop: '5px' }}>
-      <div style={{ backgroundColor: 'white', color: 'red', border: '1px solid red', borderRadius: '5px', padding:'5px' }}>
-        
-        Out of Stock 
-      </div>
-    </div>
-  )}
+ <div>Prescribed</div>
 </div>
 
 

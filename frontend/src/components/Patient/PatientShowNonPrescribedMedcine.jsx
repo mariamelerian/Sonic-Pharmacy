@@ -131,6 +131,30 @@ function PatientNonPrescribedMedicine() {
     <Card className="mb-4 mx-3 bg-light">
       <Card.Body className="text-center">
         <div className="medicine-container">
+        {medicine.quantity === 0 && (<div
+      className="prescribed-label"
+      style={{
+        position: 'absolute', // Set position to absolute
+        top: '5px', // Set distance from the top
+        right: '5px', // Set distance from the right
+        paddingRight:'5px',
+        paddingLeft:'5px',
+        paddingBottom:'5px',
+
+
+        // borderColor:'lightgreen',
+        // background: 'white', // Set background color
+        borderRadius: '8px', // Set border-radius for curved corners
+        padding: '8px', // Set padding for space inside the box
+      }}
+    >
+            <div style={{ backgroundColor: 'white', color: 'red', border: '1px solid red', borderRadius: '5px', padding:'5px' }}>
+        
+        Out of Stock 
+      </div>
+
+    </div>
+      )} 
           <div className="medicine-image-container">
             <img
               src={medicine.picture}
@@ -170,14 +194,7 @@ function PatientNonPrescribedMedicine() {
               }}
             >
   <div className="medicine-price">Price: {medicine.price} LE</div>
-  {medicine.quantity === 0 && (
-    <div style={{ marginTop: '5px' }}>
-      <div style={{ backgroundColor: 'white', color: 'red', border: '1px solid red', borderRadius: '5px', padding: '5px' }}>
-        
-        Out of Stock
-      </div>
-    </div>
-  )}
+ 
 </div>
 
             {expandedMedicine === index && (
