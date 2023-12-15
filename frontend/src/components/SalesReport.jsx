@@ -153,11 +153,12 @@ function SalesReportPage() {
             className="mx-auto"
             style={{
               flexShrink: 0,
-              width: "55%",
+              width: "37%",
               border: "1px solid var(--gray-400, #ced4da)",
               background: "var(--gray-white, #fff)",
               padding: "0.5rem", // Adjusted padding to make it thinner
               marginLeft: "1.3rem",
+              // transform: "translateX(-59%)",
             }}
           >
             <Row>

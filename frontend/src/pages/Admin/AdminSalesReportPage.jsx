@@ -5,6 +5,8 @@ import HamburgerMenu from "../../components/Admin/AdminBurgerMenu";
 import FilterByMonth from "../../components/FilterByMonth";
 import ShowSalesReport from "../../components/ShowSalesReport";
 import SalesReportPage from "../../components/SalesReport";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 function AdminSalesReportPage() {
@@ -94,7 +96,7 @@ function AdminSalesReportPage() {
                   className="mx-auto"
                   style={{
                     flexShrink: 0,
-                    width: "82%",
+                    width: "37%",
                     border: "1px solid var(--gray-400, #ced4da)",
                     background: "var(--gray-white, #fff)",
                     padding: "0.5rem", // Adjusted padding to make it thinner
@@ -127,7 +129,7 @@ function AdminSalesReportPage() {
                       >
                         Month
                       </div>
-
+                      <div style={{ position: "relative" }}>
                       <Form.Control
                         as="select"
                         onChange={(e) =>
@@ -146,6 +148,18 @@ function AdminSalesReportPage() {
                           </option>
                         ))}
                       </Form.Control>
+
+                      <FontAwesomeIcon
+                        icon={faAngleDown}
+                        style={{
+                        position: "absolute",
+                        top: "50%",
+                        right: "10px",
+                        transform: "translateY(-50%)",
+                        color: "#555", // Adjust the color as needed
+                          }}
+                       />
+                      </div>
                     </Col>
 
                     <Col xs={12} md={3} className="d-flex align-items-end">
@@ -154,8 +168,9 @@ function AdminSalesReportPage() {
                         onClick={handleFilter}
                         style={{
                           height: "38px", // Adjusted height
-                          marginLeft: "150px", // Adjusted margin-left
-                          fontSize: "14px", // Adjusted font size
+                          marginLeft: "20px", // Adjusted margin-left
+                          fontSize: "1rem",
+                          width: "8rem", // Adjusted font size
                         }}
                       >
                         Apply
