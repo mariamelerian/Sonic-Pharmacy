@@ -130,7 +130,7 @@ function PatientPrescribedMedicine() {
     <Card className="mb-4 mx-3 bg-light">
       <Card.Body className="text-center">
         <div className="medicine-container">
-         {/* Add the "Prescribed" label with a box */}
+         {/* Add the "out of stock" label with a box */}
          {medicine.quantity === 0 && (<div
       className="prescribed-label"
       style={{
