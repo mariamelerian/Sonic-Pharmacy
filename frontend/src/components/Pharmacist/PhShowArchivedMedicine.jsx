@@ -23,6 +23,8 @@ function PhShowArchivedMedicine() {
   const [quantity, setQuantity] = useState(null);
   const [medicinalUse, setMedicinalUse] = useState(null);
   const [activeIngredients, setActiveIngredients] = useState(null);
+  const [, setFilterMedicinalUse] = useState("");
+  const [expandedMedicine, setExpandedMedicine] = useState(null);
   const dispatch = useDispatch();
 
   const medicineImage = {
@@ -143,6 +145,11 @@ function PhShowArchivedMedicine() {
     setQuantity(null);
   };
 
+  const handleExpand = (index) => {
+    setFilterMedicinalUse(""); // Reset the filter when expanding a medicine
+    setExpandedMedicine(expandedMedicine === index ? null : index);
+  };
+
   return (
     <div>
       {showMedicineForm && (
@@ -168,9 +175,9 @@ function PhShowArchivedMedicine() {
         <Row>
           {filteredMedicines.map((medicine, index) => (
             <Col key={medicine.name} lg={4} md={4} sm={12}>
-              <Card
+             <Card
                 className="mb-4 mx-3 bg-light"
-                style={{ minHeight: "40rem" }}
+                style={{ minHeight: "28rem" }}
               >
                 <Card.Header>
                   <div className="d-flex justify-content-end">
@@ -323,8 +330,6 @@ function PhShowArchivedMedicine() {
                       <div
                         className="d-flex justify-content-center"
                         style={{
-                          position: "absolute",
-                          bottom: "1rem",
                           width: "100%",
                         }}
                       >
@@ -336,6 +341,7 @@ function PhShowArchivedMedicine() {
                           Unarchive
                         </button>
                       </div>
+               
                     </div>
                   )}
                 </Card.Body>
