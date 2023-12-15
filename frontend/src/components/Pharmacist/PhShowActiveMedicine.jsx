@@ -222,7 +222,7 @@ function PhShowActiveMedicine() {
             <Col key={medicine.name} lg={4} md={4} sm={12}>
               <Card
                 className="mb-4 mx-3 bg-light"
-                style={{ minHeight: "40rem" }}
+                style={{ minHeight: "28rem" }}
               >
                 <Card.Header>
                   <div className="d-flex justify-content-end">
@@ -403,22 +403,20 @@ function PhShowActiveMedicine() {
            
                      )}
 
-                      <div
-                        className="d-flex justify-content-center"
-                        style={{
-                          position: "absolute",
-                          bottom: "1rem",
-                          width: "100%",
-                        }}
-                      >
-                        <button
-                          className="btn btn-primary mt-3 "
-                          onClick={() => handleArchiveMedicine(medicine._id)}
-                          style={{ marginBottom: "1rem", width: "12rem" }}
-                        >
-                          Archive Medicine
-                        </button>
-                      </div>
+<div
+      className="d-flex justify-content-center"
+      style={{
+        width: "100%",
+      }}
+    >
+      <button
+        className="btn btn-primary mt-3"
+        onClick={() => handleArchiveMedicine(medicine._id)}
+        style={{ marginBottom: "1rem", width: "12rem" }}
+      >
+        Archive Medicine
+      </button>
+    </div>
                     </div>
                   )}
                 </Card.Body>
