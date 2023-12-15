@@ -143,8 +143,8 @@ export default function PatientMyordersDetails({
 
             <div style={rowStyle}>
               <span style={titleStyle}> Total Cost:</span>
-              {orderCost} LE
-            </div>
+              {orderCost.toFixed(2)} LE
+                          </div>
           </div>
         </Card.Text>
       </Card.Body>
