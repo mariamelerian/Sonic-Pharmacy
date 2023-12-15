@@ -11,34 +11,30 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const AppNavbarGuest = ({ flag }) => {
-  const [newNotifications, setNewNotifications] = useState(
-    useSelector((state) => state.newNotifications.newNotifications)
-  );
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState(false);
-  const doctorLoggedIn = useSelector((state) => state.doctorLogin.isLoggedIn);
-  const patientLoggedIn = useSelector((state) => state.patientLogin.isLoggedIn);
-  const [who, setWho] = useState("");
+  // const [newNotifications, setNewNotifications] = useState(
+  //   useSelector((state) => state.newNotifications.newNotifications)
+  // );
+  // const doctorLoggedIn = useSelector((state) => state.doctorLogin.isLoggedIn);
+  // const patientLoggedIn = useSelector((state) => state.patientLogin.isLoggedIn);
+  // const [who, setWho] = useState("");
 
-  useEffect(() => {
-    if (doctorLoggedIn || patientLoggedIn) {
-      setNotifications(true);
-      if (doctorLoggedIn) {
-        setWho("doctor");
-      } else {
-        setWho("patient");
-      }
-    } else {
-      setNotifications(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (doctorLoggedIn || patientLoggedIn) {
+  //     // setNotifications(true);
+  //     if (doctorLoggedIn) {
+  //       setWho("doctor");
+  //     } else {
+  //       setWho("patient");
+  //     }
+  //   } else {
+  //     // setNotifications(false);
+  //   }
+  // }, []);
 
-  const toggleNotifications = () => {
-    setShowNotifications(!showNotifications);
-  };
-  const resetNew = () => {
-    setNewNotifications(false);
-  };
+  // const toggleNotifications = () => {
+  //   setShowNotifications(!showNotifications);
+  // };
+
   const navigate = useNavigate();
 
   return (
@@ -58,7 +54,7 @@ const AppNavbarGuest = ({ flag }) => {
               fontWeight: "700",
             }}
           >
-            El7a2ny Clinic
+            Pharmacy
           </div>
           <div
             style={{
@@ -74,9 +70,9 @@ const AppNavbarGuest = ({ flag }) => {
             <Link
               className="d-flex"
               style={{ color: "#05afb9", fontSize: "1.15rem" }}
-              to={"/doctor-signup"}
+              to={"/pharmacist-signup"}
             >
-              Register as a Doctor
+              Register as a Pharmacist
             </Link>
           )}
           {flag && (

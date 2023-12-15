@@ -203,8 +203,12 @@ function MedicineForm({ onClose, fetchData }) {
             />
           </Form.Group>
         </Form>
-        <div className="d-flex justify-content-end">
-          <Button className="mr-2" onClick={handleSave}>
+        <div className="d-flex justify-content-end ">
+          <Button
+            className="mr-2"
+            onClick={handleSave}
+            style={{ marginTop: "3rem", width: "10rem" }}
+          >
             Save
           </Button>
           {/* <Button variant="secondary" onClick={onClose}>

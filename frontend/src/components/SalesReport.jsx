@@ -222,15 +222,13 @@ function SalesReportPage() {
                   Date
                 </div>
 
-                <div>
-                  <input
-                    type="date"
-                    id="datePicker"
-                    name="datePicker"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                  />
-                </div>
+                <Form.Control
+                  style={{ marginBottom: "1rem" }}
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  onKeyDown={(e) => e.preventDefault()}
+                />
               </Col>
 
               <Col xs={12} md={3} className="d-flex align-items-end">
@@ -240,7 +238,8 @@ function SalesReportPage() {
                   style={{
                     height: "38px", // Adjusted height
                     marginLeft: "150px", // Adjusted margin-left
-                    fontSize: "14px", // Adjusted font size
+                    fontSize: "14px",
+                    // Adjusted font size
                   }}
                 >
                   Apply
