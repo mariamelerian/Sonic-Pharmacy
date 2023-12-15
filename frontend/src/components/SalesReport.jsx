@@ -59,6 +59,26 @@ function SalesReportPage() {
           setError("Server Error");
         }
       }
+    } else if (selectedMonth === "") {
+      try {
+        const response = await axios.get("/monthlySales", {
+          params: {
+            month: "",
+          },
+        });
+        if (response.status === 200) {
+          setSales(response.data);
+          console.log("response.data", response.data);
+        } else {
+          console.log("Server error");
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          setError("Not found.");
+        } else if (error.response && error.response.status === 500) {
+          setError("Server Error");
+        }
+      }
     } else if (selectedMedicine !== "" || selectedDate !== "") {
       try {
         const response = await axios.get("/filteredSales", {
@@ -88,6 +108,7 @@ function SalesReportPage() {
 
   useEffect(() => {
     fetchMedicines();
+    handleFilter();
   }, []);
 
   const fetchMedicines = async () => {
@@ -132,7 +153,7 @@ function SalesReportPage() {
             className="mx-auto"
             style={{
               flexShrink: 0,
-              width: "82%",
+              width: "55%",
               border: "1px solid var(--gray-400, #ced4da)",
               background: "var(--gray-white, #fff)",
               padding: "0.5rem", // Adjusted padding to make it thinner
@@ -166,7 +187,10 @@ function SalesReportPage() {
                   Month
                 </div>
 
-                <div style={{ position: "relative", display: "inline-block" }}>
+                <div
+                  style={{ position: "relative", display: "inline-block" }}
+                  className="d-flex"
+                >
                   <Form.Control
                     as="select"
                     onChange={(e) =>
@@ -176,7 +200,7 @@ function SalesReportPage() {
                         })
                       )
                     }
-                    style={{ width: "150%" }} // Adjusted width
+                    style={{ width: "100%" }} // Adjusted width
                   >
                     <option value="">Select Month</option>
                     {months.map((use, index) => (
@@ -190,7 +214,7 @@ function SalesReportPage() {
                     style={{
                       position: "absolute",
                       top: "50%",
-                      right: "-50px",
+                      right: "1rem",
                       transform: "translateY(-50%)",
                     }}
                   />
@@ -209,11 +233,14 @@ function SalesReportPage() {
                   Medicine
                 </div>
 
-                <div style={{ position: "relative", display: "inline-block" }}>
+                <div
+                  style={{ position: "relative", display: "inline-block" }}
+                  className="d-flex"
+                >
                   <Form.Control
                     as="select"
                     onChange={(e) => setSelectedMedicine(e.target.value)}
-                    style={{ width: "130%" }} // Adjusted width
+                    style={{ width: "100%" }} // Adjusted width
                   >
                     <option value="">Select Medicine</option>
                     {medicines.map((use, index) => (
@@ -227,7 +254,7 @@ function SalesReportPage() {
                     style={{
                       position: "absolute",
                       top: "50%",
-                      right: "-30px",
+                      right: "1rem",
                       transform: "translateY(-50%)",
                     }}
                   />
@@ -260,10 +287,11 @@ function SalesReportPage() {
                   className="custom-button"
                   onClick={handleFilter}
                   style={{
-                    height: "38px", // Adjusted height
-                    marginLeft: "150px", // Adjusted margin-left
-                    fontSize: "14px",
+                    // marginLeft: "4rem", // Adjusted margin-left
+                    fontSize: "1rem",
+                    width: "8rem",
                     // Adjusted font size
+                    marginBottom: "1rem",
                   }}
                 >
                   Apply

@@ -149,11 +149,6 @@ function CartItems() {
     marginRight: "10px", // Add margin to separate buttons
   };
 
-  const quantityStyle = {
-    fontSize: "20px", // Increase font size
-    fontWeight: "bold", // Make it bold
-  };
-
   const trashIconStyle = {
     color: "red",
     cursor: "pointer", // Add cursor style
@@ -217,59 +212,147 @@ function CartItems() {
       <div className="cart">
         <h2 style={{ fontSize: "48px" }}>My Cart</h2>
         {medicine.items.map((item, index) => (
-          <div key={item.medicine}>
-            {/* <div style={lineStyle}></div> */}
-            <div style={cartItemStyle}>
-              <div style={buttonsContainerStyle}>
-                <button
-                  style={plusMinusButtonStyle}
+          // <div
+          //   key={item.medicine}
+          //   className="d-flex align-items-center justify-content-between"
+          // >
+          //   {/* <div style={lineStyle}></div> */}
+          //   <div
+          //     style={cartItemStyle}
+          //     className="d-flex align-items-center justify-content-between"
+          //   >
+          //     <div className="cart-item-image">
+          //       <img
+          //         src={item.image}
+          //         alt={item.name}
+          //         width="50"
+          //         height="90"
+          //         style={{ borderRadius: "5px", marginRight: "2rem" }}
+          //       />
+          //     </div>
+          //     <div>
+          // <div>{item.name}</div>
+          // <div style={{ color: "lightgreen", marginLeft: "1.5rem" }}>
+          //   In Stock
+          // </div>
+          //   {/* <div>{`$${item.price}`}</div> */}
+          // </div>
+
+          //     <div className="d-flex" style={{ background: "red" }}>
+          //       {" "}
+          //       <Button
+          //         onClick={() =>
+          //           handleQuantityChange(item.medicine, item.quantity + 1)
+          //         }
+          //       >
+          //         +
+          //       </Button>
+          //       <div>{item.quantity}</div>
+          //       <Button
+          // onClick={() =>
+          //   handleQuantityChange(item.medicine, item.quantity - 1)
+          // }
+          //       >
+          //         -
+          //       </Button>
+          //     </div>
+          //     <div>
+          //       <button
+          //         onClick={() => handleDeleteItem(item.medicine)}
+          //         style={trashIconStyle}
+          //       >
+          //         <FontAwesomeIcon icon={faTrash} />
+          //       </button>
+          //     </div>
+          //   </div>
+          // </div>
+          <div
+            key={item.medicine}
+            className="d-flex align-items-center justify-content-between bg-white mb-3"
+          >
+            <div
+              style={{
+                marginLeft: "2rem",
+                marginTop: "0.2rem",
+                marginBottom: "0.2rem",
+              }}
+            >
+              {" "}
+              <img
+                src={item.image}
+                alt={item.name}
+                width="50"
+                height="90"
+                style={{ borderRadius: "5px", marginRight: "2rem" }}
+              />
+            </div>
+            <div style={{ marginLeft: "-28rem" }}>
+              {" "}
+              <div style={{ fontSize: "1.2rem" }}>
+                <strong>{item.name}</strong>
+              </div>
+              <div style={{ color: "lightgreen", marginLeft: "1.5rem" }}>
+                In Stock
+              </div>
+            </div>
+            <div>
+              <div
+                className=" d-flex align-items-center justify-content-center bg-light"
+                style={{
+                  borderRadius: "5px",
+                  height: "2rem",
+                  // position: "relative",
+                  // left: "50%", // Position the button horizontally centered
+                  transform: "translateX(-285%)",
+                  marginTop: "1rem  ",
+                }}
+              >
+                <Button
+                  style={{
+                    height: "1.8rem",
+                    marginRight: "1rem",
+                    left: "50%", // Position the button horizontally centered
+                    transform: "translateX(-50%)",
+                    lineHeight: "0.8rem",
+                  }}
                   onClick={() =>
                     handleQuantityChange(item.medicine, item.quantity + 1)
                   }
                 >
-                  +
-                </button>
-                <div style={quantityStyle}>{item.quantity}</div>
-                <button
-                  style={plusMinusButtonStyle}
+                  <strong>+</strong>
+                </Button>
+                {item.quantity}
+                <Button
+                  variant="secondary"
+                  style={{
+                    height: "1.8rem",
+                    marginLeft: "1rem",
+                    tight: "50%", // Position the button horizontally centered
+                    transform: "translateX(50%)",
+                    lineHeight: "0.8rem",
+                  }}
                   onClick={() =>
                     handleQuantityChange(item.medicine, item.quantity - 1)
                   }
                 >
-                  -
-                </button>
+                  <strong>-</strong>
+                </Button>
               </div>
-              <div className="cart-item-image">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  width="50"
-                  height="90"
-                  style={cartItemImageStyle}
-                />
+            </div>
+            <div style={{ width: "6rem" }}>
+              <div style={{ fontSize: "1.2rem" }}>
+                <strong>{`$${item.price}`}</strong>
               </div>
-              <div className="cart-item-details">
-                <div
-                  className="cart-item-name"
-                  style={{
-                    quantityStyle,
-                    marginLeft: "10px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {item.name}
-                </div>
-                <div
-                  className="cart-item-price"
-                  style={{ marginLeft: "10px" }}
-                >{`$${item.price}`}</div>
-              </div>
-              <button 
+              <FontAwesomeIcon
+                style={{
+                  color: "#ff6b35",
+                  marginLeft: "4.5rem",
+                  marginTop: "1rem",
+                  cursor: "pointer",
+                }}
+                icon={faTrash}
                 onClick={() => handleDeleteItem(item.medicine)}
-                style={trashIconStyle}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
+              />
             </div>
           </div>
         ))}

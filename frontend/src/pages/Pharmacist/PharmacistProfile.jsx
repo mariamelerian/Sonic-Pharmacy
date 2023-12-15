@@ -21,7 +21,7 @@ function PharmacistProfile() {
       <AppNavbar hamburgerMenu={<PhHamburgerMenu />} />
       <Container fluid className="bg-light pt-3 mt-2">
         <Container className="bg-white px-5 py-4 d-flex align-items-center justify-content-center">
-          <Row className="w-100">
+          {/* <Row className="w-100">
             <div className="w-100 mt-5">
               <Tab.Container id="left-tabs-example" defaultActiveKey="first">
                 <Row>
@@ -56,18 +56,18 @@ function PharmacistProfile() {
                   <Col lg={9}>
                     <Tab.Content>
                       <Tab.Pane eventKey="first">
-                        <PharmacistProfileBox />
+                    
                       </Tab.Pane>
                     </Tab.Content>
                   </Col>
                 </Row>
               </Tab.Container>
             </div>
-          </Row>
+          </Row> */}
+          <PharmacistProfileBox />
         </Container>
       </Container>
       <ChatPat who="pharmacist" />
-
     </div>
   );
 }
