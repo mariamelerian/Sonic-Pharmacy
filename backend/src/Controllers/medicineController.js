@@ -367,7 +367,20 @@ const getFilteredSalesReport = async (req, res) => {
 
 const getPrescribedMedicines = async (req, res) => {
   const patientId = req.session.userId;
-  const prescriptions = await Prescription.find({ patientID: patientId });
+  const currentDate = new Date();
+  const oneMonthAgo = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() - 1,
+    currentDate.getDate()
+  );
+  const formattedOneMonthAgo = oneMonthAgo.toISOString().split("T")[0];
+  console.log(formattedOneMonthAgo);
+
+  const prescriptions = await Prescription.find({
+    patientID: patientId,
+    date: { $gte: formattedOneMonthAgo },
+  });
+  console.log(prescriptions);
 
   let prescribedMedicines = [];
   for (let i = 0; i < prescriptions.length; i++) {
