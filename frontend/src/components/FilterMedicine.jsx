@@ -50,11 +50,12 @@ function FilterMedicine({ onFilter }) {
     <Container
       style={{
         flexShrink: 0,
-        width: "35%", // Adjusted width for a smaller container
+        width: "60%", // Adjusted width for a smaller container
         // marginLeft: 0,
         border: "1px solid var(--gray-400, #ced4da)",
         background: "var(--gray-white, #fff)",
         padding: "0.5rem", // Adjusted padding to make it thinner
+        marginBottom: "2rem",
       }}
     >
       <Row style={{ justifyContent: "flex-start" }}>
@@ -111,7 +112,7 @@ function FilterMedicine({ onFilter }) {
         </Col>
         <Col xs={12} md={3} className="d-flex align-items-end">
           <Button
-            className="custom-button"
+            className="custom-button w-100"
             onClick={handleFilter}
             style={{
               height: "38px", // Adjusted height

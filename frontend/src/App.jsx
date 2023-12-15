@@ -68,13 +68,6 @@ function App() {
           <Route index element={<PharmSignup />} />
         </Route>
 
-        <Route path="forgot-password">
-          {/* <Route path="otp-verification" element={<OTPVerification />} />
-          <Route path="reset-password" element={<ResetPassword />} />
-          <Route path="password-changed" element={<PasswordChanged />} /> */}
-          <Route index element={<ForgotPassword />} />
-        </Route>
-
         <Route path="admin">
           <Route index element={<AdminHomePage />} />
           <Route path="pharmacists-list" element={<AdminPharmacistPage />} />
@@ -82,7 +75,6 @@ function App() {
           <Route path="admins-list" element={<AdminAdminsPage />} />
           <Route path="admin-medicine" element={<AdminMedicine />} />
           <Route path="admin-salesreport" element={<AdminSalesReportPage />} />
-          
 
           <Route path="profile" element={<AdminProfilePage />} />
         </Route>
@@ -101,12 +93,7 @@ function App() {
             element={<CheckOutDoneModal />}
           />
 
-          <Route
-            path="patient-chatwithpharmacist"
-            element={<ChatPat />}
-          />
-
-
+          <Route path="patient-chatwithpharmacist" element={<ChatPat />} />
 
           <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />
           <Route path="profile" element={<PatientProfile />} />
@@ -115,7 +102,7 @@ function App() {
         <Route path="Pharmacist">
           {/* <Route index element={<PharmacistHomePage />} /> */}
           <Route index element={<PhMedicine />} />
-          <Route path="ph-notifications" element={<PharmTest/>} />
+          <Route path="ph-notifications" element={<PharmTest />} />
 
           <Route path="ph-medicine" element={<PhMedicine />} />
           {/* <Route path="ph-medicine" element={<ChatPat />} /> */}

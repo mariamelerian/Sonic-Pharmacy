@@ -76,6 +76,7 @@ const LoginForm = () => {
               documents: user.files,
               userId: user._id,
               isLoggedIn: true,
+              wallet: user.wallet,
             })
           );
           navigate("/pharmacist");
@@ -167,7 +168,6 @@ const LoginForm = () => {
             Don't have an account? Sign Up.
           </a>
         </Container>
-
       </Form>
     </div>
   );

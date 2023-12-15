@@ -12,6 +12,7 @@ const initialState = {
   userId: "",
   photo: "",
   isLoggedIn: false,
+  wallet: "",
 };
 
 const loginSlice = createSlice({
@@ -30,6 +31,7 @@ const loginSlice = createSlice({
       state.userId = action.payload.userId;
       state.isLoggedIn = action.payload.isLoggedIn;
       state.photo = action.payload.photo;
+      state.wallet = action.payload.wallet;
     },
     logoutPharmacist: (state, action) => {
       state.username = "";
@@ -43,6 +45,7 @@ const loginSlice = createSlice({
       state.userId = "";
       state.photo = "";
       state.isLoggedIn = false;
+      state.wallet = "";
     },
     setUserIdPharmacist: (state, action) => {
       state = {

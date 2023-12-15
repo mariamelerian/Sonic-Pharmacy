@@ -476,7 +476,7 @@ const PharmSignupForm = () => {
           <div
             className="text-decoration-none link-decoration"
             style={{ cursor: "pointer" }}
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/")}
           >
             Login
           </div>

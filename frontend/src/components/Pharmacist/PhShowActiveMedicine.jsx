@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Form, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MedicineForm from "./PhNewMedicine";
-import { faPlus, faPenToSquare,faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faPenToSquare,
+  faInfoCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { deleteFilterArray } from "../../state/filterMedicine";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -160,7 +164,9 @@ function PhShowActiveMedicine() {
     setExpandedMedicines((prevExpandedMedicines) => {
       const isExpanded = prevExpandedMedicines.includes(index);
       return isExpanded
-        ? prevExpandedMedicines.filter((expandedIndex) => expandedIndex !== index)
+        ? prevExpandedMedicines.filter(
+            (expandedIndex) => expandedIndex !== index
+          )
         : [...prevExpandedMedicines, index];
     });
   };
@@ -168,17 +174,35 @@ function PhShowActiveMedicine() {
   return (
     <div>
       {showMedicineForm && (
-        <AddMedicineModal fetchData={fetchData} onClose={onClose} />
-      )}
-
-      <Form className="my-4 mx-3">
-        <Form.Control
-          type="text"
-          placeholder="Search Medicines"
-          value={searchTerm}
-          onChange={handleSearch}
+        <AddMedicineModal
+          fetchData={fetchData}
+          onClose={onClose}
+          setShowMedicineForm={setShowMedicineForm}
         />
-      </Form>
+      )}
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ marginBottom: "1.5rem" }}
+      >
+        <Form className="my-4 mx-3 w-100">
+          <Form.Control
+            type="text"
+            placeholder="Search Medicines"
+            value={searchTerm}
+            onChange={handleSearch}
+            style={{ width: "95.5%" }}
+          />
+        </Form>
+        <Button
+          variant="secondary"
+          onClick={toggleMedicineForm}
+          style={{ width: "33rem", marginRight: "1rem", height: "4rem" }}
+        >
+          <FontAwesomeIcon icon={faPlus} className="mr-2" />
+          Add New Medicine
+        </Button>
+      </div>
+
       {loading ? (
         <div className="text-center">
           <Spinner animation="border" role="status">
@@ -189,7 +213,10 @@ function PhShowActiveMedicine() {
         <Row>
           {filteredMedicines.map((medicine, index) => (
             <Col key={medicine.name} lg={4} md={4} sm={12}>
-              <Card className="mb-4 mx-3 bg-light">
+              <Card
+                className="mb-4 mx-3 bg-light"
+                style={{ minHeight: "40rem" }}
+              >
                 <Card.Header>
                   <div className="d-flex justify-content-end">
                     <FontAwesomeIcon
@@ -220,41 +247,28 @@ function PhShowActiveMedicine() {
                     />
                   </div>
                   <div className="details-container">
-            <div className="d-flex justify-content-between align-items-center mb-7 px-5">
-              <div
-                className="medicine-name font-weight-bold"
-                style={{
-                  fontSize: "24px",
-                  fontStyle: "normal",
-                  fontWeight: 700,
-                  lineHeight: "120%",
-                }}
-              >
-                {medicine.name}
-              </div>
-              <div
-                className="expand-button"
-                // onClick={() => handleExpand(index)}  
-                onClick={() => toggleMedicineDetails(index)}>
-              
-                <FontAwesomeIcon icon={faInfoCircle} />
-              </div>
-            </div>
-            </div>
-            <div
-              className="info-price-container d-flex justify-content-between align-items-center px-5"
-              style={{
-                color: "#777777",
-                fontSize: "1rem",
-                fontStyle: "normal",
-                fontWeight: 500,
-                lineHeight: "100%",
-                marginBottom: "0.5rem",
-              }}
-            >
-  <div className="medicine-price">Price: {medicine.price} LE</div>
+                    <div className="d-flex justify-content-between align-items-center mb-7 px-5">
+                      <div
+                        className="medicine-name font-weight-bold"
+                        style={{
+                          fontSize: "24px",
+                          fontStyle: "normal",
+                          fontWeight: 700,
+                          lineHeight: "120%",
+                        }}
+                      >
+                        {medicine.name}
+                      </div>
+                      <div
+                        className="expand-button"
+                        // onClick={() => handleExpand(index)}
+                        onClick={() => toggleMedicineDetails(index)}
+                      >
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                      </div>
+                    </div>
+                  </div>
 
-</div>
                   {editedMedicine === index ? (
                     <div style={{ paddingLeft: "20px" }}>
                       <Form.Group>
@@ -375,10 +389,18 @@ function PhShowActiveMedicine() {
                         <strong>Sales:</strong> {medicine.sales} LE
                       </div>
 
-                      <div className="d-flex justify-content-center">
+                      <div
+                        className="d-flex justify-content-center"
+                        style={{
+                          position: "absolute",
+                          bottom: "1rem",
+                          width: "100%",
+                        }}
+                      >
                         <button
-                          className="btn btn-primary mt-3"
+                          className="btn btn-primary mt-3 "
                           onClick={() => handleArchiveMedicine(medicine._id)}
+                          style={{ marginBottom: "1rem", width: "12rem" }}
                         >
                           Archive Medicine
                         </button>
@@ -399,7 +421,7 @@ function PhShowActiveMedicine() {
               </Card>
             </Col>
           ))}
-          <Col lg={6} md={6} sm={12}>
+          {/* <Col lg={6} md={6} sm={12}>
             <Card className="mb-4 mx-3 bg-light">
               <Card.Body className="text-center">
                 <Button variant="primary" onClick={toggleMedicineForm}>
@@ -408,7 +430,7 @@ function PhShowActiveMedicine() {
                 </Button>
               </Card.Body>
             </Card>
-          </Col>
+          </Col> */}
         </Row>
       )}
     </div>

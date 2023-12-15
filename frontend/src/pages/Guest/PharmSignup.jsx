@@ -8,16 +8,17 @@ import RegPhoto from "../../components/Guest/RegPhoto";
 
 import PharmSignupForm from "../../forms/Guest/PharmSignupForm";
 import GuestBurgerMenu from "../../components/Guest/GuestBurgerMenu";
+import AppNavbarGuest2 from "../../components/AppNavigation/AppNavbarGuest2";
 
 function PharmSignup() {
-/*   const dispatch = useDispatch();
+  /*   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(logout());
   }, []); */
 
   return (
     <div>
-      <AppNavbar hamburgerMenu={<GuestBurgerMenu />} />
+      <AppNavbarGuest2 flag={true} />
       <Container fluid className="bg-light pt-3 mt-2">
         <Container className="bg-white px-5 py-4 d-flex align-items-center justify-content-center">
           <div className="d-flex w-100 align-items-center">

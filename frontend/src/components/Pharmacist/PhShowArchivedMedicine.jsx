@@ -41,10 +41,6 @@ function PhShowArchivedMedicine() {
     console.log(responseData);
   }, []);
 
-  
-        
-       
-   
   const fetchData = async () => {
     try {
       const response = await axios.get("/archivedMedicines");
@@ -153,12 +149,13 @@ function PhShowArchivedMedicine() {
         <AddMedicineModal fetchData={fetchData} onClose={onClose} />
       )}
 
-      <Form className="my-4 mx-3">
+      <Form className="my-4 mx-3 w-100">
         <Form.Control
           type="text"
           placeholder="Search Medicines"
           value={searchTerm}
           onChange={handleSearch}
+          style={{ width: "63.5%" }}
         />
       </Form>
       {loading ? (
@@ -171,7 +168,10 @@ function PhShowArchivedMedicine() {
         <Row>
           {filteredMedicines.map((medicine, index) => (
             <Col key={medicine.name} lg={4} md={4} sm={12}>
-              <Card className="mb-4 mx-3 bg-light">
+              <Card
+                className="mb-4 mx-3 bg-light"
+                style={{ minHeight: "40rem" }}
+              >
                 <Card.Header>
                   <div className="d-flex justify-content-end">
                     <FontAwesomeIcon
@@ -320,10 +320,18 @@ function PhShowArchivedMedicine() {
                       >
                         <strong>Sales:</strong> {medicine.sales} LE
                       </div>
-                      <div className="d-flex justify-content-center">
+                      <div
+                        className="d-flex justify-content-center"
+                        style={{
+                          position: "absolute",
+                          bottom: "1rem",
+                          width: "100%",
+                        }}
+                      >
                         <button
                           className="btn btn-primary mt-3"
                           onClick={() => handleUnarchiveMedicine(medicine._id)}
+                          style={{ marginBottom: "1rem", width: "12rem" }}
                         >
                           Unarchive
                         </button>

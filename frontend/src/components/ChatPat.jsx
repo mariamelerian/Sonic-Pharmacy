@@ -52,7 +52,7 @@ export default function ChatPat({ who }) {
 
   const buttonStyle = {
     position: "fixed",
-    bottom: "5rem",
+    bottom: "1rem",
     right: "1rem",
     fontSize: "1.1rem",
     backgroundColor: "transparent",

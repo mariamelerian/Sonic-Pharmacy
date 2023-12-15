@@ -10,9 +10,9 @@ const NotificationsPanel = ({ isOpen, closePanel, resetNew }) => {
   const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
-  const newNotif = useSelector(
-    (state) => state.newNotifications.newNotifications
-  );
+  // const newNotif = useSelector(
+  //   (state) => state.newNotifications.newNotifications
+  // );
 
   const panelStyles = {
     position: "fixed",
@@ -52,20 +52,20 @@ const NotificationsPanel = ({ isOpen, closePanel, resetNew }) => {
     }
   };
 
-  const resetNewNotifications = async () => {
-    if (newNotif) {
-      try {
-        const response = await axios.post("/notificationFlag");
-        if (response.status === 200) {
-          setError(null);
-          resetNew();
-          dispatch(setNewNotifications(false));
-        }
-      } catch (error) {
-        setError(error.response.data.message);
-      }
-    }
-  };
+  // const resetNewNotifications = async () => {
+  //   if (newNotif) {
+  //     try {
+  //       const response = await axios.post("/notificationFlag");
+  //       if (response.status === 200) {
+  //         setError(null);
+  //         resetNew();
+  //         dispatch(setNewNotifications(false));
+  //       }
+  //     } catch (error) {
+  //       setError(error.response.data.message);
+  //     }
+  //   }
+  // };
 
   const reverseNotifications = [...notifications].reverse();
 
@@ -85,7 +85,7 @@ const NotificationsPanel = ({ isOpen, closePanel, resetNew }) => {
           <FontAwesomeIcon
             icon={faX}
             onClick={() => {
-              resetNewNotifications();
+              // resetNewNotifications();
               closePanel();
             }}
             style={{
