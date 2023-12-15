@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Form, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MedicineForm from "./PhNewMedicine";
-import { faPlus, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faPenToSquare,faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { deleteFilterArray } from "../../state/filterMedicine";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -23,6 +23,8 @@ function PhShowArchivedMedicine() {
   const [quantity, setQuantity] = useState(null);
   const [medicinalUse, setMedicinalUse] = useState(null);
   const [activeIngredients, setActiveIngredients] = useState(null);
+  const [, setFilterMedicinalUse] = useState("");
+  const [expandedMedicine, setExpandedMedicine] = useState(null);
   const dispatch = useDispatch();
 
   const medicineImage = {
@@ -143,6 +145,11 @@ function PhShowArchivedMedicine() {
     setQuantity(null);
   };
 
+  const handleExpand = (index) => {
+    setFilterMedicinalUse(""); // Reset the filter when expanding a medicine
+    setExpandedMedicine(expandedMedicine === index ? null : index);
+  };
+
   return (
     <div>
       {showMedicineForm && (
@@ -155,7 +162,7 @@ function PhShowArchivedMedicine() {
           placeholder="Search Medicines"
           value={searchTerm}
           onChange={handleSearch}
-          style={{ width: "63.5%" }}
+          style={{ width: "63.5%" , marginBottom:"3.5rem",marginTop:"2.5rem"}}
         />
       </Form>
       {loading ? (
@@ -168,9 +175,9 @@ function PhShowArchivedMedicine() {
         <Row>
           {filteredMedicines.map((medicine, index) => (
             <Col key={medicine.name} lg={4} md={4} sm={12}>
-              <Card
+             <Card
                 className="mb-4 mx-3 bg-light"
-                style={{ minHeight: "40rem" }}
+                style={{ minHeight: "28rem" }}
               >
                 <Card.Header>
                   <div className="d-flex justify-content-end">
@@ -186,7 +193,7 @@ function PhShowArchivedMedicine() {
                       onClick={() => handleEditMedicine(index)}
                     />
                   </div>
-                  <div> {medicine.name} </div>
+                  {/* <div> {medicine.name} </div> */}
                 </Card.Header>
                 <Card.Body>
                   <div className="medicine-image-container">
@@ -200,6 +207,28 @@ function PhShowArchivedMedicine() {
                         display: "block",
                       }}
                     />
+                  </div>
+                  <div className="details-container">
+                    <div className="d-flex justify-content-between align-items-center mb-7 px-5">
+                      <div
+                        className="medicine-name font-weight-bold"
+                        style={{
+                          fontSize: "24px",
+                          fontStyle: "normal",
+                          fontWeight: 700,
+                          lineHeight: "120%",
+                        }}
+                      >
+                        {medicine.name}
+                      </div>
+                      <div
+                        className="expand-button"
+                        onClick={() => handleExpand(index)}
+                        // onClick={() => toggleMedicineDetails(index)}
+                      >
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                      </div>
+                    </div>
                   </div>
                   {editedMedicine === index ? (
                     <div style={{ paddingLeft: "20px" }}>
@@ -278,28 +307,31 @@ function PhShowArchivedMedicine() {
                     </div>
                   ) : (
                     <div>
-                      <div
+                     <div
                         className="medicine-price"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Price:</strong> {medicine.price} LE
                       </div>
 
+                      {expandedMedicine === index && (
+                      <>
+
                       <div
                         className="medicine-description"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Description:</strong> {medicine.description}
                       </div>
                       <div
                         className="medicine-use"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Medicinal Use:</strong> {medicine.medicinalUse}
                       </div>
                       <div
                         className="medicine-activeIngredients"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Active Ingredients:</strong>{" "}
                         {medicine.activeIngredients.map((ingredient, index) => (
@@ -310,21 +342,22 @@ function PhShowArchivedMedicine() {
                       </div>
                       <div
                         className="medicine-quantity"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Quantity:</strong> {medicine.quantity}
                       </div>
                       <div
                         className="medicine-sales"
-                        style={{ paddingLeft: "40px" }}
+                        style={{ paddingLeft: "48px" }}
                       >
                         <strong>Sales:</strong> {medicine.sales} LE
                       </div>
+                      </>
+           
+           )}
                       <div
                         className="d-flex justify-content-center"
                         style={{
-                          position: "absolute",
-                          bottom: "1rem",
                           width: "100%",
                         }}
                       >
@@ -336,6 +369,7 @@ function PhShowArchivedMedicine() {
                           Unarchive
                         </button>
                       </div>
+               
                     </div>
                   )}
                 </Card.Body>

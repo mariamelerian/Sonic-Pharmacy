@@ -29,6 +29,8 @@ function PhShowActiveMedicine() {
   const [activeIngredients, setActiveIngredients] = useState(null);
   const [expandedMedicines, setExpandedMedicines] = useState([]);
   const dispatch = useDispatch();
+  const [, setFilterMedicinalUse] = useState("");
+  const [expandedMedicine, setExpandedMedicine] = useState(null);
 
   const medicineImage = {
     width: "14rem",
@@ -171,6 +173,11 @@ function PhShowActiveMedicine() {
     });
   };
 
+  const handleExpand = (index) => {
+    setFilterMedicinalUse(""); // Reset the filter when expanding a medicine
+    setExpandedMedicine(expandedMedicine === index ? null : index);
+  };
+
   return (
     <div>
       {showMedicineForm && (
@@ -215,7 +222,7 @@ function PhShowActiveMedicine() {
             <Col key={medicine.name} lg={4} md={4} sm={12}>
               <Card
                 className="mb-4 mx-3 bg-light"
-                style={{ minHeight: "40rem" }}
+                style={{ minHeight: "28rem" }}
               >
                 <Card.Header>
                   <div className="d-flex justify-content-end">
@@ -261,8 +268,8 @@ function PhShowActiveMedicine() {
                       </div>
                       <div
                         className="expand-button"
-                        // onClick={() => handleExpand(index)}
-                        onClick={() => toggleMedicineDetails(index)}
+                        onClick={() => handleExpand(index)}
+                        // onClick={() => toggleMedicineDetails(index)}
                       >
                         <FontAwesomeIcon icon={faInfoCircle} />
                       </div>
@@ -353,6 +360,9 @@ function PhShowActiveMedicine() {
                         <strong>Price:</strong> {medicine.price} LE
                       </div>
 
+                      {expandedMedicine === index && (
+                      <>
+
                       <div
                         className="medicine-description"
                         style={{ paddingLeft: "48px" }}
@@ -389,22 +399,24 @@ function PhShowActiveMedicine() {
                         <strong>Sales:</strong> {medicine.sales} LE
                       </div>
 
-                      <div
-                        className="d-flex justify-content-center"
-                        style={{
-                          position: "absolute",
-                          bottom: "1rem",
-                          width: "100%",
-                        }}
-                      >
-                        <button
-                          className="btn btn-primary mt-3 "
-                          onClick={() => handleArchiveMedicine(medicine._id)}
-                          style={{ marginBottom: "1rem", width: "12rem" }}
-                        >
-                          Archive Medicine
-                        </button>
-                      </div>
+                      </>
+           
+                     )}
+
+<div
+      className="d-flex justify-content-center"
+      style={{
+        width: "100%",
+      }}
+    >
+      <button
+        className="btn btn-primary mt-3"
+        onClick={() => handleArchiveMedicine(medicine._id)}
+        style={{ marginBottom: "1rem", width: "12rem" }}
+      >
+        Archive Medicine
+      </button>
+    </div>
                     </div>
                   )}
                 </Card.Body>
