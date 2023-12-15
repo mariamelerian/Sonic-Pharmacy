@@ -2,6 +2,7 @@ const Order = require("../Models/Order");
 const Cart = require("../Models/Cart");
 const Medicine = require("../Models/Medicine");
 const Patient = require("../Models/Patient");
+const Prescription = require("../Models/Prescription");
 const Pharmacist = require("../Models/Pharmacist");
 const emailService = "outlook";
 const emailUser = "youstina2307@outlook.com";
@@ -60,6 +61,59 @@ const createOrder = async (userId, address, paymentMethod) => {
     throw new Error("Failed to create the order : " + error.message);
   }
 };
+
+// const createOrderFromPrescription = async (prescription, address, paymentMethod) => {
+//   try {
+//     let items = [];
+
+//     prescription.medicine.map((medicineArr) => {
+//       const medicineName = medicineArr[0];
+//       const medicine = await Medicine.findOne({ name: medicineName });
+
+//     });
+
+//     const count = await Order.countDocuments({ patient: prescription.patientID });
+//     const orderNumber = count + 1;
+
+//     const date = new Date();
+
+//     const orderData = {
+//       number: orderNumber,
+//       date: date,
+//       items: items,
+//       totalPrice: cart.total + 50,
+//       status: "Pending",
+//       patient: prescription.patientID,
+//       address: address,
+//       paymentMethod: paymentMethod,
+//     };
+//     const order = new Order(orderData);
+//     await order.save();
+
+//     cart.items.map(async (item) => {
+//       const medicine = await Medicine.findById(item.medicine);
+//       medicine.sales += item.quantity;
+//       medicine.quantity -= item.quantity;
+//       medicine.salesData.push({
+//         quantity: item.quantity,
+//         date: date,
+//       });
+//       await medicine.save();
+
+//       if (medicine.quantity == 0) {
+//         //notify pharmacist that medicine is out of stock
+//         notifyPharmacistsOutOfStock(medicine.name);
+//       }
+//     });
+
+//     // Clear the cart
+//     cart.items = [];
+//     cart.total = 0;
+//     await cart.save();
+//   } catch (error) {
+//     throw new Error("Failed to create the order : " + error.message);
+//   }
+// };
 
 const checkout = async (req, res) => {
   //create order
