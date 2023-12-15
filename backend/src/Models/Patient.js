@@ -1,6 +1,19 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
+const fileSchema = new Schema({
+  filename: {
+    type: String,
+    required: false,
+  },
+  mimetype: {
+    type: String,
+    required: false,
+  },
+  buffer: {
+    type: Buffer,
+    required: false,
+  },
+});
 const patientSchema = new Schema(
   {
     username: {
@@ -53,6 +66,24 @@ const patientSchema = new Schema(
       type: Number,
       default: 0,
       required: true,
+    },
+    package: {
+      type: String,
+      required: false,
+    },
+    familyMembers: [[String, String]],
+    medicalHistory: [fileSchema],
+    notifications: {
+      type: [String],
+      required: false,
+    },
+    newNotifications: {
+      type: Boolean,
+      required: false,
+    },
+    prescreptions: {
+      type: [Object],
+      required: false,
     },
   },
   { timestamps: true }
