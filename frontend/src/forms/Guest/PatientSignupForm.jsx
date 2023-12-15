@@ -187,7 +187,7 @@ const PatientSignupForm = () => {
 
         if (response.status === 201) {
           isLoading(false);
-          navigate("/login");
+          navigate("/");
         } else {
           setError("Signup failed");
           isLoading(false);
