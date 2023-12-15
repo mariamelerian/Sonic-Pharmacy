@@ -15,7 +15,13 @@ export default function AddNewAdmin({ fetchData, closeForm }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    if (username === "" || password === "" || confirmPassword === "" || name === "" || email === "") {
+    if (
+      username === "" ||
+      password === "" ||
+      confirmPassword === "" ||
+      name === "" ||
+      email === ""
+    ) {
       setError("Please fill in all the required fields");
       return;
     }
@@ -32,7 +38,7 @@ export default function AddNewAdmin({ fetchData, closeForm }) {
     }
 
     try {
-      const response = await axios.post("http://localhost:8000/newAdmin", {
+      const response = await axios.post("/newAdmin", {
         username: username,
         password: password,
         name: name,

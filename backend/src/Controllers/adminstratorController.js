@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const createAdmin = async (req, res) => {
-  const { username, password, name } = req.body;
+  const { username, password, name, email } = req.body;
 
   const validation = await validateUsername(username);
   // check if username already exists in database
@@ -14,7 +14,7 @@ const createAdmin = async (req, res) => {
   }
   // create new admin
   try {
-    const newAdmin = await admin.create({ name, username, password });
+    const newAdmin = await admin.create({ name, username, password, email });
     newAdmin.password = await bcrypt.hash(password, 10);
     await newAdmin.save();
     res.status(201).json(newAdmin);
