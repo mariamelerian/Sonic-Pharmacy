@@ -62,6 +62,12 @@ const pharmacistSchema = new Schema(
     notifications: {
       type: [String],
       default: [],
+      required: true,
+    },
+    newNotification: {
+      type: Boolean,
+      default: false,
+      required: true,
     },
   },
   { timestamps: true }

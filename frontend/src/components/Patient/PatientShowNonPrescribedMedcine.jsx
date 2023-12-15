@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, Col, Row, Form, Spinner, Tabs, Tab  } from "react-bootstrap";
+import { Card, Col, Row, Form, Spinner, Tabs, Tab ,Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle ,faSearch} from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
@@ -19,6 +19,10 @@ function PatientNonPrescribedMedicine() {
   const [filterMedicinalUse, setFilterMedicinalUse] = useState("");
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [showAlternativeModal, setShowAlternativeModal] = useState(false);
+  const [showAlternatives, setShowAlternatives] = useState(false);
+  const [expandedMedicineInModal, setExpandedMedicineInModal] = useState(null);
+
+
   const [alternativeMedicines, setAlternativeMedicines] = useState([]);
   const dispatch = useDispatch();
 
@@ -88,19 +92,22 @@ function PatientNonPrescribedMedicine() {
             medicine.activeIngredients[0].toLowerCase()
         )
     );
-  
+
     setAlternativeMedicines(matchingMedicines);
-    setShowAlternativeModal(true);
+    setShowAlternatives(true);
   };
-  
 
   const handleCloseAlternativeModal = () => {
-    setShowAlternativeModal(false);
+    setShowAlternatives(false);
     setAlternativeMedicines([]);
   };
 
   const handleCloseModal = () => {
     setSelectedMedicine(null);
+  };
+  
+  const handleExpandInModal = (index) => {
+    setExpandedMedicineInModal(expandedMedicineInModal === index ? null : index);
   };
 
   const medicines = responseData;
@@ -256,6 +263,124 @@ function PatientNonPrescribedMedicine() {
     </Card>
   </Col>
 ))}
+ <Modal show={showAlternatives} onHide={handleCloseAlternativeModal} dialogClassName="modal-90w">
+  <Modal.Header closeButton>
+    <Modal.Title>Alternative Medicines</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Row>
+      {alternativeMedicines.length > 0 ? (
+        alternativeMedicines
+          .filter((medicine) => medicine.quantity > 0) // Filter out medicines with quantity === 0
+          .map((medicine, index) => (
+            <Col key={index} lg={6} md={6} sm={12}>
+              <Card className="mb-4 mx-3 bg-light">
+                <Card.Body className="text-center">
+                  <div className="medicine-container">
+                    <div className="medicine-image-container">
+                      <img
+                        src={medicine.picture}
+                        alt={medicine.name}
+                        className="img-fluid"
+                      />
+                    </div>
+                    <div className="details-container">
+                      <div className="d-flex justify-content-between mb-3 px-3">
+                        {/* Move the info button to the top left */}
+                        <div
+                          className="expand-button"
+                          onClick={() => handleExpandInModal(index)}
+                          style={{
+                            position: "absolute",
+                            top: "0",
+                            right: "0",
+                            padding: "10px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faInfoCircle} />
+                        </div>
+                        <div
+                          className="medicine-name font-weight-bold"
+                          style={{
+                            fontSize: "20px",
+                            fontWeight: 700,
+                            marginBottom: "0rem", // or "0.1rem" or any other value
+                          }}
+                        >
+                          {medicine.name}
+                        </div>
+                      </div>
+                      <div
+                        className="info-price-container d-flex justify-content-between align-items-center px-3"
+                        style={{
+                          color: "#777777",
+                          fontSize: "1rem",
+                          fontWeight: 500,
+                          lineHeight: "100%",
+                          // marginBottom: "0.2rem", // Decreased space between name and price
+                        }}
+                      >
+                        <div className="medicine-price">
+                          
+                        <strong>Price: </strong> {medicine.price} LE
+                        </div>
+                      </div>
+                      {expandedMedicineInModal === index && (
+                        <>
+                        <div
+                            className="info-price-container d-flex justify-content-start align-items-start px-3"
+                            style={{
+                              color: "#777777",
+                              fontSize: "1rem",
+                              fontWeight: 500,
+                              lineHeight: "100%",
+                              textAlign: "left",
+                              marginLeft: "0", // Adjust as needed
+                            }}
+                          >
+                            <div className="medicine-details">
+                              <p style={{ marginTop: "10px",marginBottom: "10px" }}>
+                                <strong>Description:</strong> {medicine.description}
+                              </p>
+                              <p style={{ marginBottom: "10px" }}>
+                                <strong>Medicinal Use:</strong> {medicine.medicinalUse}
+                              </p>
+                              <strong>Active Ingredients:</strong>
+                              <ul style={{ listStyleType: "none", paddingLeft: 0, fontSize: "14px" }}>
+                                {medicine.activeIngredients.map((ingredient, index) => (
+                                  <li key={index} style={{ marginBottom: "5px" }}>
+                                    • {ingredient}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                           
+                        </>
+                      )}
+                      {medicine.quantity > 0 && (
+                        // Display button only if quantity > 0
+                        <button
+                          className="btn btn-primary mt-3"
+                          onClick={() => handleAddToCart(medicine)}
+                        >
+                          Add to Cart{" "}
+                          <FontAwesomeIcon icon={faShoppingCart} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))
+      ) : (
+        <p>No available alternatives with the same active ingredient.</p>
+      )}
+    </Row>
+  </Modal.Body>
+</Modal>;
         </Row>
       )}
       <AddToCartModal

@@ -20,6 +20,7 @@ export default function PatientMyOrdersCard({
   } else if (orderStatus === "Completed") {
     statusColor = "black";
   }
+
   return (
     <Container style={{ width: "64rem" }}>
       <Accordion defaultactiveKey={1} className="acc mt-4">
@@ -48,6 +49,7 @@ export default function PatientMyOrdersCard({
               }}
             >
               {orderStatus}
+
             </div>
           </Accordion.Header>
 
