@@ -361,9 +361,67 @@ const pharmacistNotifications = async (req, res) => {
     if (!pharmacist) {
       return res.status(404).json({ message: "Pharmacist not found" });
     }
-    res.status(200).json(pharmacist.notifications);
+    return res.status(200).json(pharmacist.notifications);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+const toggleNotifications = async (req, res) => {
+  const pharmacistId = req.session.userId;
+
+  try {
+    const pharmacist = await Pharmacist.findById(pharmacistId);
+    if (!pharmacist) {
+      return res.status(404).json({ message: "Pharmacist not found" });
+    }
+
+    pharmacist.newNotification = false;
+    await pharmacist.save();
+
+    res.status(200).send("Notifications toggled successfully");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getNewNotificationFlag = async (req, res) => {
+  const pharmacistId = req.session.userId;
+
+  try {
+    const pharmacist = await Pharmacist.findById(pharmacistId);
+    if (!pharmacist) {
+      return res.status(404).json({ message: "Pharmacist not found" });
+    }
+
+    res.status(200).json(pharmacist.newNotification);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const notifyPharmacistsOutOfStock = async (medicine) => {
+  try {
+    const pharmacists = await Pharmacist.find();
+    const mailOptions = {
+      from: emailUser,
+      to: pharmacists.map((pharmacist) => pharmacist.email).join(","),
+      subject: "Medicine out of stock",
+      text: `Please note that ${medicine} medicine is out of stock.`,
+    };
+
+    pharmacists.map((pharmacist) => {
+      pharmacist.notifications.push(
+        `Please note that ${medicine} medicine is out of stock.`
+      );
+      pharmacist.newNotification = true;
+      pharmacist.save();
+    });
+
+    await transporter.sendMail(mailOptions);
+    console.log("Email sent");
+  } catch (error) {
+    console.log(error.message);
   }
 };
 
@@ -378,4 +436,7 @@ module.exports = {
   upload,
   getPharmacistWallet,
   pharmacistNotifications,
+  toggleNotifications,
+  getNewNotificationFlag,
+  notifyPharmacistsOutOfStock,
 };
