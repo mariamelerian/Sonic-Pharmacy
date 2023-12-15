@@ -113,14 +113,14 @@ function CartItems() {
   const plusMinusButtonStyle = {
     width: "24px",
     height: "24px",
-    borderRadius: "50%", // Makes the buttons circular
-    backgroundColor: "#4fa4ff", // Blue color
+    borderRadius: "50%",
+    backgroundColor: "#4fa4ff",
     color: "white",
     border: "none",
     cursor: "pointer",
-    fontSize: "10px",
+    fontSize: "18px", // Increase the font size
+    fontWeight: "bold", // Make it bold
   };
-
   const lineStyle = {
     borderBottom: "3px solid #ccc",
     width: "100%",
@@ -159,7 +159,7 @@ function CartItems() {
     cursor: "pointer", // Add cursor style
     fontSize: "18px", // Make the icon 1.5 times bigger (adjust the size as needed)
     border: "none", // Remove the border
-    marginLeft: "900px", // Move the icon to the right by 200px
+    marginLeft: "900px", // Move the icon to the right by 900px
     backgroundColor: "transparent",
   };
 
@@ -264,7 +264,7 @@ function CartItems() {
                   style={{ marginLeft: "10px" }}
                 >{`$${item.price}`}</div>
               </div>
-              <button
+              <button 
                 onClick={() => handleDeleteItem(item.medicine)}
                 style={trashIconStyle}
               >
