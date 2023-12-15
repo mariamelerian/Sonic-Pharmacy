@@ -78,14 +78,17 @@ export default function AdminViewTable() {
       <Table striped bordered hover variant="light" style={{ width: "1000px" }}>
         <thead>
           <tr>
+            <th style={{ color: "#099BA0" }}>Name</th>
             <th style={{ color: "#099BA0" }}>Username</th>
-            <th></th>
+            <th style={{ color: "#099BA0" }}>Email</th> {/* Add this line for the email column */}
           </tr>
         </thead>
         <tbody>
           {users.map((user) => (
             <tr key={user.id}>
+              <td>{user.name}</td>
               <td>{user.username}</td>
+              <td>{user.email}</td> {/* Add this line for the email column */}
             </tr>
           ))}
         </tbody>
