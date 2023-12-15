@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Form, Table } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 function SalesReportPage() {
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -164,24 +166,35 @@ function SalesReportPage() {
                   Month
                 </div>
 
-                <Form.Control
-                  as="select"
-                  onChange={(e) =>
-                    setSelectedMonth(
-                      months.findIndex((value, index) => {
-                        return value == e.target.value;
-                      })
-                    )
-                  }
-                  style={{ width: "100%" }} // Adjusted width
-                >
-                  <option value="">Select Month</option>
-                  {months.map((use, index) => (
-                    <option key={index} value={use}>
-                      {`${use}`}
-                    </option>
-                  ))}
-                </Form.Control>
+                <div style={{ position: "relative", display: "inline-block" }}>
+                  <Form.Control
+                    as="select"
+                    onChange={(e) =>
+                      setSelectedMonth(
+                        months.findIndex((value, index) => {
+                          return value == e.target.value;
+                        })
+                      )
+                    }
+                    style={{ width: "150%" }} // Adjusted width
+                  >
+                    <option value="">Select Month</option>
+                    {months.map((use, index) => (
+                      <option key={index} value={use}>
+                        {`${use}`}
+                      </option>
+                    ))}
+                  </Form.Control>
+                  <FontAwesomeIcon
+                    icon={faAngleDown}
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      right: "-50px",
+                      transform: "translateY(-50%)",
+                    }}
+                  />
+                </div>
 
                 <div
                   style={{
@@ -196,18 +209,29 @@ function SalesReportPage() {
                   Medicine
                 </div>
 
-                <Form.Control
-                  as="select"
-                  onChange={(e) => setSelectedMedicine(e.target.value)}
-                  style={{ width: "100%" }} // Adjusted width
-                >
-                  <option value="">Select Medicine</option>
-                  {medicines.map((use, index) => (
-                    <option key={index} value={use.name}>
-                      {`${use.name}`}
-                    </option>
-                  ))}
-                </Form.Control>
+                <div style={{ position: "relative", display: "inline-block" }}>
+                  <Form.Control
+                    as="select"
+                    onChange={(e) => setSelectedMedicine(e.target.value)}
+                    style={{ width: "130%" }} // Adjusted width
+                  >
+                    <option value="">Select Medicine</option>
+                    {medicines.map((use, index) => (
+                      <option key={index} value={use.name}>
+                        {`${use.name}`}
+                      </option>
+                    ))}
+                  </Form.Control>
+                  <FontAwesomeIcon
+                    icon={faAngleDown}
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      right: "-30px",
+                      transform: "translateY(-50%)",
+                    }}
+                  />
+                </div>
 
                 <div
                   style={{
