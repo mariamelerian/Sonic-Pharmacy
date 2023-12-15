@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import AddToCartModal from "./AddToCartModal";
 import PatientEmptyPrescribedMedicine from "./PatientEmptyPrescribedMedicine";
-import AlternativeMedicinesModal from "./AlternativeMedicinesModal";
+// import AlternativeMedicinesModal from "./AlternativeMedicinesModal";
 
 function PatientNonPrescribedMedicine() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -390,11 +390,11 @@ function PatientNonPrescribedMedicine() {
       />
 
       {/* Add the AlternativeMedicinesModal component */}
-      <AlternativeMedicinesModal
+      {/* <AlternativeMedicinesModal
         show={showAlternativeModal}
         handleClose={handleCloseAlternativeModal}
         alternativeMedicines={alternativeMedicines}
-      />
+      /> */}
     </div>
   );
 }
