@@ -158,8 +158,8 @@ function SalesReportPage() {
       className=" px-10"
       style={{
         flexShrink: 0,
-        width: "80%", // Adjusted width to take full width
-        border: "1px solid var(--gray-400, #ced4da)",
+        width: "100%", // Adjusted width to take full width
+        border: "3px solid var(--gray-400, #ced4da)",
         background: "var(--gray-white, #fff)",
         padding: "0.5rem", // Adjusted padding to make it thinner
         // marginLeft:"7.3rem"
@@ -241,16 +241,17 @@ function SalesReportPage() {
                 />
               </Col>
 
-              <Col xs={12} md={3} className="d-flex align-items-end">
+              <Col xs={12} md={3} className="">
                 <Button
                   className="custom-button"
                   onClick={handleFilter}
                   style={{
                     // marginLeft: "4rem", // Adjusted margin-left
                     fontSize: "1rem",
-                    width: "8rem",
+                    width: "7rem",
                     // Adjusted font size
-                    marginBottom: "1rem",
+                    marginTop: "7.5rem",
+                    marginLeft:"0.8rem"
                   }}
                 >
                   Apply
@@ -267,10 +268,10 @@ function SalesReportPage() {
       className=" mx-1 "
       style={{
         flexShrink: 0,
-        width: "80%", // Adjusted width to take full width
-        border: "1px solid var(--gray-400, #ced4da)",
+        width: "100%", // Adjusted width to take full width
+        border: "3px solid var(--gray-400, #ced4da)",
         background: "var(--gray-white, #fff)",
-        height: "11.65rem",
+        height: "11.9rem",
         padding: "0.5rem", // Adjusted padding to make it thinner
       }}
     >
@@ -337,18 +338,18 @@ function SalesReportPage() {
                 <Col
       xs={12}
       md={3}
-      className="px-5 py-3"
+      className="px-5 py-2"
     >
       <Button
         className="custom-button"
         onClick={handleFilterMonth}
         style={{
-          // marginLeft: "1rem", // Adjusted margin-left
+          marginLeft: "7rem", // Adjusted margin-left
           fontSize: "1rem",
-          width: "6.5rem",
+          width: "7rem",
           height: "2.7rem",
           // Adjusted font size
-          marginBottom: "2rem",
+          marginBottom: "3rem",
         }}
       >
         Apply
