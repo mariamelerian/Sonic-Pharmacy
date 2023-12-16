@@ -2,6 +2,7 @@ const Order = require("../Models/Order");
 const Cart = require("../Models/Cart");
 const Medicine = require("../Models/Medicine");
 const Patient = require("../Models/Patient");
+const Prescription = require("../Models/Prescription");
 const Pharmacist = require("../Models/Pharmacist");
 const emailService = "outlook";
 const emailUser = "youstina2307@outlook.com";
@@ -56,6 +57,66 @@ const createOrder = async (userId, address, paymentMethod) => {
     cart.items = [];
     cart.total = 0;
     await cart.save();
+  } catch (error) {
+    throw new Error("Failed to create the order : " + error.message);
+  }
+};
+
+const createOrderFromPrescription = async (prescription, paymentMethod) => {
+  try {
+    let items = [];
+
+    let medicineArr = prescription.medicine;
+    let total = 0;
+
+    for (let i = 0; i < medicineArr.length; i++) {
+      let medicine = await Medicine.findOne({ name: medicineArr[i][0] });
+      let item = {
+        medicine: medicine._id,
+        name: medicine.name,
+        price: medicine.price,
+        quantity: 1,
+      };
+      items.push(item);
+      total += medicine.price;
+      medicine.sales += 1;
+      medicine.quantity -= 1;
+      medicine.salesData.push({
+        quantity: item.quantity,
+        date: date,
+      });
+      await medicine.save();
+
+      if (medicine.quantity == 0) {
+        //notify pharmacist that medicine is out of stock
+        notifyPharmacistsOutOfStock(medicine.name);
+      }
+    }
+
+    const count = await Order.countDocuments({
+      patient: prescription.patientID,
+    });
+    const orderNumber = count + 1;
+
+    const date = new Date();
+
+    //get delivery address
+    const patient = await Patient.findById(prescription.patientID);
+    let address = "6 Ave, villa 3";
+    if (patient.addresses.length > 0) address = patient.addresses[0];
+
+    const orderData = {
+      number: orderNumber,
+      date: date,
+      items: items,
+      totalPrice: total + 50,
+      status: "Pending",
+      patient: prescription.patientID,
+      address: address,
+      paymentMethod: paymentMethod,
+    };
+    const order = new Order(orderData);
+    await order.save();
   } catch (error) {
     throw new Error("Failed to create the order : " + error.message);
   }
@@ -350,4 +411,5 @@ module.exports = {
   deleteOrderByNumber,
   checkoutWallet,
   checkoutStripe,
+  createOrderFromPrescription,
 };

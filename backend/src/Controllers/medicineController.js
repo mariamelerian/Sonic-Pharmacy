@@ -1,4 +1,5 @@
 const Medicine = require("../Models/Medicine");
+const Prescription = require("../Models/Prescription");
 const fs = require("fs");
 
 const multer = require("multer");
@@ -364,6 +365,37 @@ const getFilteredSalesReport = async (req, res) => {
   }
 };
 
+const getPrescribedMedicines = async (req, res) => {
+  const patientId = req.session.userId;
+  const currentDate = new Date();
+  const oneMonthAgo = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() - 1,
+    currentDate.getDate()
+  );
+  const formattedOneMonthAgo = oneMonthAgo.toISOString().split("T")[0];
+  console.log(formattedOneMonthAgo);
+
+  const prescriptions = await Prescription.find({
+    patientID: patientId,
+    date: { $gte: formattedOneMonthAgo },
+  });
+  console.log(prescriptions);
+
+  let prescribedMedicines = [];
+  for (let i = 0; i < prescriptions.length; i++) {
+    let prescription = prescriptions[i];
+    for (let j = 0; j < prescription.medicine.length; j++) {
+      let medicineName = prescription.medicine[j][0];
+      let medicine = await Medicine.findOne({ name: medicineName });
+      if (medicine) {
+        prescribedMedicines.push(medicine);
+      }
+    }
+  }
+  res.status(200).json(prescribedMedicines);
+};
+
 module.exports = {
   getMedicines,
   getMedicine,
@@ -380,4 +412,5 @@ module.exports = {
   getAllMedicines,
   getArchivedMedicines,
   unarchiveMedicine,
+  getPrescribedMedicines,
 };

@@ -10,9 +10,9 @@ const NotificationsPanel = ({ isOpen, closePanel, resetNew }) => {
   const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
-
-  const [newNotif, setNewNotif] = useState(false);
-
+  // const newNotif = useSelector(
+  //   (state) => state.newNotifications.newNotifications
+  // );
 
   const panelStyles = {
     position: "fixed",
@@ -58,7 +58,6 @@ const NotificationsPanel = ({ isOpen, closePanel, resetNew }) => {
     }
   };
 
-
   // const resetNewNotifications = async () => {
   //   if (newNotif) {
   //     try {
@@ -73,20 +72,6 @@ const NotificationsPanel = ({ isOpen, closePanel, resetNew }) => {
   //     }
   //   }
   // };
-  const resetNewNotifications = async () => {
-    if (newNotif) {
-      try {
-        const response = await axios.post("/notificationFlag");
-        if (response.status === 200) {
-          setError(null);
-          resetNew();
-          setNewNotif(false);
-        }
-      } catch (error) {
-        setError(error.response.data.message);
-      }
-    }
-  };
 
   const reverseNotifications = [...notifications].reverse();
 

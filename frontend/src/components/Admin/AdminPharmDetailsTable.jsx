@@ -8,7 +8,8 @@ function AdminPharmDetailsTable() {
   const [pharmacists, setPharmacists] = useState([]);
   const [error1, setError] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] = useState(false);
+  const [showDeleteConfirmationModal, setShowDeleteConfirmationModal] =
+    useState(false);
   const [id, setId] = useState("");
   const [selectedPharmacist, setSelectedPharmacist] = useState(null);
 
@@ -53,9 +54,7 @@ function AdminPharmDetailsTable() {
 
   const actuallyDelete = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8000/deletePharmacist?_id=${id}`
-      );
+      const response = await axios.delete(`/deletePharmacist?_id=${id}`);
 
       if (response.status === 200) {
         fetchData();
@@ -96,35 +95,50 @@ function AdminPharmDetailsTable() {
 
       {/* Delete Confirmation Modal */}
       <Modal show={showDeleteConfirmationModal} onHide={handleClose}>
-        <Modal.Body>Are you sure you want to delete this pharmacist?</Modal.Body>
+        <Modal.Body>
+          Are you sure you want to delete this pharmacist?
+        </Modal.Body>
         <Modal.Footer className="d-flex align-items-center justify-content-center">
           <Button variant="danger" onClick={actuallyDelete}>
             Yes
           </Button>
-          <Button variant="success" onClick={() => setShowDeleteConfirmationModal(false)}>
+          <Button
+            variant="success"
+            onClick={() => setShowDeleteConfirmationModal(false)}
+          >
             No
           </Button>
         </Modal.Footer>
       </Modal>
 
       {/* Table */}
-      <Table striped bordered hover variant="light" style={{ width: '1000px' }}>
+      <Table striped bordered hover variant="light" style={{ width: "1000px" }}>
         <thead>
           <tr>
-            <th style={{ color: '#099BA0' }} onClick={() => showPharmacistDetails(pharmacists[0], 0)}>
+            <th
+              style={{ color: "#099BA0" }}
+              onClick={() => showPharmacistDetails(pharmacists[0], 0)}
+            >
               Username
             </th>
-            <th style={{ color: '#099BA0' }} onClick={() => showPharmacistDetails(pharmacists[0], 1)}>
+            <th
+              style={{ color: "#099BA0" }}
+              onClick={() => showPharmacistDetails(pharmacists[0], 1)}
+            >
               Name
             </th>
-            <th style={{ color: '#099BA0' }}>Actions</th>
+            <th style={{ color: "#099BA0" }}>Actions</th>
           </tr>
         </thead>
         <tbody>
           {pharmacists.map((pharmacist, index) => (
             <tr key={pharmacist._id}>
-              <td onClick={() => showPharmacistDetails(pharmacist, 0)}>{pharmacist.username}</td>
-              <td onClick={() => showPharmacistDetails(pharmacist, 1)}>{pharmacist.name}</td>
+              <td onClick={() => showPharmacistDetails(pharmacist, 0)}>
+                {pharmacist.username}
+              </td>
+              <td onClick={() => showPharmacistDetails(pharmacist, 1)}>
+                {pharmacist.name}
+              </td>
               <td>
                 <FontAwesomeIcon
                   icon={faTrashCan}
@@ -133,9 +147,9 @@ function AdminPharmDetailsTable() {
                   }}
                   style={{
                     opacity: 1,
-                    color: '#ff6b35',
-                    fontSize: '20px',
-                    cursor: 'pointer',
+                    color: "#ff6b35",
+                    fontSize: "20px",
+                    cursor: "pointer",
                   }}
                 />
               </td>

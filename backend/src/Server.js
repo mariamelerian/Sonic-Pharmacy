@@ -59,6 +59,7 @@ const {
   getAllMedicines,
   getArchivedMedicines,
   unarchiveMedicine,
+  getPrescribedMedicines,
 } = require("./Controllers/medicineController");
 
 const {
@@ -166,6 +167,7 @@ app.get(
   requireAuth,
   pharmacistController.getNewNotificationFlag
 );
+app.get("/prescribedMedicines", requireAuth, getPrescribedMedicines);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", requireAuth, createAdmin);
