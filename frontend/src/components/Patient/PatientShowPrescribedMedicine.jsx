@@ -19,7 +19,7 @@ import AddToCartModal from "./AddToCartModal";
 import PatientEmptyPrescribedMedicine from "./PatientEmptyPrescribedMedicine";
 // import AlternativeMedicinesModal from "./AlternativeMedicinesModal";
 
-function PatientNonPrescribedMedicine() {
+function PatientPrescribedMedicine() {
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedMedicine, setExpandedMedicine] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -486,4 +486,4 @@ function PatientNonPrescribedMedicine() {
   );
 }
 
-export default PatientNonPrescribedMedicine;
+export default PatientPrescribedMedicine;
