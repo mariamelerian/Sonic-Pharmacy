@@ -6,7 +6,11 @@ import logo from "../../Assets/ClinicLogo.png";
 import NotificationsPanel from "../NotificationsPanel";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBell,
+  faSuitcaseMedical,
+  faStaffSnake,
+} from "@fortawesome/free-solid-svg-icons";
 const AppNavbar = (props) => {
   const { hamburgerMenu } = props;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -58,7 +62,7 @@ const AppNavbar = (props) => {
   // const resetNew = () => {
   //   setNewNotifications(false);
   // };
-  console.log("DDDDDDDd", who);
+
   return (
     <div>
       <Navbar className="bg-white" sticky="top" style={{ height: "5rem" }}>
@@ -74,18 +78,47 @@ const AppNavbar = (props) => {
               {hamburgerMenu}
             </Navbar.Collapse>
           </div>
+          {who === "patient" && (
+            <a
+              className="d-flex"
+              style={{
+                color: "#ff6b35",
+                fontSize: "1.15rem",
+                marginLeft: "5rem",
+                position: "absolute",
+              }}
+              href="http://localhost:3000/"
+              target="_blank" // Add this attribute to open in a new tab
+              rel="noopener noreferrer" // Add this for security
+            >
+              Visit Clinic
+              <FontAwesomeIcon
+                style={{
+                  color: "#ff6b35",
+                  marginLeft: "0.5rem",
+                  marginTop: "0.3rem",
+                }}
+                icon={faSuitcaseMedical}
+              />
+            </a>
+          )}
 
           <div style={{ flex: 1, textAlign: "center" }}>
             {" "}
             {/* Center section */}
             <div
               style={{
-                color: "#ff6b35",
-                fontSize: "3rem",
+                color: "#adb5bd  ",
+                fontSize: "2.3rem",
                 fontWeight: "700",
+                fontFamily: "'Bebas Neue', sans-serif",
               }}
             >
-              Pharmacy
+              <FontAwesomeIcon
+                style={{ color: "#adb5bd  ", marginRight: "0.5rem" }}
+                icon={faStaffSnake}
+              />
+              El7a2ny Pharmacy
             </div>
           </div>
 
@@ -118,14 +151,13 @@ const AppNavbar = (props) => {
                   color: "#212529",
                 }}
               >
-                {notifications && (
-                  <div>
-                    <FontAwesomeIcon
-                      style={{ color: "#05afb9" }}
-                      icon={faBell}
-                      onClick={toggleNotifications}
-                    />
-                    {/* {newNotifications && (
+                <div>
+                  <FontAwesomeIcon
+                    style={{ color: "#05afb9" }}
+                    icon={faBell}
+                    onClick={toggleNotifications}
+                  />
+                  {/* {newNotifications && (
                       <span
                         style={{
                           position: "absolute",
@@ -138,15 +170,13 @@ const AppNavbar = (props) => {
                         }}
                       />
                     )} */}
-                    {notifications && (
-                      <NotificationsPanel
-                        isOpen={showNotifications}
-                        closePanel={toggleNotifications}
-                        // resetNew={resetNew}
-                      />
-                    )}
-                  </div>
-                )}
+
+                  <NotificationsPanel
+                    isOpen={showNotifications}
+                    closePanel={toggleNotifications}
+                    // resetNew={resetNew}
+                  />
+                </div>
               </div>
             </div>
           </div>

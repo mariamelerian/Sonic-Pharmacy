@@ -2,39 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import logo from "../../Assets/ClinicLogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
-import NotificationsPanel from "../NotificationsPanel";
+import {
+  faBell,
+  faSuitcaseMedical,
+  faStaffSnake,
+} from "@fortawesome/free-solid-svg-icons";
 import { Button, NavLink } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const AppNavbarGuest = ({ flag }) => {
-  // const [newNotifications, setNewNotifications] = useState(
-  //   useSelector((state) => state.newNotifications.newNotifications)
-  // );
-  // const doctorLoggedIn = useSelector((state) => state.doctorLogin.isLoggedIn);
-  // const patientLoggedIn = useSelector((state) => state.patientLogin.isLoggedIn);
-  // const [who, setWho] = useState("");
-
-  // useEffect(() => {
-  //   if (doctorLoggedIn || patientLoggedIn) {
-  //     // setNotifications(true);
-  //     if (doctorLoggedIn) {
-  //       setWho("doctor");
-  //     } else {
-  //       setWho("patient");
-  //     }
-  //   } else {
-  //     // setNotifications(false);
-  //   }
-  // }, []);
-
-  // const toggleNotifications = () => {
-  //   setShowNotifications(!showNotifications);
-  // };
-
   const navigate = useNavigate();
 
   return (
@@ -45,16 +23,44 @@ const AppNavbarGuest = ({ flag }) => {
             className="d-flex flex-direction-row justify-space-between col-5"
             style={{ gap: "20px" }}
           ></div>
-          {/* <div><img src="./ClinicLogo.jpg" alt="Clinic Logo" /></div>  */}
+          <a
+            className="d-flex"
+            style={{
+              color: "#ff6b35",
+              fontSize: "1.15rem",
+              width: "10rem",
+              position: "absolute",
+            }}
+            href="http://localhost:3000/"
+            target="_blank" // Add this attribute to open in a new tab
+            rel="noopener noreferrer" // Add this for security
+          >
+            Visit Clinic
+            <FontAwesomeIcon
+              style={{
+                color: "#ff6b35",
+                marginLeft: "0.5rem",
+                marginTop: "0.3rem",
+              }}
+              icon={faSuitcaseMedical}
+            />
+          </a>
           <div
             className="col-5"
             style={{
-              color: "#ff6b35",
-              fontSize: "3rem",
+              color: "#adb5bd  ",
+              fontSize: "2.3rem",
               fontWeight: "700",
+              fontFamily: "'Bebas Neue', sans-serif",
+              position: "absolute",
+              marginLeft: "40rem",
             }}
           >
-            Pharmacy
+            <FontAwesomeIcon
+              style={{ color: "#adb5bd  ", marginRight: "0.5rem" }}
+              icon={faStaffSnake}
+            />
+            El7a2ny Pharmacy
           </div>
           <div
             style={{

@@ -83,8 +83,12 @@ const {
 } = require("./Models/MedicinalUse");
 
 const {
-  sendPatientMessage,
-  patientChat,
+  // sendPatientMessage,
+  // patientChat,
+  viewChat,
+  viewChats,
+  sendMessage,
+  addChat,
 } = require("./Controllers/chatController");
 
 //App variables
@@ -161,7 +165,7 @@ app.get("/monthlySales", getTotalMonthSales);
 app.get("/filteredSales", getFilteredSalesReport);
 app.get("/allMedicines", getAllMedicines);
 app.get("/archivedMedicines", getArchivedMedicines);
-app.get("/patientChat", requireAuth, patientChat);
+//app.get("/patientChat", requireAuth, patientChat);
 app.get("/viewNotifications", requireAuth, pharmacistNotifications);
 app.get(
   "/phNewNotifications",
@@ -190,7 +194,7 @@ app.post("/logout", logout);
 app.put("/updCookie", updateUserInfoInCookie);
 app.post("/otp", otp);
 app.post("/verifyOtp", verifyOtp);
-app.post("/sendPatientChatMessage", requireAuth, sendPatientMessage);
+//app.post("/sendPatientChatMessage", requireAuth, sendPatientMessage);
 
 app.put("/updatePatient", requireAuth, updatePatientInfo);
 app.put("/updateMedicine", requireAuth, updateMedicine);
@@ -273,6 +277,11 @@ app.delete(
 );
 
 app.post("/checkoutStripe", requireAuth, orderController.checkoutStripe);
+
+app.post("/viewChat", requireAuth, viewChat);
+app.post("/viewChats", requireAuth, viewChats);
+app.post("/sendMessage", requireAuth, sendMessage);
+app.get("/addChat", addChat);
 
 //DUMMY DATA
 
