@@ -67,7 +67,25 @@ export default function PatientMyordersDetails({
           className="d-flex justify-content-between"
           style={{ width: "50rem", marginLeft: "-1rem" }}
         >
+          
           <div style={{ fontSize: "1.1rem" }}>Delivering to {address}</div>
+          <div
+            style={{
+              // fontWeight: "bold",
+              fontSize: "1.1rem",
+              justifyContent: "flex-end",
+            }}
+          >
+            Delivery Fees: $ 50.00
+          </div>
+        </div>
+        <div
+          className="d-flex justify-content-between"
+          style={{ width: "50rem", marginLeft: "-1rem" }}
+        >
+          <div style={{ fontSize: "1.1rem" }}> </div>
+          
+          {/* <div style={{ fontSize: "1.1rem" }}>Delivering to {address}</div> */}
           <div
             style={{
               fontWeight: "bold",
@@ -78,6 +96,7 @@ export default function PatientMyordersDetails({
             Total: ${orderCost.toFixed(2)}
           </div>
         </div>
+        
         {orderStatus === "Pending" && (
           <Button
             onClick={() => handleCancel()}
