@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import loginAdminReducer from "../../state/loginAdminReducer";
 
 function AdminImg() {
-  const name = useSelector((state) => state.adminLogin.name);
+  // const name = useSelector((state) => state.adminLogin.name);
   return (
     <div>
       <Card
@@ -32,14 +32,14 @@ function AdminImg() {
               marginTop: "27rem",
               color: "white",
               textAlign: "center",
-              fontFamily: "fantasy",
-              fontSize: "5rem",
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: "6rem",
               fontStyle: "normal",
-              fontWeight: 400,
+              fontWeight: 700,
               lineHeight: "120%",
             }}
           >
-            Hello {name}
+            Hello!
           </Card.Text>
         </Card>
       </Card>

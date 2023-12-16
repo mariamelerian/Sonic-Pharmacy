@@ -63,8 +63,27 @@ function AdminSalesReportPage() {
     }
   };
 
-  useEffect(() => {
-    fetchMedicines();
+  useEffect(async () => {
+    // fetchMedicines();
+    try {
+      const response = await axios.get("/monthlySales", {
+        params: {
+          month: "",
+        },
+      });
+      if (response.status === 200) {
+        setSales(response.data);
+        console.log("response.data", response.data);
+      } else {
+        console.log("Server error");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setError("Not found.");
+      } else if (error.response && error.response.status === 500) {
+        setError("Server Error");
+      }
+    }
   }, []);
 
   const fetchMedicines = async () => {
@@ -130,35 +149,35 @@ function AdminSalesReportPage() {
                         Month
                       </div>
                       <div style={{ position: "relative" }}>
-                      <Form.Control
-                        as="select"
-                        onChange={(e) =>
-                          setSelectedMonth(
-                            months.findIndex((value, index) => {
-                              return value == e.target.value;
-                            })
-                          )
-                        }
-                        style={{ width: "100%" }} // Adjusted width
-                      >
-                        <option value="">Select Month</option>
-                        {months.map((use, index) => (
-                          <option key={index} value={use}>
-                            {`${use}`}
-                          </option>
-                        ))}
-                      </Form.Control>
+                        <Form.Control
+                          as="select"
+                          onChange={(e) =>
+                            setSelectedMonth(
+                              months.findIndex((value, index) => {
+                                return value == e.target.value;
+                              })
+                            )
+                          }
+                          style={{ width: "100%" }} // Adjusted width
+                        >
+                          <option value="">Select Month</option>
+                          {months.map((use, index) => (
+                            <option key={index} value={use}>
+                              {`${use}`}
+                            </option>
+                          ))}
+                        </Form.Control>
 
-                      <FontAwesomeIcon
-                        icon={faAngleDown}
-                        style={{
-                        position: "absolute",
-                        top: "50%",
-                        right: "10px",
-                        transform: "translateY(-50%)",
-                        color: "#555", // Adjust the color as needed
+                        <FontAwesomeIcon
+                          icon={faAngleDown}
+                          style={{
+                            position: "absolute",
+                            top: "50%",
+                            right: "10px",
+                            transform: "translateY(-50%)",
+                            color: "#555", // Adjust the color as needed
                           }}
-                       />
+                        />
                       </div>
                     </Col>
 
