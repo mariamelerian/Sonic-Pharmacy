@@ -152,21 +152,19 @@ function SalesReportPage() {
 
   return (
     <div>
-      <Row>
-        {/* First Filter Container */}
-        <Col xs={12} md={6} className="px-4">
-          <Container
-            className=" px-15"
-            style={{
-              flexShrink: 0,
-              width: "65%",
-              border: "1px solid var(--gray-400, #ced4da)",
-              background: "var(--gray-white, #fff)",
-              padding: "0.5rem", // Adjusted padding to make it thinner
-              // marginLeft: "1.3rem",
-              // transform: "translateX(-59%)",
-            }}
-          >
+     <Row className="justify-content-center">
+     <Col xs={12} md={8} lg={6} className="px-2"> {/* Adjusted width to 2/3 */}
+    <Container
+      className=" px-10"
+      style={{
+        flexShrink: 0,
+        width: "100%", // Adjusted width to take full width
+        border: "3px solid var(--gray-400, #ced4da)",
+        background: "var(--gray-white, #fff)",
+        padding: "0.5rem", // Adjusted padding to make it thinner
+        // marginLeft:"7.3rem"
+      }}
+    >
             <Row>
               <Col xs={12} md={9}>
                 <div
@@ -178,7 +176,7 @@ function SalesReportPage() {
                     marginBottom: "0.5rem", // Adjusted margin
                   }}
                 >
-                  Filter Sales Report
+                  Filter Sales Report By Medicine/Date
                 </div>
 
                 <div
@@ -243,16 +241,17 @@ function SalesReportPage() {
                 />
               </Col>
 
-              <Col xs={12} md={3} className="d-flex align-items-end">
+              <Col xs={12} md={3} className="">
                 <Button
                   className="custom-button"
                   onClick={handleFilter}
                   style={{
                     // marginLeft: "4rem", // Adjusted margin-left
                     fontSize: "1rem",
-                    width: "8rem",
+                    width: "7rem",
                     // Adjusted font size
-                    marginBottom: "1rem",
+                    marginTop: "7.5rem",
+                    marginLeft:"0.8rem"
                   }}
                 >
                   Apply
@@ -262,20 +261,20 @@ function SalesReportPage() {
           </Container>
         </Col>
         {/* Second Filter Container */}
-        <Col xs={12} md={6}>
-          <Container
-            className="px-4 mx-1 "
-            style={{
-              flexShrink: 0,
-              width: "67%",
-              border: "1px solid var(--gray-400, #ced4da)",
-              background: "var(--gray-white, #fff)",
-              height: "11.56rem",
-              padding: "0.5rem", // Adjusted padding to make it thinner
-              // marginLeft: "1.3rem",
-              // transform: "translateX(-59%)",
-            }}
-          >
+         {/* <div style={{ width: "10px" }}></div> */}
+
+         <Col xs={12} md={4} lg={3} className="d-flex px-2"> {/* Adjusted width to 1/3 */}
+    <Container
+      className=" mx-1 "
+      style={{
+        flexShrink: 0,
+        width: "100%", // Adjusted width to take full width
+        border: "3px solid var(--gray-400, #ced4da)",
+        background: "var(--gray-white, #fff)",
+        height: "11.9rem",
+        padding: "0.5rem", // Adjusted padding to make it thinner
+      }}
+    >
             <Row>
               <Col xs={12} md={9}>
                 <div
@@ -287,7 +286,7 @@ function SalesReportPage() {
                     marginBottom: "0.5rem", // Adjusted margin
                   }}
                 >
-                  Filter Sales Report
+                  Filter Sales Report By Month
                 </div>
 
                 <div
@@ -337,24 +336,25 @@ function SalesReportPage() {
                 </div>
 
                 <Col
-                  xs={12}
-                  md={3}
-                  className="d-flex align-items-end px-6 py-4"
-                >
-                  <Button
-                    className="custom-button"
-                    onClick={handleFilterMonth}
-                    style={{
-                      // marginLeft: "4rem", // Adjusted margin-left
-                      fontSize: "1rem",
-                      width: "8rem",
-                      // Adjusted font size
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    Apply
-                  </Button>
-                </Col>
+      xs={12}
+      md={3}
+      className="px-5 py-2"
+    >
+      <Button
+        className="custom-button"
+        onClick={handleFilterMonth}
+        style={{
+          marginLeft: "7rem", // Adjusted margin-left
+          fontSize: "1rem",
+          width: "7rem",
+          height: "2.7rem",
+          // Adjusted font size
+          marginBottom: "3rem",
+        }}
+      >
+        Apply
+      </Button>
+    </Col>
               </Col>
             </Row>
           </Container>
