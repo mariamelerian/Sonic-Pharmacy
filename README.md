@@ -161,7 +161,7 @@ PORT=3000
 
 ## Testing
 
-Use [this Postman link](https://app.getpostman.com/join-team?invite_code=94b34bb7917a4b47958f05519be1b46c&target_code=a52193778b9ecf01728d1a903cbf6885) to test all the APIs.
+Use [this Postman link](https://documenter.getpostman.com/view/30346344/2s9Ykn8gvm) to test all the APIs.
 
 
 ## How to Use
