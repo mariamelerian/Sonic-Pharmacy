@@ -123,7 +123,7 @@ const NotificationsPanel = ({ isOpen, closePanel, resetNew }) => {
                     style={{
                       color: "#ff6b35",
                       marginRight: "5px",
-                      marginTop: "16px",
+                      // marginTop: "16px",
                     }}
                   />
                 </div>

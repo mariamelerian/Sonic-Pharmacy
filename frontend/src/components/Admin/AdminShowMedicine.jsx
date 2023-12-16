@@ -118,7 +118,10 @@ function AdminShowMedicine() {
                           className="expand-button"
                           onClick={() => handleExpand(index)}
                         >
-                          <FontAwesomeIcon icon={faInfoCircle} />
+                          <FontAwesomeIcon
+                            icon={faInfoCircle}
+                            style={{ cursor: "pointer" }}
+                          />
                         </div>
                       </div>
                       <div
@@ -133,7 +136,7 @@ function AdminShowMedicine() {
                         }}
                       >
                         <div className="medicine-price">
-                          Price: ${medicine.price} 
+                          Price: ${medicine.price}
                         </div>
                       </div>
                       {expandedMedicine === index && (
