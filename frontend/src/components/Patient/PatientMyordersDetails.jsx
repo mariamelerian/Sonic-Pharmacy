@@ -67,7 +67,6 @@ export default function PatientMyordersDetails({
           className="d-flex justify-content-between"
           style={{ width: "50rem", marginLeft: "-1rem" }}
         >
-          
           <div style={{ fontSize: "1.1rem" }}>Delivering to {address}</div>
           <div
             style={{
@@ -76,7 +75,7 @@ export default function PatientMyordersDetails({
               justifyContent: "flex-end",
             }}
           >
-            Delivery Fees: $ 50.00
+            Delivery Fees: $ 10.00
           </div>
         </div>
         <div
@@ -84,7 +83,7 @@ export default function PatientMyordersDetails({
           style={{ width: "50rem", marginLeft: "-1rem" }}
         >
           <div style={{ fontSize: "1.1rem" }}> </div>
-          
+
           {/* <div style={{ fontSize: "1.1rem" }}>Delivering to {address}</div> */}
           <div
             style={{
@@ -96,7 +95,7 @@ export default function PatientMyordersDetails({
             Total: ${orderCost.toFixed(2)}
           </div>
         </div>
-        
+
         {orderStatus === "Pending" && (
           <Button
             onClick={() => handleCancel()}

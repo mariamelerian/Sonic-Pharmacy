@@ -12,11 +12,19 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import AddMedicineModal from "./PhNewMedicineModal";
 
-function PhShowActiveMedicine() {
+function PhShowActiveMedicine({
+  responseData,
+  setResponseData,
+  error,
+  setError,
+  loading,
+  setLoading,
+  fetchData,
+  onBroadcast,
+  flag,
+}) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [responseData, setResponseData] = useState([]);
-  const [error, setError] = useState(null);
+
   const [editedMedicine, setEditedMedicine] = useState(null);
   const [showMedicineForm, setShowMedicineForm] = useState(false);
   const filterMedicinalUse = useSelector(
@@ -39,30 +47,19 @@ function PhShowActiveMedicine() {
 
   useEffect(() => {
     fetchData();
+  }, [flag]);
+
+  useEffect(() => {
+    // fetchData();
     dispatch(
       deleteFilterArray({
         medicinalUse: "",
       })
     );
-    setEditedMedicine(null);
-    console.log(responseData);
+    // setEditedMedicine(null);
+    // console.log(responseData);
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("/medicines");
-      if (response.status === 200) {
-        setResponseData(response.data);
-        setLoading(false);
-      } else {
-        setError("Server error");
-        setLoading(false);
-      }
-    } catch (error) {
-      setError("An error occurred while fetching data.");
-      setLoading(false);
-    }
-  };
   const medicines = responseData;
   console.log(medicines);
 
@@ -75,6 +72,7 @@ function PhShowActiveMedicine() {
       const response = await axios.put(url, { id: med });
       if (response.status === 200) {
         fetchData();
+        onBroadcast();
       } else if (response.status === 404) {
         setError("Medicine not found");
       } else {

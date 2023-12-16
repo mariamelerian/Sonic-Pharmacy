@@ -2,22 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   faMessage,
   faTimes,
-  faVideo,
   faArrowLeft,
   faPaperPlane,
   faCheckDouble,
-  faPhone,
-  faPhoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Button,
-  Container,
-  ListGroup,
-  Navbar,
-  Modal,
-  FormControl,
-} from "react-bootstrap";
+import { Button, Container, ListGroup, Navbar, Form } from "react-bootstrap";
 import axios from "axios";
 
 export default function ChatPat({ who }) {
@@ -28,6 +18,8 @@ export default function ChatPat({ who }) {
   const [chosenName, setChosenName] = useState("");
   const [myMessage, setMyMessage] = useState("");
   const [chats, setChats] = useState([]);
+  const [filteredContacts, setFilteredContacts] = useState([]); // State for filtered contacts
+  const [searchTerm, setSearchTerm] = useState("");
   const [myContacts, setMyContacts] = useState([]);
   const [chatData, setChatData] = useState([]);
 
@@ -45,12 +37,12 @@ export default function ChatPat({ who }) {
     color: "white",
     overflow: "hidden",
     transition: "width 0.3s ease-in-out", // Smooth transition for width change
-    width: isHovered ? (who === "patient" ? "13.5rem" : "5rem") : "3rem", // Change width on hover
+    width: isHovered ? "5rem" : "3rem", // Change width on hover
   };
 
   const containerStyle = {
     position: "fixed",
-    bottom: "5rem",
+    bottom: "1rem",
     right: "1rem",
     fontSize: "1.1rem",
     backgroundColor: "transparent",
@@ -61,11 +53,12 @@ export default function ChatPat({ who }) {
     width: "20rem",
     padding: "0rem",
     maxHeight: "30rem",
+    height: "30rem",
   };
 
   const chatContainerStyle = {
     position: "fixed",
-    bottom: "5rem",
+    bottom: "1rem",
     right: "1rem",
     fontSize: "1.1rem",
     backgroundColor: "transparent",
@@ -120,6 +113,14 @@ export default function ChatPat({ who }) {
 
   const buttonTextPosition = isHovered ? "0" : "-100%";
   const buttonTextOpacity = isHovered ? 1 : 0;
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    const filtered = myContacts.filter((name) =>
+      name.toLowerCase().includes(term.toLowerCase())
+    );
+    setFilteredContacts(filtered);
+  };
 
   useEffect(() => {
     fetchData();
@@ -199,7 +200,7 @@ export default function ChatPat({ who }) {
                 whiteSpace: "nowrap",
               }}
             >
-              {who === "patient" ? "Chat with a pharmacist" : "Chat"}
+              Chat
             </span>
           </div>
         </Button>
@@ -227,18 +228,27 @@ export default function ChatPat({ who }) {
               <FontAwesomeIcon icon={faTimes} style={{ color: "white" }} />
             </Button>
           </Navbar>
-
+          <Form>
+            <Form.Group controlId="searchContacts">
+              <Form.Control
+                type="text"
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+                placeholder="Search contacts"
+              />
+            </Form.Group>
+          </Form>
           <ListGroup
             as="ol"
             className="flex-grow-1"
             style={{ overflowY: "auto" }}
           >
-            {myContacts.map((name, index) => (
+            {(searchTerm ? filteredContacts : myContacts).map((name, index) => (
               <ListGroup.Item
                 key={index}
                 as="li"
                 className="d-flex justify-content-between align-items-start"
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", fontSize: "1.05rem" }}
                 onClick={() => {
                   setChat(name);
                 }}

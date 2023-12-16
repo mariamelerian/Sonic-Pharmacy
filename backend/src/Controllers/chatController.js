@@ -147,6 +147,9 @@ const viewChat = async (req, res) => {
       return res.status(404).json("No messages");
     }
 
+    chat.flag=false;
+    await chat.save();
+    
     return res.status(200).json({ chat });
   } catch (error) {
     return res.status(500).json({ error: "Internal Server Error" });
@@ -182,35 +185,67 @@ const viewChats = async (req, res) => {
       for (const patient of patients) {
         const currPatient = await patientModel.findById(patient);
         if (currPatient) {
+          const chat = await chatModel.findOne({ patientID: currPatient._id , doctorID: userID });
+           if(chat){
+            chatNames.push(currPatient.name + "-" + currPatient._id+"-"+chat.flag);
+           }
+           else{
           chatNames.push(currPatient.name + "-" + currPatient._id);
+           }
         }
       }
       const allPharmacists = await Pharmacist.find();
       if (allPharmacists) {
         for (const pharmacist of allPharmacists) {
-          chatNames.push(
-            "Pharmacist " + pharmacist.name + "-" + pharmacist._id
-          );
+            const chat = await chatModel.findOne({ patientID: currPatient._id , doctorID: userID });
+             if(chat){
+              chatNames.push(
+                "Pharmacist " + pharmacist.name + "-" + pharmacist._id+"-"+chat.flag);
+             }
+             else{
+              chatNames.push(
+                "Pharmacist " + pharmacist.name + "-" + pharmacist._id
+              );
+             }
         }
       }
     } else if (isPharmacist) {
       // User is a pharmacist, get all patients and all doctors
       const allPatients = await patientModel.find();
       for (const currPatient of allPatients) {
-        chatNames.push(currPatient.name + "-" + currPatient._id);
+          const chat = await chatModel.findOne({ patientID: currPatient._id , doctorID: userID });
+           if(chat){
+            chatNames.push(currPatient.name + "-" + currPatient._id+"-"+chat.flag);
+           }
+           else{
+          chatNames.push(currPatient.name + "-" + currPatient._id);
+           }
       }
 
       const allDoctors = await doctorModel.find();
       for (const doc of allDoctors) {
-        chatNames.push("Dr. " + doc.name + "-" + doc._id);
+        const chat = await chatModel.findOne({ patientID: userID, doctorID: doctorID });
+        if(chat){
+          chatNames.push("Dr. " + doc.name + "-" + doc._id+"-"+ chat.flag);
+        }
+        else{
+       chatNames.push("Dr. " + doc.name + "-" + doc._id);
+        }
       }
     } else {
       const allPharmacists = await Pharmacist.find();
       if (allPharmacists) {
         for (const pharmacist of allPharmacists) {
-          chatNames.push(
-            "Pharmacist " + pharmacist.name + "-" + pharmacist._id
-          );
+            const chat = await chatModel.findOne({ patientID: currPatient._id , doctorID: userID });
+             if(chat){
+              chatNames.push(
+                "Pharmacist " + pharmacist.name + "-" + pharmacist._id+"-"+chat.flag);
+             }
+             else{
+              chatNames.push(
+                "Pharmacist " + pharmacist.name + "-" + pharmacist._id
+              );
+             }
         }
       }
     }
@@ -297,12 +332,49 @@ const sendMessage = async (req, res) => {
     });
 
     if (!existingChat) {
+    let pNew=null;
+    let phNew=null;
+    let docNew=null;
+    if(isDoctor){
+      docNew=userID;
+    }
+    if(isDoctor2){
+      docNew=recipientID;
+    }
+    if(isPharmacist){
+      phNew=userID;
+    }
+    if(isPharmacist2){
+      phNew=recipientID;
+    }
+    if(!isDoctor && !isPharmacist){
+      pNew=userID;
+    }
+    if(!isDoctor2 && !isPharmacist2){
+      pNew=recipientID;
+    }
+    if(!isDoctor && isPharmacist2){
+      pNew=userID;
+    }
+    if(!isPharmacist && isDoctor2){
+      pNew=userID;
+    }
+    if(!isDoctor2 && isPharmacist){
+      pNew=recipientID;
+    }
+    if(isDoctor && !isPharmacist2){
+      pNew=recipientID;
+    }
+
+  
+
       // Create a new chat
       const newChatData = {
-        patientID: isDoctor2 ? null : isPharmacist2 ? null : (isPatient ? userID : recipientID),
-        doctorID: isDoctor2 ? (isPharmacist2 ? null : (isDoctor ? userID : recipientID)) : (isDoctor ? userID : recipientID),
-        pharmacistID: isPharmacist2 ? (isDoctor2 ? null : (isPharmacist ? userID : recipientID)) : null,
+        patientID: pNew,
+        doctorID: docNew,
+        pharmacistID: phNew,
         messages: [[senderTitle, currDate, currTime, message]],
+        flag:true,
       };
       
       
@@ -314,7 +386,11 @@ const sendMessage = async (req, res) => {
     } else {
       // Add message to the existing chat
       existingChat.messages.push([senderTitle, currDate, currTime, message]);
+      
       await existingChat.save();
+
+      existingChat.flag=true;
+    await existingChat.save();
 
       return res.status(200).json(existingChat);
     }

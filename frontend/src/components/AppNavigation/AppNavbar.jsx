@@ -28,6 +28,9 @@ const AppNavbar = (props) => {
   const phWallet = useSelector((state) => state.pharmacistLogin.wallet);
   const patWallet = useSelector((state) => state.patientPharmLogin.wallet);
   const [wallet, setWallet] = useState("");
+  const [newNotifications, setNewNotifications] = useState(
+    useSelector((state) => state.newNotifications.newNotifications)
+  );
 
   useEffect(() => {
     if (phLoggedIn) {
@@ -57,12 +60,10 @@ const AppNavbar = (props) => {
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
   };
-  // const [newNotifications, setNewNotifications] = useState(
-  //   useSelector((state) => state.newNotifications.newNotifications)
-  // );
-  // const resetNew = () => {
-  //   setNewNotifications(false);
-  // };
+
+  const resetNew = () => {
+    setNewNotifications(false);
+  };
 
   return (
     <div>
@@ -159,12 +160,26 @@ const AppNavbar = (props) => {
                       icon={faBell}
                       onClick={toggleNotifications}
                     />
-
-                    <NotificationsPanel
-                      isOpen={showNotifications}
-                      closePanel={toggleNotifications}
-                      // resetNew={resetNew}
-                    />
+                    {newNotifications && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: "0.4rem",
+                          right: "-0.15rem",
+                          height: "0.6rem",
+                          width: "0.6rem",
+                          borderRadius: "50%",
+                          backgroundColor: "#ff6b35",
+                        }}
+                      />
+                    )}
+                    {notifications && (
+                      <NotificationsPanel
+                        isOpen={showNotifications}
+                        closePanel={toggleNotifications}
+                        resetNew={resetNew}
+                      />
+                    )}
                   </div>
                 )}
               </div>

@@ -171,8 +171,8 @@ function CartItems() {
   } else {
     // Calculate the subtotal
     const subtotal = medicine.total;
-    const total = subtotal + 50;
-    const delivery = 50;
+    const delivery = 10;
+    const total = subtotal + delivery;
 
     return (
       <div className="cart">
@@ -203,7 +203,7 @@ function CartItems() {
               <div style={{ fontSize: "1.2rem" }}>
                 <strong>{item.name}</strong>
               </div>
-              <div style={{ color: "lightgreen", marginLeft: "1.5rem" }}>
+              <div style={{ color: "#c9dfdf ", marginLeft: "1.5rem" }}>
                 In Stock
               </div>
             </div>
