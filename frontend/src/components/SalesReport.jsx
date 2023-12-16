@@ -148,19 +148,21 @@ function SalesReportPage() {
   return (
     <div>
       <Row>
-        <Col xs={12} md={12}>
-          <Container
-            className="mx-auto"
+        {/* First Filter Container */}
+        <Col xs={12} md={6}className="px-4"> 
+        <Container
+           className=" px-15"
             style={{
               flexShrink: 0,
-              width: "37%",
+              width: "65%",
               border: "1px solid var(--gray-400, #ced4da)",
               background: "var(--gray-white, #fff)",
               padding: "0.5rem", // Adjusted padding to make it thinner
-              marginLeft: "1.3rem",
+              // marginLeft: "1.3rem",
               // transform: "translateX(-59%)",
             }}
           >
+            
             <Row>
               <Col xs={12} md={9}>
                 <div
@@ -173,52 +175,6 @@ function SalesReportPage() {
                   }}
                 >
                   Filter Sales Report
-                </div>
-
-                <div
-                  style={{
-                    color: "#099BA0 ",
-                    fontSize: "1rem", // Adjusted font size
-                    fontStyle: "normal",
-                    fontWeight: 500,
-                    lineHeight: "100%",
-                    marginBottom: "0.5rem", // Adjusted margin
-                  }}
-                >
-                  Month
-                </div>
-
-                <div
-                  style={{ position: "relative", display: "inline-block" }}
-                  className="d-flex"
-                >
-                  <Form.Control
-                    as="select"
-                    onChange={(e) =>
-                      setSelectedMonth(
-                        months.findIndex((value, index) => {
-                          return value == e.target.value;
-                        })
-                      )
-                    }
-                    style={{ width: "100%" }} // Adjusted width
-                  >
-                    <option value="">Select Month</option>
-                    {months.map((use, index) => (
-                      <option key={index} value={use}>
-                        {`${use}`}
-                      </option>
-                    ))}
-                  </Form.Control>
-                  <FontAwesomeIcon
-                    icon={faAngleDown}
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      right: "1rem",
-                      transform: "translateY(-50%)",
-                    }}
-                  />
                 </div>
 
                 <div
@@ -293,6 +249,7 @@ function SalesReportPage() {
                     width: "8rem",
                     // Adjusted font size
                     marginBottom: "1rem",
+                    
                   }}
                 >
                   Apply
@@ -301,6 +258,107 @@ function SalesReportPage() {
             </Row>
           </Container>
         </Col>
+         {/* Second Filter Container */}
+         <Col xs={12} md={6}>
+         <Container
+         className="px-4 mx-1 "
+            style={{
+              flexShrink: 0,
+              width: "67%",
+              border: "1px solid var(--gray-400, #ced4da)",
+              background: "var(--gray-white, #fff)",
+              height:"11.56rem",
+              padding: "0.5rem", // Adjusted padding to make it thinner
+              // marginLeft: "1.3rem",
+              // transform: "translateX(-59%)",
+            }}
+          >
+            
+            <Row>
+              <Col xs={12} md={9}>
+                <div
+                  style={{
+                    fontSize: "18px", // Adjusted font size
+                    fontStyle: "normal",
+                    fontWeight: 700,
+                    lineHeight: "120%",
+                    marginBottom: "0.5rem", // Adjusted margin
+                  }}
+                >
+                  Filter Sales Report
+                </div>
+
+                <div
+                  style={{
+                    color: "#099BA0 ",
+                    fontSize: "1rem", // Adjusted font size
+                    fontStyle: "normal",
+                    fontWeight: 500,
+                    lineHeight: "100%",
+                    marginBottom: "0.5rem", // Adjusted margin
+                  }}
+                >
+                  Month
+                </div>
+
+                <div
+                  style={{ position: "relative", display: "inline-block" }}
+                  className="d-flex"
+                >
+                  <Form.Control
+                    as="select"
+                    onChange={(e) =>
+                      setSelectedMonth(
+                        months.findIndex((value, index) => {
+                          return value == e.target.value;
+                        })
+                      )
+                    }
+                    style={{ width: "100%" }} // Adjusted width
+                  >
+                    <option value="">Select Month</option>
+                    {months.map((use, index) => (
+                      <option key={index} value={use}>
+                        {`${use}`}
+                      </option>
+                    ))}
+                  </Form.Control>
+                  <FontAwesomeIcon
+                    icon={faAngleDown}
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      right: "1rem",
+                      transform: "translateY(-50%)",
+                    }}
+                  />
+                </div>
+
+              <Col xs={12} md={3} className="d-flex align-items-end px-6 py-4">
+                <Button
+                  className="custom-button"
+                  onClick={handleFilter}
+                  style={{
+                    // marginLeft: "4rem", // Adjusted margin-left
+                    fontSize: "1rem",
+                    width: "8rem",
+                    // Adjusted font size
+                    marginBottom: "1rem",
+                  }}
+                >
+                  Apply
+                </Button>
+              </Col>
+              </Col>
+
+            </Row>
+          </Container>
+          </Col>
+          
+
+
+
+
       </Row>
       <Row>
         <Col xs={12} md={12}>
