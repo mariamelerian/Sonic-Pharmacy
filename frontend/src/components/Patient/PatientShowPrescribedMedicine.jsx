@@ -27,8 +27,8 @@ function PatientNonPrescribedMedicine() {
   const dispatch = useDispatch();
 
   const medicineImage = {
-    width: "14rem",
-    height: "14rem",
+    width: "10rem",
+    height: "10rem",
   };
 
   useEffect(() => {
@@ -134,7 +134,7 @@ function PatientNonPrescribedMedicine() {
       ) : (
         <Row>
           {medicines.map((medicine, index) => (
-  <Col key={medicine.medicineName} lg={4} md={4} sm={12}>
+  <Col key={medicine.medicineName} lg={3} md={4} sm={6}>
     <Card className="mb-4 mx-3 bg-light">
       <Card.Body className="text-center">
         <div className="medicine-container">
@@ -170,7 +170,7 @@ function PatientNonPrescribedMedicine() {
             />
           </div>
           <div className="details-container">
-            <div className="d-flex justify-content-between align-items-center mb-7 px-5">
+            <div className="d-flex justify-content-between align-items-center mb-7 px-3">
               <div
                 className="medicine-name font-weight-bold"
                 style={{
@@ -190,7 +190,7 @@ function PatientNonPrescribedMedicine() {
               </div>
             </div>
             <div
-              className="info-price-container d-flex justify-content-between align-items-center px-5"
+              className="info-price-container d-flex justify-content-between align-items-center px-3"
               style={{
                 color: "#777777",
                 fontSize: "1rem",
@@ -207,21 +207,21 @@ function PatientNonPrescribedMedicine() {
 </div>
 
             {expandedMedicine === index && (
-           <>
-          <div className="medicine-description" style={{ textAlign: "left", paddingLeft: "50px", display: "flex", alignItems: "center" }}>
-  <h6 style={{ marginRight: "10px" , fontWeight: "bold" }}>Description:</h6>
-  <p style={{ marginBottom: "5px", fontSize: "14px" }}>
-    {medicine.description}
-  </p>
-</div>
-<div className="medicine-use" style={{ textAlign: "left", paddingLeft: "50px", display: "flex", alignItems: "center" }}>
-  <h6 style={{ marginRight: "10px", fontWeight: "bold" }}>Medicinal Use:</h6>
-  <p style={{ marginBottom: "5px", fontSize: "14px" }}>
-    {medicine.medicinalUse}
-  </p>
-</div>
+             <>
+             <div className="medicine-description" style={{ textAlign: "left", paddingLeft: "15px", display: "flex",  flexDirection: "column" }}>
+          <h6 style={{ marginBottom: "5px", fontWeight: "bold" }}>Description:</h6>
+          <p style={{ fontSize: "14px" }}>
+            {medicine.description}
+          </p>
+        </div>
+              <div className="medicine-use" style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", paddingLeft: "15px" }}>
+                <h6 style={{ marginBottom: "5px", fontWeight: "bold" }}>Medicinal Use:</h6>
+                <p style={{ fontSize: "14px" }}>
+                  {medicine.medicinalUse}
+                </p>
+              </div>
 
-           <div className="medicine-activeIngredients" style={{ textAlign: "left", paddingLeft: "50px" }}>
+           <div className="medicine-activeIngredients" style={{ textAlign: "left", paddingLeft: "15px" }}>
              <h6 style={{ marginRight: "10px", fontWeight: "bold" }}>Active Ingredients:</h6>
              <ul
                style={{
@@ -255,6 +255,9 @@ function PatientNonPrescribedMedicine() {
             <button
               className="btn btn-primary mt-3"
               onClick={() => handleAddToCart(medicine)}
+              style={{
+                width: "85%",
+              }}
             >
               Add to Cart <FontAwesomeIcon icon={faShoppingCart} />
             </button>

@@ -33,8 +33,8 @@ function PhShowActiveMedicine() {
   const [expandedMedicine, setExpandedMedicine] = useState(null);
 
   const medicineImage = {
-    width: "14rem",
-    height: "14rem",
+    width: "10rem",
+    height: "10rem",
   };
 
   useEffect(() => {
@@ -219,10 +219,10 @@ function PhShowActiveMedicine() {
       ) : (
         <Row>
           {filteredMedicines.map((medicine, index) => (
-            <Col key={medicine.name} lg={4} md={4} sm={12}>
+            <Col key={medicine.name} lg={3} md={4} sm={6}>
               <Card
                 className="mb-4 mx-3 bg-light"
-                style={{ minHeight: "28rem" }}
+                style={{ minHeight: "23rem" }}
               >
                 <Card.Header>
                   <div className="d-flex justify-content-end">
@@ -246,15 +246,15 @@ function PhShowActiveMedicine() {
                       src={medicine.picture}
                       alt={medicine.name}
                       style={{
-                        width: "15rem",
-                        height: "15rem",
+                        width: "10rem",
+                        height: "10rem",
                         margin: "0 auto", // Center the image horizontally
                         display: "block",
                       }}
                     />
                   </div>
                   <div className="details-container">
-                    <div className="d-flex justify-content-between align-items-center mb-7 px-5">
+                    <div className="d-flex justify-content-between align-items-center mb-7 px-4">
                       <div
                         className="medicine-name font-weight-bold"
                         style={{
@@ -354,53 +354,46 @@ function PhShowActiveMedicine() {
                   ) : (
                     <div>
                       <div
-                        className="medicine-price"
-                        style={{ paddingLeft: "48px" }}
+                        className="medicine-price px-4"
+                        
                       >
                         <strong>Price:</strong> {medicine.price} LE
                       </div>
 
                       {expandedMedicine === index && (
-                      <>
+                       <>
 
-                      <div
-                        className="medicine-description"
-                        style={{ paddingLeft: "48px" }}
-                      >
-                        <strong>Description:</strong> {medicine.description}
-                      </div>
-                      <div
-                        className="medicine-use"
-                        style={{ paddingLeft: "48px" }}
-                      >
-                        <strong>Medicinal Use:</strong> {medicine.medicinalUse}
-                      </div>
-                      <div
-                        className="medicine-activeIngredients"
-                        style={{ paddingLeft: "48px" }}
-                      >
-                        <strong>Active Ingredients:</strong>{" "}
-                        {medicine.activeIngredients.map((ingredient, index) => (
-                          <div key={index} style={{ marginBottom: "5px" }}>
-                            • {ingredient}
-                          </div>
-                        ))}
-                      </div>
-                      <div
-                        className="medicine-quantity"
-                        style={{ paddingLeft: "48px" }}
-                      >
-                        <strong>Quantity:</strong> {medicine.quantity}
-                      </div>
-                      <div
-                        className="medicine-sales"
-                        style={{ paddingLeft: "48px" }}
-                      >
-                        <strong>Sales:</strong> {medicine.sales} LE
-                      </div>
-
-                      </>
-           
+                       <div
+                         className="medicine-description px-4"
+                       >
+                         <strong>Description:</strong> {medicine.description}
+                       </div>
+                       <div
+                         className="medicine-use px-4"
+                       >
+                         <strong>Medicinal Use:</strong> {medicine.medicinalUse}
+                       </div>
+                       <div
+                         className="medicine-activeIngredients px-4"
+                       >
+                         <strong>Active Ingredients:</strong>{" "}
+                         {medicine.activeIngredients.map((ingredient, index) => (
+                           <div key={index} style={{ marginBottom: "5px" }}>
+                             • {ingredient}
+                           </div>
+                         ))}
+                       </div>
+                       <div
+                         className="medicine-quantity px-4"
+                       >
+                         <strong>Quantity:</strong> {medicine.quantity}
+                       </div>
+                       <div
+                         className="medicine-sales px-4"
+                       >
+                         <strong>Sales:</strong> {medicine.sales} LE
+                       </div>
+                       </>
                      )}
 
 <div
