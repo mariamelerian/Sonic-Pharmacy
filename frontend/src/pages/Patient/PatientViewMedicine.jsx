@@ -4,23 +4,29 @@ import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import HamburgerMenu from "../../components/Patient/PatientHamburgerMenu";
 import PatientShowMedicine from "../../components/Patient/PatientShowMedicine";
 import FilterMedicine from "../../components/FilterMedicine";
+import ChatPat from "../../components/ChatPat";
 
 function PatientMedicine() {
+  
   return (
     <div>
       <AppNavbar hamburgerMenu={<HamburgerMenu />} />
       <Container fluid className="bg-light pt-3 mt-2">
         <Container className="bg-white px-5 py-4">
           <Row>
-            <Col xs={12} md={5}>
+            <Col xs={12} md={12} className= "mb-4">
               <FilterMedicine />
             </Col>
-            <Col xs={12} md={7}>
+          </Row>
+          <Row>
+            <Col xs={12} md={12}>
               <PatientShowMedicine />
             </Col>
           </Row>
         </Container>
       </Container>
+      <ChatPat who="patient" />
+
     </div>
   );
 }

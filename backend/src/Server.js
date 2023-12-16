@@ -1,12 +1,16 @@
 // External variables
 const express = require("express");
 const mongoose = require("mongoose");
+const multer = require("multer");
 mongoose.set("strictQuery", false);
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
 
 //imports
 const {
@@ -36,6 +40,7 @@ const {
   getDeliveryAddresses,
   addDeliveryAddress,
   deleteAddress,
+  getWallet,
 } = require("./Controllers/patientController");
 
 const {
@@ -48,6 +53,14 @@ const {
   updateMedicine,
   deleteMedicine,
   medicineNamesIds,
+  getAlternativeMedicines,
+  getTotalMonthSales,
+  getFilteredSalesReport,
+  getAllMedicines,
+  getArchivedMedicines,
+  unarchiveMedicine,
+  getPrescribedMedicines,
+  getPatientMedicines,
 } = require("./Controllers/medicineController");
 
 const {
@@ -58,12 +71,25 @@ const {
   updatePharmacist,
   deletePharmacist,
   pharmacistChangePassword,
+  getPharmacistWallet,
+  pharmacistNotifications,
 } = require("./Controllers/pharmacistController");
+
+const pharmacistController = require("./Controllers/pharmacistController");
 
 const {
   MedicinalUseArray,
   getMedicinalUses,
 } = require("./Models/MedicinalUse");
+
+const {
+  // sendPatientMessage,
+  // patientChat,
+  viewChat,
+  viewChats,
+  sendMessage,
+  addChat,
+} = require("./Controllers/chatController");
 
 //App variables
 const app = express();
@@ -74,7 +100,7 @@ app.use(
   session({
     secret: "sonic123",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { secure: false }, // Set to true in a production environment with HTTPS
   })
 );
@@ -82,17 +108,21 @@ app.use(
 app.use(cookieParser());
 const port = process.env.PORT || "8000";
 
-//Apply middleware to all routes except the login route
-app.use((req, res, next) => {
-  // Check if the route is not the login route
-  if (req.path !== "/login") {
-    // Apply your middleware to all routes except login
-    requireAuth(req, res, next);
-  } else {
-    // If it's the login route, skip the middleware
-    next();
-  }
-});
+// //Apply middleware to all routes except the login route
+// // app.use((req, res, next) => {
+// //   // Check if the route is not the login route
+// //   if (
+//     req.path !== "/login" && req.path !== "/otp"
+//     // req.path !== "/patient-signup" ||
+//     // req.path !== "/pharmacist-signup"
+//   ) {
+// //     // Apply your middleware to all routes except login
+// //     requireAuth(req, res, next);
+// //   } else {
+// //     // If it's the login route, skip the middleware
+// //     next();
+// //   }
+// // });
 
 // Mongo DB
 const MongoURI = process.env.MONGO_URI;
@@ -115,34 +145,56 @@ app.get("/", (req, res) => {
 // #Routing to userController here
 //lama bagy a test bakteb dool fi postman b3d el /
 //ba map kol method l http req
-app.get("/admins", getAdmins);
-app.get("/patients", getPatients);
+app.get("/admins", requireAuth, getAdmins);
+app.get("/patients", requireAuth, getPatients);
 app.get("/patientById/:patientId", getPatientById);
-app.get("/patientAddresses", getDeliveryAddresses);
-app.get("/medicines", getMedicines);
-app.get("/medicine", getMedicine);
-app.get("/medicineByName", searchMedicine);
-app.get("/medicineNames", medicineNamesIds);
-app.get("/medicineSales", getMedicineSale);
-app.get("/medicinalUses", getMedicinalUses);
-app.get("/pharmacists", getPharmacists);
-app.get("/pharmacist", getPharmacist);
-app.get("/pharmacistApplications", getInactivePharmacists);
+app.get("/patientAddresses", requireAuth, getDeliveryAddresses);
+app.get("/medicines", requireAuth, getMedicines);
+app.get("/medicine", requireAuth, getMedicine);
+app.get("/medicineByName", requireAuth, searchMedicine);
+app.get("/medicineNames", requireAuth, medicineNamesIds);
+app.get("/medicineSales", requireAuth, getMedicineSale);
+app.get("/medicinalUses", requireAuth, getMedicinalUses);
+app.get("/pharmacists", requireAuth, getPharmacists);
+app.get("/pharmacist", requireAuth, getPharmacist);
+app.get("/pharmacistApplications", requireAuth, getInactivePharmacists);
+app.get("/getAlternativeMedicines", getAlternativeMedicines);
+app.get("/getPatientWallet", getWallet);
+app.get("/getPharmacistWallet", getPharmacistWallet);
+app.get("/monthlySales", getTotalMonthSales);
+app.get("/filteredSales", getFilteredSalesReport);
+app.get("/allMedicines", getAllMedicines);
+app.get("/archivedMedicines", getArchivedMedicines);
+//app.get("/patientChat", requireAuth, patientChat);
+app.get("/viewNotifications", requireAuth, pharmacistNotifications);
+app.get(
+  "/phNewNotifications",
+  requireAuth,
+  pharmacistController.getNewNotificationFlag
+);
+app.get("/prescribedMedicines", requireAuth, getPrescribedMedicines);
+app.get("/patientMedicines", requireAuth, getPatientMedicines);
 
 app.post("/newPatient", createPatient);
-app.post("/newAdmin", createAdmin);
-app.post("/newPharmacist", registerPharmacist);
-app.post("/newMedicine", createMedicine);
+app.post("/newAdmin", requireAuth, createAdmin);
+// app.post("/newPharmacist", registerPharmacist );
+app.post(
+  "/newPharmacist",
+  pharmacistController.upload.array("files", 5),
+  registerPharmacist
+);
+app.post("/newMedicine", requireAuth, createMedicine);
 app.post("/filterMedicine", filterMedicine);
 app.post("/addAddress", addDeliveryAddress);
 
 //authentication
 app.post("/login", login);
-app.post("/requireAuth");
+// app.post("/requireAuth");
 app.post("/logout", logout);
 app.put("/updCookie", updateUserInfoInCookie);
 app.post("/otp", otp);
 app.post("/verifyOtp", verifyOtp);
+//app.post("/sendPatientChatMessage", requireAuth, sendPatientMessage);
 
 app.put("/updatePatient", requireAuth, updatePatientInfo);
 app.put("/updateMedicine", requireAuth, updateMedicine);
@@ -151,59 +203,99 @@ app.put("/patientChangePassword", patientChangePassword);
 app.put("/adminChangePassword/:userId?", adminChangePassword);
 app.put("/pharmacistChangePassword/:userId?", pharmacistChangePassword);
 app.put("/resetPassword", resetPassword);
+app.put("/deleteMedicine", requireAuth, deleteMedicine);
+app.put("/unarchiveMedicine", unarchiveMedicine);
 
 app.delete("/deleteAdmin", requireAuth, deleteAdmin);
 app.delete("/deletePatient", requireAuth, deletePatient);
-app.delete("/deleteMedicine", requireAuth, deleteMedicine);
+
 app.delete("/deletePharmacist", requireAuth, deletePharmacist);
 app.delete("/deleteAddress", requireAuth, deleteAddress);
 
 //NEW ROUTES
 // CART ROUTES
 const cartController = require("./Controllers/cartController");
-app.get("/cart/:userId?", cartController.viewCart);
-app.get("/allCarts", cartController.getAllCarts);
-app.put("/addtocart/:medicineId/:userId?", cartController.addToCart);
-app.post("/changequantity/:medicineId/:userId?", cartController.changeQuantity);
-app.post("/removefromcart/:medicineId/:userId?", cartController.removeFromCart);
-app.put("/clearcart/:userId?", cartController.clearCart);
+app.get("/cart/:userId?", requireAuth, cartController.viewCart);
+app.get("/allCarts", requireAuth, cartController.getAllCarts);
+app.put(
+  "/addtocart/:medicineId/:userId?",
+  requireAuth,
+  cartController.addToCart
+);
+app.post(
+  "/changequantity/:medicineId/:userId?",
+  requireAuth,
+  cartController.changeQuantity
+);
+app.post(
+  "/removefromcart/:medicineId/:userId?",
+  requireAuth,
+  cartController.removeFromCart
+);
+app.post(
+  "/notificationFlag",
+  requireAuth,
+  pharmacistController.toggleNotifications
+);
+app.put("/clearcart/:userId?", requireAuth, cartController.clearCart);
 
 // ORDER ROUTES
 const orderController = require("./Controllers/orderController");
 app.get("/allOrders", orderController.getAllOrders);
-app.get("/patientorders/:userId?", orderController.getPatientOrders);
-app.get("/orders/:orderId", orderController.getOrderById);
-app.post("/checkoutCash", orderController.checkout);
-app.post("/checkoutWallet", orderController.checkoutWallet);
-app.put("/orders/update/:orderId", orderController.updateOrderByID);
+app.get(
+  "/patientorders/:userId?",
+  requireAuth,
+  orderController.getPatientOrders
+);
+app.get("/orders/:orderId", requireAuth, orderController.getOrderById);
+app.post("/checkoutCash", requireAuth, orderController.checkout);
+app.post("/checkoutWallet", requireAuth, orderController.checkoutWallet);
+app.put(
+  "/orders/update/:orderId",
+  requireAuth,
+  orderController.updateOrderByID
+);
 app.put(
   "/orders/updatebynumber/:orderNumber/:userId?",
+  requireAuth,
   orderController.updateOrderByNumber
 );
-app.put("/cancelorder/:orderId", orderController.cancelOrderByID);
+app.put("/cancelorder/:orderId", requireAuth, orderController.cancelOrderByID);
 app.put(
   "/cancelorderbynumber/:orderNumber/:userId?",
+  requireAuth,
   orderController.cancelOrderByNumber
 );
-app.delete("/deleteorder/:orderId", orderController.deleteOrderByID);
+app.delete(
+  "/deleteorder/:orderId",
+  requireAuth,
+  orderController.deleteOrderByID
+);
 app.delete(
   "/deleteorderbynumber/:orderNumber/:userId?",
   orderController.deleteOrderByNumber
 );
 
-app.post("/checkoutStripe", orderController.checkoutStripe);
+app.post("/checkoutStripe", requireAuth, orderController.checkoutStripe);
+
+app.post("/viewChat", requireAuth, viewChat);
+app.post("/viewChats", requireAuth, viewChats);
+app.post("/sendMessage", requireAuth, sendMessage);
+app.get("/addChat", addChat);
 
 //DUMMY DATA
 
-// const dummyData = require("./dummyData/patient");
+// const dummyData = require("./dummyData/medicine");
 // // const Patient = require("./Models/Adminstrator");
 // const {
 //   insertDummyDataPatient,
 //   insertDummyDataAdmin,
 //   insertDummyDataPharmacist,
 //   insertDummyDataOrder,
+//   insertDummyDataMedicine,
 // } = require("./utils");
 
+// insertDummyDataMedicine(dummyData);
 // insertDummyDataPatient(dummyData);
 //insertDummyDataAdmin(dummyData);
 //insertDummyDataPharmacist(dummyData);

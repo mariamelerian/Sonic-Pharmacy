@@ -2,12 +2,19 @@ const Order = require("../Models/Order");
 const Cart = require("../Models/Cart");
 const Medicine = require("../Models/Medicine");
 const Patient = require("../Models/Patient");
+const Prescription = require("../Models/Prescription");
+const Pharmacist = require("../Models/Pharmacist");
+const emailService = "outlook";
+const emailUser = "youstina2307@outlook.com";
+const emailPassword = "23july2002";
+const nodemailer = require("nodemailer");
+const { notifyPharmacistsOutOfStock } = require("./pharmacistController");
 
 const stripe = require("stripe")(
   "sk_test_51O9lZ0IQTS4vUIMWJeAJ5Ds71jNbeQFj6v8mO7leS2cDIJuLy1fwNzoiXPKZV5KdoMpfzocfJ6hBusxPIjbGeveF00RTnmVYCX"
 );
 
-const createOrder = async (userId, address) => {
+const createOrder = async (userId, address, paymentMethod) => {
   try {
     const cart = await Cart.findOne({ user: userId });
     const items = cart.items;
@@ -15,14 +22,17 @@ const createOrder = async (userId, address) => {
     const count = await Order.countDocuments({ patient: userId });
     const orderNumber = count + 1;
 
+    const date = new Date();
+
     const orderData = {
       number: orderNumber,
-      date: new Date(),
+      date: date,
       items: items,
       totalPrice: cart.total + 50,
       status: "Pending",
       patient: userId,
       address: address,
+      paymentMethod: paymentMethod,
     };
     const order = new Order(orderData);
     await order.save();
@@ -30,7 +40,17 @@ const createOrder = async (userId, address) => {
     cart.items.map(async (item) => {
       const medicine = await Medicine.findById(item.medicine);
       medicine.sales += item.quantity;
+      medicine.quantity -= item.quantity;
+      medicine.salesData.push({
+        quantity: item.quantity,
+        date: date,
+      });
       await medicine.save();
+
+      if (medicine.quantity == 0) {
+        //notify pharmacist that medicine is out of stock
+        notifyPharmacistsOutOfStock(medicine.name);
+      }
     });
 
     // Clear the cart
@@ -42,10 +62,74 @@ const createOrder = async (userId, address) => {
   }
 };
 
+const createOrderFromPrescription = async (prescription, paymentMethod) => {
+  try {
+    let items = [];
+
+    let medicineArr = prescription.medicine;
+    let total = 0;
+
+    for (let i = 0; i < medicineArr.length; i++) {
+      let medicine = await Medicine.findOne({ name: medicineArr[i][0] });
+      let item = {
+        medicine: medicine._id,
+        name: medicine.name,
+        price: medicine.price,
+        quantity: 1,
+      };
+      items.push(item);
+      total += medicine.price;
+      medicine.sales += 1;
+      medicine.quantity -= 1;
+      medicine.salesData.push({
+        quantity: item.quantity,
+        date: date,
+      });
+      await medicine.save();
+
+      if (medicine.quantity == 0) {
+        //notify pharmacist that medicine is out of stock
+        notifyPharmacistsOutOfStock(medicine.name);
+      }
+    }
+
+    const count = await Order.countDocuments({
+      patient: prescription.patientID,
+    });
+    const orderNumber = count + 1;
+
+    const date = new Date();
+
+    //get delivery address
+    const patient = await Patient.findById(prescription.patientID);
+    let address = "6 Ave, villa 3";
+    if (patient.addresses.length > 0) address = patient.addresses[0];
+
+    const orderData = {
+      number: orderNumber,
+      date: date,
+      items: items,
+      totalPrice: total + 50,
+      status: "Pending",
+      patient: prescription.patientID,
+      address: address,
+      paymentMethod: paymentMethod,
+    };
+    const order = new Order(orderData);
+    await order.save();
+  } catch (error) {
+    throw new Error("Failed to create the order : " + error.message);
+  }
+};
+
 const checkout = async (req, res) => {
   //create order
   try {
-    await createOrder(req.session.userId, req.body.address);
+    await createOrder(
+      req.session.userId,
+      req.body.address,
+      req.body.paymentMethod
+    );
 
     //clear cart
     const userId = req.session.userId;
@@ -198,13 +282,36 @@ const updateOrderByNumber = async (req, res) => {
 
 const cancelOrderByID = async (req, res) => {
   const orderId = req.params.orderId;
-  console.log(orderId);
   try {
     const order = await Order.findById(orderId);
-    console.log(order);
     if (order) {
       order.status = "Cancelled";
+      if (order.paymentMethod != "COD") {
+        const patient = await Patient.findById(order.patient);
+        patient.wallet += order.totalPrice;
+        await patient.save();
+      }
       await order.save();
+      //reset medicine sales and quantity
+      for (let i = 0; i < order.items.length; i++) {
+        const item = order.items[i];
+        const medicine = await Medicine.findById(item.medicine);
+        if (medicine) {
+          medicine.sales -= item.quantity;
+          medicine.quantity += item.quantity;
+          medicine.salesData.map((sale) => {
+            //remove sales data
+            console.log(sale);
+            console.log(order.date);
+            console.log(item.quantity);
+            if (sale.date == order.date && sale.quantity == item.quantity) {
+              console.log("found");
+              medicine.salesData.splice(medicine.salesData.indexOf(sale), 1);
+            }
+          });
+          await medicine.save();
+        }
+      }
       res.status(200).json(order);
     } else {
       res.status(404).json({ message: "Order not found" });
@@ -224,7 +331,28 @@ const cancelOrderByNumber = async (req, res) => {
     const order = await Order.findOne({ number: orderNumber, patient: userId });
     if (order) {
       order.status = "Cancelled";
+      if (order.paymentMethod != "COD") {
+        const patient = await Patient.findById(order.patient);
+        patient.wallet += order.totalPrice;
+        await patient.save();
+      }
       await order.save();
+      //reset medicine sales and quantity
+      for (let i = 0; i < order.items.length; i++) {
+        const item = order.items[i];
+        const medicine = await Medicine.findById(item.medicine);
+        if (medicine) {
+          medicine.sales -= item.quantity;
+          medicine.quantity += item.quantity;
+          medicine.salesData.map((sale) => {
+            //remove sales data
+            if (sale.date == order.date && sale.quantity == item.quantity) {
+              medicine.salesData.splice(medicine.salesData.indexOf(sale), 1);
+            }
+          });
+          await medicine.save();
+        }
+      }
       res.status(200).json(order);
     } else {
       res.status(404).json({ message: "Order not found" });
@@ -283,4 +411,5 @@ module.exports = {
   deleteOrderByNumber,
   checkoutWallet,
   checkoutStripe,
+  createOrderFromPrescription,
 };

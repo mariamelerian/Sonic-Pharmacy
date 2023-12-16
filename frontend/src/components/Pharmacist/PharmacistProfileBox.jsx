@@ -2,24 +2,9 @@ import React, { useState } from "react";
 import ChangePass from "../../forms/ChangePass";
 import { useSelector } from "react-redux";
 import defaultImg from "../../Assets/Pharmacist/UnknownUser.jpg";
+import { ListGroup } from "react-bootstrap";
 
 function PharmacistProfileBox() {
-  const profileBoxStyle = {
-    width: "30rem",
-    padding: "1rem",
-    backgroundColor: "#ffffff",
-    textAlign: "center",
-    marginLeft: "10rem",
-  };
-
-  const profileImageStyle = {
-    width: "150px",
-    height: "150px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    marginBottom: "20px",
-  };
-
   const inputLabel = {
     width: "12rem",
     marginRight: "0.5rem",
@@ -27,6 +12,19 @@ function PharmacistProfileBox() {
     color: "#adb5bd ",
     fontSize: "1rem",
     textAlign: "left",
+  };
+
+  const listItemStyle = {
+    fontSize: "1.05rem", // Font size for all information
+    marginBottom: "0.75rem", // Margin bottom for all information
+    verticalAlign: "top", // Align items at the top of each column
+  };
+
+  const labelStyle = {
+    cursor: "pointer",
+    fontWeight: "lighter",
+    textDecoration: "underline",
+    color: "inherit",
   };
 
   const [profileData, setProfileData] = useState({
@@ -43,7 +41,6 @@ function PharmacistProfileBox() {
     ),
   });
 
-  const _id = useSelector((state) => state.pharmacistLogin.userId);
   const [showChangePass, setShowChangePass] = useState(false); // Set initial state to false
 
   const toggleChangePass = () => {
@@ -51,53 +48,76 @@ function PharmacistProfileBox() {
   };
 
   return (
-    <div style={profileBoxStyle}>
-      <img src={profileData.photo || defaultImg} style={profileImageStyle} />
-      <h2 style={{ marginBottom: "1rem" }}>
-        <strong>Dr. {profileData.name}</strong>
-      </h2>
-      <div className="d-flex flex-column align-items-start">
-        <p class="d-flex flex-row">
-          <div style={inputLabel}>Username:</div>
-          <span>{profileData.username}</span>
-        </p>
-
-        <p className="d-flex flex-row">
-          <div style={inputLabel}>Password:</div>
-          <span
-            onClick={toggleChangePass}
-            style={{
-              textDecoration: "underline",
-              color: "blue",
-              cursor: "pointer",
-            }}
-          >
-            {showChangePass ? "close" : "change password"}
-          </span>
-          {showChangePass && (
-            <ChangePass patient={false} api="/pharmacistChangePassword" />
-          )}
-        </p>
-        <p class="d-flex flex-row">
-          <div style={inputLabel}>Email: </div>
-
-          <span>{profileData.email}</span>
-        </p>
-        <p class="d-flex flex-row">
-          <div style={inputLabel}>Affiliation: </div>
-
-          <span>{profileData.affiliation}</span>
-        </p>
-        <p class="d-flex flex-row">
-          <div style={inputLabel}>Hourly Rate:</div>
-
-          <span>{profileData.hourlyRate} LE/hr</span>
-        </p>
+    <div style={{ width: "40rem" }}>
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{
+          fontSize: "2.5rem",
+          fontWeight: "600",
+          color: "#212529",
+          lineHeight: "1.5",
+          marginBottom: "1rem",
+        }}
+      >
+        Personal Information
       </div>
-      <p class="d-flex flex-row">
-        <div style={inputLabel}>Educational Background:</div>
-        <span>{profileData.educationalBackground}</span>
-      </p>
+      <ListGroup>
+        <ListGroup.Item>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>Name: </span>
+            {profileData.name}
+          </div>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Username:{" "}
+            </span>
+            {profileData.username}
+          </div>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Password:
+            </span>{" "}
+            <span>
+              <label style={labelStyle} onClick={toggleChangePass}>
+                {showChangePass ? "close" : "change password"}
+              </label>
+            </span>
+            {showChangePass && (
+              <ChangePass patient={true} api="/pharmacistChangePassword" />
+            )}
+          </div>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Email:{" "}
+            </span>
+            {profileData.email}
+          </div>
+          {/* <div style={listItemStyle}>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Phone Number:{" "}
+            </span>
+            {profileData.phoneNumber}
+          </div> */}
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Affiliation:
+            </span>{" "}
+            {profileData.affiliation}
+          </div>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Hourly Rate:
+            </span>{" "}
+            {profileData.hourlyRate}
+          </div>
+          <div style={listItemStyle}>
+            <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+              Educational background:
+            </span>{" "}
+            {profileData.educationalBackground}
+          </div>
+        </ListGroup.Item>
+      </ListGroup>
     </div>
   );
 }

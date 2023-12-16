@@ -7,16 +7,17 @@ import AppNavbar from "../../components/AppNavigation/AppNavbar";
 import RegPhoto from "../../components/Guest/RegPhoto";
 import PatientSignupForm from "../../forms/Guest/PatientSignupForm";
 import GuestBurgerMenu from "../../components/Guest/GuestBurgerMenu";
+import AppNavbarGuest2 from "../../components/AppNavigation/AppNavbarGuest2";
 
 function PatientSignup() {
-/*   const dispatch = useDispatch();
+  /*   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(logout());
   }, []); */
 
   return (
     <div>
-      <AppNavbar hamburgerMenu={<GuestBurgerMenu />} />
+      <AppNavbarGuest2 flag={false} />
       <Container fluid className="bg-light pt-3 mt-2">
         <Container className="bg-white px-5 py-4 d-flex align-items-center justify-content-center">
           <div className="d-flex w-100 align-items-center">

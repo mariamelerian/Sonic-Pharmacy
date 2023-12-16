@@ -6,6 +6,18 @@ const otpGenerator = require("otp-generator");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const bcrypt = require("bcrypt");
+const Medicine = require("../Models/Medicine");
+const emailService = "youstina2307@outlook.com"; // e.g., 'gmail'
+const emailUser = "youstina2307@outlook.com";
+const emailPassword = "23july2002";
+
+const transporter = nodemailer.createTransport({
+  service: emailService,
+  auth: {
+    user: emailUser,
+    pass: emailPassword,
+  },
+});
 
 // const storage = multer.diskStorage({
 //   destination: (req, file, callback) => {
@@ -17,17 +29,43 @@ const bcrypt = require("bcrypt");
 // });
 
 // const upload = multer({ storage: storage, destination: "public/uploads" });
-const storage = multer.memoryStorage(); // Store files in memory
-const upload = multer({
-  storage: storage,
-  fileFilter: function (req, file, callback) {
-    // Your file filter logic here
-    callback(null, true);
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
   },
-  limits: {
-    fileSize: 1024 * 1024 * 2, // Limit file size to 2MB
+  filename: function (req, file, cb) {
+    if (!req.locals) {
+      req.locals = {};
+    }
+    if (!req.locals.docs) {
+      req.locals.docs = [];
+    }
+
+    const uniqueFileName = `${Date.now()}-${file.originalname}`;
+    req.locals.docs.push(`uploads/${uniqueFileName}`);
+    cb(null, `${Date.now()}-${file.originalname}`);
   },
-}).array("files", 7); // Accept up to 7 files
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "application/pdf" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/jpg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(
+      new Error(
+        "Invalid file type. Only PDF, PNG, JPEG, and JPG files are allowed."
+      ),
+      false
+    );
+  }
+};
+upload = multer({ storage, fileFilter });
 
 // const registerPharmacist = async (req, res) => {
 //   try {
@@ -71,45 +109,66 @@ const upload = multer({
 
 const registerPharmacist = async (req, res) => {
   try {
-    const { username } = req.body;
+    // const { username, email, password } = req.body;
+    const username = req.body.username;
+    const password = req.body.password;
+    const email = req.body.email;
+    const education = req.body.education;
+    const hourlyRate = req.body.hourlyRate;
+    const dateOfBirth = req.body.dateOfBirth;
+    const name = req.body.name;
+    const affiliation = req.body.affiliation;
+    // Debugging: log the received data
+    console.log("Received data:", req.body);
+
+    req.body.files = req.locals?.docs;
+    const files = req.body.files;
+
+    // Validate username
     const validation = await validateUsername(username);
-    // check if username already exists in database
+
     if (!validation) {
       return res.status(408).send("Username already exists");
     }
-    //check if email exists
-    const { email } = req.body;
-    const existing = await Pharmacist.findOne({ email });
-    if (existing) {
+
+    // Check if email exists
+    const existingPharmacist = await Pharmacist.findOne({ email });
+    if (existingPharmacist) {
       return res.status(409).json({ message: "Email is already registered" });
     }
-    //add default picture
-    if (!req.body.picture) {
-      const path = require("path");
-      const filePath = path.join(__dirname, "../res/default-profile-pic.jpg");
-      const imageBuffer = fs.readFileSync(filePath);
-      const base64ImageData = imageBuffer.toString("base64");
-      const imageSrc = `data:image/jpeg;base64,${base64ImageData}`;
-      req.body.picture = imageSrc;
-    }
 
-    // Create a modified request body with an empty array for files
-    const modifiedReqBody = { ...req.body, files: [] };
-    console.log("we");
-    // Create a new Pharmacist instance with the modified request body
-    const newPharmacist = new Pharmacist(modifiedReqBody);
-    console.log("we2");
+    // Debugging: log the password before hashing
+    console.log("Password before hashing:", password);
+
     // Hash the password
-    newPharmacist.password = await bcrypt.hash(req.body.password, 10);
-    console.log("we3");
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Debugging: log the hashed password
+    console.log("Hashed password:", hashedPassword);
+
+    // Create a new Pharmacist instance with the modified request body
+    const newPharmacist = new Pharmacist({
+      username,
+      email,
+      password: hashedPassword,
+      picture: req.body.picture,
+      education,
+      hourlyRate,
+      affiliation,
+      dateOfBirth,
+      name,
+      files,
+    });
+
     // Save the Pharmacist instance
-    const savedPharmacist = await newPharmacist.save();
-    const id = savedPharmacist._id;
-    console.log("we4");
+    await newPharmacist.save();
+
+    console.log("before");
+
     // Upload documents and associate them with the pharmacist
-    uploadDocuments(req, res, id);
-    console.log("we5");
-    return res.status(201).json(savedPharmacist);
+    // uploadDocuments(req.body, res, newPharmacist._id);
+
+    return res.status(201).json(newPharmacist);
   } catch (error) {
     console.error(error);
     return res.status(400).json({ error: error.message });
@@ -140,35 +199,30 @@ const registerPharmacist = async (req, res) => {
 //   });
 // };
 
-const uploadDocuments = (req, res, pharmacistId) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      console.error("Multer error:", err);
-      return res.status(400).json({ message: "Error uploading the files" });
-    }
+// const uploadDocuments = (req, res, pharmacistId) => {
+//   upload(req, res, async (err) => {
+//     if (err) {
+//       console.error("Multer error:", err);
+//       return res.status(400).json({ message: "Error uploading the files" });
+//     }
 
-    console.log("Uploaded files:", req.files);
-
-    // Update the pharmacist's files field with the filenames
-    const filenames = req.files.map((file) => ({
-      filename: file.originalname,
-      mimetype: file.mimetype,
-      buffer: file.buffer,
-    }));
-
-    try {
-      const pharmacist = await Pharmacist.findByIdAndUpdate(
-        pharmacistId,
-        { $push: { files: filenames } },
-        { new: true }
-      );
-      console.log("Files uploaded and associated with the pharmacist.");
-    } catch (error) {
-      console.error("Error uploading documents:", error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  });
-};
+//     try {
+//       const potential = await Pharmacist.findById(pharmacistId);
+//       // Update the pharmacist's files field with the filenames
+//       const filenames = req.files.forEach((file) => {
+//         potential.files.push({
+//           filename: file.originalname,
+//           mimetype: file.mimetype,
+//           buffer: file.buffer,
+//         });
+//       });
+//       console.log("Files uploaded and associated with the pharmacist.");
+//     } catch (error) {
+//       console.error("Error uploading documents:", error);
+//       return res.status(500).json({ message: "Internal server error" });
+//     }
+//   });
+// };
 
 const getPharmacists = async (req, res) => {
   try {
@@ -261,71 +315,6 @@ const pharmacistLogin = async (req, res) => {
   }
 };
 
-const pharmacistSendPasswordResetOTP = async (req, res) => {
-  // Find the user with the given email address
-  const user = await Pharmacist.findOneByID(req.params.id);
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-  const email = user.email;
-
-  // Generate a new OTP
-  const OTP = otpGenerator.generate(6, {
-    digits: true,
-    alphabets: false,
-    upperCase: false,
-    specialChars: false,
-  });
-
-  // Save the OTP and its expiry time to the user's document
-  user.passwordReset.OTP = OTP;
-  user.passwordReset.OTP_expiry = new Date(Date.now() + 30 * 60000); // OTP is valid for 30 minutes
-  await user.save();
-
-  // Send an email with the OTP to the user
-  const transporter = nodemailer.createTransport({
-    // Replace with your email service and credentials
-    service: "gmail",
-    auth: {
-      user: "your_email@example.com",
-      pass: "your_email_password",
-    },
-  });
-
-  const mailOptions = {
-    from: "your_email@example.com",
-    to: user.email,
-    subject: "Password reset OTP",
-    text: `Your password reset OTP is ${OTP}. It will be valid for the next 30 minutes. If you didn't request a password reset,
-     please ignore this email.`,
-  };
-
-  await transporter.sendMail(mailOptions);
-};
-const pharmacistCheckPasswordResetOTP = async (req, res) => {
-  // Find the user with the given email address
-
-  const user = await Pharmacist.findOneByID(req.params.id);
-
-  if (!user) {
-    return res.status(404).json({ error: "User not found" });
-  }
-  const OTP = user.passwordReset.OTP;
-  // Check if the OTP provided by the user matches the OTP stored in the document
-  if (user.passwordReset.OTP !== OTP) {
-    return res.status(409).json({ error: "InValid OTP" });
-  }
-
-  // Check if the OTP has expired (it's valid for 30 minutes)
-  if (user.passwordReset.OTP_expiry.getTime() < Date.now()) {
-    return res.status(409).json({ error: "OTP expired" });
-  }
-
-  // If the OTP is valid, return true
-  return res.status(200).json({ error: "Successful" });
-};
-
 const pharmacistChangePassword = async (req, res) => {
   const user = await Pharmacist.findById(req.session.userId);
 
@@ -352,6 +341,90 @@ const pharmacistChangePassword = async (req, res) => {
   return res.status(200).json({ message: "Password updated successfully" });
 };
 
+const getPharmacistWallet = async (req, res) => {
+  const pharmacistId = req.session.userId;
+  try {
+    const pharmacist = await Pharmacist.findById(pharmacistId);
+    if (!pharmacist) {
+      return res.status(404).json({ message: "Pharmacist not found" });
+    }
+    res.status(200).json(pharmacist.wallet);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const pharmacistNotifications = async (req, res) => {
+  const pharmacistId = req.session.userId;
+  try {
+    const pharmacist = await Pharmacist.findById(pharmacistId);
+    if (!pharmacist) {
+      return res.status(404).json({ message: "Pharmacist not found" });
+    }
+    return res.status(200).json(pharmacist.notifications);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const toggleNotifications = async (req, res) => {
+  const pharmacistId = req.session.userId;
+
+  try {
+    const pharmacist = await Pharmacist.findById(pharmacistId);
+    if (!pharmacist) {
+      return res.status(404).json({ message: "Pharmacist not found" });
+    }
+
+    pharmacist.newNotification = false;
+    await pharmacist.save();
+
+    res.status(200).send("Notifications toggled successfully");
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getNewNotificationFlag = async (req, res) => {
+  const pharmacistId = req.session.userId;
+
+  try {
+    const pharmacist = await Pharmacist.findById(pharmacistId);
+    if (!pharmacist) {
+      return res.status(404).json({ message: "Pharmacist not found" });
+    }
+
+    res.status(200).json(pharmacist.newNotification);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const notifyPharmacistsOutOfStock = async (medicine) => {
+  try {
+    const pharmacists = await Pharmacist.find();
+    const mailOptions = {
+      from: emailUser,
+      to: pharmacists.map((pharmacist) => pharmacist.email).join(","),
+      subject: "Medicine out of stock",
+      text: `Please note that ${medicine} medicine is out of stock.`,
+    };
+
+    pharmacists.map((pharmacist) => {
+      pharmacist.notifications.push(
+        `Please note that ${medicine} medicine is out of stock.`
+      );
+      pharmacist.newNotification = true;
+      pharmacist.save();
+    });
+
+    await transporter.sendMail(mailOptions);
+    console.log("Email sent");
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   registerPharmacist,
   getPharmacists,
@@ -359,8 +432,11 @@ module.exports = {
   getInactivePharmacists,
   updatePharmacist,
   deletePharmacist,
-  pharmacistLogin,
-  pharmacistSendPasswordResetOTP,
-  pharmacistCheckPasswordResetOTP,
   pharmacistChangePassword,
+  upload,
+  getPharmacistWallet,
+  pharmacistNotifications,
+  toggleNotifications,
+  getNewNotificationFlag,
+  notifyPharmacistsOutOfStock,
 };

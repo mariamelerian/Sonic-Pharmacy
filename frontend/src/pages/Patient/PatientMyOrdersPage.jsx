@@ -7,12 +7,9 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import PatientMyOrders from "../../components/Patient/PatientMyOrders";
 import PatientHamburgerMenu from "../../components/Patient/PatientHamburgerMenu";
-
+import ChatPat from "../../components/ChatPat";
 
 export default function PatientMyOrdersPage() {
-
-
-
   return (
     <>
       <AppNavbar hamburgerMenu={<PatientHamburgerMenu />} />
@@ -36,21 +33,18 @@ export default function PatientMyOrdersPage() {
           }
         `}
       </style>
-          <Container
-            className="bg-white px-5 py-4 d-flex align-items-center justify-content-center"
-            style={{
-              margin: "20px",
-              display: "flex",
-              flexDirection: "column",
-              marginLeft: "100px",
-            }}
-          >
-
-          
-            <PatientMyOrders />
-          
-          </Container>
-      
+      <Container
+        className="bg-white px-5 py-4 d-flex align-items-center justify-content-center"
+        style={{
+          marginTop: "20px",
+          display: "flex",
+          flexDirection: "column",
+          // marginLeft: "100px",
+        }}
+      >
+        <PatientMyOrders />
+      </Container>
+      <ChatPat who="patient" />
     </>
   );
 }

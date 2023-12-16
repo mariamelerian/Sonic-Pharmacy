@@ -147,7 +147,7 @@
   color: var(--theme-secondary, #ff6b35);
 
   /* Body/Underline */
-  font-family: Helvetica Neue;
+  /* font-family: Helvetica Neue; */
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
@@ -163,7 +163,7 @@
   justify-content: center;
   align-items: center;
   gap: 0.25rem;
-  font-family: Helvetica Neue;
+  /* font-family: Helvetica Neue; */
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
@@ -247,4 +247,29 @@ button.mb-3.btn-secondary.btn-interest-selected.btn.btn-primary {
 .css-b62m3t-container {
   width: 100%;
   margin-top: 15px;
+}
+
+.signup {
+  width: 15.125rem;
+  height: 2.1875rem;
+  flex-shrink: 0;
+  color: var(--Secondary, #ff6b35);
+  font-family: Roboto;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 0rem;
+  padding-bottom: 3rem;
+  padding-right: 0px;
+  padding-left: 60px;
+}
+
+.signup-container {
+  padding-top: 1rem;
+  padding-left: 0;
+  padding-right: 0;
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
+  margin-right: -8px;
 }

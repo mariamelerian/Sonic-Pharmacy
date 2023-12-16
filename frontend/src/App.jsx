@@ -31,18 +31,21 @@ import OTPVerification from "./pages/Guest/OTPVerification";
 import ResetPassword from "./pages/Guest/ResetPassword";
 import PasswordChanged from "./pages/Guest/PasswordChanged";
 import CheckOutDoneModal from "./components/Patient/PatientCheckOutDoneModal";
-  
+import PatientShowMedicine from "./components/Patient/PatientShowMedicine";
+import ChatPat from "./components/ChatPat";
+import AdminSalesReportPage from "./pages/Admin/AdminSalesReportPage";
+import PharmacistSalesReportPage from "./pages/Pharmacist/PharmacistSalesReportPage";
+import PharmTest from "./pages/Pharmacist/PharmTest";
 
 //import AddMedicineModal from "./components/Pharmacist/PhNewMedicineModal";
-
 
 function App() {
   return (
     <div className="bg-light">
       <Routes>
-        <Route path="/" element={<GuestHomePage />} />
+        {/* <Route path="/" element={<GuestHomePage />} /> */}
 
-        <Route path="login">
+        <Route path="/">
           <Route index element={<Login />} />
         </Route>
 
@@ -52,7 +55,6 @@ function App() {
           <Route path="password-changed" element={<PasswordChanged />} />
           <Route index element={<ForgotPassword />} />
         </Route>
-
 
         <Route path="GuestHomePage">
           <Route index element={<GuestHomePage />} />
@@ -66,40 +68,50 @@ function App() {
           <Route index element={<PharmSignup />} />
         </Route>
 
-        <Route path="forgot-password">
-          {/* <Route path="otp-verification" element={<OTPVerification />} />
-          <Route path="reset-password" element={<ResetPassword />} />
-          <Route path="password-changed" element={<PasswordChanged />} /> */}
-          <Route index element={<ForgotPassword />} />
-        </Route>
-
         <Route path="admin">
           <Route index element={<AdminHomePage />} />
           <Route path="pharmacists-list" element={<AdminPharmacistPage />} />
           <Route path="patients-list" element={<AdminPatientsPage />} />
           <Route path="admins-list" element={<AdminAdminsPage />} />
           <Route path="admin-medicine" element={<AdminMedicine />} />
+          <Route path="admin-salesreport" element={<AdminSalesReportPage />} />
+
           <Route path="profile" element={<AdminProfilePage />} />
         </Route>
 
         <Route path="Patient">
-          <Route index element={<PatientHomePage />} />
+          {/* <Route index element={<PatientHomePage />} /> */}
+          <Route index element={<PatientMedicine />} />
           <Route path="patient-medicine" element={<PatientMedicine />} />
+          {/* <Route path="patient-medicine" element={<FilterMedicine />} /> */}
           <Route path="patient-cart" element={<PatientCart />} />
 
           <Route path="patient-cartItem" element={<CartItems />} />
           {/* <Route path="patient-checkout" element={<PatientCheckOutModal />} /> */}
-          <Route path="patient-checkoutcomplete" element={<CheckOutDoneModal />} />
-          
+          <Route
+            path="patient-checkoutcomplete"
+            element={<CheckOutDoneModal />}
+          />
+
+          <Route path="patient-chatwithpharmacist" element={<ChatPat />} />
 
           <Route path="patient-myOrders" element={<PatientMyOrdersPage />} />
           <Route path="profile" element={<PatientProfile />} />
         </Route>
 
         <Route path="Pharmacist">
-          <Route index element={<PharmacistHomePage />} />
+          {/* <Route index element={<PharmacistHomePage />} /> */}
+          <Route index element={<PhMedicine />} />
+          <Route path="ph-notifications" element={<PharmTest />} />
+
           <Route path="ph-medicine" element={<PhMedicine />} />
+          {/* <Route path="ph-medicine" element={<ChatPat />} /> */}
+
           <Route path="pharmacist-profile" element={<PharmacistProfile />} />
+          <Route
+            path="ph-salesreport"
+            element={<PharmacistSalesReportPage />}
+          />
         </Route>
 
         <Route path="*" element={<>Page not found</>} />

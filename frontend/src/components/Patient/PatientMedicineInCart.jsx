@@ -67,28 +67,34 @@ function CartItems() {
         quantity: newQuantity,
       });
 
-      const price = response.data.items.filter(
-        (item) => item.medicine === itemId
-      )[0].price;
+      if (response.status === 200) {
+        const price = response.data.items.filter(
+          (item) => item.medicine === itemId
+        )[0].price;
 
-      setMedicine((prevMedicine) => {
-        if (prevMedicine && prevMedicine.items) {
-          const updatedItems = prevMedicine.items.map((item) =>
-            item.medicine === itemId
-              ? { ...item, quantity: newQuantity, price: price }
-              : item
-          );
+        setMedicine((prevMedicine) => {
+          if (prevMedicine && prevMedicine.items) {
+            const updatedItems = prevMedicine.items.map((item) =>
+              item.medicine === itemId
+                ? { ...item, quantity: newQuantity, price: price }
+                : item
+            );
 
-          return {
-            ...prevMedicine,
-            items: updatedItems,
-            total: response.data.total,
-          };
-        }
+            return {
+              ...prevMedicine,
+              items: updatedItems,
+              total: response.data.total,
+            };
+          }
 
-        // Return the unchanged state if items or prevMedicine is not defined
-        return prevMedicine;
-      });
+          // Return the unchanged state if items or prevMedicine is not defined
+          return prevMedicine;
+        });
+      } else {
+        console.log("Server error");
+        if (response.status === 400)
+          setError("Cannot change quantity to more than available quantity");
+      }
     } catch (error) {
       console.error("Error:", error.message);
     }
@@ -110,17 +116,6 @@ function CartItems() {
     });
   };
 
-  const plusMinusButtonStyle = {
-    width: "24px",
-    height: "24px",
-    borderRadius: "50%", // Makes the buttons circular
-    backgroundColor: "#4fa4ff", // Blue color
-    color: "white",
-    border: "none",
-    cursor: "pointer",
-    fontSize: "10px",
-  };
-
   const lineStyle = {
     borderBottom: "3px solid #ccc",
     width: "100%",
@@ -132,47 +127,13 @@ function CartItems() {
     width: "100%",
     margin: "5px 0 0 0",
   };
-  const cartItemStyle = {
-    display: "flex",
-    alignItems: "center",
-    paddingLeft: "20px", // Add padding on the left
-    borderRadius: "10px", // Apply rounded edges to each row
-    overflow: "hidden", // Ensure content within the rounded edges is visible
-    border: "20px solid white", // Add white borders
-    margin: "10px 0", // Add margin to separate the rows
-  };
-
-  const buttonsContainerStyle = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    marginRight: "10px", // Add margin to separate buttons
-  };
-
-  const quantityStyle = {
-    fontSize: "20px", // Increase font size
-    fontWeight: "bold", // Make it bold
-  };
-
-  const trashIconStyle = {
-    color: "red",
-    cursor: "pointer", // Add cursor style
-    fontSize: "18px", // Make the icon 1.5 times bigger (adjust the size as needed)
-    border: "none", // Remove the border
-    marginLeft: "900px", // Move the icon to the right by 200px
-    backgroundColor: "transparent",
-  };
-
-  const cartItemImageStyle = {
-    borderRadius: "5px", // Apply rounded corners to the image
-  };
 
   // Style for labels (Subtotal, Total, Delivery Fees)
-  const labelStyle = {
-    fontSize: "24px",
-    fontWeight: "bold",
-    textAlign: "right",
-  };
+  // const labelStyle = {
+  //   fontSize: "24px",
+  //   fontWeight: "bold",
+  //   textAlign: "right",
+  // };
 
   // Style for values (subtotal and total)
   const valueStyle = {
@@ -203,7 +164,7 @@ function CartItems() {
     //show the cart page without loading
     return (
       <div className="cart">
-        <h2 style={{ fontSize: "48px" }}>My Cart</h2>
+        <div style={{ fontSize: "2rem" }}>My Cart</div>
         <EmptyCart />
       </div>
     );
@@ -215,78 +176,144 @@ function CartItems() {
 
     return (
       <div className="cart">
-        <h2 style={{ fontSize: "48px" }}>My Cart</h2>
+        <div style={{ fontSize: "2rem" }}>My Cart</div>
         {medicine.items.map((item, index) => (
-          <div key={item.medicine}>
-            {/* <div style={lineStyle}></div> */}
-            <div style={cartItemStyle}>
-              <div style={buttonsContainerStyle}>
-                <button
-                  style={plusMinusButtonStyle}
+          <div
+            key={item.medicine}
+            className="d-flex align-items-center justify-content-between bg-white mb-3"
+          >
+            <div
+              style={{
+                marginLeft: "2rem",
+                marginTop: "0.2rem",
+                marginBottom: "0.2rem",
+              }}
+            >
+              {" "}
+              <img
+                src={item.image}
+                alt={item.name}
+                width="50"
+                height="90"
+                style={{ borderRadius: "5px", marginRight: "2rem" }}
+              />
+            </div>
+            <div style={{ marginLeft: "-28rem" }}>
+              {" "}
+              <div style={{ fontSize: "1.2rem" }}>
+                <strong>{item.name}</strong>
+              </div>
+              <div style={{ color: "lightgreen", marginLeft: "1.5rem" }}>
+                In Stock
+              </div>
+            </div>
+            <div>
+              <div
+                className=" d-flex align-items-center justify-content-center bg-light"
+                style={{
+                  borderRadius: "5px",
+                  height: "2rem",
+                  // position: "relative",
+                  // left: "50%", // Position the button horizontally centered
+                  transform: "translateX(-285%)",
+                  marginTop: "1rem  ",
+                }}
+              >
+                <Button
+                  style={{
+                    height: "1.8rem",
+                    marginRight: "1rem",
+                    left: "50%", // Position the button horizontally centered
+                    transform: "translateX(-50%)",
+                    lineHeight: "0.8rem",
+                  }}
                   onClick={() =>
                     handleQuantityChange(item.medicine, item.quantity + 1)
                   }
                 >
-                  +
-                </button>
-                <div style={quantityStyle}>{item.quantity}</div>
-                <button
-                  style={plusMinusButtonStyle}
+                  <strong>+</strong>
+                </Button>
+                {item.quantity}
+                <Button
+                  variant="secondary"
+                  style={{
+                    height: "1.8rem",
+                    marginLeft: "1rem",
+                    tight: "50%", // Position the button horizontally centered
+                    transform: "translateX(50%)",
+                    lineHeight: "0.8rem",
+                  }}
                   onClick={() =>
                     handleQuantityChange(item.medicine, item.quantity - 1)
                   }
                 >
-                  -
-                </button>
+                  <strong>-</strong>
+                </Button>
               </div>
-              <div className="cart-item-image">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  width="50"
-                  height="90"
-                  style={cartItemImageStyle}
-                />
+            </div>
+            <div style={{ width: "6rem" }}>
+              <div style={{ fontSize: "1.2rem" }}>
+                <strong>{`$${item.price}`}</strong>
               </div>
-              <div className="cart-item-details">
-                <div
-                  className="cart-item-name"
-                  style={{
-                    quantityStyle,
-                    marginLeft: "10px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {item.name}
-                </div>
-                <div
-                  className="cart-item-price"
-                  style={{ marginLeft: "10px" }}
-                >{`$${item.price}`}</div>
-              </div>
-              <button
+              <FontAwesomeIcon
+                style={{
+                  color: "#ff6b35",
+                  marginLeft: "4.5rem",
+                  marginTop: "1rem",
+                  cursor: "pointer",
+                }}
+                icon={faTrash}
                 onClick={() => handleDeleteItem(item.medicine)}
-                style={trashIconStyle}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
+              />
             </div>
           </div>
         ))}
         <div style={lineStyle}></div>
         <div style={{ textAlign: "center" }}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={labelStyle}>Subtotal:</div>
-            <div style={valueStyle}>{subtotal?.toFixed(2)} LE</div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "1rem",
+            }}
+          >
+            <div style={{ marginLeft: "60rem", fontSize: "1.5rem" }}>
+              <strong>Subtotal:</strong>
+            </div>
+
+            <div style={{ color: "#ea5b27", fontSize: "1.5rem" }}>
+              ${subtotal?.toFixed(2)}{" "}
+            </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={labelStyle}>Delivery Fees:</div>
-            <div style={valueStyle}>{delivery} LE</div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "1rem",
+            }}
+          >
+            <div style={{ marginLeft: "60rem", fontSize: "1.4rem" }}>
+              <strong>Delivery Fees:</strong>
+            </div>
+            <div style={{ color: "#ea5b27", fontSize: "1.4rem" }}>
+              ${delivery}
+            </div>
           </div>
           <div style={lineStyle2}></div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={labelStyle}>Total:</div>
-            <div style={valueStyle}>{total?.toFixed(2)} LE</div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "1rem",
+              marginBottom: "1rem",
+            }}
+          >
+            <div style={{ fontSize: "1.7rem" }}>
+              <strong>Total:</strong>
+            </div>
+            <div style={{ color: "#ea5b27", fontSize: "1.7rem" }}>
+              <strong>${total?.toFixed(2)}</strong>
+            </div>
           </div>
           <div style={lineStyle2}></div>
 
@@ -298,7 +325,7 @@ function CartItems() {
   </Link> */}
 
             <Button
-              variant="primary"
+              variant="secondary"
               style={checkoutButtonStyle}
               onClick={() => setCheckout(true)}
             >
@@ -312,7 +339,10 @@ function CartItems() {
                 delivery={delivery}
                 visibility={checkout} // Pass the checkout state
                 fetchCart={fetchData}
-                onHide={() => setCheckout(false)} // Function to hide the modal
+                onHide={() => {
+                  fetchData();
+                  setCheckout(false);
+                }} // Function to hide the modal
               />
             )}
             <div style={{ width: "50px" }}></div>

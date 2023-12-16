@@ -5,6 +5,7 @@ import { Container, Row } from "react-bootstrap";
 import PatientImg from "../../components/Patient/PatientImg";
 import PatientHamburgerMenu from "../../components/Patient/PatientHamburgerMenu";
 import { faBriefcaseMedical } from "@fortawesome/free-solid-svg-icons";
+import ChatPat from "../../components/ChatPat";
 export default function PatientHomePage() {
   return (
     <>
@@ -37,6 +38,8 @@ export default function PatientHomePage() {
           />
         </div>
       </Container>
+      <ChatPat who="patient" />
+
     </>
   );
 }

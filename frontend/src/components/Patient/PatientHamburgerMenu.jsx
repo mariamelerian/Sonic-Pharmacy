@@ -3,7 +3,8 @@ import {
   faRightFromBracket,
   faShoppingCart, 
   faBagShopping,
-  faUser
+  faUser,
+  faComments
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -119,48 +120,8 @@ function PatientHamburgerMenu() {
             </div>
           </div>
 
-          <hr className="menu-line" />
-          <a
-            id="home"
-            className="menu-item"
-            href="/patient"
-            onClick={closeMenu}
-            style={{
-              color: "var(--gray-600, #6C757D)",
-              fontFamily: "Roboto",
-              fontSize: "0.9375rem",
-              fontStyle: "normal",
-              fontWeight: 400,
-              lineHeight: "1rem" /* 106.667% */,
-              display: "flex",
-              alignItems: "center",
-              textDecoration: "none", // To remove underlines
-              padding: "0.5rem 0",
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="23"
-              height="23"
-              viewBox="0 0 23 23"
-              fill="none"
-              style={{ marginRight: "0.5rem" }}
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M2.87493 19.4062V10.0625H4.31243V19.4062C4.31243 19.5969 4.38816 19.7797 4.52295 19.9145C4.65774 20.0493 4.84056 20.125 5.03118 20.125H17.9687C18.1593 20.125 18.3421 20.0493 18.4769 19.9145C18.6117 19.7797 18.6874 19.5969 18.6874 19.4062V10.0625H20.1249V19.4062C20.1249 19.9781 19.8978 20.5266 19.4934 20.9309C19.089 21.3353 18.5406 21.5625 17.9687 21.5625H5.03118C4.45931 21.5625 3.91086 21.3353 3.50648 20.9309C3.10211 20.5266 2.87493 19.9781 2.87493 19.4062ZM18.6874 3.59373V8.62498L15.8124 5.74998V3.59373C15.8124 3.40311 15.8882 3.22029 16.0229 3.0855C16.1577 2.95071 16.3406 2.87498 16.5312 2.87498H17.9687C18.1593 2.87498 18.3421 2.95071 18.4769 3.0855C18.6117 3.22029 18.6874 3.40311 18.6874 3.59373Z"
-                fill="#6C757D"
-              />
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M10.4836 2.15623C10.7532 1.88674 11.1188 1.73535 11.4999 1.73535C11.8811 1.73535 12.2467 1.88674 12.5162 2.15623L22.0713 11.7099C22.2063 11.8448 22.2821 12.0279 22.2821 12.2187C22.2821 12.4096 22.2063 12.5926 22.0713 12.7276C21.9363 12.8626 21.7533 12.9384 21.5624 12.9384C21.3716 12.9384 21.1885 12.8626 21.0536 12.7276L11.4999 3.17254L1.94631 12.7276C1.81134 12.8626 1.6283 12.9384 1.43743 12.9384C1.24657 12.9384 1.06352 12.8626 0.928556 12.7276C0.793594 12.5926 0.717773 12.4096 0.717773 12.2187C0.717773 12.0279 0.793594 11.8448 0.928556 11.7099L10.4836 2.15623Z"
-                fill="#6C757D"
-              />
-            </svg>
-            Home
-          </a>
+          
+          
           {/* Add a line between menu items */}
           {/*    <hr className="menu-line" />
           <a
@@ -311,6 +272,7 @@ function PatientHamburgerMenu() {
           </a>
           <hr className="menu-line" />
 
+          
           <a
             id="logout"
             className="menu-item"

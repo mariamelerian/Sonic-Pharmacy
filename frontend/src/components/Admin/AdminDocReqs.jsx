@@ -38,13 +38,14 @@ export default function AdminDocReqs() {
     <Container
       className="bg-white px-5 py-4 d-flex align-items-center justify-content-center"
       style={{
-        margin: "20px",
+        // margin: "20px",
         display: "flex",
         flexDirection: "column",
-        marginLeft: "100px",
+        // marginLeft: "100px",
       }}
     >
       <AdminSearchBar />
+      {users.length === 0 && <div className="msg">No requests</div>}
 
       {users.map((user, index) => (
         <AdminDocReqCard
@@ -56,6 +57,7 @@ export default function AdminDocReqs() {
           docRate={user.hourlyRate}
           docAffiliation={user.affiliation}
           docEducation={user.education}
+          docFiles={user.files}
         />
       ))}
     </Container>

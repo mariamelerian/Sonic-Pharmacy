@@ -9,6 +9,7 @@ const nodemailer = require("nodemailer");
 const randomstring = require("randomstring");
 const Pharmacist = require("../Models/Pharmacist.js");
 const Patient = require("../Models/Patient.js");
+const session = require("express-session");
 
 const emailService = "youstina2307@outlook.com"; // e.g., 'gmail'
 const emailUser = "youstina2307@outlook.com";
@@ -39,8 +40,8 @@ const login = async (req, res) => {
     if (doctor1) {
       const auth = await bcrypt.compare(password, doctor1.password);
       if (auth) {
-        const token = createToken(doctor1._id, "pharmacist");
-        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge } * 1000);
+        const token = createToken(doctor1._id);
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
         req.session.userId = doctor1._id;
         return res.status(200).json({ message: "Pharmacist", user: doctor1 });
       }
@@ -50,8 +51,8 @@ const login = async (req, res) => {
     if (patient1) {
       const auth = await bcrypt.compare(password, patient1.password);
       if (auth) {
-        const token = createToken(patient1._id, "patient");
-        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge } * 1000);
+        const token = createToken(patient1._id);
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
         req.session.userId = patient1._id;
         console.log("logged in user: " + req.session.userId);
         return res.status(200).json({ message: "Patient", user: patient1 });
@@ -62,9 +63,11 @@ const login = async (req, res) => {
     if (admin1) {
       const auth = await bcrypt.compare(password, admin1.password);
       if (auth) {
-        const token = createToken(admin1._id, "administrator");
-        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge } * 1000);
+        const token = createToken(admin1._id);
+        res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+
         req.session.userId = admin1._id;
+        console.log("logged in user: " + req.session.userId);
         return res.status(200).json({ message: "Admin", user: admin1 });
       }
       return res.status(401).json({ message: "Invalid credentials" });
@@ -76,22 +79,24 @@ const login = async (req, res) => {
     return res.status(500).json({ message: "Server Error" });
   }
 };
+
 const requireAuth = async (req, res, next) => {
   const token = req.cookies.jwt;
-
-  if (token) {
+  console.log("token: " + token);
+  console.log("session: " + req.session.userId);
+  if (req.session.userId) {
     jwt.verify(token, "secret-unkown", (err, decodedToken) => {
       if (err) {
         console.log(err.message);
         res.redirect("/login");
       } else {
         // Store the user information in the request object
-        req.user = decodedToken;
+        //req.user = decodedToken;
         next();
       }
     });
   } else {
-    res.redirect("/login");
+    res.status(401).send("Unauthorized");
   }
 };
 

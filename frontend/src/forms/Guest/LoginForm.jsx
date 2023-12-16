@@ -76,6 +76,7 @@ const LoginForm = () => {
               documents: user.files,
               userId: user._id,
               isLoggedIn: true,
+              wallet: user.wallet,
             })
           );
           navigate("/pharmacist");
@@ -86,6 +87,7 @@ const LoginForm = () => {
             setCredentialsAdminPharm({
               userName: username,
               userId: user._id,
+              name: user.name,
             })
           );
 
@@ -115,16 +117,27 @@ const LoginForm = () => {
 
   return (
     <div className="col-9 form-container">
-      <div className="form-title">Welcome Back!</div>
+      <div
+        className="form-title"
+        style={{
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontWeight: 600,
+          fontSize: "2rem",
+        }}
+      >
+        Welcome Back!
+      </div>
       <Form className="rounded-3" onSubmit={handleSubmit}>
         <FormInput
           name="Username"
+          style={{ fontSize: "0.9rem" }}
           type="text"
           placeholder="john.doe"
           onChange={(e) => setUsername(e.target.value)}
         />
         <FormPassword
           name="Password"
+          style={{ fontSize: "0.9rem" }}
           type="password"
           placeholder="**************"
           onChange={(e) => setPassword(e.target.value)}
@@ -157,6 +170,16 @@ const LoginForm = () => {
           </div>
         </div> */}
         {error1 && <div className="error">{error1}</div>}
+        <div className="form-comment" style={{ cursor: "default" }}>
+          Don't have an account?{" "}
+          <div
+            className="text-decoration-none  link-decoration "
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("patient-signup")}
+          >
+            Sign Up
+          </div>
+        </div>
       </Form>
     </div>
   );

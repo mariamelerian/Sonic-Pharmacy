@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { Card, Form, Button } from "react-bootstrap";
+import { Card, Form, Button, Dropdown } from "react-bootstrap";
 
 function MedicineForm({ onClose, fetchData }) {
   const [medicineName, setMedicineName] = useState(null);
@@ -16,7 +16,6 @@ function MedicineForm({ onClose, fetchData }) {
   const [selectedImage, setSelectedImage] = useState(null); // New state variable for the selected image file
 
   const handleSave = async (e) => {
-    console.log("wselt henaaaa");
     e.preventDefault();
     setError(null);
     if (
@@ -37,45 +36,63 @@ function MedicineForm({ onClose, fetchData }) {
       const activeIngredientsArray = ingredients.split("-");
       let picture = null;
       if (setSelectedImage != null) {
-        console.log("here");
         // Read the file as a data URL
         // Create a FileReader instance
         const reader = new FileReader();
         // Set the image once loaded into file reader
         reader.onload = async (e) => {
-          let imageSrc = reader.result.split(",")[1];
-          imageSrc = "data:image/jpeg;base64," + imageSrc + "";
-          console.log(imageSrc);
+          const img = new Image();
+          img.src = reader.result;
 
-          picture = imageSrc;
+          img.onload = async () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
 
-          console.log("sending response");
-          const response = await axios.post("/newMedicine", {
-            picture: selectedImage,
-            name: medicineName,
-            price: price,
-            description: description,
-            quantity: quantity,
-            sales: sales,
-            activeIngredients: activeIngredientsArray,
-            medicinalUse: medicinalUse,
-            picture: picture,
-          });
+            const targetWidth = 100;
+            const targetHeight = (targetWidth / img.width) * img.height;
 
-          console.log(response);
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
 
-          if (response.status === 200) {
-            console.log("here");
-            setSuccess(true);
-            setTimeout(() => {
-              setSuccess(false); // Clear the error after 5 seconds
-            }, 5000);
-            fetchData();
-          } else if (response.status === 500) {
-            setError("Medicine not found");
-          } else {
-            setError("Error");
-          }
+            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+            const base64ImageData = canvas.toDataURL("image/jpeg");
+            picture = base64ImageData;
+
+            console.log(picture);
+
+            console.log("sending response");
+            const response = await axios.post("/newMedicine", {
+              picture: selectedImage,
+              name: medicineName,
+              price: price,
+              description: description,
+              quantity: quantity,
+              sales: sales,
+              activeIngredients: activeIngredientsArray,
+              medicinalUse: medicinalUse,
+              picture: picture,
+            });
+
+            console.log(response);
+
+            if (response.status === 200) {
+              console.log("here");
+              setSuccess(true);
+              setTimeout(() => {
+                setSuccess(false); // Clear the error after 5 seconds
+              }, 5000);
+              fetchData();
+            } else if (response.status === 500) {
+              setError("Medicine not found");
+            } else {
+              setError("Error");
+            }
+          };
+          // let imageSrc = reader.result.split(",")[1];
+          // imageSrc = "data:image/jpeg;base64," + imageSrc + "";
+          // console.log(imageSrc);
+
+          // picture = imageSrc;
         };
 
         reader.readAsDataURL(selectedImage);
@@ -84,14 +101,10 @@ function MedicineForm({ onClose, fetchData }) {
       setSuccess(false);
       setError(error.message);
     }
-    setTimeout(() => {
-      setError(null); // Clear the error after 5 seconds
-    }, 5000);
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-
+  const handleImageUpload = async (e) => {
+    let file = e.target.files[0];
     if (!file) return;
 
     setSelectedImage(file);
@@ -99,7 +112,6 @@ function MedicineForm({ onClose, fetchData }) {
 
   return (
     <Card className="mb-4 mx-3 bg-light">
-      <Card.Header className="text-center">Add New Medicine</Card.Header>
       <Card.Body>
         <Form>
           <Form.Group>
@@ -129,27 +141,64 @@ function MedicineForm({ onClose, fetchData }) {
               onChange={(e) => setDescription(e.target.value)}
             />
           </Form.Group>
+
           <Form.Group>
             <Form.Label>Medicinal Use</Form.Label>
-            <Form.Control
-              as="select"
-              name="medicinalUse"
-              value={medicinalUse}
-              onChange={(e) => setMedicinalUse(e.target.value)}
-            >
-              <option value="">Select Medicinal Use</option>
-              <option value="Pain Relief">Pain Relief</option>
-              <option value="Fever Relief">Fever Relief</option>
-              <option value="Allergy Relief">Allergy Relief</option>
-              <option value="Digestive Health">Digestive Health</option>
-              <option value="Respiratory Relief">Respiratory Relief</option>
-              <option value="Anxiety Relief">Anxiety Relief</option>
-              <option value="Cholesterol Management">
-                Cholesterol Management
-              </option>
-              <option value="Diabetes Management">Diabetes Management</option>
-              <option value="Infection Treatment">Infection Treatment</option>
-            </Form.Control>
+            <Dropdown>
+              <Dropdown.Toggle
+                className="custom-dropdown-toggle"
+                id="dropdown-basic"
+              >
+                {medicinalUse || "Select Medicinal Use"}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu className="custom-dropdown-toggle">
+                <Dropdown.Item onClick={() => setMedicinalUse("")}>
+                  Select Medicinal Use
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setMedicinalUse("Pain Relief")}>
+                  Pain Relief
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setMedicinalUse("Fever Relief")}>
+                  Fever Relief
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Allergy Relief")}
+                >
+                  Allergy Relief
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Digestive Health")}
+                >
+                  Digestive Health
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Respiratory Relief")}
+                >
+                  Respiratory Relief
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Anxiety Relief")}
+                >
+                  Anxiety Relief
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Cholesterol Management")}
+                >
+                  Cholesterol Management
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Diabetes Management")}
+                >
+                  Diabetes Management
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Infection Treatment")}
+                >
+                  Infection Treatment
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Form.Group>
           <Form.Group>
             <Form.Label>Active Ingredients</Form.Label>
@@ -190,8 +239,12 @@ function MedicineForm({ onClose, fetchData }) {
             />
           </Form.Group>
         </Form>
-        <div className="d-flex justify-content-end">
-          <Button className="mr-2" onClick={handleSave}>
+        <div className="d-flex justify-content-end ">
+          <Button
+            className="mr-2"
+            onClick={handleSave}
+            style={{ marginTop: "1rem", width: "10rem" }}
+          >
             Save
           </Button>
           {/* <Button variant="secondary" onClick={onClose}>
