@@ -205,17 +205,7 @@ const viewChats = async (req, res) => {
         chatNames.push("Dr. " + doc.name + "-" + doc._id);
       }
     } else {
-      // User is neither a doctor nor a pharmacist
-      const appointments = await appointmentModel.find({ patientID: userID });
-      for (const appointment of appointments) {
-        const doctorID = appointment.doctorID;
-        const doc = await doctorModel.findById(doctorID);
-        if (doc) {
-          chatNames.push("Dr. " + doc.name + "-" + doc._id);
-        }
-      }
       const allPharmacists = await Pharmacist.find();
-      console.log(allPharmacists);
       if (allPharmacists) {
         for (const pharmacist of allPharmacists) {
           chatNames.push(
