@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   userName: "",
   userId: "",
+  name: "",
   isLoggedIn: false,
 };
 
@@ -12,12 +13,14 @@ const loginSlice = createSlice({
   reducers: {
     setCredentialsAdminPharm: (state, action) => {
       state.userName = action.payload.userName;
+      state.name = action.payload.name;
       state.userId = action.payload.userId;
       state.isLoggedIn = action.payload.isLoggedIn;
     },
     logoutAdminPharm: (state, action) => {
       state.userName = "";
       state.userId = "";
+      state.name = "";
       state.isLoggedIn = false;
     },
 

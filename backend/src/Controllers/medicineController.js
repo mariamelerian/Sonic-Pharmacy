@@ -18,7 +18,22 @@ const storage = multer.diskStorage({
 
 const getMedicines = async (req, res) => {
   try {
-    const medicines = await Medicine.find({ state: "Active" });
+    const medicines = await Medicine.find({
+      state: "Active",
+      requiresPrescription: false,
+    });
+    res.status(200).json(medicines);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getPatientMedicines = async (req, res) => {
+  try {
+    const medicines = await Medicine.find({
+      state: "Active",
+      requiresPrescription: false,
+    });
     res.status(200).json(medicines);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -109,7 +124,7 @@ const createMedicine = async (req, res) => {
   if (!req.body.picture) {
     let picture = {};
     const path = require("path");
-    const filePath = path.join(__dirname, "../res/default-medicine-pic.jpg");
+    const filePath = path.join(__dirname, "../res/default-medicine-pic.png");
     const imageBuffer = fs.readFileSync(filePath);
     sharp(imageBuffer)
       .resize({ width: 100 }) // Adjust width as needed
@@ -246,8 +261,6 @@ const getTotalMonthSales = async (req, res) => {
       let totalQuantitySold = 0;
       for (let j = 0; j < medicine.salesData.length; j++) {
         let sale = medicine.salesData[j];
-
-        console.log(sale.date.getMonth());
         if (sale.date.getMonth() == month) {
           totalRevenue += sale.quantity * medicine.price;
           totalQuantitySold += sale.quantity;
@@ -272,7 +285,6 @@ const getFilteredSalesReport = async (req, res) => {
   let { medicineNames, startDate, endDate } = req.query;
 
   //print current date as a normal date string
-  console.log(startDate);
   try {
     let filteredSales = [];
 
@@ -297,9 +309,6 @@ const getFilteredSalesReport = async (req, res) => {
       filteredSales = filteredSales.filter((medicine) => {
         medicine.salesData = medicine.salesData.filter((sale) => {
           const saleDate = sale.date.toISOString().split("T")[0];
-          console.log(saleDate);
-          console.log(startDate);
-
           return saleDate == startDate;
         });
         return medicine.salesData.length > 0;
@@ -324,8 +333,6 @@ const getFilteredSalesReport = async (req, res) => {
       filteredSales = filteredSales.filter((medicine) => {
         medicine.salesData = medicine.salesData.filter((sale) => {
           const saleDate = sale.date.toISOString().split("T")[0];
-          console.log(saleDate);
-          console.log(startDate);
 
           return saleDate == startDate;
         });
@@ -380,19 +387,23 @@ const getPrescribedMedicines = async (req, res) => {
     patientID: patientId,
     date: { $gte: formattedOneMonthAgo },
   });
-  console.log(prescriptions);
+
+  let prescribedMedicineNames = new Set();
 
   let prescribedMedicines = [];
   for (let i = 0; i < prescriptions.length; i++) {
     let prescription = prescriptions[i];
     for (let j = 0; j < prescription.medicine.length; j++) {
       let medicineName = prescription.medicine[j][0];
+      if (prescribedMedicineNames.has(medicineName)) continue;
       let medicine = await Medicine.findOne({ name: medicineName });
       if (medicine) {
         prescribedMedicines.push(medicine);
+        prescribedMedicineNames.add(medicineName);
       }
     }
   }
+
   res.status(200).json(prescribedMedicines);
 };
 
@@ -413,4 +424,5 @@ module.exports = {
   getArchivedMedicines,
   unarchiveMedicine,
   getPrescribedMedicines,
+  getPatientMedicines,
 };

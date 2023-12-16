@@ -121,6 +121,12 @@ function PatientPrescribedMedicine() {
   };
 
   const medicines = responseData;
+
+  const filteredMedicines = medicines.filter(
+    (medicine) =>
+      medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      medicine.medicinalUse.includes(filterMedicinalUse)
+  );
   const showModal = !!selectedMedicine;
 
   return (
@@ -141,9 +147,16 @@ function PatientPrescribedMedicine() {
         </div>
       ) : error ? (
         <div className="error">{error}</div>
+      ) : medicines.length === 0 ? ( // Check if there are no prescribed medicines
+        <div
+          className="msg"
+          style={{ width: "20rem", marginLeft: "30rem", textAlign: "center" }}
+        >
+          No prescribes medicines
+        </div>
       ) : (
         <Row>
-          {medicines.map((medicine, index) => (
+          {filteredMedicines.map((medicine, index) => (
             <Col key={medicine.medicineName} lg={3} md={4} sm={6}>
               <Card className="mb-4 mx-3 bg-light">
                 <Card.Body className="text-center">
@@ -217,7 +230,7 @@ function PatientPrescribedMedicine() {
                         }}
                       >
                         <div className="medicine-price">
-                          Price: {medicine.price} LE
+                          Price: ${medicine.price}
                         </div>
                         <div>Prescribed</div>
                       </div>
@@ -390,7 +403,7 @@ function PatientPrescribedMedicine() {
                                   }}
                                 >
                                   <div className="medicine-price">
-                                    <strong>Price: </strong> {medicine.price} LE
+                                    <strong>Price: </strong> ${medicine.price}
                                   </div>
                                 </div>
                                 {expandedMedicineInModal === index && (

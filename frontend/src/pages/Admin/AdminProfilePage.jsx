@@ -15,7 +15,7 @@ function AdminProfilePage() {
     fontSize: "1rem", // Font size for all information
     marginBottom: "0.7rem", // Margin bottom for all information
     verticalAlign: "top", // Align items at the top of each column
-    fontWeight: "600", // Bold font weight for information title
+    fontWeight: "500", // Bold font weight for information title
   };
 
   const labelStyle = {
@@ -55,9 +55,15 @@ function AdminProfilePage() {
               <ListGroup.Item>
                 <div style={listItemStyle}>
                   <span style={{ color: "#099BA0", fontWeight: "bold" }}>
-                    Username:
+                    Username:{" "}
                   </span>
                   {user.userName}
+                </div>
+                <div style={listItemStyle}>
+                  <span style={{ color: "#099BA0", fontWeight: "bold" }}>
+                    Name:{" "}
+                  </span>
+                  {user.name}
                 </div>
                 <div style={listItemStyle}>
                   <span style={{ color: "#099BA0", fontWeight: "bold" }}>
@@ -69,7 +75,7 @@ function AdminProfilePage() {
                         cursor: "pointer",
                         fontWeight: "lighter",
                         textDecoration: "underline",
-                        color: "blue",
+                        color: "black",
                       }}
                       onClick={toggleChangePass} // Add your click handler here
                     >

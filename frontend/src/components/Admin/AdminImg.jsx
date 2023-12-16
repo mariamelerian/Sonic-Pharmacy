@@ -1,10 +1,10 @@
 import { Card, Image } from "react-bootstrap";
 import mainImg from "../../Assets/Admin/adminHome.png";
-/* import { useSelector } from "react-redux";
-import loginAdminReducer from "../../state/loginAdminReducer"; */
+import { useSelector } from "react-redux";
+import loginAdminReducer from "../../state/loginAdminReducer";
 
 function AdminImg() {
-  // const name = useSelector((state) => state.adminLogin.userName);
+  const name = useSelector((state) => state.adminLogin.name);
   return (
     <div>
       <Card
@@ -39,7 +39,7 @@ function AdminImg() {
               lineHeight: "120%",
             }}
           >
-            Hello, Admin
+            Hello {name}
           </Card.Text>
         </Card>
       </Card>

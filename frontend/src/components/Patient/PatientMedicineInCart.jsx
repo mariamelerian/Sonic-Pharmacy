@@ -116,17 +116,6 @@ function CartItems() {
     });
   };
 
-  const plusMinusButtonStyle = {
-    width: "24px",
-    height: "24px",
-    borderRadius: "50%",
-    backgroundColor: "#4fa4ff",
-    color: "white",
-    border: "none",
-    cursor: "pointer",
-    fontSize: "18px", // Increase the font size
-    fontWeight: "bold", // Make it bold
-  };
   const lineStyle = {
     borderBottom: "3px solid #ccc",
     width: "100%",
@@ -138,44 +127,13 @@ function CartItems() {
     width: "100%",
     margin: "5px 0 0 0",
   };
-  const cartItemStyle = {
-    display: "flex",
-    alignItems: "center",
-    paddingLeft: "20px", // Add padding on the left
-    borderRadius: "10px", // Apply rounded edges to each row
-    overflow: "hidden", // Ensure content within the rounded edges is visible
-    border: "20px solid white", // Add white borders
-    margin: "10px 0", // Add margin to separate the rows
-  };
-
-  const buttonsContainerStyle = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    marginRight: "10px", // Add margin to separate buttons
-  };
-
-  const trashIconStyle = {
-    color: "red",
-    marginLeft: "auto", // Push the icon to the right
-    cursor: "pointer", // Add cursor style
-    fontSize: "18px", // Make the icon 1.5 times bigger (adjust the size as needed)
-    border: "none", // Remove the border
-
-    marginRight: "70px", // Move the icon to the right by 200px
-    backgroundColor: "transparent",
-  };
-
-  const cartItemImageStyle = {
-    borderRadius: "5px", // Apply rounded corners to the image
-  };
 
   // Style for labels (Subtotal, Total, Delivery Fees)
-  const labelStyle = {
-    fontSize: "24px",
-    fontWeight: "bold",
-    textAlign: "right",
-  };
+  // const labelStyle = {
+  //   fontSize: "24px",
+  //   fontWeight: "bold",
+  //   textAlign: "right",
+  // };
 
   // Style for values (subtotal and total)
   const valueStyle = {
@@ -206,7 +164,7 @@ function CartItems() {
     //show the cart page without loading
     return (
       <div className="cart">
-        <h2 style={{ fontSize: "48px" }}>My Cart</h2>
+        <div style={{ fontSize: "2rem" }}>My Cart</div>
         <EmptyCart />
       </div>
     );
@@ -218,62 +176,8 @@ function CartItems() {
 
     return (
       <div className="cart">
-        <h2 style={{ fontSize: "48px" }}>My Cart</h2>
+        <div style={{ fontSize: "2rem" }}>My Cart</div>
         {medicine.items.map((item, index) => (
-          // <div
-          //   key={item.medicine}
-          //   className="d-flex align-items-center justify-content-between"
-          // >
-          //   {/* <div style={lineStyle}></div> */}
-          //   <div
-          //     style={cartItemStyle}
-          //     className="d-flex align-items-center justify-content-between"
-          //   >
-          //     <div className="cart-item-image">
-          //       <img
-          //         src={item.image}
-          //         alt={item.name}
-          //         width="50"
-          //         height="90"
-          //         style={{ borderRadius: "5px", marginRight: "2rem" }}
-          //       />
-          //     </div>
-          //     <div>
-          // <div>{item.name}</div>
-          // <div style={{ color: "lightgreen", marginLeft: "1.5rem" }}>
-          //   In Stock
-          // </div>
-          //   {/* <div>{`$${item.price}`}</div> */}
-          // </div>
-
-          //     <div className="d-flex" style={{ background: "red" }}>
-          //       {" "}
-          //       <Button
-          //         onClick={() =>
-          //           handleQuantityChange(item.medicine, item.quantity + 1)
-          //         }
-          //       >
-          //         +
-          //       </Button>
-          //       <div>{item.quantity}</div>
-          //       <Button
-          // onClick={() =>
-          //   handleQuantityChange(item.medicine, item.quantity - 1)
-          // }
-          //       >
-          //         -
-          //       </Button>
-          //     </div>
-          //     <div>
-          //       <button
-          //         onClick={() => handleDeleteItem(item.medicine)}
-          //         style={trashIconStyle}
-          //       >
-          //         <FontAwesomeIcon icon={faTrash} />
-          //       </button>
-          //     </div>
-          //   </div>
-          // </div>
           <div
             key={item.medicine}
             className="d-flex align-items-center justify-content-between bg-white mb-3"
@@ -366,18 +270,50 @@ function CartItems() {
         ))}
         <div style={lineStyle}></div>
         <div style={{ textAlign: "center" }}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={labelStyle}>Subtotal:</div>
-            <div style={valueStyle}>{subtotal?.toFixed(2)} LE</div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "1rem",
+            }}
+          >
+            <div style={{ marginLeft: "60rem", fontSize: "1.5rem" }}>
+              <strong>Subtotal:</strong>
+            </div>
+
+            <div style={{ color: "#ea5b27", fontSize: "1.5rem" }}>
+              ${subtotal?.toFixed(2)}{" "}
+            </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={labelStyle}>Delivery Fees:</div>
-            <div style={valueStyle}>{delivery} LE</div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "1rem",
+            }}
+          >
+            <div style={{ marginLeft: "60rem", fontSize: "1.4rem" }}>
+              <strong>Delivery Fees:</strong>
+            </div>
+            <div style={{ color: "#ea5b27", fontSize: "1.4rem" }}>
+              ${delivery}
+            </div>
           </div>
           <div style={lineStyle2}></div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={labelStyle}>Total:</div>
-            <div style={valueStyle}>{total?.toFixed(2)} LE</div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "1rem",
+              marginBottom: "1rem",
+            }}
+          >
+            <div style={{ fontSize: "1.7rem" }}>
+              <strong>Total:</strong>
+            </div>
+            <div style={{ color: "#ea5b27", fontSize: "1.7rem" }}>
+              <strong>${total?.toFixed(2)}</strong>
+            </div>
           </div>
           <div style={lineStyle2}></div>
 
@@ -389,7 +325,7 @@ function CartItems() {
   </Link> */}
 
             <Button
-              variant="primary"
+              variant="secondary"
               style={checkoutButtonStyle}
               onClick={() => setCheckout(true)}
             >

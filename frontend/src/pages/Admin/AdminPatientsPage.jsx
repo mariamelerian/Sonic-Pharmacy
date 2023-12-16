@@ -23,10 +23,10 @@ export default function AdminPatientsPage() {
       <Container
         className="bg-white px-5 py-4 d-flex align-items-center justify-content-center"
         style={{
-          margin: "20px",
+          // margin: "20px",
           display: "flex",
           flexDirection: "column",
-          marginLeft: "100px",
+          // marginLeft: "100px",
         }}
       >
         {/* <AdminSearchBar /> */}

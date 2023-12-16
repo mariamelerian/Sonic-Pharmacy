@@ -18,7 +18,6 @@ import {
   Modal,
   FormControl,
 } from "react-bootstrap";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import axios from "axios";
 
 export default function ChatPat({ who }) {
@@ -26,29 +25,15 @@ export default function ChatPat({ who }) {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(null);
   const [chosen, setChosen] = useState(false);
+  const [chosenName, setChosenName] = useState("");
   const [myMessage, setMyMessage] = useState("");
   const [chats, setChats] = useState([]);
-
-  ////////////////////////////video
-  const [me, setMe] = useState("");
-  const [name, setName] = useState("");
+  const [myContacts, setMyContacts] = useState([]);
+  const [chatData, setChatData] = useState([]);
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("/patientChat");
-      if (response.status === 200) {
-        console.log(response.data.messages);
-        setChats(response.data.messages);
-      }
-    } catch (error) {
-      console.log(error.message);
-      setError(error.response.data.message);
-    }
-  };
 
   const buttonStyle = {
     position: "fixed",
@@ -136,19 +121,56 @@ export default function ChatPat({ who }) {
   const buttonTextPosition = isHovered ? "0" : "-100%";
   const buttonTextOpacity = isHovered ? 1 : 0;
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const setChat = (name) => {
+    setChosen(true);
+    setIsOpen(false);
+    setChosenName(name);
+    fetchChatData(name);
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.post("/viewChats");
+      if (response.status === 200) {
+        setMyContacts(response.data.chatNames);
+      }
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
+
+  const fetchChatData = async (name) => {
+    const id = name.split("-")[1];
+    console.log(id);
+    try {
+      const response = await axios.post("/viewChat", { _id: id });
+      if (response.status === 200) {
+        setChatData(response.data.chat.messages);
+      }
+    } catch (error) {
+      setChatData([]);
+      setError(error.response.data.message);
+    }
+  };
+
   const sendMessage = async () => {
+    const id = chosenName.split("-")[1];
+
     if (myMessage) {
       try {
-        const response = await axios.post("/sendPatientChatMessage", {
-          sender: "Patient",
-          content: myMessage,
+        const response = await axios.post("/sendMessage", {
+          recipientID: id,
+          message: myMessage,
         });
         if (response.status === 200) {
-          setChats(response.data.messages);
+          fetchChatData(chosenName);
           setMyMessage("");
         }
       } catch (error) {
-        console.log(error.message);
         setError(error.response.data.message);
       }
     }
@@ -161,7 +183,8 @@ export default function ChatPat({ who }) {
           style={buttonStyle}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          onClick={() => setIsOpen(true)} //trigger openning chat
+          onClick={() => setIsOpen(true)}
+          variant="secondary"
         >
           <div style={buttonContentStyle}>
             <FontAwesomeIcon
@@ -176,13 +199,59 @@ export default function ChatPat({ who }) {
                 whiteSpace: "nowrap",
               }}
             >
-              {"Chat with a Pharmacist"}
+              {who === "patient" ? "Chat with a pharmacist" : "Chat"}
             </span>
           </div>
         </Button>
       )}
-
       {isOpen && (
+        <Container
+          fluid
+          className="d-flex flex-column bg-light"
+          style={containerStyle}
+        >
+          <Navbar
+            className="d-flex justify-content-between p-1"
+            style={{ backgroundColor: "#ff6b35", width: "100%" }}
+          >
+            <div style={{ color: "white", marginLeft: "1rem" }}>
+              {who === "patient" ? "Available Pharmacist" : "Your Contacts"}
+            </div>
+            <Button
+              variant="link"
+              onClick={() => {
+                setIsOpen(false);
+              }}
+              style={{ alignSelf: "flex-end" }}
+            >
+              <FontAwesomeIcon icon={faTimes} style={{ color: "white" }} />
+            </Button>
+          </Navbar>
+
+          <ListGroup
+            as="ol"
+            className="flex-grow-1"
+            style={{ overflowY: "auto" }}
+          >
+            {myContacts.map((name, index) => (
+              <ListGroup.Item
+                key={index}
+                as="li"
+                className="d-flex justify-content-between align-items-start"
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setChat(name);
+                }}
+              >
+                <div className="d-flex flex-column">
+                  <div>{name.split("-")[0]}</div>
+                </div>
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        </Container>
+      )}
+      {chosen && (
         <div>
           {" "}
           <Container
@@ -192,9 +261,9 @@ export default function ChatPat({ who }) {
           >
             <Navbar
               className="d-flex justify-content-between p-1"
-              style={{ backgroundColor: "#05afb9", width: "100%" }}
+              style={{ backgroundColor: "#ff6b35", width: "100%" }}
             >
-              <div>
+              <div style={{ fontSize: "1rem" }}>
                 {" "}
                 <FontAwesomeIcon
                   icon={faArrowLeft}
@@ -205,16 +274,18 @@ export default function ChatPat({ who }) {
                   }}
                   onClick={() => {
                     setChosen(false);
+                    setChosenName("");
+                    setChatData([]);
                     setIsOpen(true);
                   }}
                 />
-                {"Chat with a Pharmacist"}
+                {chosenName.split("-")[0]}
               </div>
               <div>
                 <Button
                   variant="link"
                   onClick={() => {
-                    setIsOpen(false);
+                    setChosen(false);
                   }}
                   style={{ color: "white", alignSelf: "flex-end" }}
                 >
@@ -230,23 +301,18 @@ export default function ChatPat({ who }) {
               style={{ width: "100%", padding: "10px", overflowY: "auto" }}
               className="d-flex flex-column"
             >
-              {/* <change */}
-              {chats.map((item, index) => (
+              {chatData.map((item, index) => (
                 <div
                   key={index}
-                  className={
-                    item.sender === "Patient" ? "text-end" : "text-start"
-                  }
-                  style={
-                    item.sender === "Patient" ? { ...myMsg } : { ...otherMsg }
-                  }
+                  className={item[0] === who ? "text-end" : "text-start"}
+                  style={item[0] === who ? { ...myMsg } : { ...otherMsg }}
                 >
-                  <div>{item.content}</div>
+                  <div>{item[3]}</div>
                   <div style={{ fontSize: "0.6rem", textAlign: "end" }}>
-                    {/* {item[1].split("-")[2]}
+                    {item[1].split("-")[2]}
                     {"/"}
-                    {item[1].split("-")[1]} {item[2]} */}
-                    {item.sender === "Patient" && (
+                    {item[1].split("-")[1]} {item[2]}
+                    {item[0] === who && (
                       <FontAwesomeIcon
                         icon={faCheckDouble}
                         style={{ marginLeft: "0.3rem", color: "#adb5bd " }}
@@ -265,6 +331,7 @@ export default function ChatPat({ who }) {
                   marginRight: "1rem",
                   padding: "5px",
                   border: "1px solid transparent",
+                  fontSize: "0.98rem",
                 }}
                 value={myMessage}
                 onChange={(e) => setMyMessage(e.target.value)}
@@ -272,7 +339,7 @@ export default function ChatPat({ who }) {
               <FontAwesomeIcon
                 icon={faPaperPlane}
                 style={{
-                  color: "#05afb9",
+                  color: "#ff6b35",
                   marginRight: "1rem",
                   cursor: "pointer",
                 }}

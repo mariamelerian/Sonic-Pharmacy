@@ -87,6 +87,7 @@ const LoginForm = () => {
             setCredentialsAdminPharm({
               userName: username,
               userId: user._id,
+              name: user.name,
             })
           );
 
@@ -116,16 +117,27 @@ const LoginForm = () => {
 
   return (
     <div className="col-9 form-container">
-      <div className="form-title">Welcome Back!</div>
+      <div
+        className="form-title"
+        style={{
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontWeight: 600,
+          fontSize: "2rem",
+        }}
+      >
+        Welcome Back!
+      </div>
       <Form className="rounded-3" onSubmit={handleSubmit}>
         <FormInput
           name="Username"
+          style={{ fontSize: "0.9rem" }}
           type="text"
           placeholder="john.doe"
           onChange={(e) => setUsername(e.target.value)}
         />
         <FormPassword
           name="Password"
+          style={{ fontSize: "0.9rem" }}
           type="password"
           placeholder="**************"
           onChange={(e) => setPassword(e.target.value)}
