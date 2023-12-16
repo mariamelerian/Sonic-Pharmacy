@@ -20,6 +20,7 @@ const dummyData = [
     sales: 400,
     activeIngredients: ["Paracetamol"],
     medicinalUse: medicinalUsesArray[2],
+    requiresPrescription: false,
   },
   {
     name: "Loratadine",
@@ -29,6 +30,7 @@ const dummyData = [
     sales: 150,
     activeIngredients: ["Loratadine"],
     medicinalUse: medicinalUsesArray[3],
+    requiresPrescription: false,
   },
   {
     name: "Omeprazole",
@@ -38,6 +40,7 @@ const dummyData = [
     sales: 100,
     activeIngredients: ["Omeprazole"],
     medicinalUse: medicinalUsesArray[4],
+    requiresPrescription: false,
   },
   {
     name: "Salbutamol",
@@ -47,6 +50,7 @@ const dummyData = [
     sales: 120,
     activeIngredients: ["Salbutamol"],
     medicinalUse: medicinalUsesArray[5],
+    requiresPrescription: false,
   },
   {
     name: "Diazepam",
@@ -56,6 +60,7 @@ const dummyData = [
     sales: 80,
     activeIngredients: ["Diazepam"],
     medicinalUse: medicinalUsesArray[6],
+    requiresPrescription: true,
   },
   {
     name: "Simvastatin",
@@ -65,6 +70,7 @@ const dummyData = [
     sales: 200,
     activeIngredients: ["Simvastatin"],
     medicinalUse: medicinalUsesArray[7],
+    requiresPrescription: true,
   },
   {
     name: "Metformin",
@@ -74,6 +80,7 @@ const dummyData = [
     sales: 250,
     activeIngredients: ["Metformin"],
     medicinalUse: medicinalUsesArray[8],
+    requiresPrescription: true,
   },
   {
     name: "Amoxicillin",
@@ -83,6 +90,7 @@ const dummyData = [
     sales: 300,
     activeIngredients: ["Amoxicillin"],
     medicinalUse: medicinalUsesArray[9],
+    requiresPrescription: false,
   },
   {
     name: "Ranitidine",
@@ -92,6 +100,7 @@ const dummyData = [
     sales: 120,
     activeIngredients: ["Ranitidine"],
     medicinalUse: medicinalUsesArray[0],
+    requiresPrescription: true,
   },
   {
     name: "Ciprofloxacin",
@@ -101,6 +110,7 @@ const dummyData = [
     sales: 150,
     activeIngredients: ["Ciprofloxacin"],
     medicinalUse: medicinalUsesArray[1],
+    requiresPrescription: false,
   },
   {
     name: "Fluoxetine",
@@ -110,6 +120,7 @@ const dummyData = [
     sales: 180,
     activeIngredients: ["Fluoxetine"],
     medicinalUse: medicinalUsesArray[2],
+    requiresPrescription: true,
   },
   {
     name: "Levothyroxine",
@@ -119,6 +130,7 @@ const dummyData = [
     sales: 200,
     activeIngredients: ["Levothyroxine"],
     medicinalUse: medicinalUsesArray[3],
+    requiresPrescription: true,
   },
   {
     name: "Warfarin",
@@ -128,6 +140,7 @@ const dummyData = [
     sales: 150,
     activeIngredients: ["Warfarin"],
     medicinalUse: medicinalUsesArray[4],
+    requiresPrescription: true,
   },
 ];
 

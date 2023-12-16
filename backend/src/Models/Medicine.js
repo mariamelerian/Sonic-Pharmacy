@@ -62,6 +62,11 @@ const medicineSchema = new mongoose.Schema({
     default: "Active",
     required: true,
   },
+  requiresPrescription: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 const Medicine = mongoose.model("Medicine", medicineSchema);

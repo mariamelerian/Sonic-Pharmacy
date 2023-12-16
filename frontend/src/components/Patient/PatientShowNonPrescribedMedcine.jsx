@@ -52,7 +52,7 @@ function PatientNonPrescribedMedicine() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("/medicines");
+      const response = await axios.get("/patientMedicines");
       if (response.status === 200) {
         setResponseData(response.data);
         setLoading(false);

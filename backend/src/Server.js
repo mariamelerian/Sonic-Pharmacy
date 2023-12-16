@@ -60,6 +60,7 @@ const {
   getArchivedMedicines,
   unarchiveMedicine,
   getPrescribedMedicines,
+  getPatientMedicines,
 } = require("./Controllers/medicineController");
 
 const {
@@ -168,6 +169,7 @@ app.get(
   pharmacistController.getNewNotificationFlag
 );
 app.get("/prescribedMedicines", requireAuth, getPrescribedMedicines);
+app.get("/patientMedicines", requireAuth, getPatientMedicines);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", requireAuth, createAdmin);
@@ -284,7 +286,7 @@ app.post("/checkoutStripe", requireAuth, orderController.checkoutStripe);
 //   insertDummyDataMedicine,
 // } = require("./utils");
 
-//insertDummyDataMedicine(dummyData);
+// insertDummyDataMedicine(dummyData);
 // insertDummyDataPatient(dummyData);
 //insertDummyDataAdmin(dummyData);
 //insertDummyDataPharmacist(dummyData);
