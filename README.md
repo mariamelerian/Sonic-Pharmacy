@@ -127,7 +127,7 @@ Make sure you have the following software installed on your system:
 ### Clone the Repository
 
 ```bash
-git https://github.com/advanced-computer-lab-2023/Sonic-Clinic.git
+git https://github.com/advanced-computer-lab-2023/Sonic-Pharmacy.git
 ```
 #### To run the backend:
 ```bash
@@ -258,10 +258,10 @@ Follow these steps to navigate and use Sonic-Pharmacy effectively:
 
 - Access the "Pharmacists" section.
 - Click on a pharmacist to view their details.
-- Use the search bar to search for a doctor by name
+- Use the search bar to search for a pharmacist by name
 - Click on the trashcan icon to delete a pharmacist.
-- Click on the requests to view new doctors that are requesting to join the platform
-- Click on the green tick or the red cross to accept or reject the request of a doctor
+- Click on the requests to view new pharmacists that are requesting to join the platform
+- Click on the green tick or the red cross to accept or reject the request of a pharmacist
 
 ### 4. Manage Admins
 
