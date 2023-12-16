@@ -93,7 +93,7 @@ const doctorModel = require("../Models/Doctor.js");
 // };
 
 const viewChat = async (req, res) => {
-  const userID = req.user.id;
+  const userID = req.session.userId;
   const recipientID = req.body._id;
 
   let isDoctor = false;
@@ -154,7 +154,7 @@ const viewChat = async (req, res) => {
 };
 
 const viewChats = async (req, res) => {
-  const userID = req.user.id;
+  const userID = req.session.userId;
   let isDoctor = false;
   let isPharmacist = false;
 
@@ -233,7 +233,7 @@ const viewChats = async (req, res) => {
 const sendMessage = async (req, res) => {
   const recipientID = req.body.recipientID;
   const message = req.body.message;
-  const userID = req.user.id;
+  const userID = req.session.userId;
   const currentDate = new Date();
   const currDate = currentDate.toISOString().split("T")[0];
   const currTime = currentDate.toLocaleTimeString([], {
