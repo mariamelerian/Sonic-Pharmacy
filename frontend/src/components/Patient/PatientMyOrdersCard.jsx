@@ -30,13 +30,13 @@ export default function PatientMyOrdersCard({
               style={{
                 fontWeight: "bold",
                 fontSize: "1.2rem",
-                marginRight: "21rem",
+                marginRight: "23rem",
               }}
             >{`Order ${orderNumber}`}</div>
             <div
               style={{
                 fontSize: "1.1rem",
-                marginRight: "21rem",
+                marginRight: "19rem",
               }}
             >
               {orderDate.split("T")[0].split("-").reverse().join("/")}
@@ -49,7 +49,6 @@ export default function PatientMyOrdersCard({
               }}
             >
               {orderStatus}
-
             </div>
           </Accordion.Header>
 

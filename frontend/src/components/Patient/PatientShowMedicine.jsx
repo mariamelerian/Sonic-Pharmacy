@@ -7,22 +7,19 @@ function MedicineTabs() {
   const [key, setKey] = useState("nonPrescribed");
 
   return (
-    
     <Tabs
       id="controlled-tab-example"
       activeKey={key}
       onSelect={(k) => setKey(k)}
       className="mb-3 justify-content-center"
-      
     >
-      
-      <Tab eventKey="nonPrescribed" title="Non-Prescribed Medicine">
-      <PatientNonPrescribedMedicine/>
+      <Tab eventKey="nonPrescribed" title="OTC Medicines">
+        <PatientNonPrescribedMedicine />
         {/* <PatientShowMedicine prescribed={false} /> */}
       </Tab>
-      <Tab eventKey="prescribed" title="Prescribed Medicine">
+      <Tab eventKey="prescribed" title="Prescription Medicines">
         {/* <PatientPrescribedMedicine prescribed={true} /> */}
-        <PatientPrescribedMedicine/>
+        <PatientPrescribedMedicine />
       </Tab>
     </Tabs>
   );
