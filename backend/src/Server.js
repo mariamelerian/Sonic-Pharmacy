@@ -166,14 +166,14 @@ app.get("/filteredSales", getFilteredSalesReport);
 app.get("/allMedicines", getAllMedicines);
 app.get("/archivedMedicines", getArchivedMedicines);
 //app.get("/patientChat", requireAuth, patientChat);
+app.get("/prescribedMedicines", requireAuth, getPrescribedMedicines);
+app.get("/patientMedicines", requireAuth, getPatientMedicines);
 app.get("/viewNotifications", requireAuth, pharmacistNotifications);
 app.get(
   "/phNewNotifications",
   requireAuth,
   pharmacistController.getNewNotificationFlag
 );
-app.get("/prescribedMedicines", requireAuth, getPrescribedMedicines);
-app.get("/patientMedicines", requireAuth, getPatientMedicines);
 
 app.post("/newPatient", createPatient);
 app.post("/newAdmin", requireAuth, createAdmin);
@@ -199,7 +199,7 @@ app.post("/verifyOtp", verifyOtp);
 app.put("/updatePatient", requireAuth, updatePatientInfo);
 app.put("/updateMedicine", requireAuth, updateMedicine);
 app.put("/updatePharmacist", requireAuth, updatePharmacist);
-app.put("/patientChangePassword", patientChangePassword);
+app.put("/patientChangePassword/:patiendId?", patientChangePassword);
 app.put("/adminChangePassword/:userId?", adminChangePassword);
 app.put("/pharmacistChangePassword/:userId?", pharmacistChangePassword);
 app.put("/resetPassword", resetPassword);

@@ -322,6 +322,7 @@ const getFilteredSalesReport = async (req, res) => {
         for (let i = 0; i < medicine.salesData.length; i++) {
           const sale = medicine.salesData[i];
           const saleDate = sale.date.toISOString().split("T")[0];
+          console.log(saleDate);
           if (saleDate >= startDate && saleDate <= endDate) {
             return true;
           }
@@ -386,6 +387,8 @@ const getPrescribedMedicines = async (req, res) => {
   const prescriptions = await Prescription.find({
     patientID: patientId,
     date: { $gte: formattedOneMonthAgo },
+    //status is not fulfilled
+    status: { $ne: "Filled" },
   });
 
   let prescribedMedicineNames = new Set();
