@@ -71,8 +71,14 @@ const patientSchema = new Schema(
       type: String,
       required: false,
     },
-    familyMembers: [[String, String]],
-    medicalHistory: [fileSchema],
+    familyMembers: {
+      type: [[String, String]],
+      required: false,
+    },
+    medicalHistory: {
+      type: [fileSchema],
+      required: false,
+    },
     notifications: {
       type: [String],
       required: false,
