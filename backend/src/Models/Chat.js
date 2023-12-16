@@ -19,6 +19,11 @@ const chatSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    flag: {
+      type: Boolean,
+      default: false, // Set the default value to false
+      required: false,
+    },
   },
   { timestamps: true }
 );
