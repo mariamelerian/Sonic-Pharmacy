@@ -45,7 +45,7 @@ export default function ChatPat({ who }) {
     color: "white",
     overflow: "hidden",
     transition: "width 0.3s ease-in-out", // Smooth transition for width change
-    width: isHovered ? "13.3rem" : "3rem", // Change width on hover
+    width: isHovered ? (who === "patient" ? "13.5rem" : "5rem") : "3rem", // Change width on hover
   };
 
   const containerStyle = {
@@ -127,7 +127,7 @@ export default function ChatPat({ who }) {
 
   const setChat = (name) => {
     setChosen(true);
-    setIsOpen(false);
+    // setIsOpen(false);
     setChosenName(name);
     fetchChatData(name);
   };
@@ -215,7 +215,7 @@ export default function ChatPat({ who }) {
             style={{ backgroundColor: "#ff6b35", width: "100%" }}
           >
             <div style={{ color: "white", marginLeft: "1rem" }}>
-              {who === "patient" ? "Available Pharmacist" : "Your Contacts"}
+              {who === "patient" ? "Available Pharmacists" : "Your Contacts"}
             </div>
             <Button
               variant="link"

@@ -224,7 +224,10 @@ function PhShowArchivedMedicine() {
                         onClick={() => handleExpand(index)}
                         // onClick={() => toggleMedicineDetails(index)}
                       >
-                        <FontAwesomeIcon icon={faInfoCircle} />
+                        <FontAwesomeIcon
+                          icon={faInfoCircle}
+                          style={{ cursor: "pointer" }}
+                        />
                       </div>
                     </div>
                   </div>
@@ -335,7 +338,7 @@ function PhShowArchivedMedicine() {
                             <strong>Quantity:</strong> {medicine.quantity}
                           </div>
                           <div className="medicine-sales px-4">
-                            <strong>Sales:</strong> {medicine.sales} LE
+                            <strong>Sales:</strong> ${medicine.sales}
                           </div>
                         </>
                       )}
