@@ -15,6 +15,7 @@ import forgotEmail from "./forgotEmail";
 import loginAdminReducer from "./loginAdminReducer";
 import loginPatientReducer from "./loginPatientReducer";
 import loginPharmacistReducer from "./loginPharmacistReducer";
+import notifications from "./notifications";
 
 const persistConfig = {
   key: "root",
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   patientPharmLogin: loginPatientReducer,
   pharmacistLogin: loginPharmacistReducer,
   forgotEmail: forgotEmail,
+  newNotifications: notifications,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
