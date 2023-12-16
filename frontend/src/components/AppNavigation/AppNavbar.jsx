@@ -170,12 +170,13 @@ const AppNavbar = (props) => {
                         }}
                       />
                     )} */}
-
-                  <NotificationsPanel
-                    isOpen={showNotifications}
-                    closePanel={toggleNotifications}
-                    // resetNew={resetNew}
-                  />
+                  {(who === "ph" || who === "patient") && (
+                    <NotificationsPanel
+                      isOpen={showNotifications}
+                      closePanel={toggleNotifications}
+                      // resetNew={resetNew}
+                    />
+                  )}
                 </div>
               </div>
             </div>

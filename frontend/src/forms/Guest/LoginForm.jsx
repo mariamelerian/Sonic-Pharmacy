@@ -87,6 +87,7 @@ const LoginForm = () => {
             setCredentialsAdminPharm({
               userName: username,
               userId: user._id,
+              name: user.name,
             })
           );
 
