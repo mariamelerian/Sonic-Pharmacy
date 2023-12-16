@@ -145,8 +145,10 @@ function PatientPrescribedMedicine() {
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         </div>
-      ) : error ? (
+       ) : error ? (
         <div className="error">{error}</div>
+      ) : medicines.length === 0 ? ( // Check if there are no prescribed medicines
+        <PatientEmptyPrescribedMedicine />
       ) : (
         <Row>
           {filteredMedicines.map((medicine, index) => (
