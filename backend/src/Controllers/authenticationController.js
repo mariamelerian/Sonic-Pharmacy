@@ -91,7 +91,7 @@ const requireAuth = async (req, res, next) => {
         res.redirect("/login");
       } else {
         // Store the user information in the request object
-        //req.user = decodedToken;
+        req.user = decodedToken;
         next();
       }
     });
