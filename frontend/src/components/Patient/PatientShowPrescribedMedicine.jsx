@@ -121,6 +121,12 @@ function PatientPrescribedMedicine() {
   };
 
   const medicines = responseData;
+
+  const filteredMedicines = medicines.filter(
+    (medicine) =>
+      medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      medicine.medicinalUse.includes(filterMedicinalUse)
+  );
   const showModal = !!selectedMedicine;
 
   return (
@@ -143,7 +149,7 @@ function PatientPrescribedMedicine() {
         <div className="error">{error}</div>
       ) : (
         <Row>
-          {medicines.map((medicine, index) => (
+          {filteredMedicines.map((medicine, index) => (
             <Col key={medicine.medicineName} lg={3} md={4} sm={6}>
               <Card className="mb-4 mx-3 bg-light">
                 <Card.Body className="text-center">
