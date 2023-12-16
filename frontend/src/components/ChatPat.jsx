@@ -180,11 +180,11 @@ export default function ChatPat({ who }) {
     <div>
       {!isOpen && (
         <Button
-          variant="secondary"
           style={buttonStyle}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          onClick={() => setIsOpen(true)} //trigger openning chat
+          onClick={() => setIsOpen(true)}
+          variant="secondary"
         >
           <div style={buttonContentStyle}>
             <FontAwesomeIcon
@@ -204,94 +204,7 @@ export default function ChatPat({ who }) {
           </div>
         </Button>
       )}
-
-      {isOpen && who === "patient" && (
-        <div>
-          {" "}
-          <Container
-            fluid
-            className="d-flex flex-column bg-white"
-            style={chatContainerStyle}
-          >
-            <Navbar
-              className="d-flex justify-content-between p-1"
-              style={{ backgroundColor: "#ff6b35 ", width: "100%" }}
-            >
-              <div>Chat with a pharmacist</div>
-              <div>
-                <Button
-                  variant="link"
-                  onClick={() => {
-                    setIsOpen(false);
-                  }}
-                  style={{ color: "white", alignSelf: "flex-end" }}
-                >
-                  <FontAwesomeIcon
-                    icon={faTimes}
-                    style={{ cursor: "pointer" }}
-                  />
-                </Button>
-              </div>
-            </Navbar>
-
-            <div
-              style={{ width: "100%", padding: "10px", overflowY: "auto" }}
-              className="d-flex flex-column"
-            >
-              {/* <change */}
-              {chats.map((item, index) => (
-                <div
-                  key={index}
-                  className={
-                    item.sender === "Patient" ? "text-end" : "text-start"
-                  }
-                  style={
-                    item.sender === "Patient" ? { ...myMsg } : { ...otherMsg }
-                  }
-                >
-                  <div>{item.content}</div>
-                  <div style={{ fontSize: "0.6rem", textAlign: "end" }}>
-                    {item[1].split("-")[2]}
-                    {"/"}
-                    {item[1].split("-")[1]} {item[2]}
-                    {item.sender === "Patient" && (
-                      <FontAwesomeIcon
-                        icon={faCheckDouble}
-                        style={{ marginLeft: "0.3rem", color: "#adb5bd " }}
-                      />
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div style={inputDiv} className="d-flex align-items-center">
-              <input
-                type="text"
-                placeholder="Type your message"
-                style={{
-                  flex: "1",
-                  marginRight: "1rem",
-                  padding: "5px",
-                  border: "1px solid transparent",
-                }}
-                value={myMessage}
-                onChange={(e) => setMyMessage(e.target.value)}
-              />
-              <FontAwesomeIcon
-                icon={faPaperPlane}
-                style={{
-                  color: "#ff6b35 ",
-                  marginRight: "1rem",
-                  cursor: "pointer",
-                }}
-                onClick={() => sendMessage()}
-              />
-            </div>
-          </Container>
-        </div>
-      )}
-
-      {isOpen && who === "ph" && (
+      {isOpen && (
         <Container
           fluid
           className="d-flex flex-column bg-light"
@@ -302,7 +215,7 @@ export default function ChatPat({ who }) {
             style={{ backgroundColor: "#ff6b35", width: "100%" }}
           >
             <div style={{ color: "white", marginLeft: "1rem" }}>
-              Your contacts
+              {who === "patient" ? "Available Pharmacist" : "Your Contacts"}
             </div>
             <Button
               variant="link"
@@ -338,92 +251,104 @@ export default function ChatPat({ who }) {
           </ListGroup>
         </Container>
       )}
-      {chosen &&
-        who ===
-          "ph"(
-            <div>
-              {" "}
-              <Container
-                fluid
-                className="d-flex flex-column bg-white"
-                style={chatContainerStyle}
-              >
-                <Navbar
-                  className="d-flex justify-content-between p-1"
-                  style={{ backgroundColor: "#ff6b35", width: "100%" }}
+      {chosen && (
+        <div>
+          {" "}
+          <Container
+            fluid
+            className="d-flex flex-column bg-white"
+            style={chatContainerStyle}
+          >
+            <Navbar
+              className="d-flex justify-content-between p-1"
+              style={{ backgroundColor: "#ff6b35", width: "100%" }}
+            >
+              <div style={{ fontSize: "1rem" }}>
+                {" "}
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  style={{
+                    marginRight: "1rem",
+                    marginLeft: "0.2rem",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setChosen(false);
+                    setChosenName("");
+                    setChatData([]);
+                    setIsOpen(true);
+                  }}
+                />
+                {chosenName.split("-")[0]}
+              </div>
+              <div>
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setChosen(false);
+                  }}
+                  style={{ color: "white", alignSelf: "flex-end" }}
                 >
-                  <div style={{ fontSize: "1rem" }}>
-                    {" "}
-                    <FontAwesomeIcon
-                      icon={faArrowLeft}
-                      style={{
-                        marginRight: "1rem",
-                        marginLeft: "0.2rem",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        setChosen(false);
-                        setChosenName("");
-                        setChatData([]);
-                        setIsOpen(true);
-                      }}
-                    />
-                    {chosenName.split("-")[0]}
-                  </div>
-                </Navbar>
-
-                <div
-                  style={{ width: "100%", padding: "10px", overflowY: "auto" }}
-                  className="d-flex flex-column"
-                >
-                  {chatData.map((item, index) => (
-                    <div
-                      key={index}
-                      className={item[0] === who ? "text-end" : "text-start"}
-                      style={item[0] === who ? { ...myMsg } : { ...otherMsg }}
-                    >
-                      <div>{item[3]}</div>
-                      <div style={{ fontSize: "0.6rem", textAlign: "end" }}>
-                        {item[1].split("-")[2]}
-                        {"/"}
-                        {item[1].split("-")[1]} {item[2]}
-                        {item[0] === who && (
-                          <FontAwesomeIcon
-                            icon={faCheckDouble}
-                            style={{ marginLeft: "0.3rem", color: "#adb5bd " }}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div style={inputDiv} className="d-flex align-items-center">
-                  <input
-                    type="text"
-                    placeholder="Type your message"
-                    style={{
-                      flex: "1",
-                      marginRight: "1rem",
-                      padding: "5px",
-                      border: "1px solid transparent",
-                      fontSize: "0.98rem",
-                    }}
-                    value={myMessage}
-                    onChange={(e) => setMyMessage(e.target.value)}
-                  />
                   <FontAwesomeIcon
-                    icon={faPaperPlane}
-                    style={{
-                      color: "#ff6b35",
-                      marginRight: "1rem",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => sendMessage()}
+                    icon={faTimes}
+                    style={{ cursor: "pointer" }}
                   />
+                </Button>
+              </div>
+            </Navbar>
+
+            <div
+              style={{ width: "100%", padding: "10px", overflowY: "auto" }}
+              className="d-flex flex-column"
+            >
+              {chatData.map((item, index) => (
+                <div
+                  key={index}
+                  className={item[0] === who ? "text-end" : "text-start"}
+                  style={item[0] === who ? { ...myMsg } : { ...otherMsg }}
+                >
+                  <div>{item[3]}</div>
+                  <div style={{ fontSize: "0.6rem", textAlign: "end" }}>
+                    {item[1].split("-")[2]}
+                    {"/"}
+                    {item[1].split("-")[1]} {item[2]}
+                    {item[0] === who && (
+                      <FontAwesomeIcon
+                        icon={faCheckDouble}
+                        style={{ marginLeft: "0.3rem", color: "#adb5bd " }}
+                      />
+                    )}
+                  </div>
                 </div>
-              </Container>
+              ))}
             </div>
-          )}
+            <div style={inputDiv} className="d-flex align-items-center">
+              <input
+                type="text"
+                placeholder="Type your message"
+                style={{
+                  flex: "1",
+                  marginRight: "1rem",
+                  padding: "5px",
+                  border: "1px solid transparent",
+                  fontSize: "0.98rem",
+                }}
+                value={myMessage}
+                onChange={(e) => setMyMessage(e.target.value)}
+              />
+              <FontAwesomeIcon
+                icon={faPaperPlane}
+                style={{
+                  color: "#ff6b35",
+                  marginRight: "1rem",
+                  cursor: "pointer",
+                }}
+                onClick={() => sendMessage()}
+              />
+            </div>
+          </Container>
+        </div>
+      )}
     </div>
   );
 }
