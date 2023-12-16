@@ -1,5 +1,5 @@
 const Patient = require("../Models/Patient.js");
-const Pharmacist = require("../Models/Pharmacist");
+const Pharmacist = require("../Models/Pharmacist.js");
 const PatientChat = require("../Models/PatientChat.js");
 const chatModel = require("../Models/Chat.js");
 const patientModel = require("../Models/Patient.js");
@@ -157,15 +157,17 @@ const viewChats = async (req, res) => {
   const userID = req.session.userId;
   let isDoctor = false;
   let isPharmacist = false;
-
+  console.log(req.session.userId);
   try {
     // Check if the user is a doctor
     const doctor = await doctorModel.findById(userID);
+    
     if (doctor) {
       isDoctor = true;
     } else {
       // Check if the user is a pharmacist
       const pharmacist = await Pharmacist.findById(userID);
+      console.log(pharmacist);
       if (pharmacist) {
         isPharmacist = true;
       }

@@ -19,7 +19,7 @@ const fileSchema = new Schema({
   },
 });
 
-const doctorSchema = new Schema(
+const doctorSchema = new mongoose.Schema(
   {
     username: {
       type: String,
