@@ -34,11 +34,8 @@ function SalesReportPage() {
     "December",
   ];
 
-  const handleFilter = async () => {
+  const handleFilterMonth = async () => {
     console.log("selectedMonth", selectedMonth);
-    console.log("selectedMedicine", selectedMedicine);
-    console.log("selectedDate", selectedDate);
-
     if (selectedMonth !== "" && selectedMonth !== -1) {
       try {
         const response = await axios.get("/monthlySales", {
@@ -59,27 +56,35 @@ function SalesReportPage() {
           setError("Server Error");
         }
       }
-    } else if (selectedMonth === "") {
-      try {
-        const response = await axios.get("/monthlySales", {
-          params: {
-            month: "",
-          },
-        });
-        if (response.status === 200) {
-          setSales(response.data);
-          console.log("response.data", response.data);
-        } else {
-          console.log("Server error");
-        }
-      } catch (error) {
-        if (error.response && error.response.status === 404) {
-          setError("Not found.");
-        } else if (error.response && error.response.status === 500) {
-          setError("Server Error");
-        }
-      }
-    } else if (selectedMedicine !== "" || selectedDate !== "") {
+    }
+  };
+
+  const handleFilter = async () => {
+    console.log("selectedMedicine", selectedMedicine);
+    console.log("selectedDate", selectedDate);
+
+    // if (selectedMonth === "") {
+    //   try {
+    //     const response = await axios.get("/monthlySales", {
+    //       params: {
+    //         month: "",
+    //       },
+    //     });
+    //     if (response.status === 200) {
+    //       setSales(response.data);
+    //       console.log("response.data", response.data);
+    //     } else {
+    //       console.log("Server error");
+    //     }
+    //   } catch (error) {
+    //     if (error.response && error.response.status === 404) {
+    //       setError("Not found.");
+    //     } else if (error.response && error.response.status === 500) {
+    //       setError("Server Error");
+    //     }
+    //   }
+    // } else
+    if (selectedMedicine !== "" || selectedDate !== "") {
       try {
         const response = await axios.get("/filteredSales", {
           params: {
@@ -149,9 +154,9 @@ function SalesReportPage() {
     <div>
       <Row>
         {/* First Filter Container */}
-        <Col xs={12} md={6}className="px-4"> 
-        <Container
-           className=" px-15"
+        <Col xs={12} md={6} className="px-4">
+          <Container
+            className=" px-15"
             style={{
               flexShrink: 0,
               width: "65%",
@@ -162,7 +167,6 @@ function SalesReportPage() {
               // transform: "translateX(-59%)",
             }}
           >
-            
             <Row>
               <Col xs={12} md={9}>
                 <div
@@ -249,7 +253,6 @@ function SalesReportPage() {
                     width: "8rem",
                     // Adjusted font size
                     marginBottom: "1rem",
-                    
                   }}
                 >
                   Apply
@@ -258,22 +261,21 @@ function SalesReportPage() {
             </Row>
           </Container>
         </Col>
-         {/* Second Filter Container */}
-         <Col xs={12} md={6}>
-         <Container
-         className="px-4 mx-1 "
+        {/* Second Filter Container */}
+        <Col xs={12} md={6}>
+          <Container
+            className="px-4 mx-1 "
             style={{
               flexShrink: 0,
               width: "67%",
               border: "1px solid var(--gray-400, #ced4da)",
               background: "var(--gray-white, #fff)",
-              height:"11.56rem",
+              height: "11.56rem",
               padding: "0.5rem", // Adjusted padding to make it thinner
               // marginLeft: "1.3rem",
               // transform: "translateX(-59%)",
             }}
           >
-            
             <Row>
               <Col xs={12} md={9}>
                 <div
@@ -334,31 +336,29 @@ function SalesReportPage() {
                   />
                 </div>
 
-              <Col xs={12} md={3} className="d-flex align-items-end px-6 py-4">
-                <Button
-                  className="custom-button"
-                  onClick={handleFilter}
-                  style={{
-                    // marginLeft: "4rem", // Adjusted margin-left
-                    fontSize: "1rem",
-                    width: "8rem",
-                    // Adjusted font size
-                    marginBottom: "1rem",
-                  }}
+                <Col
+                  xs={12}
+                  md={3}
+                  className="d-flex align-items-end px-6 py-4"
                 >
-                  Apply
-                </Button>
+                  <Button
+                    className="custom-button"
+                    onClick={handleFilterMonth}
+                    style={{
+                      // marginLeft: "4rem", // Adjusted margin-left
+                      fontSize: "1rem",
+                      width: "8rem",
+                      // Adjusted font size
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    Apply
+                  </Button>
+                </Col>
               </Col>
-              </Col>
-
             </Row>
           </Container>
-          </Col>
-          
-
-
-
-
+        </Col>
       </Row>
       <Row>
         <Col xs={12} md={12}>
