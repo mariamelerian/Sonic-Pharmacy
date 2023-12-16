@@ -357,7 +357,7 @@ function PhShowActiveMedicine() {
                         className="medicine-price px-4"
                         
                       >
-                        <strong>Price:</strong> {medicine.price} LE
+                        <strong>Price:</strong> ${medicine.price} 
                       </div>
 
                       {expandedMedicine === index && (

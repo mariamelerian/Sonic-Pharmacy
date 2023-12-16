@@ -225,7 +225,7 @@ function PatientPrescribedMedicine() {
                         }}
                       >
                         <div className="medicine-price">
-                          Price: {medicine.price} LE
+                          Price: ${medicine.price}
                         </div>
                         <div>Prescribed</div>
                       </div>
@@ -398,7 +398,7 @@ function PatientPrescribedMedicine() {
                                   }}
                                 >
                                   <div className="medicine-price">
-                                    <strong>Price: </strong> {medicine.price} LE
+                                    <strong>Price: </strong> ${medicine.price} 
                                   </div>
                                 </div>
                                 {expandedMedicineInModal === index && (
