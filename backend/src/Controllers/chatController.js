@@ -1,5 +1,5 @@
 const Patient = require("../Models/Patient.js");
-const Pharmacist = require("../Models/Pharmacist");
+const Pharmacist = require("../Models/Pharmacist.js");
 const PatientChat = require("../Models/PatientChat.js");
 const chatModel = require("../Models/Chat.js");
 const patientModel = require("../Models/Patient.js");
@@ -157,15 +157,17 @@ const viewChats = async (req, res) => {
   const userID = req.session.userId;
   let isDoctor = false;
   let isPharmacist = false;
-
+  console.log(req.session.userId);
   try {
     // Check if the user is a doctor
     const doctor = await doctorModel.findById(userID);
+    
     if (doctor) {
       isDoctor = true;
     } else {
       // Check if the user is a pharmacist
       const pharmacist = await Pharmacist.findById(userID);
+      console.log(pharmacist);
       if (pharmacist) {
         isPharmacist = true;
       }
@@ -203,17 +205,7 @@ const viewChats = async (req, res) => {
         chatNames.push("Dr. " + doc.name + "-" + doc._id);
       }
     } else {
-      // User is neither a doctor nor a pharmacist
-      const appointments = await appointmentModel.find({ patientID: userID });
-      for (const appointment of appointments) {
-        const doctorID = appointment.doctorID;
-        const doc = await doctorModel.findById(doctorID);
-        if (doc) {
-          chatNames.push("Dr. " + doc.name + "-" + doc._id);
-        }
-      }
       const allPharmacists = await Pharmacist.find();
-      console.log(allPharmacists);
       if (allPharmacists) {
         for (const pharmacist of allPharmacists) {
           chatNames.push(

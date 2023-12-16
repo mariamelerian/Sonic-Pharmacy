@@ -18,7 +18,22 @@ const storage = multer.diskStorage({
 
 const getMedicines = async (req, res) => {
   try {
-    const medicines = await Medicine.find({ state: "Active" });
+    const medicines = await Medicine.find({
+      state: "Active",
+      requiresPrescription: false,
+    });
+    res.status(200).json(medicines);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getPatientMedicines = async (req, res) => {
+  try {
+    const medicines = await Medicine.find({
+      state: "Active",
+      requiresPrescription: false,
+    });
     res.status(200).json(medicines);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -109,7 +124,7 @@ const createMedicine = async (req, res) => {
   if (!req.body.picture) {
     let picture = {};
     const path = require("path");
-    const filePath = path.join(__dirname, "../res/default-medicine-pic.jpg");
+    const filePath = path.join(__dirname, "../res/default-medicine-pic.png");
     const imageBuffer = fs.readFileSync(filePath);
     sharp(imageBuffer)
       .resize({ width: 100 }) // Adjust width as needed
@@ -409,4 +424,5 @@ module.exports = {
   getArchivedMedicines,
   unarchiveMedicine,
   getPrescribedMedicines,
+  getPatientMedicines,
 };
