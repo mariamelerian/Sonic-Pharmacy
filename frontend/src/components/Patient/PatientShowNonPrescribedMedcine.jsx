@@ -174,13 +174,14 @@ function PatientNonPrescribedMedicine() {
                         }}
                       >
                         <div
-                          style={{
-                            backgroundColor: "white",
-                            color: "red",
-                            border: "1px solid red",
-                            borderRadius: "5px",
-                            padding: "5px",
-                          }}
+                          // style={{
+                          //   backgroundColor: "white",
+                          //   color: "red",
+                          //   border: "1px solid red",
+                          //   borderRadius: "5px",
+                          //   padding: "5px",
+                          // }}
+                          className="error"
                         >
                           Out of Stock
                         </div>
@@ -210,7 +211,10 @@ function PatientNonPrescribedMedicine() {
                           className="expand-button"
                           onClick={() => handleExpand(index)}
                         >
-                          <FontAwesomeIcon icon={faInfoCircle} />
+                          <FontAwesomeIcon
+                            icon={faInfoCircle}
+                            style={{ cursor: "pointer" }}
+                          />
                         </div>
                       </div>
                       <div
@@ -397,7 +401,7 @@ function PatientNonPrescribedMedicine() {
                                   }}
                                 >
                                   <div className="medicine-price">
-                                    <strong>Price: </strong> ${medicine.price} 
+                                    <strong>Price: </strong> ${medicine.price}
                                   </div>
                                 </div>
                                 {expandedMedicineInModal === index && (

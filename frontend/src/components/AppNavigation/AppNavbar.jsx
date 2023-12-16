@@ -28,6 +28,7 @@ const AppNavbar = (props) => {
   const phWallet = useSelector((state) => state.pharmacistLogin.wallet);
   const patWallet = useSelector((state) => state.patientPharmLogin.wallet);
   const [wallet, setWallet] = useState("");
+
   useEffect(() => {
     if (phLoggedIn) {
       setNotifications(true);
@@ -151,33 +152,21 @@ const AppNavbar = (props) => {
                   color: "#212529",
                 }}
               >
-                <div>
-                  <FontAwesomeIcon
-                    style={{ color: "#05afb9" }}
-                    icon={faBell}
-                    onClick={toggleNotifications}
-                  />
-                  {/* {newNotifications && (
-                      <span
-                        style={{
-                          position: "absolute",
-                          top: "0.4rem",
-                          right: "-0.15rem",
-                          height: "0.6rem",
-                          width: "0.6rem",
-                          borderRadius: "50%",
-                          backgroundColor: "#ff6b35",
-                        }}
-                      />
-                    )} */}
-                  {(who === "ph" || who === "patient") && (
+                {notifications && (
+                  <div>
+                    <FontAwesomeIcon
+                      style={{ color: "#05afb9" }}
+                      icon={faBell}
+                      onClick={toggleNotifications}
+                    />
+
                     <NotificationsPanel
                       isOpen={showNotifications}
                       closePanel={toggleNotifications}
                       // resetNew={resetNew}
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
