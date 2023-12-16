@@ -155,7 +155,7 @@ npm start
 ```
 
 ### Create .env file and add the following:
-MONGO_URI= "mongodb+srv://admin:admin@pharmacycluster.lf2awbn.mongodb.net/?retryWrites=true&w=majority"
+MONGO_URI= "mongodb+srv://Clinic:Pass_123@cluster0.afyaloc.mongodb.net/?retryWrites=true&w=majority"
 PORT=3000
 
 
@@ -611,6 +611,39 @@ function OTPVerification() {
 export default OTPVerification;
 
 ```
+## Status Build
+
+### Current Issues
+
+1. **Long Loading Time:**
+   - Users may experience extended loading times during certain interactions. We are actively working to optimize performance and enhance the overall user experience.
+
+2. **Code Structure Enhancement:**
+   - The code structure is functional but could benefit from further enhancement for better readability, maintainability, and scalability. We appreciate your patience as we strive to improve the codebase.
+
+3. **Platform Linking:**
+   - The linkage between platforms needs refinement. Our team acknowledges the importance of seamless integration, and we are committed to enhancing the connection between different components for a smoother user experience.
+
+4. **Chat Construction Using Arrays:**
+   - The construction of chats currently relies on arrays, which may impact efficiency. We are exploring alternative approaches to optimize chat construction and ensure real-time communication.
+
+5. **Cart Management:**
+   - Users currently cannot add or remove multiple items from their carts with quick successive clicks, they must wait for a couple of seconds before they can perform the operation again. We are actively working to resolve this delay.
+
+6. **Delayed Notifications:**
+   - Users currently cannot view new notifications without refreshing the page first.We understand the importance of this feature and are working to address this limitation.
+
+7. **Authentication Method:**
+   - Request authentication utilizes express session and not token. We are actively working to resolve this issue.
+
+
+### Next Steps
+
+Our development team is actively working on addressing the identified issues and implementing improvements. We appreciate your understanding and patience as we strive to make the necessary enhancements to deliver a more robust and user-friendly application.
+
+### How You Can Contribute
+
+Your feedback is crucial in shaping the future of our project. If you encounter any issues not mentioned here or have suggestions for improvement, please feel free to open an issue on our GitHub repository or reach out to our support team.
 
 ## Contribute
 
