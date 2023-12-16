@@ -12,11 +12,18 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import AddMedicineModal from "./PhNewMedicineModal";
 
-function PhShowArchivedMedicine() {
+function PhShowArchivedMedicine({
+  responseData,
+  setResponseData,
+  error,
+  setError,
+  loading,
+  setLoading,
+  fetchData,
+  flag,
+  onBroadcast,
+}) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [responseData, setResponseData] = useState([]);
-  const [error, setError] = useState(null);
   const [editedMedicine, setEditedMedicine] = useState(null);
   const [showMedicineForm, setShowMedicineForm] = useState(false);
   const filterMedicinalUse = useSelector(
@@ -38,30 +45,18 @@ function PhShowArchivedMedicine() {
 
   useEffect(() => {
     fetchData();
+  }, [flag]);
+
+  useEffect(() => {
+    // fetchData();
     dispatch(
       deleteFilterArray({
         medicinalUse: "",
       })
     );
     setEditedMedicine(null);
-    console.log(responseData);
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("/archivedMedicines");
-      if (response.status === 200) {
-        setResponseData(response.data);
-        setLoading(false);
-      } else {
-        setError("Server error");
-        setLoading(false);
-      }
-    } catch (error) {
-      setError("An error occurred while fetching data.");
-      setLoading(false);
-    }
-  };
   const medicines = responseData;
 
   const handleUnarchiveMedicine = async (med) => {
@@ -70,6 +65,7 @@ function PhShowArchivedMedicine() {
 
       if (response.status === 200) {
         fetchData();
+        onBroadcast();
       } else if (response.status === 404) {
         setError("Medicine not found");
       } else {
