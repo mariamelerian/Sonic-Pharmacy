@@ -152,7 +152,7 @@ function PatientPrescribedMedicine() {
           className="msg"
           style={{ width: "20rem", marginLeft: "30rem", textAlign: "center" }}
         >
-          No prescribes medicines
+          No prescribed medicines
         </div>
       ) : (
         <Row>
@@ -215,7 +215,10 @@ function PatientPrescribedMedicine() {
                           className="expand-button"
                           onClick={() => handleExpand(index)}
                         >
-                          <FontAwesomeIcon icon={faInfoCircle} />
+                          <FontAwesomeIcon
+                            icon={faInfoCircle}
+                            style={{ cursor: "pointer" }}
+                          />
                         </div>
                       </div>
                       <div
