@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Form, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MedicineForm from "./PhNewMedicine";
-import { faPlus, faPenToSquare,faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faPenToSquare,
+  faInfoCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { deleteFilterArray } from "../../state/filterMedicine";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -162,7 +166,7 @@ function PhShowArchivedMedicine() {
           placeholder="Search Medicines"
           value={searchTerm}
           onChange={handleSearch}
-          style={{ width: "63.5%" , marginBottom:"3.5rem",marginTop:"2.5rem"}}
+          style={{ width: "72%", marginBottom: "3.5rem", marginTop: "2.5rem" }}
         />
       </Form>
       {loading ? (
@@ -175,11 +179,8 @@ function PhShowArchivedMedicine() {
         <Row>
           {filteredMedicines.map((medicine, index) => (
             <Col key={medicine.name} lg={3} md={4} sm={6}>
-             <Card
-                className="mb-4 mx-3 bg-light"
-                style={{ minHeight: "23rem" }}
-              >
-                <Card.Header>
+              <Card className="mb-4 mx-3 bg-light">
+                <Card.Body>
                   <div className="d-flex justify-content-end">
                     <FontAwesomeIcon
                       icon={faPenToSquare}
@@ -193,9 +194,6 @@ function PhShowArchivedMedicine() {
                       onClick={() => handleEditMedicine(index)}
                     />
                   </div>
-                  {/* <div> {medicine.name} </div> */}
-                </Card.Header>
-                <Card.Body>
                   <div className="medicine-image-container">
                     <img
                       src={medicine.picture}
@@ -307,48 +305,40 @@ function PhShowArchivedMedicine() {
                     </div>
                   ) : (
                     <div>
-                     <div
-                        className="medicine-price px-4"
-                      >
-                        <strong>Price:</strong> ${medicine.price}
+                      <div className="medicine-price px-4">
+                        <span>Price:</span> ${medicine.price}
                       </div>
 
                       {expandedMedicine === index && (
-                      <>
-
-                      <div
-                        className="medicine-description px-4"
-                      >
-                        <strong>Description:</strong> {medicine.description}
-                      </div>
-                      <div
-                        className="medicine-use px-4"
-                      >
-                        <strong>Medicinal Use:</strong> {medicine.medicinalUse}
-                      </div>
-                      <div
-                        className="medicine-activeIngredients px-4"
-                      >
-                        <strong>Active Ingredients:</strong>{" "}
-                        {medicine.activeIngredients.map((ingredient, index) => (
-                          <div key={index} style={{ marginBottom: "5px" }}>
-                            • {ingredient}
+                        <>
+                          <div className="medicine-description px-4">
+                            <strong>Description:</strong> {medicine.description}
                           </div>
-                        ))}
-                      </div>
-                      <div
-                        className="medicine-quantity px-4"
-                      >
-                        <strong>Quantity:</strong> {medicine.quantity}
-                      </div>
-                      <div
-                        className="medicine-sales px-4"
-                      >
-                        <strong>Sales:</strong> {medicine.sales} LE
-                      </div>
-                      </>
-           
-           )}
+                          <div className="medicine-use px-4">
+                            <strong>Medicinal Use:</strong>{" "}
+                            {medicine.medicinalUse}
+                          </div>
+                          <div className="medicine-activeIngredients px-4">
+                            <strong>Active Ingredients:</strong>{" "}
+                            {medicine.activeIngredients.map(
+                              (ingredient, index) => (
+                                <div
+                                  key={index}
+                                  style={{ marginBottom: "5px" }}
+                                >
+                                  • {ingredient}
+                                </div>
+                              )
+                            )}
+                          </div>
+                          <div className="medicine-quantity px-4">
+                            <strong>Quantity:</strong> {medicine.quantity}
+                          </div>
+                          <div className="medicine-sales px-4">
+                            <strong>Sales:</strong> {medicine.sales} LE
+                          </div>
+                        </>
+                      )}
                       <div
                         className="d-flex justify-content-center"
                         style={{
@@ -360,23 +350,23 @@ function PhShowArchivedMedicine() {
                           onClick={() => handleUnarchiveMedicine(medicine._id)}
                           style={{ marginBottom: "1rem", width: "12rem" }}
                         >
-                          Unarchive
+                          Unarchive Medicine
                         </button>
                       </div>
-               
                     </div>
                   )}
                 </Card.Body>
-                <Card.Footer>
-                  {editedMedicine === index && (
+
+                {editedMedicine === index && (
+                  <Card.Footer>
                     <div
                       className="d-flex align-items-center justify-content-center"
                       onClick={() => saveMedicine(medicine._id)}
                     >
                       <Button>Save Changes</Button>
                     </div>
-                  )}
-                </Card.Footer>
+                  </Card.Footer>
+                )}
               </Card>
             </Col>
           ))}

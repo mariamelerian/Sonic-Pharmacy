@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { Card, Form, Button } from "react-bootstrap";
+import { Card, Form, Button, Dropdown } from "react-bootstrap";
 
 function MedicineForm({ onClose, fetchData }) {
   const [medicineName, setMedicineName] = useState(null);
@@ -112,7 +112,6 @@ function MedicineForm({ onClose, fetchData }) {
 
   return (
     <Card className="mb-4 mx-3 bg-light">
-      <Card.Header className="text-center">Add New Medicine</Card.Header>
       <Card.Body>
         <Form>
           <Form.Group>
@@ -142,27 +141,64 @@ function MedicineForm({ onClose, fetchData }) {
               onChange={(e) => setDescription(e.target.value)}
             />
           </Form.Group>
+
           <Form.Group>
             <Form.Label>Medicinal Use</Form.Label>
-            <Form.Control
-              as="select"
-              name="medicinalUse"
-              value={medicinalUse}
-              onChange={(e) => setMedicinalUse(e.target.value)}
-            >
-              <option value="">Select Medicinal Use</option>
-              <option value="Pain Relief">Pain Relief</option>
-              <option value="Fever Relief">Fever Relief</option>
-              <option value="Allergy Relief">Allergy Relief</option>
-              <option value="Digestive Health">Digestive Health</option>
-              <option value="Respiratory Relief">Respiratory Relief</option>
-              <option value="Anxiety Relief">Anxiety Relief</option>
-              <option value="Cholesterol Management">
-                Cholesterol Management
-              </option>
-              <option value="Diabetes Management">Diabetes Management</option>
-              <option value="Infection Treatment">Infection Treatment</option>
-            </Form.Control>
+            <Dropdown>
+              <Dropdown.Toggle
+                className="custom-dropdown-toggle"
+                id="dropdown-basic"
+              >
+                {medicinalUse || "Select Medicinal Use"}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu className="custom-dropdown-toggle">
+                <Dropdown.Item onClick={() => setMedicinalUse("")}>
+                  Select Medicinal Use
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setMedicinalUse("Pain Relief")}>
+                  Pain Relief
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setMedicinalUse("Fever Relief")}>
+                  Fever Relief
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Allergy Relief")}
+                >
+                  Allergy Relief
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Digestive Health")}
+                >
+                  Digestive Health
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Respiratory Relief")}
+                >
+                  Respiratory Relief
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Anxiety Relief")}
+                >
+                  Anxiety Relief
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Cholesterol Management")}
+                >
+                  Cholesterol Management
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Diabetes Management")}
+                >
+                  Diabetes Management
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => setMedicinalUse("Infection Treatment")}
+                >
+                  Infection Treatment
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Form.Group>
           <Form.Group>
             <Form.Label>Active Ingredients</Form.Label>
@@ -207,7 +243,7 @@ function MedicineForm({ onClose, fetchData }) {
           <Button
             className="mr-2"
             onClick={handleSave}
-            style={{ marginTop: "3rem", width: "10rem" }}
+            style={{ marginTop: "1rem", width: "10rem" }}
           >
             Save
           </Button>

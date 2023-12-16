@@ -18,11 +18,6 @@ function AddMedicineModal({ fetchData, setShowMedicineForm }) {
       <Modal.Body>
         <MedicineForm onClose={handleClose} fetchData={fetchData} />
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 }
