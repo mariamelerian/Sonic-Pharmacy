@@ -345,8 +345,16 @@ const PharmSignupForm = () => {
 
   return (
     <div className="col-9 form-container">
-      <div className="form-title">Hello!</div>
-      <div className="form-title">Submit a Request to Get Started</div>
+      <div
+        className="form-title"
+        style={{
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontWeight: 600,
+          fontSize: "1.71rem",
+        }}
+      >
+        Submit a request to get started!
+      </div>
       <form className="rounded-3" onSubmit={handleSubmit}>
         <div className="row">
           <div className="col">
