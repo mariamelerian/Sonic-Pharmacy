@@ -133,7 +133,7 @@ function AdminShowMedicine() {
                         }}
                       >
                         <div className="medicine-price">
-                          Price: {medicine.price} LE
+                          Price: ${medicine.price} 
                         </div>
                       </div>
                       {expandedMedicine === index && (
