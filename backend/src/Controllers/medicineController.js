@@ -372,19 +372,23 @@ const getPrescribedMedicines = async (req, res) => {
     patientID: patientId,
     date: { $gte: formattedOneMonthAgo },
   });
-  console.log(prescriptions);
+
+  let prescribedMedicineNames = new Set();
 
   let prescribedMedicines = [];
   for (let i = 0; i < prescriptions.length; i++) {
     let prescription = prescriptions[i];
     for (let j = 0; j < prescription.medicine.length; j++) {
       let medicineName = prescription.medicine[j][0];
+      if (prescribedMedicineNames.has(medicineName)) continue;
       let medicine = await Medicine.findOne({ name: medicineName });
       if (medicine) {
         prescribedMedicines.push(medicine);
+        prescribedMedicineNames.add(medicineName);
       }
     }
   }
+
   res.status(200).json(prescribedMedicines);
 };
 
