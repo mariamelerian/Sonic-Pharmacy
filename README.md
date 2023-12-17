@@ -2,7 +2,7 @@
 
 ## Project Title
 
-El7a2ny is a complete software solution designed for pharmacists, doctors, and patients. It aims to facilitate and automate interactions between patients, doctors, and pharmacists. The system helps find suitable medication , order prescribed or non-prescribed medication, view previous orders, and conduct text chats.
+El7a2ny is a complete software solution designed for pharmacist and patients. It aims to facilitate and automate interactions between patients and pharmacists. The system helps find suitable medication , order prescribed or non-prescribed medication, view previous orders, and conduct text chats.
 
 ## Motivation
 
@@ -11,7 +11,6 @@ The motivation behind El7a2ny is to enhance the healthcare experience using tech
 ## Tech/Framework Used
 
 - **MERN Stack:** Combines MongoDB, Express.js, React, and Node.js for full-stack development.
-- **Socket.io:** Used for video chat functionality.
 - **Stripe:** Integrated for secure card payment processing.
 - **Postman:** Utilized for testing API endpoints.
 - **Redux:** Used for state management in the frontend.
@@ -107,7 +106,6 @@ The motivation behind El7a2ny is to enhance the healthcare experience using tech
 
 - **Chat Functionality:**
   - View individual chats and send messages.
-  - Add new chats.
 
 ## Authorization and Security
 
@@ -117,7 +115,7 @@ The motivation behind El7a2ny is to enhance the healthcare experience using tech
   - Logout securely.
 
 - **Password Management:**
-  - Implement password change functionality securely with OTP verification for patients, pharmacists, and administrators.
+  - Implement password change functionality securely for patients, pharmacists, and administrators.
 
 ## Installation
 
@@ -174,7 +172,7 @@ npm start
 ### Create .env file and add the following:
 
 MONGO_URI= "mongodb+srv://Clinic:Pass_123@cluster0.afyaloc.mongodb.net/?retryWrites=true&w=majority"
-PORT=8001
+PORT=3001
 
 ## Testing
 
@@ -200,12 +198,11 @@ Follow these steps to navigate and use Sonic-Pharmacy effectively:
 
 ### 3. Profile Management
 
-- Update your personal information under the "My Profile" section in the menu.
-- Change your password securely to by entering your email to recieve an OTP which you will need to enter to be able to type your new password.
+- Change your password securely.
 
 ### 4. Chatting
 
-- Click on the blue chat icon on the bottom right corner to use the Chat functionality.
+- Click on the orange chat icon on the bottom right corner to use the Chat functionality.
 - View, create and respond to individual chat messages.
 
 ### 5. Log Out
@@ -303,7 +300,7 @@ Follow these steps to navigate and use Sonic-Pharmacy effectively:
 
 ## Screenshots of the System
 
-Access the [Google Drive folder](https://drive.google.com/drive/folders/1Nqq8H35nmAYbNz82tsrXSa3r3NvYQdoi?usp=sharing) to view screenshots of the Sonic-Clinic system.
+Access the [Google Drive folder](https://drive.google.com/drive/folders/1QMJUYNqCbLtApzb46wWwF5Y9tHTrOK9w?usp=sharing) to view screenshots of the Sonic-Pharmacy system.
 
 Feel free to explore the provided images for an in-depth look at the user interface, features, and functionalities of Sonic-Clinic.
 
@@ -346,8 +343,6 @@ We applied a set of coding conventions to maintain consistency and readability a
 - **JavaScript/Node.js:** We follow the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) for JavaScript and Node.js projects.
 
 - **React:** For React components and applications, we follow the [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react).
-
-- **CSS:** Our stylesheets adhere to the [BEM (Block, Element, Modifier) methodology](http://getbem.com/) for maintainability and clarity.
 
 - **Naming Conventions:** Descriptive and meaningful variable and function names are encouraged. Please avoid abbreviations when clarity is sacrificed.
 
@@ -594,38 +589,75 @@ export default function PatientMyOrdersPage() {
 }
 ```
 
-### OTP Verification Page
+### Admin Pharmacists Page
 
 ```jsx
-import Container from "react-bootstrap/Container";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState } from "react";
+import AdminViewTable from "../../components/Admin/AdminViewTable";
+import AdminSearchBar from "../../components/Admin/AdminSearchBar";
 import AppNavbar from "../../components/AppNavigation/AppNavbar";
-import RegPhoto from "../../components/Guest/RegPhoto";
-import GuestBurgerMenu from "../../components/Guest/GuestBurgerMenu";
-import OTPVerificationForm from "../../forms/Guest/OTPVerificationForm";
-import AppNavbarGuest2 from "../../components/AppNavigation/AppNavbarGuest2";
+import { Container } from "react-bootstrap";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import AdminDocReqs from "../../components/Admin/AdminDocReqs";
+import AdminBurgerMenu from "../../components/Admin/AdminBurgerMenu";
+import AdminPharmDetailsTable from "../../components/Admin/AdminPharmDetailsTable";
 
-function OTPVerification() {
+export default function AdminPharmacistPage() {
+  const [tab, setTab] = useState("registered");
+
   return (
-    <div>
-      <AppNavbarGuest2 flag={true} />
-      <Container fluid className="bg-light pt-3 mt-2">
-        <Container className="bg-white px-5 py-4 d-flex align-items-center justify-content-center">
-          <div className="d-flex w-100 align-items-center">
-            <div className="col-lg-5 order-lg-2 d-none d-lg-block">
-              <RegPhoto />
-            </div>
-            <div className="col-12 col-lg-7 order-lg-1">
-              <OTPVerificationForm />
-            </div>
-          </div>
-        </Container>
-      </Container>
-    </div>
+    <>
+      <AppNavbar hamburgerMenu={<AdminBurgerMenu />} />
+      <div
+        style={{
+          marginTop: "50px",
+          color: "var(--body-text-body-color, #212529)",
+          fontSize: "2rem",
+          fontWeight: "600",
+          textAlign: "center",
+          lineHeight: "120%",
+        }}
+      >
+        Available Pharmacists
+      </div>
+      <style>
+        {`
+          /* Custom CSS for inactive tabs */
+          .nav-link {
+            color: #099BA0  ; /* Set the color for inactive tabs */
+          }
+        `}
+      </style>
+
+      <Tabs
+        id="controlled-tab-example"
+        activeKey={tab}
+        onSelect={(k) => setTab(k)}
+        className="mb-3 d-flex align-items-center justify-content-center"
+        style={{ marginTop: "20px" }}
+      >
+        <Tab eventKey="registered" title="Registered">
+          <Container
+            className="bg-white px-5 py-4 d-flex align-items-center justify-content-center"
+            style={{
+              // margin: "20px",
+              display: "flex",
+              flexDirection: "column",
+              // marginLeft: "20rem",
+            }}
+          >
+            {/* <AdminSearchBar /> */}
+            <AdminPharmDetailsTable />
+          </Container>
+        </Tab>
+        <Tab eventKey="requests" title="Requests">
+          <AdminDocReqs />
+        </Tab>
+      </Tabs>
+    </>
   );
 }
-
-export default OTPVerification;
 ```
 
 ## Status Build
@@ -700,8 +732,6 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 Certain components and dependencies used in this project are subject to their own licenses:
 
 - **Stripe:** The use of Stripe is subject to the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). Please review the license terms for more information.
-
-- **Socket.io:** The use of Socket.io is subject to the [MIT License](https://opensource.org/licenses/MIT). Please review the license terms for more information.
 
 - **MongoDB:** The use of MongoDB is subject to the [Server Side Public License (SSPL)](https://www.mongodb.com/licensing/server-side-public-license). Please review the license terms for more information.
 
