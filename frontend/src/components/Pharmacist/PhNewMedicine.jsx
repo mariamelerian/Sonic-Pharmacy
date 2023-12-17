@@ -8,12 +8,12 @@ function MedicineForm({ onClose, fetchData }) {
   const [description, setDescription] = useState(null);
   const [medicinalUse, setMedicinalUse] = useState(null);
   const [quantity, setQuantity] = useState(null);
-  const [sales, setSales] = useState(null);
   //const [picture, setPicture] = useState(null);
   const [ingredients, setIngredients] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null); // New state variable for the selected image file
+  const [isPrescriptionRequired, setIsPrescriptionRequired] = useState(false);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -24,7 +24,6 @@ function MedicineForm({ onClose, fetchData }) {
       description == null ||
       medicinalUse == null ||
       quantity == null ||
-      sales == null ||
       ingredients == null
     ) {
       setError("Please fill in all the required fields");
@@ -67,10 +66,11 @@ function MedicineForm({ onClose, fetchData }) {
               price: price,
               description: description,
               quantity: quantity,
-              sales: sales,
+              sales: 0,
               activeIngredients: activeIngredientsArray,
               medicinalUse: medicinalUse,
               picture: picture,
+              requiresPrescription: isPrescriptionRequired,
             });
 
             console.log(response);
@@ -84,6 +84,8 @@ function MedicineForm({ onClose, fetchData }) {
               fetchData();
             } else if (response.status === 500) {
               setError("Medicine not found");
+            } else if (response.status === 409) {
+              setError("Medicine name exists");
             } else {
               setError("Error");
             }
@@ -120,6 +122,7 @@ function MedicineForm({ onClose, fetchData }) {
               type="text"
               name="medicineName"
               value={medicineName}
+              style={{ marginBottom: "0.5rem" }}
               onChange={(e) => setMedicineName(e.target.value)}
             />
           </Form.Group>
@@ -129,6 +132,7 @@ function MedicineForm({ onClose, fetchData }) {
               type="number"
               name="price"
               value={price}
+              style={{ marginBottom: "0.5rem" }}
               onChange={(e) => setPrice(e.target.value)}
             />
           </Form.Group>
@@ -138,13 +142,14 @@ function MedicineForm({ onClose, fetchData }) {
               as="textarea"
               name="description"
               value={description}
+              style={{ marginBottom: "0.5rem" }}
               onChange={(e) => setDescription(e.target.value)}
             />
           </Form.Group>
 
           <Form.Group>
             <Form.Label>Medicinal Use</Form.Label>
-            <Dropdown>
+            <Dropdown style={{ marginBottom: "0.5rem" }}>
               <Dropdown.Toggle
                 className="custom-dropdown-toggle"
                 id="dropdown-basic"
@@ -206,6 +211,7 @@ function MedicineForm({ onClose, fetchData }) {
               type="text"
               name="medicinalUse"
               value={ingredients}
+              style={{ marginBottom: "0.5rem" }}
               onChange={(e) => setIngredients(e.target.value)}
             />
           </Form.Group>
@@ -216,17 +222,18 @@ function MedicineForm({ onClose, fetchData }) {
               type="number"
               name="quantity"
               value={quantity}
+              style={{ marginBottom: "0.5rem" }}
               onChange={(e) => setQuantity(e.target.value)}
             />
           </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Sales</Form.Label>
-            <Form.Control
-              type="number"
-              name="sales"
-              value={sales}
-              onChange={(e) => setSales(e.target.value)}
+          <Form.Group controlId="prescriptionCheckbox">
+            <Form.Check
+              type="checkbox"
+              label="Prescription Required"
+              checked={isPrescriptionRequired}
+              style={{ marginBottom: "0.5rem" }}
+              onChange={(e) => setIsPrescriptionRequired(e.target.checked)}
             />
           </Form.Group>
           <Form.Group>

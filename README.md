@@ -1,15 +1,16 @@
 # Sonic-Pharmacy
 
 ## Project Title
-El7a2ny is a complete software solution designed for pharmacists, doctors, and patients. It aims to facilitate and automate interactions between patients, doctors, and pharmacists. The system helps find suitable medication , order prescribed or non-prescribed medication, view previous orders, and conduct text chats.
+
+El7a2ny is a complete software solution designed for pharmacist and patients. It aims to facilitate and automate interactions between patients and pharmacists. The system helps find suitable medication , order prescribed or non-prescribed medication, view previous orders, and conduct text chats.
 
 ## Motivation
+
 The motivation behind El7a2ny is to enhance the healthcare experience using technology to simplify and optimize the interactions between healthcare providers and patients. By creating a virtual pharmacy, the goal is to make healthcare services more accessible, efficient, and user-friendly.
 
 ## Tech/Framework Used
 
 - **MERN Stack:** Combines MongoDB, Express.js, React, and Node.js for full-stack development.
-- **Socket.io:** Used for video chat functionality.
 - **Stripe:** Integrated for secure card payment processing.
 - **Postman:** Utilized for testing API endpoints.
 - **Redux:** Used for state management in the frontend.
@@ -17,29 +18,29 @@ The motivation behind El7a2ny is to enhance the healthcare experience using tech
 - **JWT Authentication:** Implemented for secure user authentication.
 - **nodemon:** Employed for automatic server restart during development.
 
-
-
 ## Features
 
 ### Patient Features
 
 - **Medicines:**
+
   - Add medicine to the cart either prescribed or non-prescribed.
   - You can find alternatives for out of stock medicine using the same active ingredient.
 
-
 - **Cart:**
+
   - Pay for prescriptions in the cart using Stripe, wallet balance, or cash on delivery (COD).
 
 - **Wallet:**
+
   - View wallet balance and transactions.
   - Pay for medicine using wallet balance.
 
 - **Profile Management:**
   - Change password securely.
   - Update personal information.
-  
 - **My Orders:**
+
   - View past orders including its details.
   - Cancel a pending order.
 
@@ -49,11 +50,13 @@ The motivation behind El7a2ny is to enhance the healthcare experience using tech
 ### Pharmacist Features
 
 - **Medicine:**
+
   - View all medicine with its details.
   - Archive medicine.
   - Add new medicine or edit already existing medicine.
 
 - **Sales Report:**
+
   - View and filter sales reports based on a selected month, medicine, or date.
 
 - **Profile Management:**
@@ -62,17 +65,21 @@ The motivation behind El7a2ny is to enhance the healthcare experience using tech
 ### Administrator Features
 
 - **Profile Management:**
+
   - Change password securely.
 
 - **Manage Users:**
+
   - Add or remove administrators.
   - Remove patients.
   - View pharmacists' applications, accept or reject them.
 
 - **View Data:**
+
   - View all pharmacists, patients and admins data.
 
 - **Medicines:**
+
   - View all medicine with its details.
 
 - **Sales Report:**
@@ -81,9 +88,11 @@ The motivation behind El7a2ny is to enhance the healthcare experience using tech
 ### Guest Features
 
 - **Patient Registration:**
+
   - Register as a new patient.
 
 - **Pharmacist Registration:**
+
   - Apply as a pharmacist.
 
 - **Login:**
@@ -92,24 +101,21 @@ The motivation behind El7a2ny is to enhance the healthcare experience using tech
 ### General Features
 
 - **Notification System:**
+
   - Pharmacist views notifications for out of stock medicine.
 
 - **Chat Functionality:**
   - View individual chats and send messages.
-  - Add new chats.
-
-
 
 ## Authorization and Security
 
-- **User Authentication  (JWT athentication) :**
+- **User Authentication (JWT athentication) :**
+
   - Implement role-based authentication for patients, pharmacists, and administrators.
   - Logout securely.
 
 - **Password Management:**
-  - Implement password change functionality securely with OTP verification for patients, pharmacists, and administrators.
-
-
+  - Implement password change functionality securely for patients, pharmacists, and administrators.
 
 ## Installation
 
@@ -129,45 +135,55 @@ Make sure you have the following software installed on your system:
 ```bash
 git https://github.com/advanced-computer-lab-2023/Sonic-Pharmacy.git
 ```
+
 #### To run the backend:
+
 ```bash
 cd backend/src
 ```
+
 ```bash
 npm i
 ```
+
 ```bash
 nodemon server.js
 ```
+
 #### To run the frontend:
+
 ```bash
 cd frontend/src
 ```
+
 ```bash
 npm i
 ```
+
 ```bash
 npm update
 ```
+
 ```bash
 npm start
 
 ```
 
 ### Create .env file and add the following:
-MONGO_URI= "mongodb+srv://Clinic:Pass_123@cluster0.afyaloc.mongodb.net/?retryWrites=true&w=majority"
-PORT=3000
 
+MONGO_URI= "mongodb+srv://Clinic:Pass_123@cluster0.afyaloc.mongodb.net/?retryWrites=true&w=majority"
+PORT=3001
 
 ## Testing
 
 Use [this Postman link](https://documenter.getpostman.com/view/30346344/2s9Ykn8gvm) to test all the APIs.
 
-
 ## How to Use
 
 Follow these steps to navigate and use Sonic-Pharmacy effectively:
+
 ### General:
+
 ### 1. Register or Log In
 
 - If you want to sign up as a patient, click on the "Sign up" button on the login page.
@@ -182,26 +198,25 @@ Follow these steps to navigate and use Sonic-Pharmacy effectively:
 
 ### 3. Profile Management
 
-- Update your personal information under the "My Profile" section in the menu.
-- Change your password securely to by entering your email to recieve an OTP which you will need to enter to be able to type your new password.
+- Change your password securely.
 
 ### 4. Chatting
 
-- Click on the blue chat icon on the bottom right corner to use the Chat functionality.
+- Click on the orange chat icon on the bottom right corner to use the Chat functionality.
 - View, create and respond to individual chat messages.
 
 ### 5. Log Out
 
 - When done, click on the "Log Out" button in the menu to securely log out of your account.
 
-
 ### Patient:
+
 ### 1. Medicine
 
 - Access the "Available Medicine" section
-- Filter medicine by medicinal use and click on apply to filter Non-Prescribed or Prescribed medicine. 
+- Filter medicine by medicinal use and click on apply to filter Non-Prescribed or Prescribed medicine.
 - Click on the small "i" icon to view all medicine details.
-- Click on the "Add to Cart" button to add a medicine to your cart. 
+- Click on the "Add to Cart" button to add a medicine to your cart.
 - Click on the "Find Alternatives" button on out of stock medicine to view alternatives with the same active ingredient.
 
 ### 2. Cart
@@ -218,11 +233,12 @@ Follow these steps to navigate and use Sonic-Pharmacy effectively:
 - Add new addresses using the "Add New Address" button.
 
 ### Pharmacist:
+
 ### 1. Medicine
 
 - Access the "Available Medicine" section
 - Filter medicine by medicinal use and click on apply to filter Active or Archived medicine.
-- Unarchive archived medicine by clicking the blue "unarchive" button. 
+- Unarchive archived medicine by clicking the blue "unarchive" button.
 - Archive medicine by clicking the blue "archive" button.
 - Click on the orange "Add New Medicine" button to add a new medicine, enter the required fields and click on create to add a new medicine (click on close form if you change your mind).
 - Click on the small "i" icon to view all medicine details.
@@ -243,6 +259,7 @@ Follow these steps to navigate and use Sonic-Pharmacy effectively:
 - View notifications for out of stock medicine by clicking the bell icon on the top right.
 
 ### Admin:
+
 ### 1. Manage Appointments
 
 - Access the "My Profile" section in the menu to view your personal details.
@@ -281,13 +298,11 @@ Follow these steps to navigate and use Sonic-Pharmacy effectively:
 - Access the "Sales Report" section.
 - You can view the quantity sold and revenue of a medicine by filtering by month and clicking apply.
 
-
 ## Screenshots of the System
 
-Access the [Google Drive folder](https://drive.google.com/drive/folders/1Nqq8H35nmAYbNz82tsrXSa3r3NvYQdoi?usp=sharing) to view screenshots of the Sonic-Clinic system.
+Access the [Google Drive folder](https://drive.google.com/drive/folders/1QMJUYNqCbLtApzb46wWwF5Y9tHTrOK9w?usp=sharing) to view screenshots of the Sonic-Pharmacy system.
 
 Feel free to explore the provided images for an in-depth look at the user interface, features, and functionalities of Sonic-Clinic.
-
 
 ## Credits
 
@@ -298,28 +313,28 @@ A special thanks to the following YouTube channels for providing excellent tutor
 
 ### Tutorials and Playlists:
 
-- *Node.js:*
+- _Node.js:_
+
   - [Node.js Crash Course](https://www.youtube.com/playlist?list=PLZlA0Gpn_vH_uZs4vJMIhcinABSTUH2bY)
 
-- *Express.js:*
+- _Express.js:_
+
   - [Express.js Crash Course](https://www.youtube.com/watch?v=fgTGADljAeg)
 
-- *React:*
+- _React:_
   - [React Introduction](https://www.youtube.com/playlist?list=PLZlA0Gpn_vH_NT5zPVp18nGe_W9LqBDQK)
   - [React Hooks - Functional Components](https://www.youtube.com/playlist?list=PLZlA0Gpn_vH8EtggFGERCwMY5u5hOjf-h)
   - [React useState VS useEffect](https://codedamn.com/news/reactjs/usestate-and-useeffect-hooks)
-  
-- *JWT Authentication:*
+- _JWT Authentication:_
+
   - [JWT Authentication Tutorial](https://www.youtube.com/watch?v=mbsmsi7l3r4)
   - [MERN Stack Authentication Tutorial](https://www.youtube.com/watch?v=-RCnNyD0L-s)
   - [MERN Stack Authentication Tutorial - Part 1](https://dev.to/salarc123/mern-stack-authentication-tutorial-part-1-the-backend-1c57)
 
-- *Stripe for Payment Process:*
+- _Stripe for Payment Process:_
   - [Stripe API Overview](https://youtu.be/1r-F3FIONl8)
 
 A big thank you to the creators of these tutorials for their valuable contributions to the developer community.
-
-
 
 ## Code Style
 
@@ -328,8 +343,6 @@ We applied a set of coding conventions to maintain consistency and readability a
 - **JavaScript/Node.js:** We follow the [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) for JavaScript and Node.js projects.
 
 - **React:** For React components and applications, we follow the [Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react).
-
-- **CSS:** Our stylesheets adhere to the [BEM (Block, Element, Modifier) methodology](http://getbem.com/) for maintainability and clarity.
 
 - **Naming Conventions:** Descriptive and meaningful variable and function names are encouraged. Please avoid abbreviations when clarity is sacrificed.
 
@@ -344,10 +357,10 @@ Before submitting a pull request, please ensure that your code sticks to these c
 ## Backend (node js)
 
 ### Registering as a Pharmacist
+
 Below is a Node.js function for a guest to create an account as a pharmacist.
 
 ```javascript
-
 const registerPharmacist = async (req, res) => {
   try {
     // const { username, email, password } = req.body;
@@ -367,7 +380,7 @@ const registerPharmacist = async (req, res) => {
 
     // Validate username
     const validation = await validateUsername(username);
-    
+
     //Check if username exists
     if (!validation) {
       return res.status(408).send("Username already exists");
@@ -417,7 +430,9 @@ const registerPharmacist = async (req, res) => {
   }
 };
 ```
+
 ### Changing Your Password as a Patient
+
 The following is a Node.js function that demonstrates how a patient can change their password.
 
 ```javascript
@@ -450,9 +465,10 @@ const patientChangePassword = async (req, res) => {
 
   return res.status(200).json({ message: "Password updated successfully" });
 };
-
 ```
+
 ### Getting Alternative Medicine
+
 The following Node.js function returns alternavies for out of stock medicine using the same active ingredient.
 
 ```javascript
@@ -480,7 +496,6 @@ const getAlternativeMedicines = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 ```
 
 ## Frontend (react)
@@ -513,15 +528,13 @@ function PhMedicine() {
         </Container>
       </Container>
       <ChatPat who="pharmacist" />
-
     </div>
-    
   );
 }
 
 export default PhMedicine;
-
 ```
+
 ### Patient My Orders Page
 
 ```jsx
@@ -574,68 +587,109 @@ export default function PatientMyOrdersPage() {
     </>
   );
 }
-
 ```
 
-### OTP Verification Page
+### Admin Pharmacists Page
 
 ```jsx
-import Container from "react-bootstrap/Container";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState } from "react";
+import AdminViewTable from "../../components/Admin/AdminViewTable";
+import AdminSearchBar from "../../components/Admin/AdminSearchBar";
 import AppNavbar from "../../components/AppNavigation/AppNavbar";
-import RegPhoto from "../../components/Guest/RegPhoto";
-import GuestBurgerMenu from "../../components/Guest/GuestBurgerMenu";
-import OTPVerificationForm from "../../forms/Guest/OTPVerificationForm";
-import AppNavbarGuest2 from "../../components/AppNavigation/AppNavbarGuest2";
+import { Container } from "react-bootstrap";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import AdminDocReqs from "../../components/Admin/AdminDocReqs";
+import AdminBurgerMenu from "../../components/Admin/AdminBurgerMenu";
+import AdminPharmDetailsTable from "../../components/Admin/AdminPharmDetailsTable";
 
-function OTPVerification() {
+export default function AdminPharmacistPage() {
+  const [tab, setTab] = useState("registered");
+
   return (
-    <div>
-      <AppNavbarGuest2 flag={true} />
-      <Container fluid className="bg-light pt-3 mt-2">
-        <Container className="bg-white px-5 py-4 d-flex align-items-center justify-content-center">
-          <div className="d-flex w-100 align-items-center">
-            <div className="col-lg-5 order-lg-2 d-none d-lg-block">
-              <RegPhoto />
-            </div>
-            <div className="col-12 col-lg-7 order-lg-1">
-              <OTPVerificationForm />
-            </div>
-          </div>
-        </Container>
-      </Container>
-    </div>
+    <>
+      <AppNavbar hamburgerMenu={<AdminBurgerMenu />} />
+      <div
+        style={{
+          marginTop: "50px",
+          color: "var(--body-text-body-color, #212529)",
+          fontSize: "2rem",
+          fontWeight: "600",
+          textAlign: "center",
+          lineHeight: "120%",
+        }}
+      >
+        Available Pharmacists
+      </div>
+      <style>
+        {`
+          /* Custom CSS for inactive tabs */
+          .nav-link {
+            color: #099BA0  ; /* Set the color for inactive tabs */
+          }
+        `}
+      </style>
+
+      <Tabs
+        id="controlled-tab-example"
+        activeKey={tab}
+        onSelect={(k) => setTab(k)}
+        className="mb-3 d-flex align-items-center justify-content-center"
+        style={{ marginTop: "20px" }}
+      >
+        <Tab eventKey="registered" title="Registered">
+          <Container
+            className="bg-white px-5 py-4 d-flex align-items-center justify-content-center"
+            style={{
+              // margin: "20px",
+              display: "flex",
+              flexDirection: "column",
+              // marginLeft: "20rem",
+            }}
+          >
+            {/* <AdminSearchBar /> */}
+            <AdminPharmDetailsTable />
+          </Container>
+        </Tab>
+        <Tab eventKey="requests" title="Requests">
+          <AdminDocReqs />
+        </Tab>
+      </Tabs>
+    </>
   );
 }
-
-export default OTPVerification;
-
 ```
+
 ## Status Build
 
 ### Current Issues
 
 1. **Long Loading Time:**
+
    - Users may experience extended loading times during certain interactions. We are actively working to optimize performance and enhance the overall user experience.
 
 2. **Code Structure Enhancement:**
+
    - The code structure is functional but could benefit from further enhancement for better readability, maintainability, and scalability. We appreciate your patience as we strive to improve the codebase.
 
 3. **Platform Linking:**
+
    - The linkage between platforms needs refinement. Our team acknowledges the importance of seamless integration, and we are committed to enhancing the connection between different components for a smoother user experience.
 
 4. **Chat Construction Using Arrays:**
+
    - The construction of chats currently relies on arrays, which may impact efficiency. We are exploring alternative approaches to optimize chat construction and ensure real-time communication.
 
 5. **Cart Management:**
+
    - Users currently cannot add or remove multiple items from their carts with quick successive clicks, they must wait for a couple of seconds before they can perform the operation again. We are actively working to resolve this delay.
 
 6. **Delayed Notifications:**
+
    - Users currently cannot view new notifications without refreshing the page first.We understand the importance of this feature and are working to address this limitation.
 
 7. **Authentication Method:**
    - Request authentication utilizes express session and not token. We are actively working to resolve this issue.
-
 
 ### Next Steps
 
@@ -669,7 +723,6 @@ If you encounter any issues or have suggestions for improvements, please open an
 
 Thank you for contributing to El7a2ny! 🚀
 
-
 ## License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT)
@@ -679,8 +732,6 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 Certain components and dependencies used in this project are subject to their own licenses:
 
 - **Stripe:** The use of Stripe is subject to the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). Please review the license terms for more information.
-
-- **Socket.io:** The use of Socket.io is subject to the [MIT License](https://opensource.org/licenses/MIT). Please review the license terms for more information.
 
 - **MongoDB:** The use of MongoDB is subject to the [Server Side Public License (SSPL)](https://www.mongodb.com/licensing/server-side-public-license). Please review the license terms for more information.
 

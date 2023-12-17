@@ -185,8 +185,8 @@ const checkoutStripe = async (req, res) => {
     payment_method_types: ["card"],
     line_items: line_items,
     mode: "payment",
-    success_url: "http://localhost:3000/patient/patient-myOrders",
-    cancel_url: "http://localhost:3000/patient/patient-cart",
+    success_url: "http://localhost:3001/patient/patient-myOrders",
+    cancel_url: "http://localhost:3001/patient/patient-cart",
   });
 
   if (!session)
