@@ -99,11 +99,11 @@ function AdminPharmDetailsTable() {
           Are you sure you want to delete this pharmacist?
         </Modal.Body>
         <Modal.Footer className="d-flex align-items-center justify-content-center">
-          <Button variant="danger" onClick={actuallyDelete}>
+          <Button variant="secondary" onClick={actuallyDelete}>
             Yes
           </Button>
           <Button
-            variant="success"
+            variant="primary"
             onClick={() => setShowDeleteConfirmationModal(false)}
           >
             No

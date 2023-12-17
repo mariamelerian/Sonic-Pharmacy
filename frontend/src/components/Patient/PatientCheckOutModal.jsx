@@ -311,7 +311,7 @@ function PatientCheckOutModal({
         ) : (
           <div>
             <Button
-              variant="success"
+              variant="primary"
               style={{ marginRight: "10px" }}
               onClick={placeorder}
             >
@@ -319,7 +319,7 @@ function PatientCheckOutModal({
             </Button>
 
             <Link to="/patient/patient-cart">
-              <Button variant="danger" onClick={onHide}>
+              <Button variant="secondary" onClick={onHide}>
                 Cancel
               </Button>
             </Link>

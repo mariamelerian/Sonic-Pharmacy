@@ -6,19 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
 function SalesReportPage() {
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [selectedMedicine, setSelectedMedicine] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
-  const [medicines, setMedicines] = useState([]);
-  const [sales, setSales] = useState({
-    sales: [],
-    totalQuantitySold: 0,
-    totalRevenue: 0,
-  });
-
-  const [error, setError] = useState(null);
-  const dispatch = useDispatch();
-
   const months = [
     "January",
     "February",
@@ -33,6 +20,22 @@ function SalesReportPage() {
     "November",
     "December",
   ];
+  const currentDate = new Date();
+  const currentMonthIndex = currentDate.getMonth();
+  const currentMonth = months[currentDate.getMonth()];
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedMonthName, setSelectedMonthName] = useState(currentMonth);
+  const [selectedMedicine, setSelectedMedicine] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [medicines, setMedicines] = useState([]);
+  const [sales, setSales] = useState({
+    sales: [],
+    totalQuantitySold: 0,
+    totalRevenue: 0,
+  });
+
+  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
   const handleFilterMonth = async () => {
     console.log("selectedMonth", selectedMonth);
@@ -41,6 +44,26 @@ function SalesReportPage() {
         const response = await axios.get("/monthlySales", {
           params: {
             month: selectedMonth,
+          },
+        });
+        if (response.status === 200) {
+          setSales(response.data);
+          console.log("response.data", response.data);
+        } else {
+          console.log("Server error");
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          setError("Not found.");
+        } else if (error.response && error.response.status === 500) {
+          setError("Server Error");
+        }
+      }
+    } else {
+      try {
+        const response = await axios.get("/monthlySales", {
+          params: {
+            month: currentMonthIndex,
           },
         });
         if (response.status === 200) {
@@ -106,6 +129,28 @@ function SalesReportPage() {
           setError("Server Error");
         }
       }
+    } else if (selectedMedicine === "" || selectedDate === "") {
+      try {
+        const response = await axios.get("/filteredSales", {
+          params: {
+            medicineNames: "",
+            startDate: "",
+            endDate: "",
+          },
+        });
+        if (response.status === 200) {
+          console.log("response.data", response.data);
+          setSales(response.data);
+        } else {
+          console.log("Server error");
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          setError("Not found.");
+        } else if (error.response && error.response.status === 500) {
+          setError("Server Error");
+        }
+      }
     } else {
       setError("Please select a filter");
     }
@@ -114,6 +159,7 @@ function SalesReportPage() {
   useEffect(() => {
     fetchMedicines();
     handleFilter();
+    handleFilterMonth();
   }, []);
 
   const fetchMedicines = async () => {
@@ -149,22 +195,33 @@ function SalesReportPage() {
       }
     }
   };
+  const handleMonthChange = (e) => {
+    setSelectedMonthName(e.target.value);
+    const selectedMonthName = e.target.value;
+    const newIndex = months.indexOf(selectedMonthName);
+
+    if (newIndex !== -1) {
+      setSelectedMonth(newIndex);
+    }
+  };
 
   return (
     <div>
-     <Row className="justify-content-center">
-     <Col xs={12} md={8} lg={6} className="px-2"> {/* Adjusted width to 2/3 */}
-    <Container
-      className=" px-10"
-      style={{
-        flexShrink: 0,
-        width: "100%", // Adjusted width to take full width
-        border: "3px solid var(--gray-400, #ced4da)",
-        background: "var(--gray-white, #fff)",
-        padding: "0.5rem", // Adjusted padding to make it thinner
-        // marginLeft:"7.3rem"
-      }}
-    >
+      <Row className="justify-content-center">
+        <Col xs={12} md={8} lg={6} className="px-2">
+          {" "}
+          {/* Adjusted width to 2/3 */}
+          <Container
+            className=" px-10"
+            style={{
+              flexShrink: 0,
+              width: "100%", // Adjusted width to take full width
+              border: "3px solid var(--gray-400, #ced4da)",
+              background: "var(--gray-white, #fff)",
+              padding: "0.5rem", // Adjusted padding to make it thinner
+              // marginLeft:"7.3rem"
+            }}
+          >
             <Row>
               <Col xs={12} md={9}>
                 <div
@@ -251,7 +308,7 @@ function SalesReportPage() {
                     width: "7rem",
                     // Adjusted font size
                     marginTop: "7.5rem",
-                    marginLeft:"0.8rem"
+                    marginLeft: "0.8rem",
                   }}
                 >
                   Apply
@@ -261,20 +318,22 @@ function SalesReportPage() {
           </Container>
         </Col>
         {/* Second Filter Container */}
-         {/* <div style={{ width: "10px" }}></div> */}
+        {/* <div style={{ width: "10px" }}></div> */}
 
-         <Col xs={12} md={4} lg={3} className="d-flex px-2"> {/* Adjusted width to 1/3 */}
-    <Container
-      className=" mx-1 "
-      style={{
-        flexShrink: 0,
-        width: "100%", // Adjusted width to take full width
-        border: "3px solid var(--gray-400, #ced4da)",
-        background: "var(--gray-white, #fff)",
-        height: "11.9rem",
-        padding: "0.5rem", // Adjusted padding to make it thinner
-      }}
-    >
+        <Col xs={12} md={4} lg={3} className="d-flex px-2">
+          {" "}
+          {/* Adjusted width to 1/3 */}
+          <Container
+            className=" mx-1 "
+            style={{
+              flexShrink: 0,
+              width: "100%", // Adjusted width to take full width
+              border: "3px solid var(--gray-400, #ced4da)",
+              background: "var(--gray-white, #fff)",
+              height: "11.9rem",
+              padding: "0.5rem", // Adjusted padding to make it thinner
+            }}
+          >
             <Row>
               <Col xs={12} md={9}>
                 <div
@@ -308,13 +367,8 @@ function SalesReportPage() {
                 >
                   <Form.Control
                     as="select"
-                    onChange={(e) =>
-                      setSelectedMonth(
-                        months.findIndex((value, index) => {
-                          return value == e.target.value;
-                        })
-                      )
-                    }
+                    onChange={handleMonthChange}
+                    value={selectedMonthName}
                     style={{ width: "100%" }} // Adjusted width
                   >
                     <option value="">Select Month</option>
@@ -335,26 +389,22 @@ function SalesReportPage() {
                   />
                 </div>
 
-                <Col
-      xs={12}
-      md={3}
-      className="px-5 py-2"
-    >
-      <Button
-        className="custom-button"
-        onClick={handleFilterMonth}
-        style={{
-          marginLeft: "7rem", // Adjusted margin-left
-          fontSize: "1rem",
-          width: "7rem",
-          height: "2.7rem",
-          // Adjusted font size
-          marginBottom: "3rem",
-        }}
-      >
-        Apply
-      </Button>
-    </Col>
+                <Col xs={12} md={3} className="px-5 py-2">
+                  <Button
+                    className="custom-button"
+                    onClick={handleFilterMonth}
+                    style={{
+                      marginLeft: "7rem", // Adjusted margin-left
+                      fontSize: "1rem",
+                      width: "7rem",
+                      height: "2.7rem",
+                      // Adjusted font size
+                      marginBottom: "3rem",
+                    }}
+                  >
+                    Apply
+                  </Button>
+                </Col>
               </Col>
             </Row>
           </Container>
