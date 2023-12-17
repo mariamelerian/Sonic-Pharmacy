@@ -197,7 +197,7 @@ const viewChats = async (req, res) => {
       const allPharmacists = await Pharmacist.find();
       if (allPharmacists) {
         for (const pharmacist of allPharmacists) {
-            const chat = await chatModel.findOne({ patientID: currPatient._id , doctorID: userID });
+            const chat = await chatModel.findOne({ pharmacistID: pharmacist._id , doctorID: userID });
              if(chat){
               chatNames.push(
                 "Pharmacist " + pharmacist.name + "-" + pharmacist._id+"-"+chat.flag);
@@ -213,7 +213,7 @@ const viewChats = async (req, res) => {
       // User is a pharmacist, get all patients and all doctors
       const allPatients = await patientModel.find();
       for (const currPatient of allPatients) {
-          const chat = await chatModel.findOne({ patientID: currPatient._id , doctorID: userID });
+          const chat = await chatModel.findOne({ patientID: currPatient._id , pharmacistID: userID });
            if(chat){
             chatNames.push(currPatient.name + "-" + currPatient._id+"-"+chat.flag);
            }
@@ -224,7 +224,7 @@ const viewChats = async (req, res) => {
 
       const allDoctors = await doctorModel.find();
       for (const doc of allDoctors) {
-        const chat = await chatModel.findOne({ patientID: userID, doctorID: doctorID });
+        const chat = await chatModel.findOne({ doctorID: doc._id, pharmacistID: userID });
         if(chat){
           chatNames.push("Dr. " + doc.name + "-" + doc._id+"-"+ chat.flag);
         }
@@ -236,7 +236,7 @@ const viewChats = async (req, res) => {
       const allPharmacists = await Pharmacist.find();
       if (allPharmacists) {
         for (const pharmacist of allPharmacists) {
-            const chat = await chatModel.findOne({ patientID: currPatient._id , doctorID: userID });
+            const chat = await chatModel.findOne({ patientID: userID, pharmacistID: pharmacist._id });
              if(chat){
               chatNames.push(
                 "Pharmacist " + pharmacist.name + "-" + pharmacist._id+"-"+chat.flag);
@@ -386,8 +386,6 @@ const sendMessage = async (req, res) => {
     } else {
       // Add message to the existing chat
       existingChat.messages.push([senderTitle, currDate, currTime, message]);
-      
-      await existingChat.save();
 
       existingChat.flag=true;
     await existingChat.save();
