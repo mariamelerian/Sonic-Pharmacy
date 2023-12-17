@@ -96,59 +96,63 @@ const viewChat = async (req, res) => {
   const userID = req.session.userId;
   const recipientID = req.body._id;
 
-  let isDoctor = false;
-  let isPharmacist = false;
+  // let isDoctor = false;
+  // let isPharmacist = false;
 
-  try {
-    // Check if the user is a doctor
-    const doctor = await doctorModel.findById(userID);
-    if (doctor) {
-      isDoctor = true;
-    } else {
-      // Check if the user is a pharmacist
-      const pharmacist = await Pharmacist.findById(userID);
-      if (pharmacist) {
-        isPharmacist = true;
-      }
-    }
+   try {
+  //   // Check if the user is a doctor
+  //   const doctor = await doctorModel.findById(userID);
+  //   if (doctor) {
+  //     isDoctor = true;
+  //   } else {
+  //     // Check if the user is a pharmacist
+  //     const pharmacist = await Pharmacist.findById(userID);
+  //     if (pharmacist) {
+  //       isPharmacist = true;
+  //     }
+  //   }
 
-    // Determine the user field (doctorID, patientID, or pharmacistID) based on the user type
-    let userID2, recipientID2;
+  //   // Determine the user field (doctorID, patientID, or pharmacistID) based on the user type
+  //   let userID2, recipientID2;
 
-    if (isDoctor) {
-      userID2 = recipientID;
-      recipientID2 = userID;
-    } else if (isPharmacist) {
-      userID2 = recipientID;
-      recipientID2 = userID;
-    } else {
-      const patient = await patientModel.findById(userID);
-      if (patient) {
-        userID2 = recipientID;
-        recipientID2 = userID;
-      } else {
-        // The user is neither a doctor nor a pharmacist, so handle the case accordingly
-        return res.status(404).json("Invalid user type");
-      }
-    }
+  //   if (isDoctor) {
+  //     userID2 = recipientID;
+  //     recipientID2 = userID;
+  //   } else if (isPharmacist) {
+  //     userID2 = recipientID;
+  //     recipientID2 = userID;
+  //   } else {
+  //     const patient = await patientModel.findById(userID);
+  //     if (patient) {
+  //       userID2 = recipientID;
+  //       recipientID2 = userID;
+  //     } else {
+  //       // The user is neither a doctor nor a pharmacist, so handle the case accordingly
+  //       return res.status(404).json("Invalid user type");
+  //     }
+  //   }
 
     const chat = await chatModel.findOne({
       $or: [
-        { patientID: userID2, doctorID: recipientID2 },
-        { patientID: recipientID2, doctorID: userID2 },
-        { pharmacistID: recipientID2, doctorID: userID2 },
-        { doctorID: recipientID2, pharmacistID: userID2 },
-        { patientID: recipientID2, pharmacistID: userID2 },
-        { pharmacistID: recipientID2, patientID: userID2 },
+        { patientID: userID, doctorID: recipientID },
+        { patientID: recipientID, doctorID: userID},
+        { pharmacistID: recipientID, doctorID: userID },
+        { doctorID: recipientID, pharmacistID: userID },
+        { patientID: recipientID, pharmacistID: userID },
+        { pharmacistID: recipientID, patientID: userID },
       ],
     });
 
     if (!chat) {
       return res.status(404).json("No messages");
     }
-
-    chat.flag=false;
-    await chat.save();
+  //   if(chat){
+  //   if(chat.flag){
+  //   chat.flag=false;
+  //   await chat.save();
+  //   }
+  // }
+    
     
     return res.status(200).json({ chat });
   } catch (error) {
@@ -170,7 +174,6 @@ const viewChats = async (req, res) => {
     } else {
       // Check if the user is a pharmacist
       const pharmacist = await Pharmacist.findById(userID);
-      console.log(pharmacist);
       if (pharmacist) {
         isPharmacist = true;
       }
@@ -330,43 +333,42 @@ const sendMessage = async (req, res) => {
         { doctorID: userID, pharmacistID: recipientID },
       ],
     });
-
+    
     if (!existingChat) {
-    let pNew=null;
-    let phNew=null;
-    let docNew=null;
-    if(isDoctor){
-      docNew=userID;
-    }
-    if(isDoctor2){
-      docNew=recipientID;
-    }
-    if(isPharmacist){
-      phNew=userID;
-    }
-    if(isPharmacist2){
-      phNew=recipientID;
-    }
-    if(!isDoctor && !isPharmacist){
-      pNew=userID;
-    }
-    if(!isDoctor2 && !isPharmacist2){
-      pNew=recipientID;
-    }
-    if(!isDoctor && isPharmacist2){
-      pNew=userID;
-    }
-    if(!isPharmacist && isDoctor2){
-      pNew=userID;
-    }
-    if(!isDoctor2 && isPharmacist){
-      pNew=recipientID;
-    }
-    if(isDoctor && !isPharmacist2){
-      pNew=recipientID;
-    }
-
-  
+      // Create a new chat
+      let pNew = null;
+      let phNew = null;
+      let docNew = null;
+      if (isDoctor) {
+        docNew = userID;
+      }
+      if (isDoctor2) {
+        docNew = recipientID;
+      }
+      if (isPharmacist) {
+        phNew = userID;
+      }
+      if (isPharmacist2) {
+        phNew = recipientID;
+      }
+      if (!isDoctor && !isPharmacist) {
+        pNew = userID;
+      }
+      if (!isDoctor2 && !isPharmacist2) {
+        pNew = recipientID;
+      }
+      if (!isDoctor && isPharmacist2) {
+        pNew = userID;
+      }
+      if (!isPharmacist && isDoctor2) {
+        pNew = userID;
+      }
+      if (!isDoctor2 && isPharmacist) {
+        pNew = recipientID;
+      }
+      if (isDoctor && !isPharmacist2) {
+        pNew = recipientID;
+      }
 
       // Create a new chat
       const newChatData = {
@@ -374,10 +376,8 @@ const sendMessage = async (req, res) => {
         doctorID: docNew,
         pharmacistID: phNew,
         messages: [[senderTitle, currDate, currTime, message]],
-        flag:true,
+        flag: true,
       };
-      
-      
 
       const newChat = await chatModel.create(newChatData);
       await newChat.save();
@@ -386,13 +386,13 @@ const sendMessage = async (req, res) => {
     } else {
       // Add message to the existing chat
       existingChat.messages.push([senderTitle, currDate, currTime, message]);
-
-      existingChat.flag=true;
-    await existingChat.save();
+      existingChat.flag = true;
+      await existingChat.save();
 
       return res.status(200).json(existingChat);
     }
   } catch (error) {
+    console.error(error);  // Add this line to log the error
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
