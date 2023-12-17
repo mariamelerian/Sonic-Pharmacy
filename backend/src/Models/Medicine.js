@@ -9,24 +9,24 @@ const medicineSchema = new mongoose.Schema({
   }, // Store the image source as a string
   name: {
     type: String,
-    required: true,
+    required: false,
     unique: true,
   },
   price: {
     type: Number,
-    required: true,
+    required: false,
   },
   description: {
     type: String,
-    required: true,
+    required: false,
   },
   quantity: {
     type: Number,
-    required: true,
+    required: false,
   },
   sales: {
     type: Number,
-    required: true,
+    required: false,
     default: 10,
   },
 
@@ -35,32 +35,32 @@ const medicineSchema = new mongoose.Schema({
       {
         quantity: {
           type: Number,
-          required: true,
+          required: false,
         },
         date: {
           type: Date,
-          required: true,
+          required: false,
           default: Date.now,
         },
       },
     ],
-    required: true,
+    required: false,
     default: [],
   },
   activeIngredients: {
     type: [String],
-    required: true,
+    required: false,
   },
   medicinalUse: {
     type: String,
     // enum: MedicinalUseArray,
-    required: true,
+    required: false,
   },
   state: {
     type: String,
     enum: ["Active", "Archived"],
     default: "Active",
-    required: true,
+    required: false,
   },
   requiresPrescription: {
     type: Boolean,
