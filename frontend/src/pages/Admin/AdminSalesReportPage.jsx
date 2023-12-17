@@ -10,16 +10,6 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 
 function AdminSalesReportPage() {
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [medicines, setMedicines] = useState([]);
-  const [sales, setSales] = useState({
-    sales: [],
-    totalQuantitySold: 0,
-    totalRevenue: 0,
-  });
-
-  const [error, setError] = useState(null);
-
   const months = [
     "January",
     "February",
@@ -34,6 +24,20 @@ function AdminSalesReportPage() {
     "November",
     "December",
   ];
+
+  const currentDate = new Date();
+  const currentMonthIndex = currentDate.getMonth();
+  const currentMonth = months[currentDate.getMonth()];
+  const [selectedMonth, setSelectedMonth] = useState(currentMonthIndex);
+  const [selectedMonthName, setSelectedMonthName] = useState(currentMonth);
+  const [medicines, setMedicines] = useState([]);
+  const [sales, setSales] = useState({
+    sales: [],
+    totalQuantitySold: 0,
+    totalRevenue: 0,
+  });
+
+  const [error, setError] = useState(null);
 
   const handleFilter = async () => {
     console.log("selectedMonth", selectedMonth);
@@ -64,26 +68,8 @@ function AdminSalesReportPage() {
   };
 
   useEffect(async () => {
-    // fetchMedicines();
-    try {
-      const response = await axios.get("/monthlySales", {
-        params: {
-          month: "",
-        },
-      });
-      if (response.status === 200) {
-        setSales(response.data);
-        console.log("response.data", response.data);
-      } else {
-        console.log("Server error");
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        setError("Not found.");
-      } else if (error.response && error.response.status === 500) {
-        setError("Server Error");
-      }
-    }
+    fetchMedicines();
+    handleFilter();
   }, []);
 
   const fetchMedicines = async () => {
@@ -151,6 +137,7 @@ function AdminSalesReportPage() {
                       <div style={{ position: "relative" }}>
                         <Form.Control
                           as="select"
+                          value={selectedMonthName}
                           onChange={(e) =>
                             setSelectedMonth(
                               months.findIndex((value, index) => {

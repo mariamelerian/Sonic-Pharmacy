@@ -108,7 +108,7 @@ function PharmacistProfileBox() {
             <span style={{ color: "#099BA0", fontWeight: "bold" }}>
               Hourly Rate:
             </span>{" "}
-            {profileData.hourlyRate}
+            ${profileData.hourlyRate}
           </div>
           <div style={listItemStyle}>
             <span style={{ color: "#099BA0", fontWeight: "bold" }}>
