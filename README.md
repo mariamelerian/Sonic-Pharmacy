@@ -172,7 +172,7 @@ npm start
 ### Create .env file and add the following:
 
 MONGO_URI= "mongodb+srv://Clinic:Pass_123@cluster0.afyaloc.mongodb.net/?retryWrites=true&w=majority"
-PORT=3001
+PORT=8000
 
 ## Testing
 
