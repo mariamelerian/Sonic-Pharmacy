@@ -20,7 +20,7 @@ const getMedicines = async (req, res) => {
   try {
     const medicines = await Medicine.find({
       state: "Active",
-      requiresPrescription: false,
+     // requiresPrescription: false,
     });
     res.status(200).json(medicines);
   } catch (error) {
