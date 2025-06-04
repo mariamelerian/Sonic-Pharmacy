@@ -745,14 +745,14 @@ Certain components and dependencies used in this project are subject to their ow
 
 Refer to the respective licenses of these components for details about permissions and restrictions. Ensure compliance with the terms of each license when using or contributing to this project.
 
-##Authors
--Mariam Elerian
--Abdullah Hany
--Ahmed Khourshed
--Ashraf Karam
--Aya Abdelaal
--George Sherif
--Sarah Ehab
--Seif Edris
--Youssef Bassem
--Youstina Nabil
+## Authors
+-**Mariam Elerian**
+-**Abdullah Hany**
+-**Ahmed Khourshed**
+-**Ashraf Karam**
+-**Aya Abdelaal**
+-**George Sherif**
+-**Sarah Ehab**
+-**Seif Edris**
+-**Youssef Bassem**
+-**Youstina Nabil**
